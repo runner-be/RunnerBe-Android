@@ -41,7 +41,6 @@ class AdditionalInfoViewModel @Inject constructor(
 
     fun register() = viewModelScope.launch {
         _registerState.emit(UiState.Loading)
-        val nickName = "RunnerBe${(Math.random() * 100).toInt()}" //랜덤아이디 지급
         val deviceToken = RunnerBeApplication.mTokenPreference.getDeviceToken() // 디바이스 토큰
         val uuid = RunnerBeApplication.mTokenPreference.getUuid()
         if(deviceToken != null && uuid != null) {
@@ -53,7 +52,6 @@ class AdditionalInfoViewModel @Inject constructor(
                             JoinUserRequest(
                                 uuid = uuid,
                                 deviceToken = deviceToken,
-                                nickName = nickName,
                                 birthday = year,
                                 jobTag = job,
                                 genderTag = getGenderTag(genderRadioChecked.value)

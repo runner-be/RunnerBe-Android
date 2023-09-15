@@ -199,6 +199,8 @@ class PostDetailFragment :
 
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
+        mNaverMap.mapType = NaverMap.MapType.Navi
+        mNaverMap.isNightModeEnabled = true
         createCenterMarker()
         initMarkerInfoView()
         mNaverMap.uiSettings.isScrollGesturesEnabled = false

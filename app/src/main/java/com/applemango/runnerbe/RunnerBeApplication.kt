@@ -48,14 +48,17 @@ class RunnerBeApplication: Application() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         mTokenPreference = TokenSPreference(applicationContext)
         FirebaseApp.initializeApp(this)
-
         // fire base settings
+        firebaseTokenUpdate()
+    }
+
+    fun firebaseTokenUpdate() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) return@OnCompleteListener
             // Get new FCM registration token
             val token = task.result
+            mTokenPreference.setDeviceToken(token)
             val userId = mTokenPreference.getUserId()
-
             if(userId > 0) {
                 CoroutineScope(Dispatchers.IO).launch {
                     runCatching {

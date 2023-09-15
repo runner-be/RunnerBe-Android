@@ -28,9 +28,6 @@ import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -122,6 +119,8 @@ class RunningWriteOneFragment :
         mNaverMap = map
         createCenterMarker()
         initMarkerInfoView()
+        mNaverMap.mapType = NaverMap.MapType.Navi
+        mNaverMap.isNightModeEnabled = true
         mNaverMap.locationSource = locationSource
         mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
 

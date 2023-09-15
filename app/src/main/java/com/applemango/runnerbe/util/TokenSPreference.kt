@@ -38,7 +38,7 @@ class TokenSPreference(private val applicationContext : Context) {
     }
 
     fun setDeviceToken(deviceToken : String) {
-        editor.putString("deviceToken", deviceToken)
+        editor.putString("deviceToken", deviceToken).commit()
     }
 
     fun setRefreshToken(refreshToken : String) {

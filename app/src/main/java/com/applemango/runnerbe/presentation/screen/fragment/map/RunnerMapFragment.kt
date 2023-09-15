@@ -50,6 +50,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        RunnerBeApplication.instance.firebaseTokenUpdate()
         binding.vm = viewModel
         binding.postListLayout.vm = viewModel
         binding.postListLayout.mainVm = mainViewModel
@@ -125,6 +126,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
         mNaverMap.locationSource = locationSource
+        mNaverMap.mapType = NaverMap.MapType.Navi
+        mNaverMap.isNightModeEnabled = true
         mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
         //SlidingUpPanelLayout이 크기를 자꾸 변경하는 문제가 있어서 레이아웃 사이즈를 초기에 고정시켜버리기
         binding.mapLayout.setHeight(binding.mapLayout.measuredHeight)

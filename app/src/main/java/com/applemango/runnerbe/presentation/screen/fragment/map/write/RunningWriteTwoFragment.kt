@@ -27,7 +27,6 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -121,6 +120,8 @@ class RunningWriteTwoFragment :
 
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
+        mNaverMap.mapType = NaverMap.MapType.Navi
+        mNaverMap.isNightModeEnabled = true
         mNaverMap.uiSettings.isScrollGesturesEnabled = false
         mNaverMap.uiSettings.isZoomControlEnabled = false
         createCenterMarker()

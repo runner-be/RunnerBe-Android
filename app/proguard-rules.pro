@@ -24,4 +24,7 @@
 @com.google.gson.annotations.SerializedName <fields>;
 }
 
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+-keep class * extends com.google.gson.TypeAdapter
+
 -keep @kotlinx.parcelize.Parcelize public class *

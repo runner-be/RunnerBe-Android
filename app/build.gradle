@@ -13,14 +13,14 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-//    signingConfigs {
-//        release {
-//            storeFile file('C:\\Users\\JJH\\Desktop\\runnerBe-Key.jks')
-//            storePassword 'runnerbe2023'
-//            keyAlias 'key0'
-//            keyPassword 'runnerbe2023'
-//        }
-//    }
+    signingConfigs {
+        release {
+            storeFile file('runnerBe-Key.jks')
+            storePassword 'runnerbe2023'
+            keyAlias 'key0'
+            keyPassword 'runnerbe2023'
+        }
+    }
     compileSdk 33
 
     defaultConfig {
@@ -28,7 +28,7 @@ android {
         minSdk 23
         targetSdk 33
         versionCode buildVersionCode
-        versionName "0.0.4"
+        versionName "0.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,6 +42,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
 //            signingConfig signingConfigs.release
         }
         debug {
