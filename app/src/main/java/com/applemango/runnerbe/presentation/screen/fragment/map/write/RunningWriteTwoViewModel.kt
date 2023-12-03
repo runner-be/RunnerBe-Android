@@ -34,7 +34,7 @@ class RunningWriteTwoViewModel @Inject constructor(
             runningDate = Calendar.getInstance().time,
             runningDisplayDate = DateSelectData.defaultNowDisplayDate(),
             runningDisplayTime = TimeSelectData.getDefaultTimeData(),
-            runningTag = RunningTag.Before,
+            runningTag = RunningTag.All,
             coordinate = LatLng(0.0, 0.0)
         )
     )

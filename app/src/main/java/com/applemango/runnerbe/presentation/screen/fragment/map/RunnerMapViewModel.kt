@@ -11,11 +11,9 @@ import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.usecase.post.GetRunningListUseCase
 import com.applemango.runnerbe.presentation.model.PriorityFilterTag
 import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -35,7 +33,7 @@ class RunnerMapViewModel @Inject constructor(
     val refreshThisLocation: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     var refreshCount = 0
-    val filterRunningTag: MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.Before)
+    val filterRunningTag: MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
     private var preFilterRunningTag: RunningTag = filterRunningTag.value
     val filterPriorityTag: MutableStateFlow<PriorityFilterTag> =
         MutableStateFlow(PriorityFilterTag.BY_DISTANCE)

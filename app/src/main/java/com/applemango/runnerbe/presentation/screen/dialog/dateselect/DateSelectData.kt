@@ -5,7 +5,6 @@ import com.applemango.runnerbe.presentation.model.RunningTag
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import kotlin.math.min
 
 @Parcelize
 data class DateSelectData(

@@ -4,6 +4,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 
 enum class RunningTag(val tag: String) {
+    All("W"),
     After("A"),
     Before("B"),
     Holiday("H");
@@ -14,6 +15,7 @@ enum class RunningTag(val tag: String) {
 
     fun getTagNameResource() : Int {
         return when(tag) {
+            All.tag -> R.string.all_work
             After.tag -> R.string.after_work
             Holiday.tag -> R.string.holiday
             else -> R.string.before_work

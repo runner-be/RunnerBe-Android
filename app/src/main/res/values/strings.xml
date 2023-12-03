@@ -105,6 +105,7 @@
     <string name="post_close_complete">모집완료</string>
     
     <!-- 북마크 -->
+    <string name="all_work">전체</string>
     <string name="before_work">출근 전</string>
     <string name="after_work">퇴근 후</string>
     <string name="holiday">휴일</string>

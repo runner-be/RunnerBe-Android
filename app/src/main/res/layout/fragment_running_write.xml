@@ -9,15 +9,6 @@
             type="com.applemango.runnerbe.presentation.screen.fragment.map.write.RunningWriteOneViewModel" />
     </data>
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="@color/black">-->
-
-
-
-<!--    </ScrollView>-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

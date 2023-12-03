@@ -9,10 +9,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
-import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
-import com.applemango.runnerbe.domain.usecase.bookmark.GetAfterBookmarkListUseCase
-import com.applemango.runnerbe.domain.usecase.bookmark.GetBeforeBookmarkListUseCase
-import com.applemango.runnerbe.domain.usecase.bookmark.GetHolidayBookmarkListUseCase
+import com.applemango.runnerbe.domain.usecase.bookmark.*
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -23,18 +20,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookMarkViewModel @Inject constructor(
+    private val getAllDayBookmarkListUseCase: GetAllDayBookmarkListUseCase,
     private val getBeforeBookmarkListUseCase: GetBeforeBookmarkListUseCase,
     private val getAfterBookmarkListUseCase: GetAfterBookmarkListUseCase,
     private val getHolidayBookmarkListUseCase: GetHolidayBookmarkListUseCase,
     private val bookMarkStatusChangeUseCase: BookMarkStatusChangeUseCase
 ): ViewModel() {
 
-    val radioChecked : MutableStateFlow<Int> = MutableStateFlow(R.id.beforeTab)
+    val radioChecked : MutableStateFlow<Int> = MutableStateFlow(R.id.allTab)
     val bookmarkList : ObservableArrayList<Posting> = ObservableArrayList()
 
     fun getBookmarkList(runningTag : String) = viewModelScope.launch {
         val tag = RunningTag.getByTag(runningTag)
         when(tag) {
+            RunningTag.Before -> {
+                getBeforeBookmarkListUseCase(userId = RunnerBeApplication.mTokenPreference.getUserId())
+            }
             RunningTag.After -> {
                 getAfterBookmarkListUseCase(userId = RunnerBeApplication.mTokenPreference.getUserId())
             }
@@ -42,7 +43,7 @@ class BookMarkViewModel @Inject constructor(
                 getHolidayBookmarkListUseCase(userId = RunnerBeApplication.mTokenPreference.getUserId())
             }
             else -> { //혹시 모를 다른 것들은 다 출근 전으로...
-                getBeforeBookmarkListUseCase(userId = RunnerBeApplication.mTokenPreference.getUserId())
+                getAllDayBookmarkListUseCase(userId = RunnerBeApplication.mTokenPreference.getUserId())
             }
         }.collect {
             if(it is CommonResponse.Success<*> && it.body is GetBookmarkResponse && it.body.result.bookMarkList != null) {

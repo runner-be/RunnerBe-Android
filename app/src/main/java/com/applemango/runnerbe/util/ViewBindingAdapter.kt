@@ -13,8 +13,6 @@ import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectD
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.naver.maps.geometry.LatLng
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -70,16 +68,16 @@ fun bindTime(textView: TextView, dateString: String?) {
 
 @BindingAdapter("running_tag_string")
 fun bindRunningTag(textView: TextView, runningTag: String?) {
-    Log.e("runningTag", runningTag.toString())
     runningTag?.let {
         textView.text = when(it) {
+            RunningTag.All.tag -> textView.resources.getString(R.string.all_work)
             RunningTag.Holiday.tag -> textView.resources.getString(R.string.holiday)
             RunningTag.After.tag -> textView.resources.getString(R.string.after_work)
             RunningTag.Before.tag -> textView.resources.getString(R.string.before_work)
             else -> it
         }
     } ?: run {
-        textView.text = textView.context.resources.getString(R.string.before_work)
+        textView.text = textView.context.resources.getString(R.string.all_work)
     }
 }
 

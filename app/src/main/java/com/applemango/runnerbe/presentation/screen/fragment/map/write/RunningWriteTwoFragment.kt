@@ -10,15 +10,11 @@ import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningWriteTwoBinding
-import com.applemango.runnerbe.presentation.model.GenderTag
-import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
-import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.RangeSlider.OnChangeListener
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate

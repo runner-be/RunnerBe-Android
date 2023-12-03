@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentBookMarkBinding
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,9 +31,10 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
 
     private fun getList(tagType: Int) {
         val tag = when (tagType) {
+            R.id.beforeTab -> RunningTag.Before
             R.id.afterTab -> RunningTag.After
             R.id.holidayTab -> RunningTag.Holiday
-            else -> RunningTag.Before
+            else -> RunningTag.All
         }
         viewModel.getBookmarkList(tag.tag)
     }

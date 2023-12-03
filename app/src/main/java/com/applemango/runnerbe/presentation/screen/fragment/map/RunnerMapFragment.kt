@@ -233,6 +233,9 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     fun filterRunningTagClick() {
         val tagList = listOf(
+            SelectItemParameter(resources.getString(RunningTag.All.getTagNameResource())) {
+                viewModel.filterRunningTag.value = RunningTag.All
+            },
             SelectItemParameter(resources.getString(RunningTag.Before.getTagNameResource())) {
                 viewModel.filterRunningTag.value = RunningTag.Before
             },

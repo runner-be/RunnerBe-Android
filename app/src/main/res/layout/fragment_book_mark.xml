@@ -40,13 +40,29 @@
             app:layout_constraintTop_toBottomOf="@id/scrap_text_view">
 
             <RadioButton
-                android:id="@+id/beforeTab"
+                android:id="@+id/allTab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="4dp"
                 android:textSize="14sp"
                 android:checked="true"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="10dp"
+                android:button="@null"
+                android:textColor="@color/tc_select_tab"
+                android:text="@string/all_work"
+                android:background="@drawable/selector_tab"/>
+
+            <RadioButton
+                android:id="@+id/beforeTab"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:textSize="14sp"
+                android:checked="false"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="10dp"

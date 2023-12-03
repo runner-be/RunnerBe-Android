@@ -74,7 +74,7 @@ android {
     productFlavors {
         dev {
             dimension "server"
-            buildConfigField "String", "BASE_URL", "\"https://www.runnerbe2.shop\""
+            buildConfigField "String", "BASE_URL", "\"https://dev.runnerbe2.shop\""
         }
         real {
             dimension "server"
