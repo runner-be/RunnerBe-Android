@@ -3,15 +3,19 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentMyPostBinding
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyPostFragment : BaseFragment<FragmentMyPostBinding>(R.layout.fragment_my_post) {
 
     private val myPageViewModel: MyPageViewModel by viewModels(
@@ -52,6 +56,13 @@ class MyPostFragment : BaseFragment<FragmentMyPostBinding>(R.layout.fragment_my_
                     }
                 }
 
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.changedBookMarkPost.collect {
+                    myPageViewModel.postUpdate(it)
+                }
             }
         }
     }

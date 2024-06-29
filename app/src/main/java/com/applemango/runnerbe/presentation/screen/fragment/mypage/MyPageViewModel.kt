@@ -81,6 +81,11 @@ class MyPageViewModel @Inject constructor(
     fun paceRegistrationClicked() = viewModelScope.launch {
         _actions.emit(MyPageAction.MoveToPaceRegistration)
     }
+
+    fun postUpdate(posting: Posting) {
+        val index = myPosts.indexOf(posting)
+        if (index != -1) myPosts[index] = posting.copy()
+    }
 }
 
 sealed class MyPageAction {
