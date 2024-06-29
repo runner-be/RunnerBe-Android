@@ -3,10 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="fragment"
-            type="com.applemango.runnerbe.presentation.screen.fragment.map.filter.RunningFilterFragment" />
         <variable
             name="vm"
             type="com.applemango.runnerbe.presentation.screen.fragment.map.filter.RunningFilterViewModel" />
@@ -32,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back"
-                android:onClick="@{() -> fragment.goBack()}"
+                android:onClick="@{() -> vm.backClicked()}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -56,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_refresh"
-                android:onClick="@{() -> fragment.refresh()}"
+                android:onClick="@{() -> vm.refresh()}"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

@@ -6,7 +6,6 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
-import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
 import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel

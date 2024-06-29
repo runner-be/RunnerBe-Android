@@ -2,8 +2,6 @@ package com.applemango.runnerbe.domain.usecase.runningtalk
 
 import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class MessageSendUseCase @Inject constructor(

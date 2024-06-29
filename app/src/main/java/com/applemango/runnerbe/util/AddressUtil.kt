@@ -3,10 +3,8 @@ package com.applemango.runnerbe.util
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import java.io.IOException
 import java.util.*
-import kotlin.collections.ArrayList
 
 object AddressUtil {
     // 좌표 -> 주소 변환

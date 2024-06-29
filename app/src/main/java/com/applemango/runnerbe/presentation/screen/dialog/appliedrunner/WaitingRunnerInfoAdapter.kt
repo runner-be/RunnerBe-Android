@@ -9,7 +9,10 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.presentation.model.listener.PostAcceptListener
 
-class WaitingRunnerInfoAdapter(private val dataList: ObservableArrayList<UserInfo>, private val listener : PostAcceptListener) :
+class WaitingRunnerInfoAdapter(
+    private val dataList: ObservableArrayList<UserInfo>,
+    private val listener: PostAcceptListener
+) :
     RecyclerView.Adapter<WaitingRunnerInfoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WaitingRunnerInfoViewHolder {
         return WaitingRunnerInfoViewHolder(

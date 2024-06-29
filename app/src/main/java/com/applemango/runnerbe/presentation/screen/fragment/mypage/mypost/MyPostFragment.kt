@@ -5,9 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMyPostBinding
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections

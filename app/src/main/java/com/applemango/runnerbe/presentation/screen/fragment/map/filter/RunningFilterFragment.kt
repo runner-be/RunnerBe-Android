@@ -5,11 +5,15 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningFilterBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.google.android.material.slider.RangeSlider
+import kotlinx.coroutines.launch
 
 class RunningFilterFragment :
     BaseFragment<FragmentRunningFilterBinding>(R.layout.fragment_running_filter) {
@@ -20,10 +24,41 @@ class RunningFilterFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        binding.fragment = this
         initSetting()
         filterSetting()
         sliderSetting()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.recruitmentStartAge.collect {
+                    binding.ageSlider.values = listOf(
+                        viewModel.recruitmentStartAge.value.toFloat(),
+                        viewModel.recruitmentEndAge.value.toFloat()
+                    )
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.recruitmentEndAge.collect {
+                    binding.ageSlider.values = listOf(
+                        viewModel.recruitmentStartAge.value.toFloat(),
+                        viewModel.recruitmentEndAge.value.toFloat()
+                    )
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.actions.collect {
+                    when(it) {
+                        is RunningFilterAction.MoveToBack -> {
+                            setFragmentResult("filter", it.bundle)
+                            navPopStack()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initSetting() {
@@ -54,21 +89,8 @@ class RunningFilterFragment :
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    goBack()
+                    viewModel.backClicked()
                 }
             })
-    }
-
-    override fun goBack() {
-        setFragmentResult("filter", viewModel.getFilterToBundle())
-        navPopStack()
-    }
-
-    fun refresh() {
-        viewModel.refresh()
-        binding.ageSlider.values = listOf(
-            viewModel.recruitmentStartAge.value.toFloat(),
-            viewModel.recruitmentEndAge.value.toFloat()
-        )
     }
 }

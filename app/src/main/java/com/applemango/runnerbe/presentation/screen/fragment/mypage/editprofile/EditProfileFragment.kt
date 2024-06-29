@@ -1,23 +1,21 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentEditProfileBinding
 import com.applemango.runnerbe.presentation.model.JobButtonId
-import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

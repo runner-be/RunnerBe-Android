@@ -1,18 +1,17 @@
 package com.applemango.runnerbe.presentation.screen.compose.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.presentation.model.LoginType
 import com.applemango.runnerbe.data.network.request.SocialLoginRequest
 import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.domain.repository.KakaoLoginRepository
 import com.applemango.runnerbe.domain.repository.NaverLoginRepository
 import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
+import com.applemango.runnerbe.presentation.model.LoginType
+import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +80,7 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun getUserData(userId: Int) = CoroutineScope(Dispatchers.IO).launch {
+    private fun getUserData(userId: Int) = CoroutineScope(Dispatchers.IO).launch {
         getUserDataUseCase(userId).collect {
             when (it) {
                 is CommonResponse.Success<*> -> {

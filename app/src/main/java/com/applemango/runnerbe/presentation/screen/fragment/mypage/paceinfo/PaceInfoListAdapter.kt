@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSelectItemCallBack
-import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSimpleSelectListViewHolder
 
 class PaceInfoListAdapter(
     private val listener: PaceSelectListener

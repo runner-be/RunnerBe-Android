@@ -6,7 +6,6 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import androidx.core.content.FileProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.BuildConfig
 import java.io.File
 import java.text.SimpleDateFormat
@@ -34,8 +33,4 @@ fun View.setHeight(value: Int) {
         lp.height = value
         layoutParams = lp
     }
-}
-
-fun RecyclerView.scrollPercent() : Double {
-    return (this.computeVerticalScrollOffset() * 1.0 / (this.computeVerticalScrollRange() - this.computeVerticalScrollExtent())) * 100.0
 }

@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.activity.OnBackPressedCallback

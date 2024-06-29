@@ -1,7 +1,5 @@
 package com.applemango.runnerbe.data.network.request
 
-import retrofit2.http.Query
-
 data class GetRunningListRequest(
     val whetherEnd: String,
     val priorityFilter : String,

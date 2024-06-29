@@ -1,7 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate
 
-import java.util.Date
-
 sealed class RunningTalkUiState {
     data class MyRunningTalkUiState(
         val items: List<RunningTalkItem>,

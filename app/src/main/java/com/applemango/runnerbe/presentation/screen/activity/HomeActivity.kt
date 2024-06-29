@@ -1,13 +1,8 @@
 package com.applemango.runnerbe.presentation.screen.activity
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

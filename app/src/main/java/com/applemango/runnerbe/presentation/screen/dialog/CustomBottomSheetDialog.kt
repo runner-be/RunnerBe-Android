@@ -2,7 +2,6 @@ package com.applemango.runnerbe.presentation.screen.dialog
 
 import android.app.Dialog
 import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,7 @@ abstract class CustomBottomSheetDialog<T : ViewDataBinding>(
 
     private var _binding: T? = null
     val binding get() = _binding!!
-    var mLoadingDialog: LoadingDialog? = null
+    private var mLoadingDialog: LoadingDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

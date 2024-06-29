@@ -8,10 +8,8 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.JobButtonId
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class RunningFilterViewModel: ViewModel() {
 
@@ -28,12 +26,19 @@ class RunningFilterViewModel: ViewModel() {
         initialValue = ""
     )
 
+    val actions: MutableSharedFlow<RunningFilterAction> = MutableSharedFlow()
     fun refresh() {
         genderRadioChecked.value = R.id.allTab
         isAllAgeChecked.value = true
         recruitmentStartAge.value = 20
         recruitmentEndAge.value = 40
         jobRadioChecked.value = -1
+    }
+
+    fun backClicked() {
+        viewModelScope.launch {
+            actions.emit(RunningFilterAction.MoveToBack(getFilterToBundle()))
+        }
     }
 
     private fun getGenderTag(): String = when (genderRadioChecked.value) {
@@ -56,10 +61,14 @@ class RunningFilterViewModel: ViewModel() {
         jobRadioChecked.value = JobButtonId.findByJob(jobTag)?.id?:-1
     }
 
-    fun getFilterToBundle() : Bundle = bundleOf(
+    private fun getFilterToBundle() : Bundle = bundleOf(
         "gender" to getGenderTag(),
         "job" to (getJobTag()?:"N"),
         "minAge" to if(isAllAgeChecked.value) 0 else recruitmentStartAge.value,
         "maxAge" to if(isAllAgeChecked.value) 100 else recruitmentEndAge.value
     )
+}
+
+sealed class RunningFilterAction {
+    data class MoveToBack(val bundle: Bundle): RunningFilterAction()
 }

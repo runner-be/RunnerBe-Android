@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.job
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +13,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.Addit
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -65,7 +63,7 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
         }
     }
 
-    fun moveToNext() {
+    private fun moveToNext() {
         navigate(AdditionalJobSelectFragmentDirections.actionAdditionalJobSelectFragmentToRegisterCompleteFragment())
     }
 }

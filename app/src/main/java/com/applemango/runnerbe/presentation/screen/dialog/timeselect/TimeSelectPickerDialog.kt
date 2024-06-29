@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogTimeSelectBinding
-import com.applemango.runnerbe.presentation.model.DateResultListener
 import com.applemango.runnerbe.presentation.model.TimeResultListener
 import com.applemango.runnerbe.util.NumberUtil
 import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener

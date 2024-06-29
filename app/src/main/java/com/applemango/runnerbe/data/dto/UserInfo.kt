@@ -2,7 +2,6 @@ package com.applemango.runnerbe.data.dto
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.parcelize.Parcelize
 
 // 마이페이지(UserInfo), 게시글 상세(runnerInfo, waitingRunnerInfo)

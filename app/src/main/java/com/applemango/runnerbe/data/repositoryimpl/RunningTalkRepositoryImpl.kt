@@ -1,10 +1,12 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import com.applemango.runnerbe.data.network.api.*
-import com.applemango.runnerbe.data.network.request.FirebaseTokenUpdateRequest
-import com.applemango.runnerbe.domain.repository.RunningTalkRepository
+import com.applemango.runnerbe.data.network.api.GetRunningTalkDetailApi
+import com.applemango.runnerbe.data.network.api.GetRunningTalkMessagesApi
+import com.applemango.runnerbe.data.network.api.MessageReportApi
+import com.applemango.runnerbe.data.network.api.MessageSendApi
 import com.applemango.runnerbe.data.network.request.MessageReportRequest
 import com.applemango.runnerbe.data.network.request.SendMessageRequest
+import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import javax.inject.Inject
 

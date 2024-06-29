@@ -2,7 +2,6 @@ package com.applemango.runnerbe.presentation.screen.fragment.base
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,22 +16,22 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.presentation.viewmodel.NavigationViewModel
 import com.applemango.runnerbe.presentation.screen.dialog.LoadingDialog
 import com.applemango.runnerbe.presentation.screen.dialog.NoAdditionalInfoDialog
+import com.applemango.runnerbe.presentation.viewmodel.NavigationViewModel
 
 /**
  * 프래그먼트의 공통 명세는 여기에 작성해주세요.
  */
 open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) :
     Fragment() {
-    var TAG = "Runnerbe"
+    private var TAG = "Runnerbe"
     private var _binding: T? = null
     protected val binding: T get() = _binding!!
 
-    var mLoadingDialog: LoadingDialog? = null
+    private var mLoadingDialog: LoadingDialog? = null
 
-    protected val navController: NavController get() = findNavController()
+    private val navController: NavController get() = findNavController()
 
     private val navigationViewModel : NavigationViewModel by viewModels()
 

@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
@@ -12,12 +11,10 @@ import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.JobButtonId
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.TokenSPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -107,7 +104,7 @@ class AdditionalInfoViewModel @Inject constructor(
         }
     }
 
-    fun getGenderTag(tabId : Int) : String = when(tabId) {
+    private fun getGenderTag(tabId : Int) : String = when(tabId) {
             R.id.maleButton-> GenderTag.MALE.tag
             else -> GenderTag.FEMALE.tag
         }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.ui.theme.pretendardTypography
+import com.applemango.runnerbe.presentation.screen.compose.ui.theme.pretendardTypography
 
 @Composable
 fun PaceComponentMini(pace: Pace) {

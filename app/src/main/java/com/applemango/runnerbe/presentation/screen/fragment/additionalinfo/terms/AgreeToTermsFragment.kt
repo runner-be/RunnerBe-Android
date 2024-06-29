@@ -1,17 +1,12 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.terms
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentAgreeToTermsBinding
-import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.terms.AgreeToTermsViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.SettingFragmentDirections
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AgreeToTermsFragment :

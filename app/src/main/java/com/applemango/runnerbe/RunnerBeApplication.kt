@@ -2,8 +2,6 @@ package com.applemango.runnerbe
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.applemango.runnerbe.data.network.FireBaseModule
 import com.applemango.runnerbe.data.network.request.FirebaseTokenUpdateRequest
@@ -16,7 +14,6 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 
 @HiltAndroidApp
 class RunnerBeApplication: Application() {

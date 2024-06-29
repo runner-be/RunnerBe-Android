@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import android.util.Log
 import com.applemango.runnerbe.data.network.api.*
 import com.applemango.runnerbe.data.network.request.AttendanceAccessionRequest
 import com.applemango.runnerbe.data.network.request.GetRunningListRequest

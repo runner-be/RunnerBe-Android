@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -80,7 +79,7 @@ class BookMarkViewModel @Inject constructor(
         }
     }
 
-    fun postChange(posting: Posting) {
+    private fun postChange(posting: Posting) {
         val index = bookmarkList.indexOf(posting)
         if(index != -1 ) bookmarkList[index] = posting
     }

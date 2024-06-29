@@ -1,8 +1,5 @@
 package com.applemango.runnerbe.domain.entity
 
-import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
-
 enum class Pace(val key: String, val time: String) {
     BEGINNER("beginner","700 ~ 900"),
     AVERAGE("average", "600 ~ 700"),

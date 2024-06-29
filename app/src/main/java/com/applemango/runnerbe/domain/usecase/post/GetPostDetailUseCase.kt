@@ -3,7 +3,6 @@ package com.applemango.runnerbe.domain.usecase.post
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.data.network.response.BaseResponse
-import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
 import com.applemango.runnerbe.data.network.response.GetPostDetailResponse
 import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse

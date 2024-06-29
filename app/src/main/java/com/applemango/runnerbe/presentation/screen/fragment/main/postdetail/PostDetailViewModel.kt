@@ -1,11 +1,9 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main.postdetail
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
@@ -19,7 +17,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -170,7 +167,7 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun dropPost() = viewModelScope.launch {
+    private fun dropPost() = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
@@ -194,7 +191,7 @@ class PostDetailViewModel @Inject constructor(
         } else _dropUiState.emit(UiState.Failed("로그인이 필요합니다."))
     }
 
-    fun reportPost() = viewModelScope.launch {
+    private fun reportPost() = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
@@ -219,7 +216,7 @@ class PostDetailViewModel @Inject constructor(
     fun isParticipatePostIn(posting: Posting): Boolean =
         runnerInfo.any { it.userId == RunnerBeApplication.mTokenPreference.getUserId() }
 
-    fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
+    private fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
     fun isMyPost(): Boolean =
         RunnerBeApplication.mTokenPreference.getUserId() == post.value?.postUserId
 

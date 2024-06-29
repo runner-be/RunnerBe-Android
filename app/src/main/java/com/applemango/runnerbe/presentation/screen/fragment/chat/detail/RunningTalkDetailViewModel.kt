@@ -56,8 +56,8 @@ class RunningTalkDetailViewModel @Inject constructor(
     val messageReportUiState get() = _messageReportUiState
 
     val attachImageUrls: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
-    val failedImageList = ArrayList<String>()
-    val successImageList = ArrayList<String>()
+    private val failedImageList = ArrayList<String>()
+    private val successImageList = ArrayList<String>()
     private val maxImageCount = 3
 
     fun getDetailData(isRefresh: Boolean) = viewModelScope.launch {

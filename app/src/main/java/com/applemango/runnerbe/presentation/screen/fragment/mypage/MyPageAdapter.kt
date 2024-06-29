@@ -10,7 +10,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.MyPost
  */
 class MyPageAdapter (fragment: MyPageFragment): FragmentStateAdapter(fragment) {
 
-    var fragmentList = mutableListOf<Fragment>(MyPostFragment(), JoinPostFragment())
+    private var fragmentList = mutableListOf<Fragment>(MyPostFragment(), JoinPostFragment())
 
     override fun getItemCount(): Int {
         return fragmentList.size
@@ -23,10 +23,6 @@ class MyPageAdapter (fragment: MyPageFragment): FragmentStateAdapter(fragment) {
     override fun getItemId(position: Int): Long {
         // generate new id
         return fragmentList[position].hashCode().toLong()
-    }
-
-    fun setFragment(position: Int, refresh: Fragment){
-        fragmentList[position] = refresh
     }
 
     override fun containsItem(itemId: Long): Boolean {

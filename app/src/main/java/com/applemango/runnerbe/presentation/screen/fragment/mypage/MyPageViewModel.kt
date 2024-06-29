@@ -4,19 +4,17 @@ import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
 import com.applemango.runnerbe.domain.usecase.PatchUserImageUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.data.network.response.UserDataResponse
+import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +30,6 @@ class MyPageViewModel @Inject constructor(
     val moveTab : MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val isShowInfoDialog get() = _isShowInfoDialog
 
     private var _updateUserImageState : MutableLiveData<UiState> = MutableLiveData()
     val updateUserImageState get() = _updateUserImageState

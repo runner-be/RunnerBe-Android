@@ -51,7 +51,7 @@ object RunningTalkDetailMapper {
         return result
     }
 
-    fun messageToRunningTalkItem(message: Messages): RunningTalkItem? {
+    private fun messageToRunningTalkItem(message: Messages): RunningTalkItem? {
         return if (message.content != null) RunningTalkItem.MessageTalkItem(
             id = message.messageId, message = message.content
         ) else if (message.imageUrl != null) RunningTalkItem.ImageTalkItem(

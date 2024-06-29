@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.domain.usecase.post
 
 import com.applemango.runnerbe.data.network.request.GetRunningListRequest
-import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
 import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.state.CommonResponse

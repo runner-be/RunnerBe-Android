@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.applemango.runnerbe.R

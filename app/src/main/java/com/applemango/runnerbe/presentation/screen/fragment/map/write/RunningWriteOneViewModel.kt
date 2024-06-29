@@ -1,14 +1,15 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 import com.naver.maps.geometry.LatLng
-import kotlinx.coroutines.flow.*
-import okhttp3.internal.wait
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import java.util.*
 
 class RunningWriteOneViewModel : ViewModel() {
