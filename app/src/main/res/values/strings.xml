@@ -3,7 +3,7 @@
     <string name="runner_be">러너비</string>
     <string name="login_kakao">카카오로 로그인</string>
     <string name="login_naver">네이버로 로그인</string>
-    
+
     <string name="comma_text">%s · %s</string>
 
     <string name="setting">설정</string>
@@ -28,7 +28,7 @@
     <string name="join_running">참여 러닝</string>
     <string name="running_list">러닝 목록</string>
     <string name="logout">로그아웃</string>
-    
+
     <string name="msg_empty_my_post">아직 모임을 만들지 않았어요!</string>
     <string name="msg_empty_join_post">아직 러닝에 참여하지 않았어요!</string>
     <string name="msg_go_my_post">모임을 만들어볼까요?</string>
@@ -87,7 +87,7 @@
     <string name="msg_additional_info_complete">나를 충분히 소개했어요.\n달릴 준비 완료!</string>
     <string name="msg_additional_info_complete_description">이제 러너비에서 함께 달려볼까요?</string>
     <string name="already_run">달릴 준비 완료!</string>
-    
+
 
     <!-- 메인 화면 -->
     <string name="by_distance">거리순</string>
@@ -112,7 +112,7 @@
     <string name="do_post_apply">신청하기</string>
     <string name="apply_complete">신청완료</string>
     <string name="post_close_complete">모집완료</string>
-    
+
     <!-- 북마크 -->
     <string name="all_work">전체</string>
     <string name="before_work">출근 전</string>
@@ -140,6 +140,18 @@
     <string name="recruiting">모집중</string>
     <string name="recruitment_deadline">모집 마감</string>
     <string name="recruitment_end">모집 종료</string>
+
+    <!-- 위치 검색 -->
+    <string name="running_location_search">장소 정보 입력</string>
+    <string name="running_location_search_hint">모임 장소 검색</string>
+    <string name="running_location_detect_current">현재 위치로 설정</string>
+    <string name="running_location_search_description">이렇게 검색해 보세요</string>
+    <string name="running_location_search_description_a_1">도로명 + 건물번호</string>
+    <string name="running_location_search_description_a_2">예) 러너비로 12길 3</string>
+    <string name="running_location_search_description_b_1">지역명 + 번지</string>
+    <string name="running_location_search_description_b_2">예) 러너비동 12–3</string>
+    <string name="running_location_search_description_c_1">건물명, 아파트명</string>
+    <string name="running_location_search_description_c_2">예) 러너비아파트 101동</string>
 
     <!-- 러닝톡 -->
     <string name="report">신고</string>
@@ -196,7 +208,8 @@
     <string name="sheave">시브</string>
     <string name="joy">조이</string>
     <string name="chanho">찬호</string>
-    
+    <string name="rocky">로키</string>
+
     <!-- 포스트 -->
     <string name="before_running_management_button_text">모임 후 출석/로그를 관리할 수 있어요</string>
     <string name="log_write">로그 쓰기</string>
@@ -227,6 +240,5 @@
     <string name="grand_matser_pace_runner_description">1km당 4.5분 미만으로 러닝하는 초고수 러너</string>
 
     <string name="facebook_app_id">638544227722032</string>
-
 
 </resources>
