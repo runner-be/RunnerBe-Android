@@ -3,6 +3,7 @@ package com.applemango.runnerbe.data.network.request
 data class GetRunningListRequest(
     val whetherEnd: String,
     val priorityFilter : String,
+    val paceFilter : String,
     val distanceFilter : String,
     val gender : String,
     val maxAge : String,

@@ -103,6 +103,9 @@
         android:label="RunningFilterFragment" >
 
         <argument
+            android:name="paces"
+            app:argType="com.applemango.runnerbe.domain.entity.Pace[]"/>
+        <argument
             android:name="gender"
             app:argType="string"/>
         <argument

@@ -11,6 +11,7 @@ interface GetRunningListApi {
         @Query("runningTag") runningTag: String,
         @Query("whetherEnd") whetherEnd: String,
         @Query("filter") priorityFilter : String,
+        @Query("paceFilter") paceFilter: String,
         @Query("distanceFilter") distanceFilter : String,
         @Query("genderFilter") gender : String,
         @Query("ageFilterMax") maxAge : String,

@@ -107,6 +107,10 @@ fun LogoAndTextView(modifier: Modifier) {
                     mContext.startActivity(Intent(mContext, HomeActivity::class.java))
                     mContext.finish()
                 }
+
+                else -> {
+                    Log.e("LogoAndTextView", "when - else")
+                }
             }
         }
     }
@@ -143,6 +147,7 @@ fun KakaoLoginView(modifier: Modifier) {
                 AuthErrorCause.ServerError.toString() -> "서버 내부 에러"
                 AuthErrorCause.Unauthorized.toString() -> "앱이 요청 권한이 없음"
                 else -> {
+                    Log.e("KakaoLogin", error.toString())
                     error.toString()
                 }// Unknown
 

@@ -102,6 +102,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                             val filter = it.filterData
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningFilterFragment(
+                                    paces = filter.paceTags.toTypedArray(),
                                     gender = filter.genderTag,
                                     job = filter.jobTag,
                                     minAge = filter.minAge,

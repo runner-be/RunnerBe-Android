@@ -112,6 +112,11 @@ fun ImageView.setDrawableImageResource(resourceId: Int) {
     this.setImageResource(resourceId)
 }
 
+@BindingAdapter("bind:setVisibilityInvisibleUnless")
+fun setVisibilityInvisibleUnless(view: View, visible: Boolean) {
+    view.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+}
+
 @BindingAdapter("runner_count")
 fun runnerCountText(textView: TextView, peopleNum: Int) {
     textView.text = textView.context.resources.getString(R.string.max_people_count, peopleNum.toString())
@@ -140,33 +145,43 @@ fun getGenderAndAgeString(textView: TextView, age: String?, gender: String?) {
     }
 }
 
+private const val THREE_HOURS_IN_MILLIS = 3 * 60 * 60 * 1000L
+
 @BindingAdapter("bind:whetherEndCheckStatus")
-fun getWhetherEndCheckStatus(textView: TextView, post:Posting) {
-    val resource = textView.resources
-    val now = Calendar.getInstance().time
-    val threeHour = 3 * 60 * 60 * 1000
-    if(post.gatheringTime != null && post.runningTime != null) {
-        val startTime = dateStringToLongTime(post.gatheringTime)
-        val runningTime = timeStringToLongTime(post.runningTime)
-        if(now.time - startTime > 0) {
-            if(startTime + threeHour + runningTime - now.time > 0) {
-                textView.text = resource.getString(R.string.recruitment_deadline)
-                textView.setTextColor(ResourcesCompat.getColor(resource, R.color.dark_g3, null))
-            } else {
-                textView.text = resource.getString(R.string.recruitment_end)
-                textView.setTextColor(ResourcesCompat.getColor(resource, R.color.dark_g3, null))
-            }
+fun getWhetherEndCheckStatus(textView: TextView, post: Posting) {
+    val resources = textView.resources
+    val currentTime = System.currentTimeMillis()
+
+    fun setTextAndColor(textResId: Int, colorResId: Int) {
+        textView.text = resources.getString(textResId)
+        textView.setTextColor(ResourcesCompat.getColor(resources, colorResId, null))
+    }
+
+    if (post.gatheringTime == null || post.runningTime == null) {
+        if (post.whetherEnd == "N") {
+            setTextAndColor(R.string.recruiting, R.color.primary)
         } else {
-            textView.text = resource.getString(R.string.recruiting)
-            textView.setTextColor(ResourcesCompat.getColor(resource, R.color.primary, null))
+            setTextAndColor(R.string.recruitment_deadline, R.color.dark_g3)
         }
-    } else {
-        if(post.whetherEnd == "Y") {
-            textView.text = resource.getString(R.string.recruiting)
-            textView.setTextColor(ResourcesCompat.getColor(resource, R.color.primary, null))
-        } else {
-            textView.text = resource.getString(R.string.recruitment_deadline)
-            textView.setTextColor(ResourcesCompat.getColor(resource, R.color.dark_g3, null))
+        return
+    }
+
+    val startTime = dateStringToLongTime(post.gatheringTime)
+    val runningTime = timeStringToLongTime(post.runningTime)
+
+    when {
+        currentTime < startTime -> {
+            if (post.whetherEnd == "N") {
+                setTextAndColor(R.string.recruiting, R.color.primary)
+            } else {
+                setTextAndColor(R.string.recruitment_deadline, R.color.dark_g3)
+            }
+        }
+        currentTime < startTime + THREE_HOURS_IN_MILLIS + runningTime -> {
+            setTextAndColor(R.string.recruitment_deadline, R.color.dark_g3)
+        }
+        else -> {
+            setTextAndColor(R.string.recruitment_end, R.color.dark_g3)
         }
     }
 }

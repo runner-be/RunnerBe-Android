@@ -45,3 +45,15 @@ fun initPaceInfoList() : List<PaceSelectItem> {
         )
     )
 }
+
+fun initPaceInfoListWithAll(): List<PaceSelectItem> {
+    val allPaceItem = PaceSelectItem(
+        pace = Pace.ALL,
+        paceImageResource = 0,
+        paceName = "페이스 무관",
+        paceDescription = "페이스 맞춤형 러너",
+        isSelected = false
+    )
+
+    return listOf(allPaceItem) + initPaceInfoList()
+}

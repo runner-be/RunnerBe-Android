@@ -9,6 +9,7 @@ import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.data.network.response.GetRunningListResponse
 import com.applemango.runnerbe.data.vo.MapFilterData
+import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.domain.usecase.post.GetRunningListUseCase
 import com.applemango.runnerbe.presentation.model.PriorityFilterTag
 import com.applemango.runnerbe.presentation.model.RunningTag
@@ -17,7 +18,13 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,8 +51,18 @@ class RunnerMapViewModel @Inject constructor(
     private var prePriorityTag = filterPriorityTag.value
     val includeFinish: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var preIncludeFinish = includeFinish.value
-    val filterData: MutableStateFlow<MapFilterData> =
-        MutableStateFlow(MapFilterData("A", "N", 0, 100))
+    private val filterData: MutableStateFlow<MapFilterData> =
+        MutableStateFlow(
+            MapFilterData(
+                listOf(
+                    Pace.ALL,
+                    Pace.BEGINNER,
+                    Pace.AVERAGE,
+                    Pace.HIGH,
+                    Pace.MASTER
+                ), "A", "N", 0, 100
+            )
+        )
     private var preFilterData = filterData.value
     private val isRefresh: StateFlow<Int> = combine(
         filterRunningTag,
@@ -82,8 +99,20 @@ class RunnerMapViewModel @Inject constructor(
         getRunningList(if (userId > 0) userId else null, isRefresh = true)
     }
 
-    fun setFilter(gender: String?, jobTag: String?, minAge: Int? = 0, maxAge: Int?) {
-        filterData.value = MapFilterData(gender ?: "A", jobTag ?: "N", minAge ?: 0, maxAge ?: 100)
+    fun setFilter(
+        paces: List<Pace>,
+        gender: String?,
+        jobTag: String?,
+        minAge: Int? = 0,
+        maxAge: Int?
+    ) {
+        filterData.value = MapFilterData(
+            paces,
+            gender ?: "A",
+            jobTag ?: "N",
+            minAge ?: 0,
+            maxAge ?: 100
+        )
     }
 
     fun writeClicked() {
@@ -143,6 +172,7 @@ class RunnerMapViewModel @Inject constructor(
         val request = GetRunningListRequest(
             userLat = coordinator.latitude,
             userLng = coordinator.longitude,
+            paceFilter = filterData.value.paceTags.joinToString(","),
             jobFilter = filterData.value.jobTag,
             gender = filterData.value.genderTag,
             distanceFilter = "N",
@@ -173,6 +203,7 @@ class RunnerMapViewModel @Inject constructor(
                         if (it.code >= 999) UiState.NetworkError
                         else UiState.Failed(it.message)
                     }
+
                     is CommonResponse.Loading -> UiState.Loading
                     else -> UiState.Empty
                 }
@@ -186,5 +217,6 @@ sealed class RunnerMapAction {
     data class ShowSelectListDialog(
         val list: List<SelectItemParameter>
     ) : RunnerMapAction()
-    data class MoveToRunningFilter(val filterData: MapFilterData): RunnerMapAction()
+
+    data class MoveToRunningFilter(val filterData: MapFilterData) : RunnerMapAction()
 }

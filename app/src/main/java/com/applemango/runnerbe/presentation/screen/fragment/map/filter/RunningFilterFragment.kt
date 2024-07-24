@@ -2,6 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.map.filter
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -62,6 +63,7 @@ class RunningFilterFragment :
     }
 
     private fun initSetting() {
+        viewModel.setPaceTags(args.paces.toList())
         viewModel.setGenderTag(args.gender)
         viewModel.setJobTag(args.job)
         viewModel.isAllAgeChecked.value = isAllCheckAge(args.minAge, args.maxAge)
@@ -89,7 +91,13 @@ class RunningFilterFragment :
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.backClicked()
+                    val count = viewModel.paceList.value.count { it.isSelected }
+                    if (count != 0) {
+                        viewModel.backClicked()
+                    } else {
+                        // 팝업 출력
+                        Toast.makeText(requireContext(), "페이스 선택해주세요", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
     }

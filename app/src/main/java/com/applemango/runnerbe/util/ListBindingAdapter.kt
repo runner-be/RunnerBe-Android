@@ -26,6 +26,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.pr
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceCheckSelectListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSimpleSelectListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.AttendanceAccessionAdapter
@@ -166,6 +167,20 @@ fun setPaceSimpleSelectAdapter(
     val adapter = recyclerView.adapter
     recyclerView.itemAnimator = null
     if (adapter is PaceSimpleSelectListAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:paceCheckListAdapter", "bind:paceCheckSelectListener")
+fun setPaceCheckSelectAdapter(
+    recyclerView: RecyclerView,
+    dataList: List<PaceSelectItem>,
+    listener: PaceSelectListener
+) {
+    recyclerView.adapter ?: run {
+        recyclerView.adapter = PaceCheckSelectListAdapter(listener)
+    }
+    val adapter = recyclerView.adapter
+    recyclerView.itemAnimator = null
+    if (adapter is PaceCheckSelectListAdapter) adapter.submitList(dataList)
 }
 
 @BindingAdapter("bind:talkListAdapter", "bind:talkListClickListener")

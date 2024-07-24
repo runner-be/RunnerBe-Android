@@ -65,6 +65,7 @@ class PostRepositoryImpl @Inject constructor(
                 runningTag = runningTag,
                 distanceFilter = request.distanceFilter,
                 gender = request.gender,
+                paceFilter = request.paceFilter,
                 jobFilter = request.jobFilter,
                 minAge = request.minAge,
                 maxAge = request.maxAge,

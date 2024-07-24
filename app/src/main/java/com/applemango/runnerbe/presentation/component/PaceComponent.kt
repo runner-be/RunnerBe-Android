@@ -28,6 +28,7 @@ fun PaceComponentMini(pace: Pace) {
         Image(
             modifier = Modifier.padding(end = 2.dp), painter = painterResource(
                 id = when (pace) {
+                    Pace.ALL -> 0
                     Pace.BEGINNER -> R.drawable.ic_beginner_pace_14
                     Pace.AVERAGE -> R.drawable.ic_general_pace_14
                     Pace.HIGH -> R.drawable.ic_master_pace_14

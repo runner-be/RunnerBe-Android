@@ -15,6 +15,5 @@ class PostViewHolder(
         binding.item = item
         binding.clickListener = listener
         binding.incomingType = type
-
     }
 }
