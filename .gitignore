@@ -43,6 +43,8 @@ captures/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
+.idea/misc.xml
+.idea/compiler.xml
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
@@ -90,3 +92,4 @@ lint/tmp/
 .DS_Store
 .DS_Store?
 .idea/deploymentTargetDropDown.xml
+/.idea/
