@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.job
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +42,9 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
                                     buttonText = resources.getString(R.string.confirm)
                                 )
                             }
+                        }
+                        else -> {
+                            Log.e("AdditionalJobSelectFragment", "onViewCreated - when - else")
                         }
                     }
                 }

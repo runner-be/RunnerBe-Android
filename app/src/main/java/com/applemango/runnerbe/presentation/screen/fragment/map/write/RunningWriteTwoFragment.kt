@@ -87,6 +87,9 @@ class RunningWriteTwoFragment :
                         ).show()
                         navPopStack(R.id.mainFragment)
                     }
+                    else -> {
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

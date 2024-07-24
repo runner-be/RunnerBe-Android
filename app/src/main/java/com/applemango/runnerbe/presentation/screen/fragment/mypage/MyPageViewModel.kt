@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage
 
+import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -52,6 +53,10 @@ class MyPageViewModel @Inject constructor(
                             RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
                             pace.emit(result.userInfo.pace)
                         }
+                    }
+
+                    else -> {
+                        Log.e("MyPageViewModel", "getUserData - when - else")
                     }
                 }
             }

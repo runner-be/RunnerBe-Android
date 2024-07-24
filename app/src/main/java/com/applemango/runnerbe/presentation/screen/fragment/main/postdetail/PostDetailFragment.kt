@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main.postdetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -143,6 +144,9 @@ class PostDetailFragment :
                                 )
                             }
                         }
+                        else -> {
+                            Log.e("PostDetailFragment", "observeBind - when - else")
+                        }
                     }
                 }
             }
@@ -178,6 +182,9 @@ class PostDetailFragment :
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                        else -> {
+                            Log.e("EditProfileFragment", "observeBind - when - else")
+                        }
                     }
                 }
             }
@@ -208,6 +215,9 @@ class PostDetailFragment :
                         }
                         is UiState.NetworkError -> {
                             Toast.makeText(context, "문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {
+                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

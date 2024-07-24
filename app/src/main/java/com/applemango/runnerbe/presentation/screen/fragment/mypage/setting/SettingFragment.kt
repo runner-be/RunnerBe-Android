@@ -3,6 +3,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.setting
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -71,6 +72,10 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
 
                     }
                     is UiState.Success -> viewModel.logout()
+
+                    else -> {
+                        Log.e("SettingFragment", "observeBind - when - else")
+                    }
                 }
             }
         }

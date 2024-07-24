@@ -46,6 +46,9 @@ class MyPostAttendanceAccessionFragment : BaseFragment<FragmentMyPostAttendanceA
                         //오프라인 발생 어쩌구 다이얼로그
                         Log.e("error", it.toString())
                     }
+                    else -> {
+                        Log.e("MyPostAttendanceAccessionFragment", "onViewCreated - when - else")
+                    }
                 }
             }
         }

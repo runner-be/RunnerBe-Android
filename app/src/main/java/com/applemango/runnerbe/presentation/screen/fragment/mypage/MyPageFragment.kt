@@ -4,6 +4,7 @@ import android.Manifest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -100,6 +101,9 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         Toast.LENGTH_SHORT
                     ).show()
                     refresh()
+                }
+                else -> {
+                    Log.e("MainViewModel", "bookmarkStatusChange - when - else")
                 }
             }
         }

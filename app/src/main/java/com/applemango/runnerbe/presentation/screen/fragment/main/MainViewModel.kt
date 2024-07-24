@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
@@ -20,7 +21,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
-    var lastTabIndex : Int = 0
     val clickedPost: MutableStateFlow<Posting?> = MutableStateFlow(null)
 
     private val _bookmarkPost : MutableSharedFlow<Posting> = MutableSharedFlow()
@@ -68,6 +68,9 @@ class MainViewModel @Inject constructor(
                             post.bookMark = if(post.bookmarkCheck()) 0 else 1
                             _bookmarkPost.emit(post)
                         }
+                    }
+                    else -> {
+                        Log.e("MainViewModel", "bookmarkStatusChange - when - else")
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.Toast
@@ -74,6 +75,10 @@ class EditProfileFragment :
                     ).show()
                     refreshBack()
                 }
+
+                else -> {
+                    Log.e("EditProfileFragment", "observeBind - when - else")
+                }
             }
         }
         viewModel.nicknameChangeState.observe(viewLifecycleOwner) {
@@ -101,6 +106,10 @@ class EditProfileFragment :
                         Toast.LENGTH_SHORT
                     ).show()
                     refreshBack()
+                }
+
+                else -> {
+                    Log.e("EditProfileFragment", "observeBind - when - else")
                 }
             }
         }
