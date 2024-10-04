@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
@@ -60,6 +61,10 @@ class MyPostViewModel @Inject constructor(
                             post.bookMark = if(post.bookmarkCheck()) 0 else 1
                             _changedBookMarkPost.emit(post)
                         }
+                    }
+
+                    else -> {
+                        Log.e(this.javaClass.name, "bookmarkStatusChange - when - else - CommonResponse")
                     }
                 }
             }

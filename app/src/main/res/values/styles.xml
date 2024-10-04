@@ -12,4 +12,8 @@
     <style name="SeekBarColor" parent="Widget.AppCompat.SeekBar">
         <item name="colorPrimary">@color/primary</item>
     </style>
+
+    <style name="photo_round_shape_14">
+        <item name="cornerSize">14dp</item>
+    </style>
 </resources>

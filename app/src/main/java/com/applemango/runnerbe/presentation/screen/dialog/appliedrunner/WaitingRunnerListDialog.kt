@@ -3,6 +3,7 @@ package com.applemango.runnerbe.presentation.screen.dialog.appliedrunner
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import androidx.fragment.app.viewModels
@@ -59,6 +60,10 @@ class WaitingRunnerListDialog(
                                 buttonText = resources.getString(R.string.confirm)
                             )
                         }
+                    }
+
+                    else -> {
+                        Log.e(this.javaClass.name, "observeBind - when - else - UiState")
                     }
                 }
             }

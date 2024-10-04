@@ -42,8 +42,6 @@ import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
-
-
 @Composable
 fun LoginView(
     navController: NavController
@@ -166,7 +164,7 @@ fun KakaoLoginView(modifier: Modifier) {
             /* 카카오 로그인 기능 */
             var keyHash = Utility.getKeyHash(mContext)
             Log.i("keyHash", keyHash)
-            KakaoSdk.init(mContext, mContext.getString(R.string.kakao_native_key))
+//            KakaoSdk.init(mContext, mContext.getString(R.string.kakao_native_key))
 
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(mContext)) {
                 UserApiClient.instance.loginWithKakaoTalk(mContext, callback = callback)

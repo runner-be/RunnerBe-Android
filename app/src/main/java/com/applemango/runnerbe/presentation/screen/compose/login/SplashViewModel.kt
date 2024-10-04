@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.compose.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -88,6 +89,10 @@ class SplashViewModel @Inject constructor(
                         val result = it.body.result
                         RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
                     }
+                }
+
+                else -> {
+                    Log.e(this.javaClass.name, "getUserData - when - else - CommonResponse")
                 }
             }
         }

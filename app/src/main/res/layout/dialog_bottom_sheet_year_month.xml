@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_g5_5_round_dialog"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="20dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_top_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_gray_underbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.github.gzuliyujiang.wheelview.widget.WheelView
+            android:id="@+id/wv_year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@id/wv_month"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_top_bar"
+            app:wheel_curvedEnabled="true"
+            app:wheel_curvedIndicatorSpace="4dp"
+            app:wheel_indicatorColor="@android:color/transparent"
+            app:wheel_itemSpace="60dp"
+            app:wheel_itemTextBoldSelected="true"
+            app:wheel_itemTextColor="@color/dark_g4"
+            app:wheel_itemTextColorSelected="@color/primary"
+            app:wheel_itemTextSize="18sp"
+            app:wheel_itemTextSizeSelected="20sp" />
+
+        <com.github.gzuliyujiang.wheelview.widget.WheelView
+            android:id="@+id/wv_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/wv_year"
+            app:layout_constraintTop_toBottomOf="@+id/iv_top_bar"
+            app:wheel_curvedEnabled="true"
+            app:wheel_curvedIndicatorSpace="4dp"
+            app:wheel_indicatorColor="@android:color/transparent"
+            app:wheel_itemSpace="60dp"
+            app:wheel_itemTextBoldSelected="true"
+            app:wheel_itemTextColor="@color/dark_g4"
+            app:wheel_itemTextColorSelected="@color/primary"
+            app:wheel_itemTextSize="18sp"
+            app:wheel_itemTextSizeSelected="20sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_my_page_yet_running_custom"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/pretendard_medium"
+            android:gravity="center"
+            android:paddingVertical="14dp"
+            android:text="@string/confirm"
+            android:textColor="@color/tc_enable_dark3_5g_black"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/wv_year" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

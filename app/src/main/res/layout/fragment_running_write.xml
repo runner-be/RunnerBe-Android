@@ -191,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginHorizontal="16dp"
                         android:text="@{vm.runningDisplayDate.fullDisplayDate}"
                         tools:text="3/31 (금) AM 6:00"
                         android:textColor="@color/dark_g1"/>
@@ -238,7 +238,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginHorizontal="16dp"
                         android:text="@{vm.runningDisplayTime.fullDisplayTime}"
                         tools:text="0 시간 20 분"
                         android:textColor="@color/dark_g1"/>
@@ -276,22 +276,40 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/timeLimitDescriptionView"/>
 
-                <androidx.cardview.widget.CardView
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/locationLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
+                    android:orientation="horizontal"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="40dp"
-                    app:layout_constraintTop_toBottomOf="@id/runningLocationTextView"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:background="@drawable/bg_dark_5_5g_radius_6"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/runningLocationTextView">
 
-                    <com.naver.maps.map.MapView
-                        android:id="@+id/mapView"
-                        android:layout_width="match_parent"
-                        android:layout_height="218dp"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_location"/>
 
-                </androidx.cardview.widget.CardView>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="16dp"
+                        android:text="@{vm.runningSelectedLocation}"
+                        android:textColor="@color/dark_g1"/>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/locationSetButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_right_arrow_16"/>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

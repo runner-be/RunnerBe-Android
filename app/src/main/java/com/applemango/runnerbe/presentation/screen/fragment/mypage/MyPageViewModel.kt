@@ -26,7 +26,7 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
     val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
-    val joinPosts: ObservableArrayList<Posting> = ObservableArrayList()
+    val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
     val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
     val moveTab : MutableSharedFlow<Int> = MutableSharedFlow()
 
@@ -46,10 +46,11 @@ class MyPageViewModel @Inject constructor(
                         if (it.body is UserDataResponse) {
                             val result = it.body.result
                             userInfo.postValue(result.userInfo)
-                            joinPosts.clear()
                             myPosts.clear()
-                            joinPosts.addAll(result.myRunning)
-                            myPosts.addAll(result.posting)
+                            joinPosts.value = result.myRunning
+                            result.posting?.let { postingList ->
+                                myPosts.addAll(postingList)
+                            }
                             RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
                             pace.emit(result.userInfo.pace)
                         }

@@ -76,7 +76,7 @@ class PaceInfoRegistFragment :
                     override fun onClicked() {
                         when(viewModel.inputPage) {
                             PaceRegistrationInputPage.MAP.mode -> {
-                                findNavController().navigate(PaceInfoRegistFragmentDirections.moveToWriteFragment())
+                                findNavController().navigate(PaceInfoRegistFragmentDirections.moveToWriteFragment(null))
                             }
                             PaceRegistrationInputPage.MY_PAGE.mode -> {
                                 refreshBack()

@@ -26,6 +26,7 @@
     <color name="black_19">#191919</color>
     <color name="black_29">#292929</color>
     <color name="primary">#FFDD62</color>
+    <color name="primary_pressed">#FECF6C</color>
     <color name="naver_green">#03C75A</color>
     <color name="black_background">#121212</color>
     

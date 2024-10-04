@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_circle_shape_dark_3_5_stroke">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:layout_margin="1dp"
+            tools:src="@drawable/ic_niaka"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/fl_stamp"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:clickable="true"
+            android:padding="2dp"
+            android:background="@drawable/bg_g5_circle_shape_no_stroke"
+            app:layout_constraintEnd_toEndOf="@id/iv_photo"
+            app:layout_constraintBottom_toBottomOf="@id/iv_photo">
+
+            <ImageView
+                android:id="@+id/iv_stamp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                tools:src="@drawable/ic_stamp_5_interest"
+                android:scaleType="fitXY" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

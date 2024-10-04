@@ -1,12 +1,13 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
 import android.os.Bundle
-import android.view.MotionEvent
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
 import com.applemango.runnerbe.databinding.FragmentRunningWriteBinding
@@ -39,6 +40,8 @@ class RunningWriteOneFragment :
     BaseFragment<FragmentRunningWriteBinding>(R.layout.fragment_running_write),
     OnMapReadyCallback, View.OnClickListener {
 
+    private val navArgs: RunningWriteOneFragmentArgs by navArgs()
+
     private var centerMarker: Marker? = null
     private var markerInfoView: InfoWindow = InfoWindow()
 
@@ -52,20 +55,7 @@ class RunningWriteOneFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
-        binding.mapView.getMapAsync(this)
         binding.scrollView.requestDisallowInterceptTouchEvent(true)
-        binding.mapView.setOnTouchListener { v, event ->
-            when (event.action) {
-                MotionEvent.ACTION_MOVE -> {
-                    binding.scrollView.requestDisallowInterceptTouchEvent(true)
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    binding.scrollView.requestDisallowInterceptTouchEvent(true)
-                }
-            }
-            v.performClick()
-            binding.mapView.onTouchEvent(event)
-        }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -76,8 +66,13 @@ class RunningWriteOneFragment :
         observeBind()
         binding.dateLayout.setOnClickListener(this)
         binding.timeLayout.setOnClickListener(this)
+        binding.locationLayout.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
         binding.nextButton.setOnClickListener(this)
+        navArgs.address?.let {
+            viewModel.runningSelectedLocation.value = it.roadAddress + " " + it.detailAddress
+            viewModel.coordinate = LatLng(it.y.toDouble(), it.x.toDouble())
+        }
     }
 
     private fun observeBind() {
@@ -91,35 +86,7 @@ class RunningWriteOneFragment :
                 viewModel.runningDisplayDate.emit(DateSelectData.runningTagDefault(tag))
             }
         }
-
     }
-
-    override fun onStart() {
-        super.onStart()
-        binding.mapView.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.mapView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.mapView.onStop()
-    }
-
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.mapView.onLowMemory()
-    }
-
 
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
@@ -225,6 +192,11 @@ class RunningWriteOneFragment :
                             viewModel.runningDisplayTime.value = displayTime
                         }
                     }
+                )
+            }
+            binding.locationLayout -> {
+                navigate(
+                    RunningWriteOneFragmentDirections.actionRunningWriteFragmentToRunningAddressSearchFragment()
                 )
             }
             binding.backBtn -> navPopStack()

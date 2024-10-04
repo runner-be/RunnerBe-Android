@@ -10,6 +10,8 @@ import com.applemango.runnerbe.presentation.model.TimeResultListener
 import com.applemango.runnerbe.util.NumberUtil
 import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
 import com.github.gzuliyujiang.wheelview.widget.WheelView
+import com.jakewharton.rxbinding4.view.clicks
+import java.util.concurrent.TimeUnit
 
 class TimeSelectPickerDialog(context: Context) : Dialog(context, R.style.confirmDialogStyle) {
 
@@ -43,6 +45,12 @@ class TimeSelectPickerDialog(context: Context) : Dialog(context, R.style.confirm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initWheelView()
+        setClickListeners()
+        setContentView(binding.root)
+    }
+
+    private fun initWheelView() {
         val hourList = NumberUtil.getRange(0, 5)
         val minuteList = NumberUtil.getUnitNumber(0, 50, 10)
         binding.hourWheelView.setData(hourList, hourList.indexOf(timeSelectData?.hour))
@@ -58,22 +66,25 @@ class TimeSelectPickerDialog(context: Context) : Dialog(context, R.style.confirm
 
             override fun onWheelLoopFinished(view: WheelView?) {}
         })
-
-        binding.confirmButton.setOnClickListener {
-            result.getDate(
-                TimeSelectData(
-                    hour = binding.hourWheelView.getCurrentItem(),
-                    minute = binding.minuteWheelView.getCurrentItem()
-                )
-            )
-            dismiss()
-        }
-        setContentView(binding.root)
     }
 
-    private fun setMinuteData(minuteList : List<String>) {
+    private fun setClickListeners() {
+        with(binding) {
+            confirmButton.setOnClickListener {
+                result.getDate(
+                    TimeSelectData(
+                        hour = binding.hourWheelView.getCurrentItem(),
+                        minute = binding.minuteWheelView.getCurrentItem()
+                    )
+                )
+                dismiss()
+            }
+        }
+    }
+
+    private fun setMinuteData(minuteList: List<String>) {
         if (binding.hourWheelView.getCurrentItem<String>() == "5") {
-            binding.minuteWheelView.setData(listOf("00"), 0)
+            binding.minuteWheelView.setData(listOf("0"), 0)
         } else {
             binding.minuteWheelView.setData(
                 minuteList,

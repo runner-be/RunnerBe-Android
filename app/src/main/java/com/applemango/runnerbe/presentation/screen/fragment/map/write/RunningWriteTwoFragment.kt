@@ -32,7 +32,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RunningWriteTwoFragment :
     BaseFragment<FragmentRunningWriteTwoBinding>(R.layout.fragment_running_write_two),
-    OnMapReadyCallback, View.OnClickListener {
+//    OnMapReadyCallback, View.OnClickListener {
+    View.OnClickListener {
 
     private lateinit var mNaverMap: NaverMap
     private var centerMarker : Marker? = null
@@ -42,7 +43,6 @@ class RunningWriteTwoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mapView.getMapAsync(this)
         viewModel.oneData.value = args.data
         binding.vm = viewModel
         binding.backBtn.setOnClickListener(this)
@@ -95,56 +95,30 @@ class RunningWriteTwoFragment :
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding.mapView.onStart()
-    }
+//    override fun onMapReady(map: NaverMap) {
+//        mNaverMap = map
+//        mNaverMap.mapType = NaverMap.MapType.Navi
+//        mNaverMap.isNightModeEnabled = true
+//        mNaverMap.uiSettings.isScrollGesturesEnabled = false
+//        mNaverMap.uiSettings.isZoomControlEnabled = false
+//        createCenterMarker()
+//    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.mapView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.mapView.onStop()
-    }
-
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.mapView.onLowMemory()
-    }
-
-    override fun onMapReady(map: NaverMap) {
-        mNaverMap = map
-        mNaverMap.mapType = NaverMap.MapType.Navi
-        mNaverMap.isNightModeEnabled = true
-        mNaverMap.uiSettings.isScrollGesturesEnabled = false
-        mNaverMap.uiSettings.isZoomControlEnabled = false
-        createCenterMarker()
-    }
-
-    private fun createCenterMarker() {
-        centerMarker = Marker()
-        val lat = viewModel.oneData.value.coordinate.latitude
-        val lng = viewModel.oneData.value.coordinate.longitude
-        centerMarker?.apply {
-            position = LatLng(lat, lng)
-            map = mNaverMap
-            icon = OverlayImage.fromResource(R.drawable.ic_select_map_marker_no_profile)
-        }
-
-        mNaverMap.moveCamera(CameraUpdate.scrollTo(viewModel.oneData.value.coordinate))
-        context?.let {
-            viewModel.locationInfo.value = AddressUtil.getAddress(it, lat, lng)
-        }
-    }
+//    private fun createCenterMarker() {
+//        centerMarker = Marker()
+//        val lat = viewModel.oneData.value.coordinate.latitude
+//        val lng = viewModel.oneData.value.coordinate.longitude
+//        centerMarker?.apply {
+//            position = LatLng(lat, lng)
+//            map = mNaverMap
+//            icon = OverlayImage.fromResource(R.drawable.ic_select_map_marker_no_profile)
+//        }
+//
+//        mNaverMap.moveCamera(CameraUpdate.scrollTo(viewModel.oneData.value.coordinate))
+//        context?.let {
+//            viewModel.locationInfo.value = AddressUtil.getAddress(it, lat, lng)
+//        }
+//    }
 
     override fun onClick(v: View?) {
         when(v) {
@@ -170,6 +144,4 @@ class RunningWriteTwoFragment :
             }
         }
     }
-
-
 }

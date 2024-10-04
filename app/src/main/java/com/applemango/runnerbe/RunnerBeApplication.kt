@@ -42,7 +42,7 @@ class RunnerBeApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        KakaoSdk.init(this, getString(R.string.kakao_native_key))
+        KakaoSdk.init(this, BuildConfig.KAKAO_API_KEY)
         // 다크모드 비활성화
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         mTokenPreference = TokenSPreference(applicationContext)

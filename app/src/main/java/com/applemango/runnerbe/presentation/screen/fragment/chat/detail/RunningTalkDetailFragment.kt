@@ -4,6 +4,7 @@ import android.Manifest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -70,6 +71,7 @@ class RunningTalkDetailFragment :
                     }
                     when (it) {
                         is UiState.Success -> refresh()
+                        else -> { Log.e(this.javaClass.name, "observeBind - when - else - UiState") }
                     }
                 }
             }
@@ -103,6 +105,10 @@ class RunningTalkDetailFragment :
                                     buttonText = resources.getString(R.string.confirm)
                                 )
                             }
+                        }
+
+                        else -> {
+                            Log.e(this.javaClass.name, "observeBind - when - else - UiState")
                         }
                     }
                 }

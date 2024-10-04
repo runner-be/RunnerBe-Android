@@ -4,6 +4,25 @@ import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.data.network.BearerInterceptor
 import com.applemango.runnerbe.data.network.XAccessTokenInterceptor
 import com.applemango.runnerbe.data.network.api.*
+import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
+import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
+import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
+import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
+import com.applemango.runnerbe.data.network.api.runningLog.GetStampListApi
+import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
+import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
+import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
+import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +31,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -42,11 +65,28 @@ object NetworkModule {
             .build()
     }
 
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeConverter())
+        .create()
+
+    class ZonedDateTimeConverter : TypeAdapter<ZonedDateTime>() {
+        private val formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME  // ISO 8601 포맷터
+
+        override fun write(out: JsonWriter, value: ZonedDateTime?) {
+            out.value(value?.format(formatter))
+        }
+
+        override fun read(input: JsonReader): ZonedDateTime {
+            val date = input.nextString()
+            return ZonedDateTime.parse(date, formatter)
+        }
+    }
+
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .client(okHttpClient)
         .build()
 
@@ -179,4 +219,54 @@ object NetworkModule {
     @Singleton
     fun provideUserPaceRegist(retrofit: Retrofit): PatchUserPaceRegistApi =
         retrofit.create(PatchUserPaceRegistApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetAddressList(retrofit: Retrofit): GetAddressResultListApi =
+        retrofit.create(GetAddressResultListApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDeleteRunningLog(retrofit: Retrofit): DeleteRunningLogApi =
+        retrofit.create(DeleteRunningLogApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetJoinedRunnerList(retrofit: Retrofit): GetJoinedRunnerListApi =
+        retrofit.create(GetJoinedRunnerListApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetMonthlyRunningLogList(retrofit: Retrofit): GetMonthlyRunningLogListApi =
+        retrofit.create(GetMonthlyRunningLogListApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetRunningLogDetail(retrofit: Retrofit): GetRunningLogDetailApi =
+        retrofit.create(GetRunningLogDetailApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetStampList(retrofit: Retrofit): GetStampListApi =
+        retrofit.create(GetStampListApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePatchRunningLog(retrofit: Retrofit): PatchRunningLogApi =
+        retrofit.create(PatchRunningLogApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePatchStampToJoinedRunner(retrofit: Retrofit): PatchStampToJoinedRunnerApi =
+        retrofit.create(PatchStampToJoinedRunnerApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePostRunningLog(retrofit: Retrofit): PostRunningLogApi =
+        retrofit.create(PostRunningLogApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePostStampToJoinedRunner(retrofit: Retrofit): PostStampToJoinedRunnerApi =
+        retrofit.create(PostStampToJoinedRunnerApi::class.java)
 }

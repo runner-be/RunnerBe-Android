@@ -79,7 +79,6 @@ class RunningFilterViewModel : ViewModel() {
                         it.copy(isSelected = true)
                     }
                 } else {
-                    // 클릭된 아이템 체크 후 전체 선택 또한 체크되도록
                     paceList.value.map { item ->
                         if (item.pace == paceSelectItem.pace) {
                             item.copy(isSelected = !item.isSelected)

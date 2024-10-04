@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 비활성화 상태 -->
+    <item android:color="@color/dark_g5" android:state_enabled="false"/>
+
+    <!-- 눌림 상태 -->
+    <item android:color="@color/primary_pressed" android:state_pressed="true" android:state_enabled="true"/>
+
+    <!-- 활성화 상태 -->
+    <item android:color="@color/primary" android:state_enabled="true"/>
+</selector>

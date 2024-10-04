@@ -3,6 +3,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.chat.detail
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.loader.content.CursorLoader
@@ -180,6 +181,10 @@ class RunningTalkDetailViewModel @Inject constructor(
 
                     is CommonResponse.Failed -> {
                         _messageReportUiState.emit(UiState.Failed(it.message))
+                    }
+
+                    else -> {
+                        Log.e(this.javaClass.name, "messageReport - when - else - CommonResponse")
                     }
                 }
             }

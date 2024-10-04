@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
+import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressResult
 import com.naver.maps.geometry.LatLng
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,6 +20,7 @@ class RunningWriteOneViewModel : ViewModel() {
     var runningDate : Date = Calendar.getInstance().time
     val runningDisplayDate : MutableStateFlow<DateSelectData> = MutableStateFlow(DateSelectData.defaultNowDisplayDate())
     val runningDisplayTime : MutableStateFlow<TimeSelectData> = MutableStateFlow(TimeSelectData.getDefaultTimeData())
+    val runningSelectedLocation : MutableStateFlow<String> = MutableStateFlow("위치 정보 추가")
 
     val onNext = combine(runningTitle, runningDisplayTime) { title, time ->
         title.replace("\\s".toRegex(), "").isNotEmpty() && (time.hour.toInt() + time.minute.toInt()) > 0

@@ -36,7 +36,7 @@ class MyPostFragment : BaseFragment<FragmentMyPostBinding>(R.layout.fragment_my_
                 when(it) {
                     is MyPostActions.MoveToWrite -> {
                         checkAdditionalUserInfo {
-                            navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment())
+                            navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment(null))
                         }
                     }
                     is MyPostActions.MoveToMyPostAttendanceSee -> {

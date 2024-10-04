@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -90,7 +91,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                             checkAdditionalUserInfo {
                                 if(RunnerBeApplication.mTokenPreference.getMyRunningPace().isNullOrBlank()) {
                                     navigate(MainFragmentDirections.moveToPaceInfoFragment("map"))
-                                } else navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment())
+                                } else navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment(null))
                             }
                         }
                         is RunnerMapAction.ShowSelectListDialog -> {
@@ -182,6 +183,10 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 when (it) {
                     is UiState.Success -> {
                         markerUpdate()
+                    }
+
+                    else -> {
+                        Log.e(this.javaClass.name, "onMapReady - when - else - UiState")
                     }
                 }
             }

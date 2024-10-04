@@ -3,6 +3,7 @@ package com.applemango.runnerbe.util
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -11,6 +12,9 @@ import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
+import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
+import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -225,4 +229,41 @@ fun ImageView.setImageUrl(url: String?) {
     Glide.with(this)
         .load(url)
         .into(this)
+}
+
+@BindingAdapter("bind:isSwitchChecked")
+fun SwitchCompat.isChecked(isChecked: Boolean?) {
+    if (isChecked == null) this.isChecked = true
+    else this.isChecked = isChecked
+}
+
+@BindingAdapter("bind:logTeamSrc")
+fun ImageView.setLogTeamSrc(type: RunningLogType?) {
+    when (type) {
+        null -> { setImageResource(R.drawable.ic_team_lock) }
+        RunningLogType.ALONE -> setImageResource(R.drawable.ic_team_lock)
+        RunningLogType.TEAM -> setImageResource(R.drawable.ic_team_default)
+    }
+}
+
+@BindingAdapter("bind:stampSrc")
+fun ImageView.setStampImageSrc(stampItem: StampItem?) {
+    if (stampItem == null) {
+        setImageResource(R.drawable.ic_stamp_unavailable)
+    } else {
+        setImageResource(stampItem.image)
+    }
+}
+
+@BindingAdapter("bind:weatherSrc")
+fun ImageView.setWeatherImageSrc(weatherItem: WeatherItem?) {
+    val icon = weatherItem?.image ?: R.drawable.ic_weather_default
+    Glide.with(context)
+        .load(icon)
+        .into(this)
+}
+
+@BindingAdapter("bind:logVisibility")
+fun SwitchCompat.setLogVisibility(visibility: Boolean) {
+    isChecked = visibility
 }

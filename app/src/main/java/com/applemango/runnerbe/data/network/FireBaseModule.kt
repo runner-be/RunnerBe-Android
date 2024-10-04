@@ -32,7 +32,7 @@ object FireBaseModule {
             Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(httpClientBuilder.build())
-                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .also { firebaseRetrofit = it }
         }

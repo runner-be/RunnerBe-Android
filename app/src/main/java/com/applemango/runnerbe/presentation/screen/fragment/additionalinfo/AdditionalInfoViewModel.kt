@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
@@ -71,6 +72,10 @@ class AdditionalInfoViewModel @Inject constructor(
                                 }
                                 is CommonResponse.Failed -> {
                                     _registerState.emit(UiState.Failed(it.message))
+                                }
+
+                                else -> {
+                                    Log.e(this.javaClass.name, "register - when - else - CommonResponse")
                                 }
                             }
                         }

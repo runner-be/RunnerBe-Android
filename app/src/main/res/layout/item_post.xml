@@ -35,11 +35,15 @@
                 android:layout_height="wrap_content"
                 android:text="@{item.title}"
                 tools:text="새벽에 같이 달릴 친절한 여성 러너 구해요!"
+                android:ellipsize="end"
                 android:textSize="16sp"
                 android:textColor="@color/dark_g1"
                 android:fontFamily="@font/pretendard_regular"
                 android:includeFontPadding="false"
-                app:layout_constraintRight_toLeftOf="@id/bookmark_btn"
+                android:layout_marginEnd="8dp"
+                android:lines="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/bookmark_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 

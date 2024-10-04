@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 
+import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -74,6 +75,10 @@ class BookMarkViewModel @Inject constructor(
                         post.bookMark = if(post.bookmarkCheck()) 0 else 1
                         postChange(post)
                     }
+                }
+
+                else -> {
+                    Log.e(this.javaClass.name, "bookmarkStatusChange - when - else - CommonResponse")
                 }
             }
         }

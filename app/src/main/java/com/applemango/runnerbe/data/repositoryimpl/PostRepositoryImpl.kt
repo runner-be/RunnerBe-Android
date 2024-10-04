@@ -6,6 +6,7 @@ import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.data.network.request.WriteRunningRequest
 import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
@@ -18,7 +19,8 @@ class PostRepositoryImpl @Inject constructor(
     private val postApplyApi: PostApplyApi,
     private val postWhetherAcceptHandlingApi: WhetherAcceptHandlingApi,
     private val dropPostApi: DropPostApi,
-    private val reportPostApi: PostReportPostingApi
+    private val reportPostApi: PostReportPostingApi,
+    private val getAddressResultListApi: GetAddressResultListApi
 ) : PostRepository {
     override suspend fun getBookmarkList(userId: Int): CommonResponse {
         return try {
@@ -183,6 +185,24 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAddressList(keyword: String): CommonResponse {
+        return try {
+            val response = getAddressResultListApi.getAddressList(query = keyword)
+
+            if (response.isSuccessful) {
+                CommonResponse.Success(response.code(), response)
+            } else {
+                CommonResponse.Failed(
+                    response.code(),
+                    response.message() ?: "failed"
+                )
+            }
+        } catch (e: HttpException) {
+            CommonResponse.Failed(e.code(), e.message ?: "HTTP error")
+        } catch (e: Exception) {
+            CommonResponse.Failed(999, e.message ?: "Unknown error")
+        }
+    }
     override suspend fun dropPost(postId: Int, userId: Int): CommonResponse {
         return try {
             val response = dropPostApi.dropPost(postId, userId)

@@ -55,6 +55,7 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
                     when(it) {
                         is AdditionalInfoAction.MoveToBack -> { navPopStack() }
                         is AdditionalInfoAction.ActivityFinish -> { activity?.finish() }
+                        else -> { Log.e(this.javaClass.name, "onViewCreated - when - else - AdditionalInfoAction") }
                     }
                 }
             }
