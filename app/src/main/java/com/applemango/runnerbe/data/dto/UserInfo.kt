@@ -2,7 +2,6 @@ package com.applemango.runnerbe.data.dto
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.parcelize.Parcelize
 
 // 마이페이지(UserInfo), 게시글 상세(runnerInfo, waitingRunnerInfo)
@@ -14,6 +13,7 @@ data class UserInfo(
     @SerializedName("age") val age: String?,
     @SerializedName("diligence") val diligence: String?,
     @SerializedName("job") val job: String?,
+    @SerializedName("pace") val pace: String?,
     @SerializedName("profileImageUrl") val profileImageUrl: String?,
     // Y : 수신동의, N : 수신거부
     @SerializedName("pushOn") val pushOn: String?,

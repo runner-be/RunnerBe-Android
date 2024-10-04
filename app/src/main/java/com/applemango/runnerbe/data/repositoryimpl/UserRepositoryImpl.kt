@@ -17,7 +17,8 @@ class UserRepositoryImpl @Inject constructor(
     private val nicknameChangeApi: NicknameChangeApi,
     private val jobChangeApi: EditJobApi,
     private val patchUserImageApi: PatchUserImageApi,
-    private val bookMarkStatusChangeApi: BookMarkStatusChangeApi
+    private val bookMarkStatusChangeApi: BookMarkStatusChangeApi,
+    private val patchUserPaceApi: PatchUserPaceRegistApi
 ) : UserRepository {
     override suspend fun joinUser(request: JoinUserRequest): CommonResponse {
         return try {
@@ -141,6 +142,23 @@ class UserRepositoryImpl @Inject constructor(
                 postId = postId,
                 whetherAdd = whetherAdd
             )
+            if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
+                CommonResponse.Success(response.body()!!.code, response.body()!!)
+            } else {
+                CommonResponse.Failed(
+                    response.body()?.code ?: response.code(),
+                    response.body()?.message ?: response.message()
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CommonResponse.Failed(999, e.message ?: "error")
+        }
+    }
+
+    override suspend fun patchUserPaceRegist(userId: Int, pace: String): CommonResponse {
+        return try {
+            val response = patchUserPaceApi.patchUserPaceRegist(userId, PatchUserPaceRegisterRequest(pace))
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {

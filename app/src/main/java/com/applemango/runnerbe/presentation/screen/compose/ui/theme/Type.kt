@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.ui.theme
+package com.applemango.runnerbe.presentation.screen.compose.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
@@ -41,4 +41,19 @@ val notoSans = FontFamily(
     Font(R.font.noto_sans_cj_kkr_light, FontWeight.Light, FontStyle.Normal),
     Font(R.font.noto_sans_cj_kkr_medium, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.noto_sans_cj_kkr_regular, FontWeight.Normal, FontStyle.Normal)
+)
+
+val pretendard = FontFamily(
+    Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.pretendard_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.pretendard_light, FontWeight.Light, FontStyle.Normal),
+    Font(R.font.pretendard_medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.pretendard_thin, FontWeight.Thin, FontStyle.Normal)
+)
+
+val pretendardTypography = Typography(
+    caption = TextStyle(
+        fontFamily = pretendard,
+        fontWeight = FontWeight.Normal
+    )
 )

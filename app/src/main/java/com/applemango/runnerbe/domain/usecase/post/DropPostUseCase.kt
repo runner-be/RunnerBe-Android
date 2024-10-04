@@ -1,7 +1,5 @@
 package com.applemango.runnerbe.domain.usecase.post
 
-import android.widget.Toast
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import kotlinx.coroutines.flow.Flow

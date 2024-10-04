@@ -6,12 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.presentation.model.LoginType
 import com.applemango.runnerbe.data.network.request.SocialLoginRequest
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.repository.KakaoLoginRepository
 import com.applemango.runnerbe.domain.repository.NaverLoginRepository
+import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
+import com.applemango.runnerbe.presentation.model.LoginType
+import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val kakaoRepo: KakaoLoginRepository,
-    private val naverRepo: NaverLoginRepository
+    private val naverRepo: NaverLoginRepository,
+    private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
 
     private val _isTokenLogin: MutableLiveData<Boolean> = MutableLiveData()
@@ -63,11 +68,32 @@ class SplashViewModel @Inject constructor(
                     RunnerBeApplication.mTokenPreference.setLoginType(type)
                     if(result.jwt != null) RunnerBeApplication.mTokenPreference.setToken(result.jwt)
                     // 추가정보 입력시
-                    result.userId?.let { it1 -> RunnerBeApplication.mTokenPreference.setUserId(it1) }
+                    result.userId?.let { userId ->
+                        RunnerBeApplication.mTokenPreference.setUserId(userId)
+                        getUserData(userId)
+                    }
                     // 추가정보 미입력시
                     result.uuid?.let { it1 -> RunnerBeApplication.mTokenPreference.setUuid(it1) }
+
                     _isSocialLogin.value = CommonResponse.Success(it.code, it)
                 } else _isSocialLogin.value = CommonResponse.Failed(it.code,it.message?:"error")
+            }
+        }
+    }
+
+    private fun getUserData(userId: Int) = CoroutineScope(Dispatchers.IO).launch {
+        getUserDataUseCase(userId).collect {
+            when (it) {
+                is CommonResponse.Success<*> -> {
+                    if (it.body is UserDataResponse) {
+                        val result = it.body.result
+                        RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
+                    }
+                }
+
+                else -> {
+                    Log.e(this.javaClass.name, "getUserData - when - else - CommonResponse")
+                }
             }
         }
     }

@@ -2,14 +2,12 @@ package com.applemango.runnerbe.presentation.screen.fragment.base
 
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavArgs
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentWebViewBinding
+import kotlinx.coroutines.launch
 
 class WebViewFragment : BaseFragment<FragmentWebViewBinding>(R.layout.fragment_web_view) {
 
@@ -19,7 +17,13 @@ class WebViewFragment : BaseFragment<FragmentWebViewBinding>(R.layout.fragment_w
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = webViewViewModel
-        binding.fragment = this
+        viewLifecycleOwner.lifecycleScope.launch {
+            webViewViewModel.actions.collect {
+                when(it) {
+                    is WebViewAction.MoveToBack -> { navPopStack() }
+                }
+            }
+        }
         webViewViewModel.title.value = args.title
         binding.webView.apply {
 

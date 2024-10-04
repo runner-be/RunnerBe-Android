@@ -14,5 +14,7 @@ data class WriteRunningRequest(
     @SerializedName("ageMax") val maxAge : Int,
     @SerializedName("peopleNum") val numberOfRunner : Int,
     @SerializedName("contents") val contents : String?,
-    @SerializedName("runnerGender") val gender : String
+    @SerializedName("runnerGender") val gender : String,
+    @SerializedName("paceGrade") val paceGrade: String,
+    @SerializedName("afterParty") val isAfterParty: Int
 )

@@ -3,7 +3,7 @@
     <string name="runner_be">러너비</string>
     <string name="login_kakao">카카오로 로그인</string>
     <string name="login_naver">네이버로 로그인</string>
-    
+
     <string name="comma_text">%s · %s</string>
 
     <string name="setting">설정</string>
@@ -28,7 +28,7 @@
     <string name="join_running">참여 러닝</string>
     <string name="running_list">러닝 목록</string>
     <string name="logout">로그아웃</string>
-    
+
     <string name="msg_empty_my_post">아직 모임을 만들지 않았어요!</string>
     <string name="msg_empty_join_post">아직 러닝에 참여하지 않았어요!</string>
     <string name="msg_go_my_post">모임을 만들어볼까요?</string>
@@ -40,6 +40,8 @@
     <string name="confirm">확인</string>
     <string name="next">다음</string>
     <string name="enrollment">등록</string>
+    <string name="save">저장</string>
+    <string name="do_enrollment">등록하기</string>
 
     <string name="do_delete">삭제하기</string>
     <string name="delete_complete">삭제가 완료되었어요!</string>
@@ -49,6 +51,9 @@
     <string name="all">전체</string>
     <string name="female">여성</string>
     <string name="male">남성</string>
+
+    <string name="has_exist">있음</string>
+    <string name="has_not_exist">없음</string>
 
     <string name="max_people_count">최대 %s명</string>
     <string name="gender_string">%s만</string>
@@ -64,6 +69,11 @@
     <string name="msg_network_error_content">네트워크를 연결해주세요.</string>
     <string name="ready">준비됐어요!</string>
 
+
+    <!--  뒷풀이  -->
+    <string name="after_party_exist">뒷풀이 있음</string>
+    <string name="after_party_not_exist">뒷풀이 없음</string>
+
     <!-- 추가 정보 입력 화면 -->
     <string name="msg_terms_all_check">모든 약관을 읽었으며, 이에 동의해요.</string>
     <string name="terms_of_use_a_service_agreement">[필수] 서비스 이용약관 동의</string>
@@ -78,7 +88,7 @@
     <string name="msg_additional_info_complete">나를 충분히 소개했어요.\n달릴 준비 완료!</string>
     <string name="msg_additional_info_complete_description">이제 러너비에서 함께 달려볼까요?</string>
     <string name="already_run">달릴 준비 완료!</string>
-    
+
 
     <!-- 메인 화면 -->
     <string name="by_distance">거리순</string>
@@ -103,7 +113,7 @@
     <string name="do_post_apply">신청하기</string>
     <string name="apply_complete">신청완료</string>
     <string name="post_close_complete">모집완료</string>
-    
+
     <!-- 북마크 -->
     <string name="all_work">전체</string>
     <string name="before_work">출근 전</string>
@@ -121,28 +131,54 @@
     <string name="recruitment_age">모집 연령</string>
     <string name="all_age">모든 연령</string>
     <string name="recruitment_content">하고싶은 말 (선택)</string>
+    <string name="after_party">뒤풀이</string>
     <string name="msg_recruitment_count_minimum">모임 인원은 최소 2명부터 가능해요!</string>
     <string name="hint_content_write">함께할 러너들에게 하실 말씀이 있나요?\nex) ㅇㅇ마트 앞에서 만나요~</string>
     <string name="limit_five_hundred">%s/500</string>
     <string name="display_recruitment_age_setting">%s세 - %s세</string>
     <string name="question_running_write">글을 등록하시겠어요?</string>
     <string name="complete_running_write">글이 등록되었어요!</string>
+    <string name="recruiting">모집중</string>
+    <string name="recruitment_deadline">모집 마감</string>
+    <string name="recruitment_end">모집 종료</string>
+
+    <!-- 위치 검색 -->
+    <string name="running_location_search">장소 정보 입력</string>
+    <string name="running_location_search_hint">모임 장소 검색</string>
+    <string name="running_location_detect_current">현재 위치로 설정</string>
+    <string name="running_location_search_description">이렇게 검색해 보세요</string>
+    <string name="running_location_search_description_a_1">도로명 + 건물번호</string>
+    <string name="running_location_search_description_a_2">예) 러너비로 12길 3</string>
+    <string name="running_location_search_description_b_1">지역명 + 번지</string>
+    <string name="running_location_search_description_b_2">예) 러너비동 12–3</string>
+    <string name="running_location_search_description_c_1">건물명, 아파트명</string>
+    <string name="running_location_search_description_c_2">예) 러너비아파트 101동</string>
+    <string name="running_location_search_detail_edit">주소 수정</string>
+    <string name="running_location_search_detail_confirm">주소 등록</string>
+    <string name="running_location_search_detail_hint_1">상세 설명</string>
+    <string name="running_location_search_detail_hint_2">모임 장소 상세 설명을 입력하세요.</string>
 
     <!-- 러닝톡 -->
     <string name="report">신고</string>
     <string name="msg_warning_report">부적절한 신고는 수락되지 않으며,활동 제재의 원인이 될 수 있습니다.정말 신고하시겠어요?</string>
     <string name="report_complete">신고처리 되었습니다.</string>
+    <string name="image_count_alert">이미지는 한 번에 3장까지 등록 가능합니다.</string>
 
     <!-- 마이 페이지 -->
+    <string name="attendance_manage">출석 관리</string>
     <string name="attendance_managing">출석 관리하기</string>
     <string name="attendance_see">출석 확인하기</string>
     <string name="do_submit">제출하기</string>
+    <string name="lets_add_stamp">이 달의 스탬프를 채워봐요!</string>
+    <string name="title_attendance">참여한 러닝</string>
     <string name="msg_attendance_waiting">러닝 후에 출석을 관리해주세요</string>
     <string name="msg_attendance_complete">출석을 완료했어요 😎</string>
     <string name="msg_not_attendance_check">출석을 체크하지 않았어요 😣</string>
     <string name="msg_not_attendance_complete">불참했어요 😭</string>
     <string name="absent">결석</string>
     <string name="present">출석</string>
+    <string name="do_profile_edit">프로필 수정하기</string>
+    <string name="pace_registration_description">페이스를 등록하세요!</string>
 
     <!-- 내정보 수정  -->
     <string name="msg_impossible_nickname_change">* 닉네임 변경이 완료되어 추가 변경은 불가능해요!</string>
@@ -153,6 +189,13 @@
     <string name="question_job_change">직군 변경은 3개월에 1회 가능해요.\n변경하시겠어요?</string>
     <string name="my_job">나의 직군</string>
     <string name="double_check">중복확인</string>
+    <string name="pace_regist">페이스 등록</string>
+    <string name="pace_regist_with_emoji">👟 페이스 등록</string>
+    <string name="pace_level">페이스 난이도</string>
+    <string name="pace_regist_description_title">나의 러닝 페이스를 선택해주세요!</string>
+    <string name="pace_regist_description">페이스는 1km당 달리는데 걸리는 시간에 대한\n나의 러닝 페이스를 의미해요.</string>
+    <string name="pace_complete_title">페이스 %s \n등록 완료!</string>
+    <string name="pace_complete_description">페이스는 언제든 수정할 수 있어요.</string>
     <string name="finished_enrollment">등록완료</string>
     <string name="consider_more">더 고민할래요!</string>
     <string name="complete_change_nickname">닉네임이 변경되었어요!</string>
@@ -172,6 +215,11 @@
     <string name="sheave">시브</string>
     <string name="joy">조이</string>
     <string name="chanho">찬호</string>
+    <string name="rocky">로키</string>
+
+    <!-- 포스트 -->
+    <string name="before_running_management_button_text">모임 후 출석/로그를 관리할 수 있어요</string>
+    <string name="log_write">로그 쓰기</string>
 
     <!-- 직군 선택 버튼 -->
     <string name="psv_and_icon">🏫  공무원</string>
@@ -189,7 +237,90 @@
     <string name="acc_and_icon">💰  재무</string>
     <string name="cus_and_icon">🗣  CS</string>
 
+    <string name="beginner_pace_runner">입문 러너</string>
+    <string name="beginner_pace_runner_description">1km당 7~9분 러닝하는 입문 러너</string>
+    <string name="general_pace_runner">평균 러너</string>
+    <string name="general_pace_runner_description">1km당 6~7분 러닝하는 평균 러너</string>
+    <string name="master_pace_runner">고수 러너</string>
+    <string name="master_pace_runner_description">1km당 4.5~6분 러닝하는 고수 러너</string>
+    <string name="grand_matser_pace_runner">초고수 러너</string>
+    <string name="grand_matser_pace_runner_description">1km당 4.5분 미만으로 러닝하는 초고수 러너</string>
+
     <string name="facebook_app_id">638544227722032</string>
 
+    <!-- 바텀 시트 - 날씨 -->
+    <string name="weather_title">날씨</string>
+    <string name="weather_temperature_title">기온</string>
+    <string name="weather_temperature_hint">기온을 입력하세요!</string>
+    <string name="weather_temperature_unit">ºC</string>
+    <string name="weather_1_sunny">해</string>
+    <string name="weather_2_sunny">구름</string>
+    <string name="weather_3_sunny">밤</string>
+    <string name="weather_4_sunny">비</string>
+    <string name="weather_5_sunny">눈</string>
+
+    <!-- 바텀 시트 - 스탬프 -->
+    <string name="stamp_title">스탬프</string>
+    <string name="stamp_apply">적용하기</string>
+
+    <string name="stamp_1_name">Check!</string>
+    <string name="stamp_2_name">성취</string>
+    <string name="stamp_3_name">사교</string>
+    <string name="stamp_4_name">독기</string>
+    <string name="stamp_5_name">질주</string>
+    <string name="stamp_6_name">지속</string>
+    <string name="stamp_7_name">흥미</string>
+    <string name="stamp_8_name">성장</string>
+    <string name="stamp_9_name">쾌락</string>
+    <string name="stamp_10_name">감성</string>
+
+    <string name="stamp_1_description">체크메이트 - 오늘도 해냈군요!</string>
+    <string name="stamp_2_description">달리며 뿌듯하게 자랑할 만한 일이 일어났어요!</string>
+    <string name="stamp_3_description">달리기를 통해 소통하며 친구를 만들었어요!</string>
+    <string name="stamp_4_description">힘들어도 멈추지 않고 끝까지 달렸어요!</string>
+    <string name="stamp_5_description">속도를 내어 누구보다 빠르게 달린 날이에요!</string>
+    <string name="stamp_6_description">게으름 피우지 않고 꾸준히 달렸어요!</string>
+    <string name="stamp_7_description">풍경, 이벤트 등 달리는 도중 다양한 일들이 생겼어요!</string>
+    <string name="stamp_8_description">달리는 도중 이전보다 한층 더 성장한 나를 발견했어요!</string>
+    <string name="stamp_9_description">달리는 도중 심장이 터지도록 즐거움을 느꼈어요!</string>
+    <string name="stamp_10_description">이 온도, 이 습도, 이 러닝... 모든게 아름다운 달리기였어요!</string>
+
+    <!-- 러닝 로그 -->
+    <string name="running_log_add_stamp">터치해서 러닝 스탬프를 찍어볼까요?</string>
+    <string name="running_log_5_line_diary_title">5줄 러닝 일기</string>
+    <string name="running_log_5_line_diary_hint">5줄 일기로 오늘 하루 러닝을 표현해보세요.</string>
+    <string name="running_log_5_line_diary_add_photo">사진</string>
+
+    <string name="running_log_weather_title">날씨</string>
+    <string name="running_log_weather_default">-</string>
+
+    <string name="running_log_team_title">함께한 러너</string>
+    <string name="running_log_team_default">0 명</string>
+
+    <string name="running_visibility_title">공개 설정</string>
+    <string name="running_visibility_detail">이 글을 모두가 볼 수 있습니다.</string>
+
+    <string name="running_log_diary_length">%1$d/500</string>
+    <string name="running_log_diary_max_length_alert">5줄 일기는 500자 이하로 작성해주세요.</string>
+
+    <!-- 그룹 프로필-->
+    <string name="group_profile_title">함께한 러너</string>
+    <string name="group_profile_description">함께한 러너 프로필을 터치하여\n러닝 스탬프를 남겨봐요!</string>
+    <string name="group_profile_count">%1$d명</string>
+
+    <!-- 월간 캘린더 -->
+    <string name="calendar_title">캘린더</string>
+    <string name="calendar_monthly_statistic">크루 %1$d회  ·  개인 %2$d회</string>
+    <string name="calendar_monthly_statistic_empty">이 달의 스탬프를 채워봐요!</string>
+    <string name="calendar_selected_year_month">%1$d년 %2$d월</string>
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+    <string name="sunday">일</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

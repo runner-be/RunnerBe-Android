@@ -9,11 +9,11 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentAdditionalJobSelectBinding
 import com.applemango.runnerbe.presentation.model.JobButtonId
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
+import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.AdditionalInfoAction
 import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.AdditionalInfoViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -23,7 +23,6 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragment = this
         binding.vm = viewModel
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -44,6 +43,19 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
                                 )
                             }
                         }
+                        else -> {
+                            Log.e("AdditionalJobSelectFragment", "onViewCreated - when - else")
+                        }
+                    }
+                }
+            }
+
+            launch {
+                viewModel.actions.collect {
+                    when(it) {
+                        is AdditionalInfoAction.MoveToBack -> { navPopStack() }
+                        is AdditionalInfoAction.ActivityFinish -> { activity?.finish() }
+                        else -> { Log.e(this.javaClass.name, "onViewCreated - when - else - AdditionalInfoAction") }
                     }
                 }
             }
@@ -56,7 +68,7 @@ class AdditionalJobSelectFragment: BaseFragment<FragmentAdditionalJobSelectBindi
         }
     }
 
-    fun moveToNext() {
+    private fun moveToNext() {
         navigate(AdditionalJobSelectFragmentDirections.actionAdditionalJobSelectFragmentToRegisterCompleteFragment())
     }
 }

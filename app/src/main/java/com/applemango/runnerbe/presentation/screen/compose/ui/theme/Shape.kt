@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.ui.theme
+package com.applemango.runnerbe.presentation.screen.compose.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

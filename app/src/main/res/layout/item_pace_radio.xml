@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="14dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/select_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_radio_select"
+            bind:isSelected="@{item.selected}"
+            android:layout_marginLeft="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/pace_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            bind:imageResource="@{item.paceImageResource}"
+            android:layout_marginLeft="18dp"
+            app:layout_constraintLeft_toRightOf="@id/select_radio_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            tools:text="700 ~ 900"
+            android:text="@{item.pace.time}"
+            android:textSize="15sp"
+            android:textColor="@color/dark_g2"
+            android:fontFamily="@font/pretendard_semi_bold"
+            app:layout_constraintLeft_toRightOf="@id/pace_img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

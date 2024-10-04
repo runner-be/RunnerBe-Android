@@ -3,20 +3,19 @@ package com.applemango.runnerbe.presentation.screen.dialog.appliedrunner
 import android.app.Dialog
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import androidx.databinding.ObservableArrayList
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.DialogWaitingRunnuerListBinding
 import com.applemango.runnerbe.presentation.model.listener.PostDialogListener
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
-import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailViewModel
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
+import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailViewModel
 import com.applemango.runnerbe.presentation.state.UiState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WaitingRunnerListDialog(
-    private val waitingList: ObservableArrayList<UserInfo>,
     private val detailViewModel: PostDetailViewModel,
     private val postListener: PostDialogListener,
     private val roomId: Int?
@@ -39,7 +37,7 @@ class WaitingRunnerListDialog(
         binding.dialog = this
         if(detailViewModel.post.value != null) viewModel.post =detailViewModel.post.value!!
         else dismiss()
-        viewModel.waitingInfo.addAll(waitingList)
+        viewModel.waitingInfo.addAll(detailViewModel.waitingInfo)
         observeBind()
     }
 
@@ -62,6 +60,10 @@ class WaitingRunnerListDialog(
                                 buttonText = resources.getString(R.string.confirm)
                             )
                         }
+                    }
+
+                    else -> {
+                        Log.e(this.javaClass.name, "observeBind - when - else - UiState")
                     }
                 }
             }

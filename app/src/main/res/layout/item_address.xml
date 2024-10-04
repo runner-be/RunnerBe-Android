@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_click_g7_g5"
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="12dp"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_address_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/dark_g2"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="여의도 공원" />
+
+        <TextView
+            android:id="@+id/tv_address_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:textColor="@color/dark_g3_5"
+            android:textSize="14sp"
+            tools:text="서울 영등포구 여의도동 2" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

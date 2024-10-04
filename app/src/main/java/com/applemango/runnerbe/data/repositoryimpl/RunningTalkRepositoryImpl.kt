@@ -1,10 +1,12 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import com.applemango.runnerbe.data.network.api.*
-import com.applemango.runnerbe.data.network.request.FirebaseTokenUpdateRequest
-import com.applemango.runnerbe.domain.repository.RunningTalkRepository
+import com.applemango.runnerbe.data.network.api.GetRunningTalkDetailApi
+import com.applemango.runnerbe.data.network.api.GetRunningTalkMessagesApi
+import com.applemango.runnerbe.data.network.api.MessageReportApi
+import com.applemango.runnerbe.data.network.api.MessageSendApi
 import com.applemango.runnerbe.data.network.request.MessageReportRequest
 import com.applemango.runnerbe.data.network.request.SendMessageRequest
+import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import javax.inject.Inject
 
@@ -48,9 +50,9 @@ class RunningTalkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun sendMessage(roomId: Int, content: String): CommonResponse {
+    override suspend fun sendMessage(roomId: Int, content: String?, url: String?): CommonResponse {
         return try {
-            val response = sendMessagesApi.sendMessage(roomId, SendMessageRequest(content))
+            val response = sendMessagesApi.sendMessage(roomId, SendMessageRequest(content, url))
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {

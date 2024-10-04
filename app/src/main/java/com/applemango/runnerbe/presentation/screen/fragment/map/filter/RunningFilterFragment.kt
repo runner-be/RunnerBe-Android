@@ -2,15 +2,19 @@ package com.applemango.runnerbe.presentation.screen.fragment.map.filter
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningFilterBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.google.android.material.slider.RangeSlider
+import kotlinx.coroutines.launch
 
 class RunningFilterFragment :
     BaseFragment<FragmentRunningFilterBinding>(R.layout.fragment_running_filter) {
@@ -21,13 +25,45 @@ class RunningFilterFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        binding.fragment = this
         initSetting()
         filterSetting()
         sliderSetting()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.recruitmentStartAge.collect {
+                    binding.ageSlider.values = listOf(
+                        viewModel.recruitmentStartAge.value.toFloat(),
+                        viewModel.recruitmentEndAge.value.toFloat()
+                    )
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.recruitmentEndAge.collect {
+                    binding.ageSlider.values = listOf(
+                        viewModel.recruitmentStartAge.value.toFloat(),
+                        viewModel.recruitmentEndAge.value.toFloat()
+                    )
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.actions.collect {
+                    when(it) {
+                        is RunningFilterAction.MoveToBack -> {
+                            setFragmentResult("filter", it.bundle)
+                            navPopStack()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initSetting() {
+        viewModel.setPaceTags(args.paces.toList())
         viewModel.setGenderTag(args.gender)
         viewModel.setJobTag(args.job)
         viewModel.isAllAgeChecked.value = isAllCheckAge(args.minAge, args.maxAge)
@@ -55,21 +91,14 @@ class RunningFilterFragment :
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    goBack()
+                    val count = viewModel.paceList.value.count { it.isSelected }
+                    if (count != 0) {
+                        viewModel.backClicked()
+                    } else {
+                        // 팝업 출력
+                        Toast.makeText(requireContext(), "페이스 선택해주세요", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
-    }
-
-    override fun goBack() {
-        setFragmentResult("filter", viewModel.getFilterToBundle())
-        navPopStack()
-    }
-
-    fun refresh() {
-        viewModel.refresh()
-        binding.ageSlider.values = listOf(
-            viewModel.recruitmentStartAge.value.toFloat(),
-            viewModel.recruitmentEndAge.value.toFloat()
-        )
     }
 }

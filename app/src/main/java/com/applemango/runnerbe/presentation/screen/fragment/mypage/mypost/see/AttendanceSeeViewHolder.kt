@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.ItemAttendanceSeeBinding
-import com.applemango.runnerbe.presentation.model.RunnerDiligence
 
 class AttendanceSeeViewHolder(private val binding : ItemAttendanceSeeBinding) : RecyclerView.ViewHolder(binding.root) {
 

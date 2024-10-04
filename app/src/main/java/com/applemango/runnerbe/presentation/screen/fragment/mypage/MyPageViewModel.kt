@@ -1,23 +1,21 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage
 
+import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.R
+import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.dto.ProfileUrlList
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.presentation.model.RunnerDiligence
-import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
 import com.applemango.runnerbe.domain.usecase.PatchUserImageUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.data.network.response.UserDataResponse
+import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,20 +24,19 @@ class MyPageViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val patchUserImageUseCase: PatchUserImageUseCase
 ) : ViewModel() {
-
-    private var _uiUserDataFlow: MutableStateFlow<CommonResponse> =
-        MutableStateFlow(CommonResponse.Empty)
-    val uiUserDataFlow: StateFlow<CommonResponse> = _uiUserDataFlow
     val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
-    val joinPosts: ObservableArrayList<Posting> = ObservableArrayList()
+    val pace: MutableStateFlow<String?> = MutableStateFlow(null)
+    val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
     val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
     val moveTab : MutableSharedFlow<Int> = MutableSharedFlow()
 
     private val _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
-    val isShowInfoDialog get() = _isShowInfoDialog
 
     private var _updateUserImageState : MutableLiveData<UiState> = MutableLiveData()
     val updateUserImageState get() = _updateUserImageState
+
+    private val _actions = MutableSharedFlow<MyPageAction>()
+    val actions get() = _actions
 
     fun getUserData(userId: Int) = viewModelScope.launch {
         if (userId > -1) {
@@ -49,14 +46,20 @@ class MyPageViewModel @Inject constructor(
                         if (it.body is UserDataResponse) {
                             val result = it.body.result
                             userInfo.postValue(result.userInfo)
-                            joinPosts.clear()
                             myPosts.clear()
-                            joinPosts.addAll(result.myRunning)
-                            myPosts.addAll(result.posting)
+                            joinPosts.value = result.myRunning
+                            result.posting?.let { postingList ->
+                                myPosts.addAll(postingList)
+                            }
+                            RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
+                            pace.emit(result.userInfo.pace)
                         }
                     }
+
+                    else -> {
+                        Log.e("MyPageViewModel", "getUserData - when - else")
+                    }
                 }
-                _uiUserDataFlow.emit(it)
             }
         } else {
             //에러 메시지 뱉자~
@@ -81,5 +84,16 @@ class MyPageViewModel @Inject constructor(
 
     fun setTab(index : Int) = viewModelScope.launch { moveTab.emit(index) }
 
+    fun paceRegistrationClicked() = viewModelScope.launch {
+        _actions.emit(MyPageAction.MoveToPaceRegistration)
+    }
 
+    fun postUpdate(posting: Posting) {
+        val index = myPosts.indexOf(posting)
+        if (index != -1) myPosts[index] = posting.copy()
+    }
+}
+
+sealed class MyPageAction {
+    object MoveToPaceRegistration : MyPageAction()
 }

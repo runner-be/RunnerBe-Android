@@ -3,7 +3,6 @@ package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.comp
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.setFragmentResult
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentAdiitionalRegisterCompleteBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment

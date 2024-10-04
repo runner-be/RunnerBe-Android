@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -10,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningWriteTwoBinding
+import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
@@ -32,7 +32,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RunningWriteTwoFragment :
     BaseFragment<FragmentRunningWriteTwoBinding>(R.layout.fragment_running_write_two),
-    OnMapReadyCallback, View.OnClickListener {
+//    OnMapReadyCallback, View.OnClickListener {
+    View.OnClickListener {
 
     private lateinit var mNaverMap: NaverMap
     private var centerMarker : Marker? = null
@@ -42,7 +43,6 @@ class RunningWriteTwoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mapView.getMapAsync(this)
         viewModel.oneData.value = args.data
         binding.vm = viewModel
         binding.backBtn.setOnClickListener(this)
@@ -51,6 +51,10 @@ class RunningWriteTwoFragment :
             viewModel.recruitmentStartAge.value = ages[0].toInt()
             viewModel.recruitmentEndAge.value = ages[1].toInt()
         })
+        context?.let {
+            binding.paceLevelSelectRecyclerView.addItemDecoration(RecyclerViewItemDeco(it, 8))
+        }
+
         binding.postButton.setOnClickListener(this)
         observeBind()
     }
@@ -83,61 +87,38 @@ class RunningWriteTwoFragment :
                         ).show()
                         navPopStack(R.id.mainFragment)
                     }
+                    else -> {
+                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding.mapView.onStart()
-    }
+//    override fun onMapReady(map: NaverMap) {
+//        mNaverMap = map
+//        mNaverMap.mapType = NaverMap.MapType.Navi
+//        mNaverMap.isNightModeEnabled = true
+//        mNaverMap.uiSettings.isScrollGesturesEnabled = false
+//        mNaverMap.uiSettings.isZoomControlEnabled = false
+//        createCenterMarker()
+//    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.mapView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        binding.mapView.onStop()
-    }
-
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.mapView.onLowMemory()
-    }
-
-    override fun onMapReady(map: NaverMap) {
-        mNaverMap = map
-        mNaverMap.mapType = NaverMap.MapType.Navi
-        mNaverMap.isNightModeEnabled = true
-        mNaverMap.uiSettings.isScrollGesturesEnabled = false
-        mNaverMap.uiSettings.isZoomControlEnabled = false
-        createCenterMarker()
-    }
-
-    private fun createCenterMarker() {
-        centerMarker = Marker()
-        val lat = viewModel.oneData.value.coordinate.latitude
-        val lng = viewModel.oneData.value.coordinate.longitude
-        centerMarker?.apply {
-            position = LatLng(lat, lng)
-            map = mNaverMap
-            icon = OverlayImage.fromResource(R.drawable.ic_select_map_marker_no_profile)
-        }
-
-        mNaverMap.moveCamera(CameraUpdate.scrollTo(viewModel.oneData.value.coordinate))
-        context?.let {
-            viewModel.locationInfo.value = AddressUtil.getAddress(it, lat, lng)
-        }
-    }
+//    private fun createCenterMarker() {
+//        centerMarker = Marker()
+//        val lat = viewModel.oneData.value.coordinate.latitude
+//        val lng = viewModel.oneData.value.coordinate.longitude
+//        centerMarker?.apply {
+//            position = LatLng(lat, lng)
+//            map = mNaverMap
+//            icon = OverlayImage.fromResource(R.drawable.ic_select_map_marker_no_profile)
+//        }
+//
+//        mNaverMap.moveCamera(CameraUpdate.scrollTo(viewModel.oneData.value.coordinate))
+//        context?.let {
+//            viewModel.locationInfo.value = AddressUtil.getAddress(it, lat, lng)
+//        }
+//    }
 
     override fun onClick(v: View?) {
         when(v) {
@@ -163,6 +144,4 @@ class RunningWriteTwoFragment :
             }
         }
     }
-
-
 }

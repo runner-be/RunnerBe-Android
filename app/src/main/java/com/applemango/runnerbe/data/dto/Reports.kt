@@ -15,26 +15,5 @@ data class Reports(
     @SerializedName("whetherPostUser") val whetherPostUser: String,
     var reportCheck: Boolean = false
 ) {
-    fun meCheck(): Boolean {
-        return if (this.messageFrom == "me") return true
-        else false
-    }
-    fun writerCheck() : Boolean {
-        return if(this.whetherPostUser == "Y") return true
-        else false
-    }
 }
 
-fun mapperMessageToReports(item: Message): Reports {
-    return Reports(
-        messageId = item.messageId,
-        content = item.content,
-        createdAt = item.createdAt,
-        userId = item.userId,
-        nickName = item.nickName,
-        profileImageUrl = item.profileImageUrl,
-        messageFrom = item.messageFrom,
-        whetherPostUser = item.whetherPostUser,
-        reportCheck = false
-    )
-}

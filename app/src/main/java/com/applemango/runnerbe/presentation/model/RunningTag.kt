@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.model
 
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 
 enum class RunningTag(val tag: String) {
     All("W"),

@@ -1,15 +1,25 @@
 package com.applemango.runnerbe.util
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 /**
  * author : 두루
  */
 
-fun TimeHourAndMinute(dateString: String): String {
+fun parseLocalDateToKorean(localDate: LocalDate): String {
+    return "${localDate.year}년 ${localDate.monthValue}월 ${localDate.dayOfMonth}일 ${
+        localDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
+    }"
+}
+
+fun timeHourAndMinute(dateString: String): String {
     val stringToDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    val to: Date = stringToDate.parse(dateString)
+    val to: Date = stringToDate.parse(dateString.replace("T", " ").replace("Z", " "))
     val dateToString = SimpleDateFormat("HH:mm")
     return dateToString.format(to)
 }
@@ -28,24 +38,31 @@ fun DateString(dateString: String): String {
     return dateToString.format(to)
 }
 
-fun DateStringInT(dateString: String) : String = dateString.substring(0, dateString.indexOf("T"))
+fun dateStringToString(dateString: String, format: SimpleDateFormat): String? {
+    val temp = dateString.replace("T", " ").replace("Z", " ")
+    val stringToDate = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
+    val to: Date? = stringToDate.parse(temp)
+    return to?.let { format.format(it) }
+}
 
-fun dateStringToLongTime(dateString: String) : Long {
+fun DateStringInT(dateString: String): String = dateString.substring(0, dateString.indexOf("T"))
+
+fun dateStringToLongTime(dateString: String): Long {
     val temp = dateString.replace("T", " ").replace("Z", " ")
     val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 //    formatter.timeZone = TimeZone.getTimeZone("KST")
     val date = formatter.parse(temp)
-    return date?.time?:0L
+    return date?.time ?: 0L
 }
 
-fun timeStringToLongTime(timeString: String) : Long {
+fun timeStringToLongTime(timeString: String): Long {
     val timeSplit = timeString.split(":")
     return ((timeSplit[0].toInt() * 60 * 60 * 1000) + (timeSplit[1].toInt() * 60 * 1000)).toLong()
 }
 
 fun TimeString(dateString: String): String {
     val res = dateString.split(":")
-    val hourString = if(res[0] != "00")"${res[0]}시 " else ""
+    val hourString = if (res[0] != "00") "${res[0]}시 " else ""
     val minuteString = "${res[1]}분"
     return "$hourString$minuteString"
 }
@@ -55,17 +72,15 @@ fun BeforeTimeString(dateString: String): String {
     val date = stringToDate.parse(dateString)
 
     val today = Calendar.getInstance()
-    val day = (today.time.time-date.time) / (60*60*24*1000)
-    val hour = (today.time.time-date.time) / (60*60*1000)
-    val minute = (today.time.time-date.time) / (60*1000)
-    return if(day > 0) {
-        day.toString()+"일 전"
-    }
-    else if(hour > 0) {
-        hour.toString()+"시간 전"
-    }
-    else {
-        minute.toString()+"분 전"
+    val day = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
+    val hour = (today.time.time - date.time) / (60 * 60 * 1000)
+    val minute = (today.time.time - date.time) / (60 * 1000)
+    return if (day > 0) {
+        day.toString() + "일 전"
+    } else if (hour > 0) {
+        hour.toString() + "시간 전"
+    } else {
+        minute.toString() + "분 전"
     }
 }
 
@@ -75,7 +90,7 @@ fun removeLastNchars(str: String, n: Int): String {
     } else str.substring(0, str.length - n)
 }
 
-fun getDateList(range : Int) : List<String> {
+fun getDateList(range: Int): List<String> {
     val format = SimpleDateFormat("M/d (E)")
     val cal = Calendar.getInstance()
     cal.add(Calendar.DATE, -1)
@@ -99,7 +114,7 @@ fun getMonthAndDay(date: String): String {
 
 }
 
-fun getYearListByDay(range: Int) : List<String> {
+fun getYearListByDay(range: Int): List<String> {
     val format = SimpleDateFormat("yyyy")
     val cal = Calendar.getInstance()
     cal.add(Calendar.DATE, -1)
@@ -114,7 +129,7 @@ fun getYearListByDay(range: Int) : List<String> {
  * untilYear : 몇년 전까지 불러올 것인지(20이면 20년 전부터 가져옴)
  * range: untilYear ~ range만큼 가져옴
  */
-fun getYearListByYear(untilYear: Int, range : Int) : List<String> {
+fun getYearListByYear(untilYear: Int, range: Int): List<String> {
     val format = SimpleDateFormat("yyyy")
     val cal = Calendar.getInstance()
     cal.add(Calendar.YEAR, 1 - untilYear)

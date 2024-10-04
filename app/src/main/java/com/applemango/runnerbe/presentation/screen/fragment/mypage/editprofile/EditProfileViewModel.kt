@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile
 
-import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +7,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.domain.usecase.JobChangeUseCase
-import com.applemango.runnerbe.domain.usecase.NicknameChangeUseCase
+import com.applemango.runnerbe.domain.usecase.myinfo.NicknameChangeUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

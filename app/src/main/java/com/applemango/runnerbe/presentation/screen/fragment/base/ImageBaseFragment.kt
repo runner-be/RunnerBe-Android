@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 
 open class ImageBaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) : BaseFragment<T>(layoutId) {
 
-    protected var isMultipleImage: Boolean = false
+    private var isMultipleImage: Boolean = false
     private var mCurrentPhotoPath: String = ""
     var isImage = true
 

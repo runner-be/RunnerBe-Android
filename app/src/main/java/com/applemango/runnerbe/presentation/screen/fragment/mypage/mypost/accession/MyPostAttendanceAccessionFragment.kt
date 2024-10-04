@@ -12,7 +12,6 @@ import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -46,6 +45,9 @@ class MyPostAttendanceAccessionFragment : BaseFragment<FragmentMyPostAttendanceA
                     is UiState.NetworkError -> {
                         //오프라인 발생 어쩌구 다이얼로그
                         Log.e("error", it.toString())
+                    }
+                    else -> {
+                        Log.e("MyPostAttendanceAccessionFragment", "onViewCreated - when - else")
                     }
                 }
             }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/const_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/dark_g7"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="12dp">
+
+        <FrameLayout
+            android:id="@+id/fl_profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:duplicateParentState="true"
+            android:background="@drawable/bg_g5_circle_shape_no_stroke"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                tools:src="@color/white" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            tools:text="김민규"
+            android:textColor="@color/dark_g1"
+            android:textSize="17sp"
+            android:ellipsize="end"
+            android:maxLength="10"
+            android:maxLines="1"
+            app:layout_constraintStart_toEndOf="@id/fl_profile"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_leader"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_mini_runnerbe_logo"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="@id/tv_profile_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_profile_name"
+            app:layout_constraintStart_toEndOf="@id/tv_profile_name" />
+
+        <FrameLayout
+            android:id="@+id/fl_stamp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="6dp"
+            android:duplicateParentState="true"
+            android:background="@drawable/bg_g5_circle_shape_no_stroke"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_stamp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/ic_stamp_4_durability"
+                android:scaleType="fitXY" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

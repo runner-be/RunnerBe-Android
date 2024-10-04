@@ -6,10 +6,14 @@
     </style>
 
     <style name="confirmDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <style name="SeekBarColor" parent="Widget.AppCompat.SeekBar">
         <item name="colorPrimary">@color/primary</item>
+    </style>
+
+    <style name="photo_round_shape_14">
+        <item name="cornerSize">14dp</item>
     </style>
 </resources>

@@ -12,12 +12,10 @@ import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.JobButtonId
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.TokenSPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,6 +30,9 @@ class AdditionalInfoViewModel @Inject constructor(
 
     private val _registerState : MutableSharedFlow<UiState> = MutableSharedFlow()
     val registerState : SharedFlow<UiState> get() = _registerState
+
+    private val _actions: MutableSharedFlow<AdditionalInfoAction> = MutableSharedFlow()
+    val actions: SharedFlow<AdditionalInfoAction> get() = _actions
 
     private fun getJobTag(): String? = JobButtonId.findById(jobRadioChecked.value)?.job
 
@@ -72,6 +73,10 @@ class AdditionalInfoViewModel @Inject constructor(
                                 is CommonResponse.Failed -> {
                                     _registerState.emit(UiState.Failed(it.message))
                                 }
+
+                                else -> {
+                                    Log.e(this.javaClass.name, "register - when - else - CommonResponse")
+                                }
                             }
                         }
                     }?:run {
@@ -84,11 +89,34 @@ class AdditionalInfoViewModel @Inject constructor(
                 _registerState.emit(UiState.Failed("출생년도를 다시 입력해주세요."))
             }
         } else _registerState.emit(UiState.Failed("앱을 재실행해주세요."))
-
     }
 
-    fun getGenderTag(tabId : Int) : String = when(tabId) {
+    fun backClicked() {
+        viewModelScope.launch {
+            _actions.emit(AdditionalInfoAction.MoveToBack)
+        }
+    }
+
+    fun cancelClicked() {
+        viewModelScope.launch {
+            _actions.emit(AdditionalInfoAction.ActivityFinish)
+        }
+    }
+
+    fun nextClicked() {
+        viewModelScope.launch {
+            _actions.emit(AdditionalInfoAction.MoveToNext)
+        }
+    }
+
+    private fun getGenderTag(tabId : Int) : String = when(tabId) {
             R.id.maleButton-> GenderTag.MALE.tag
             else -> GenderTag.FEMALE.tag
         }
+}
+
+sealed class AdditionalInfoAction {
+    object MoveToBack : AdditionalInfoAction()
+    object ActivityFinish: AdditionalInfoAction()
+    object MoveToNext: AdditionalInfoAction()
 }

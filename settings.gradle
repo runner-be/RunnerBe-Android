@@ -6,14 +6,15 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
-        maven{ url 'https://naver.jfrog.io/artifactory/maven/' }
+        maven { url 'https://repository.map.naver.com/archive/maven' }
     }
 }
+
 rootProject.name = "RunnerBe-Android"
 include ':app'

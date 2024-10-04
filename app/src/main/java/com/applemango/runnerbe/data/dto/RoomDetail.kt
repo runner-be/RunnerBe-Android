@@ -8,13 +8,14 @@ data class RoomDetail(
 )
 
 data class RoomInfo(
-    @SerializedName("runningTag") val runningTag : String,
-    @SerializedName("title") val talkTitle : String
+    @SerializedName("title") val talkTitle : String,
+    @SerializedName("pace") val pace: String
 )
 
 data class Messages(
     @SerializedName("messageId") val messageId :Int,
-    @SerializedName("content") val content : String,
+    @SerializedName("content") val content : String?,
+    @SerializedName("imageUrl") val imageUrl: String?,
     @SerializedName("createdAt") val createAt : String,
     @SerializedName("userId") val userId : Int,
     @SerializedName("nickName") val nickName : String,

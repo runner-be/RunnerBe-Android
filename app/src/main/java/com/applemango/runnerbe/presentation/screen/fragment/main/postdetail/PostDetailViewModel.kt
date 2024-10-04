@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main.postdetail
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,12 +9,14 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.domain.usecase.post.*
+import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,10 +39,13 @@ class PostDetailViewModel @Inject constructor(
     val processUiState get() = _processUiState
 
     private val _dropUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
-    val dropUiState : StateFlow<UiState> get() = _dropUiState
+    val dropUiState: StateFlow<UiState> get() = _dropUiState
 
-    private val _reportUiState:MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
+    private val _reportUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
     val reportUiState: StateFlow<UiState> get() = _reportUiState
+
+    private val _actions: MutableSharedFlow<PostDetailAction> = MutableSharedFlow()
+    val actions: SharedFlow<PostDetailAction> get() = _actions
 
     val locationInfo: MutableStateFlow<String> =
         MutableStateFlow(RunnerBeApplication.instance.applicationContext.getString(R.string.no_location_info))
@@ -84,6 +88,66 @@ class PostDetailViewModel @Inject constructor(
         } else _processUiState.emit(UiState.AnonymousFailed())
     }
 
+    fun backClicked() {
+        viewModelScope.launch {
+            _actions.emit(PostDetailAction.MoveToBack)
+        }
+    }
+
+    fun waitingBtnClicked() {
+        viewModelScope.launch {
+            _actions.emit(PostDetailAction.ShowAppliedRunnerListDialog)
+        }
+    }
+
+    fun bottomBtnClicked() {
+        val resources = RunnerBeApplication.instance.resources
+        viewModelScope.launch {
+            _actions.emit(PostDetailAction.ShowTwoBtnDialog(
+                titleText = resources.getString(if (isMyPost()) R.string.question_post_close else R.string.question_post_apply),
+                firstBtnText = resources.getString(R.string.no),
+                secondBtnText = resources.getString(R.string.yes),
+                firstEvent = {},
+                secondEvent = { bottomProcess() }
+            )
+            )
+        }
+    }
+
+    fun reportBtnClicked() {
+        val resources = RunnerBeApplication.instance.resources
+        viewModelScope.launch {
+            _actions.emit(PostDetailAction.ShowTwoBtnDialog(
+                titleText = resources.getString(R.string.msg_warning_report),
+                firstBtnText = resources.getString(R.string.yes),
+                secondBtnText = resources.getString(R.string.no),
+                firstEvent = { reportPost() },
+                secondEvent = {}
+            )
+            )
+        }
+    }
+
+    fun moreIconClicked() {
+        val resources = RunnerBeApplication.instance.resources
+        viewModelScope.launch {
+            _actions.emit(PostDetailAction.ShowSelectListDialog(
+                listOf(
+                    SelectItemParameter(resources.getString(R.string.do_delete)) {
+                        dropPost()
+                    }
+                )
+            ))
+        }
+    }
+    fun moveToMessageClicked() {
+        viewModelScope.launch {
+            val id = roomId ?: return@launch
+            val name = post.value?.nickName ?: return@launch
+            _actions.emit(PostDetailAction.MoveToMessage(id, name))
+        }
+    }
+
     fun setBottomButtonText(posting: Posting): Int {
         return if (isPostClose()) R.string.post_close_complete
         else {
@@ -103,9 +167,9 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun dropPost() = viewModelScope.launch {
+    private fun dropPost() = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        if(userId > 0) {
+        if (userId > 0) {
             post.value?.postId?.let { postId ->
                 dropPostUseCase(postId, userId).collect {
                     _dropUiState.emit(
@@ -115,6 +179,7 @@ class PostDetailViewModel @Inject constructor(
                                 if (it.code <= 999) UiState.NetworkError
                                 else UiState.Failed(it.message)
                             }
+
                             is CommonResponse.Loading -> UiState.Loading
                             else -> UiState.Empty
                         }
@@ -123,12 +188,12 @@ class PostDetailViewModel @Inject constructor(
             } ?: run {
                 _dropUiState.emit(UiState.Failed("앱 재실행 후 다시 시도해 주세요."))
             }
-        }else _dropUiState.emit(UiState.Failed("로그인이 필요합니다."))
+        } else _dropUiState.emit(UiState.Failed("로그인이 필요합니다."))
     }
 
-    fun reportPost() = viewModelScope.launch {
+    private fun reportPost() = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        if(userId > 0) {
+        if (userId > 0) {
             post.value?.postId?.let { postId ->
                 postReportUseCase(postId, userId).collect {
                     _reportUiState.emit(
@@ -138,6 +203,7 @@ class PostDetailViewModel @Inject constructor(
                                 if (it.code <= 999) UiState.NetworkError
                                 else UiState.Failed(it.message)
                             }
+
                             is CommonResponse.Loading -> UiState.Loading
                             else -> UiState.Empty
                         }
@@ -150,7 +216,7 @@ class PostDetailViewModel @Inject constructor(
     fun isParticipatePostIn(posting: Posting): Boolean =
         runnerInfo.any { it.userId == RunnerBeApplication.mTokenPreference.getUserId() }
 
-    fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
+    private fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
     fun isMyPost(): Boolean =
         RunnerBeApplication.mTokenPreference.getUserId() == post.value?.postUserId
 
@@ -166,4 +232,20 @@ class PostDetailViewModel @Inject constructor(
         }
         return result
     }
+}
+
+sealed class PostDetailAction() {
+    object MoveToBack : PostDetailAction()
+    object ShowAppliedRunnerListDialog : PostDetailAction()
+    data class MoveToMessage(val roomId: Int, val nickName: String) : PostDetailAction()
+    data class ShowTwoBtnDialog(
+        val titleText: String,
+        val firstBtnText: String,
+        val secondBtnText: String,
+        val firstEvent: () -> Unit,
+        val secondEvent: () -> Unit,
+    ) : PostDetailAction()
+    data class ShowSelectListDialog(
+        val list: List<SelectItemParameter>
+    ) : PostDetailAction()
 }

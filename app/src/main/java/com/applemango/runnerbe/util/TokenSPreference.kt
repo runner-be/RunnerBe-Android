@@ -85,4 +85,9 @@ class TokenSPreference(private val applicationContext : Context) {
     fun removeLoginType() {
         editor.remove("loginType").commit()
     }
+
+    fun getMyRunningPace(): String? = sSharedPreferences.getString("runningPace", "")
+    fun setMyRunningPace(pace: String) {
+        editor.putString("runningPace", pace).commit()
+    }
 }

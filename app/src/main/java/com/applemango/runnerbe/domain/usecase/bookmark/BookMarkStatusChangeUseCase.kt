@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.domain.usecase.bookmark
 
-import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
 import com.applemango.runnerbe.domain.repository.UserRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import kotlinx.coroutines.flow.Flow

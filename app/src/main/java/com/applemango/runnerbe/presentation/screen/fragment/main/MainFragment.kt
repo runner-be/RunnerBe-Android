@@ -1,16 +1,19 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentMainBinding
 import com.applemango.runnerbe.databinding.ItemTabListBinding
+import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.MainBottomTab
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.map.RunnerMapViewModel
@@ -34,17 +37,24 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     private val viewModel: RunnerMapViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         pageSetting()
         observeBind()
-//        val sha1 = byteArrayOf(
-//            0xE4.toByte(), 0xE4.toByte(), 0x34, 0xFF.toByte(), 0x4D, 0x03, 0xD4.toByte(), 0x8C.toByte(), 0x0A, 0x33, 0x4B, 0x43, 0x7C, 0xC4.toByte(), 0x74, 0x3C, 0xAE.toByte(), 0xA5.toByte(), 0x83.toByte(), 0x89.toByte()
-//        )
-//        Log.e("젠장", "keyHash: " + Base64.encodeToString(sha1, Base64.NO_WRAP))
 
         setFragmentResultListener("filter") { _, bundle ->
+            val paces: List<Pace> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelableArray("paces", Pace::class.java)?.toList()
+            } else {
+                @Suppress("DEPRECATION")
+                bundle.getParcelableArray("paces")?.filterIsInstance<Pace>()
+            } ?: emptyList()
+
+            Log.e("MainFragment", paces.toString())
+
             viewModel.setFilter(
+                paces = paces,
                 gender = bundle.getString("gender"),
                 jobTag = bundle.getString("job"),
                 minAge = bundle.getInt("minAge"),
@@ -95,5 +105,4 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             }?.run { tab.customView = this.root }
         }.attach()
     }
-
 }

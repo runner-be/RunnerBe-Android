@@ -40,12 +40,10 @@ data class Posting(
     @SerializedName("whetherCheck") val whetherCheck: String?,
     @SerializedName("profileUrlList") val profileUrlList: List<ProfileUrlList>?,
     @SerializedName("runnerList") val runnerList: List<UserInfo>?,
-    @SerializedName("whetherPostUser") val whetherPostUser: String?
+    @SerializedName("whetherPostUser") val whetherPostUser: String?,
+    @SerializedName("pace") val pace: String?,
+    @SerializedName("afterParty") val afterParty: Int?
 ) : Parcelable {
-    fun endCheck(): String = if(this.whetherEnd == "Y"){
-            "마감된 게시글"
-        } else "모집중"
-
     fun bookmarkCheck(): Boolean {
         return this.bookMark == 1
     }
@@ -61,9 +59,7 @@ data class Posting(
         return this.whetherCheck == "Y" && this.attendance == 1
     }
 
-    fun writerCheck(): Boolean {
-        return this.whetherPostUser == "Y"
-    }
+    fun isWhetherEnded(): Boolean = whetherEnd == "Y"
 
     fun groupString(): String {
         return try {
@@ -78,7 +74,7 @@ data class Posting(
 
     fun genderString() : String {
         return if(this.gender =="전체") this.gender
-        else this.gender+"만"
+        else "${this.gender}만"
     }
 
     //이거 데이터바인딩 시에 너무 자주 도는 이유를 찾자

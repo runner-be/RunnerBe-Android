@@ -14,16 +14,4 @@ data class Message(
     // Y이면 글쓴이, 아니먄 N
     @SerializedName("whetherPostUser") val whetherPostUser: String
 ) {
-    fun meCheck(): Boolean {
-        return if (this.messageFrom == "me") return true
-        else false
-    }
-    fun writerCheck() : Boolean {
-        return if(this.whetherPostUser == "Y") return true
-        else false
-    }
-}
-
-enum class MessageType(val value: Int) {
-    OTHER_MESSAGE(0), MY_MESSAGE(1)
 }

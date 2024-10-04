@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -12,10 +13,10 @@ import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentEditProfileBinding
 import com.applemango.runnerbe.presentation.model.JobButtonId
-import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,7 +73,11 @@ class EditProfileFragment :
                         resources.getString(R.string.complete_change_job),
                         Toast.LENGTH_SHORT
                     ).show()
-                    navPopStack()
+                    refreshBack()
+                }
+
+                else -> {
+                    Log.e("EditProfileFragment", "observeBind - when - else")
                 }
             }
         }
@@ -100,7 +105,11 @@ class EditProfileFragment :
                         resources.getString(R.string.complete_change_nickname),
                         Toast.LENGTH_SHORT
                     ).show()
-                    navPopStack()
+                    refreshBack()
+                }
+
+                else -> {
+                    Log.e("EditProfileFragment", "observeBind - when - else")
                 }
             }
         }
@@ -111,6 +120,11 @@ class EditProfileFragment :
         viewModel.radioChecked.value = currentJob?.id
         viewModel.currentJob = currentJob?.job ?: ""
         currentRadioButton = currentJob?.id
+    }
+
+    private fun refreshBack() {
+        requireActivity().supportFragmentManager.setFragmentResult("refresh", bundleOf())
+        navPopStack()
     }
 
     private fun jobButtonClick() = OnCheckedChangeListener { btn, isCheck ->

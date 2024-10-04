@@ -17,9 +17,16 @@
             android:background="@color/dark_g5"
             android:padding="16dp">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_ver"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
             <com.github.gzuliyujiang.wheelview.widget.WheelView
                 android:id="@+id/hourWheelView"
-                android:layout_width="40dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 app:wheel_itemTextColorSelected="@color/primary"
                 app:wheel_itemTextColor="@color/dark_g4"
@@ -29,9 +36,11 @@
                 app:wheel_curvedIndicatorSpace="4dp"
                 app:wheel_curvedEnabled="true"
                 app:wheel_indicatorColor="@android:color/transparent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/confirmButton"/>
+                android:layout_marginStart="61dp"
+                android:layout_marginEnd="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/hourTextView"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/hourTextView"
@@ -40,14 +49,15 @@
                 android:text="@string/hour"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/confirmButton"
-                app:layout_constraintLeft_toRightOf="@id/hourWheelView"/>
+                app:layout_constraintEnd_toStartOf="@id/gl_ver"
+                />
 
             <com.github.gzuliyujiang.wheelview.widget.WheelView
                 android:id="@+id/minuteWheelView"
-                android:layout_width="40dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 app:wheel_itemTextColorSelected="@color/primary"
                 app:wheel_itemTextColor="@color/dark_g4"
@@ -56,9 +66,9 @@
                 app:wheel_itemSpace="45dp"
                 app:wheel_curvedIndicatorSpace="4dp"
                 app:wheel_curvedEnabled="true"
-                android:layout_marginLeft="61dp"
+                android:layout_marginStart="20dp"
                 app:wheel_indicatorColor="@android:color/transparent"
-                app:layout_constraintLeft_toRightOf="@id/hourTextView"
+                app:layout_constraintStart_toEndOf="@id/gl_ver"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/confirmButton"/>
 
@@ -69,12 +79,12 @@
                 android:text="@string/minute"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="61dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="61dp"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/confirmButton"
-                app:layout_constraintLeft_toRightOf="@id/minuteWheelView"/>
+                app:layout_constraintStart_toEndOf="@id/minuteWheelView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/confirmButton"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/confirmButton"

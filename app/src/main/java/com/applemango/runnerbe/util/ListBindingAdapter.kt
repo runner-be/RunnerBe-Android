@@ -2,37 +2,38 @@ package com.applemango.runnerbe.util
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.applemango.runnerbe.data.dto.Messages
+import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.presentation.model.CreatorImageAndPosition
 import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.model.listener.*
+import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewHorizontalItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectListData
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectListItemAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailListAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailListClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailUiState
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailViewPagerAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
+import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceCheckSelectListAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSimpleSelectListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinPostAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.MyPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.AttendanceAccessionAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceSeeAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoListAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.creator.CreatorAdapter
-
-@BindingAdapter("myPostAdapter", "myPostEvent")
-fun setMyPostAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<Posting>,
-    myPostClickListener: MyPostClickListener
-) {
-    if (recyclerView.adapter == null) {
-        recyclerView.adapter = MyPostAdapter(dataList, myPostClickListener)
-    }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
 
 @BindingAdapter("attendanceSeeAdapter")
 fun setAttendanceSeeAdapter(
@@ -108,6 +109,18 @@ fun setPostListAdapter(
     recyclerView.adapter?.notifyDataSetChanged()
 }
 
+@BindingAdapter("bind:postAdapter", "bind:postClickListener", "bind:postIncomingType")
+fun setPostAdapter(
+    recyclerView: RecyclerView,
+    dataList: ObservableArrayList<Posting>,
+    clickListener: PostClickListener,
+    type: PostIncomingType
+) {
+    if (recyclerView.adapter == null)
+        recyclerView.adapter = PostAdapter(dataList, clickListener, type)
+    recyclerView.adapter?.notifyDataSetChanged()
+}
+
 @BindingAdapter("runnerInfoAdapter")
 fun setRunnerInfoAdapter(
     recyclerView: RecyclerView,
@@ -128,13 +141,88 @@ fun setWaitingUserInfoAdapter(
     recyclerView.adapter?.notifyDataSetChanged()
 }
 
-@BindingAdapter("messageAdapter")
-fun setMessageAdapter(
+@BindingAdapter("bind:paceListAdapter", "bind:paceSelectListener")
+fun setPaceListAdapter(
     recyclerView: RecyclerView,
-    dataList: ObservableArrayList<Messages>
+    dataList: List<PaceSelectItem>,
+    listener: PaceSelectListener
 ) {
-    if(recyclerView.adapter == null) recyclerView.adapter =
-        RunningTalkDetailAdapter(dataList)
-    recyclerView.adapter?.notifyDataSetChanged()
-    recyclerView.scrollToPosition(dataList.size - 1)
+    recyclerView.adapter ?: run {
+        recyclerView.adapter = PaceInfoListAdapter(listener)
+    }
+    val adapter = recyclerView.adapter
+    recyclerView.itemAnimator = null
+    if (adapter is PaceInfoListAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:paceSimpleListAdapter", "bind:paceSimpleSelectListener")
+fun setPaceSimpleSelectAdapter(
+    recyclerView: RecyclerView,
+    dataList: List<PaceSelectItem>,
+    listener: PaceSelectListener
+) {
+    recyclerView.adapter ?: run {
+        recyclerView.adapter = PaceSimpleSelectListAdapter(listener)
+    }
+    val adapter = recyclerView.adapter
+    recyclerView.itemAnimator = null
+    if (adapter is PaceSimpleSelectListAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:paceCheckListAdapter", "bind:paceCheckSelectListener")
+fun setPaceCheckSelectAdapter(
+    recyclerView: RecyclerView,
+    dataList: List<PaceSelectItem>,
+    listener: PaceSelectListener
+) {
+    recyclerView.adapter ?: run {
+        recyclerView.adapter = PaceCheckSelectListAdapter(listener)
+    }
+    val adapter = recyclerView.adapter
+    recyclerView.itemAnimator = null
+    if (adapter is PaceCheckSelectListAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:talkListAdapter", "bind:talkListClickListener")
+fun setTalkListAdapter(
+    recyclerView: RecyclerView,
+    dataList: List<RunningTalkUiState>,
+    listener: RunningTalkDetailListClickListener
+) {
+    recyclerView.adapter ?: run {
+        recyclerView.adapter = RunningTalkDetailListAdapter(listener = listener)
+    }
+    val adapter = recyclerView.adapter
+    recyclerView.itemAnimator = null
+    if (adapter is RunningTalkDetailListAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:talkImageAdapter", "bind:talkImageSelectListener")
+fun setTalkImageAdapter(
+    recyclerView: RecyclerView,
+    dataList: List<String>,
+    listener: RunningTalkDetailImageSelectListener
+) {
+    recyclerView.adapter ?: run {
+        recyclerView.layoutManager =
+            LinearLayoutManager(recyclerView.context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = RunningTalkDetailImageAdapter(listener = listener)
+        recyclerView.itemAnimator = null
+        recyclerView.addItemDecoration(RecyclerViewHorizontalItemDeco(recyclerView.context, 8))
+    }
+    val adapter = recyclerView.adapter
+    if (adapter is RunningTalkDetailImageAdapter) adapter.submitList(dataList)
+}
+
+@BindingAdapter("bind:imageDetailAdapter")
+fun setImageDetailAdapter(
+    viewPager: ViewPager2,
+    dataList: List<ImageDetailUiState>
+) {
+    viewPager.adapter ?: run {
+        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        viewPager.adapter = ImageDetailViewPagerAdapter()
+    }
+    val adapter = viewPager.adapter
+    if(adapter is ImageDetailViewPagerAdapter) adapter.submitList(dataList)
 }

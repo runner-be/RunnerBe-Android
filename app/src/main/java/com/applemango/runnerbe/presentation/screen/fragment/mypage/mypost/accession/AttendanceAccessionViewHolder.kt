@@ -7,8 +7,6 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.ItemAttendanceAccessionBinding
 import com.applemango.runnerbe.presentation.model.listener.AttendanceAccessionClickListener
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlin.properties.Delegates
 
 class AttendanceAccessionViewHolder(

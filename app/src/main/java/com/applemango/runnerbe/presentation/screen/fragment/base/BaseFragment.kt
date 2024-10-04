@@ -17,24 +17,29 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.presentation.viewmodel.NavigationViewModel
 import com.applemango.runnerbe.presentation.screen.dialog.LoadingDialog
 import com.applemango.runnerbe.presentation.screen.dialog.NoAdditionalInfoDialog
+import com.applemango.runnerbe.presentation.viewmodel.NavigationViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlin.math.roundToInt
 
 /**
  * 프래그먼트의 공통 명세는 여기에 작성해주세요.
  */
 open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: Int) :
     Fragment() {
-    var TAG = "Runnerbe"
+    private var TAG = "Runnerbe"
     private var _binding: T? = null
     protected val binding: T get() = _binding!!
 
-    var mLoadingDialog: LoadingDialog? = null
+    private var mLoadingDialog: LoadingDialog? = null
 
-    protected val navController: NavController get() = findNavController()
+    private val navController: NavController get() = findNavController()
 
     private val navigationViewModel : NavigationViewModel by viewModels()
+
+    private var _compositeDisposable: CompositeDisposable? = null
+    protected val compositeDisposable get() = _compositeDisposable!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +52,8 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
             null,
             false
         )
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
+        _compositeDisposable = CompositeDisposable()
         return binding.root
     }
 
@@ -66,13 +72,12 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _compositeDisposable?.clear()
+        _compositeDisposable?.dispose()
     }
 
     open fun goBack() {
         navPopStack()
-    }
-    fun activityFinish() {
-        activity?.finish()
     }
     private fun navigationAction() {
         navigationViewModel.apply {
@@ -83,7 +88,6 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
                 if (it) navController.popBackStack()
             }
             navSpecificBackStack.observe(viewLifecycleOwner) {
-                Log.e( "navSpecificBackStack", it.toString())
                 if(it != null) navController.popBackStack(it, false)
             }
         }
@@ -99,7 +103,6 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
         id?.let {
             navigationViewModel.navSpecificBackStack.postValue(it)
         }?:navigationViewModel.popBackStack.postValue(true)
-
     }
 
     fun navigate(direction: NavDirections) { navigationViewModel.navDirectionAction.postValue(direction) }
@@ -126,11 +129,16 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
         if (prev == null) {
             NoAdditionalInfoDialog().show(childFragmentManager, TAG)
         }
-
     }
 
     fun hideKeyBoard() {
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
+    }
+
+    internal fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

@@ -76,11 +76,15 @@ class BookMarkViewModel @Inject constructor(
                         postChange(post)
                     }
                 }
+
+                else -> {
+                    Log.e(this.javaClass.name, "bookmarkStatusChange - when - else - CommonResponse")
+                }
             }
         }
     }
 
-    fun postChange(posting: Posting) {
+    private fun postChange(posting: Posting) {
         val index = bookmarkList.indexOf(posting)
         if(index != -1 ) bookmarkList[index] = posting
     }
