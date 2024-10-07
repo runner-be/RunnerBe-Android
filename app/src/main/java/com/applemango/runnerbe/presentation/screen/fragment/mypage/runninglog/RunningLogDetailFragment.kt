@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningLogDetailBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
@@ -24,7 +25,7 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
     private val args: RunningLogDetailFragmentArgs by navArgs()
 
     @Inject
-    lateinit var memberStampAdapter: MemberStampAdapter
+    lateinit var gotStampAdapter: GotStampAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +36,7 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
 
     private fun initMemberStampRecyclerView() {
         binding.rcvTeamStamp.apply {
-            adapter = memberStampAdapter
+            adapter = gotStampAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
@@ -49,22 +50,35 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
                     val weatherItem = getWeatherItemByCode(runningLogDetail.weatherCode)
                     val memberStamps = it.gotStamp
 
-                    memberStampAdapter.submitList(memberStamps)
+                    gotStampAdapter.submitList(memberStamps)
                     tvDateTime.text = parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
                     Glide.with(binding.root.context)
                         .load(stampItem.image)
                         .into(binding.ivStamp)
                     tvStamp.text = stampItem.description
                     tvDiary.text = runningLogDetail.contents
-                    Glide.with(binding.root.context)
-                        .load(runningLogDetail.imageUrl)
-                        .into(binding.ivPhoto)
+                    runningLogDetail.imageUrl?.let {
+                        Glide.with(binding.root.context)
+                            .load(runningLogDetail.imageUrl)
+                            .into(binding.ivPhoto)
+                    } ?: run {
+                        binding.ivPhoto.visibility = View.GONE
+                    }
                     tvDegree.text = runningLogDetail.weatherDegree.toString()
                     Glide.with(binding.root.context)
                         .load(weatherItem.image)
                         .into(binding.ivWeather)
+                    if (runningLogDetail.gatheringId == null) {
+                        ivTeam.setImageResource(R.drawable.ic_team_lock)
+                    } else {
+                        ivTeam.setImageResource(R.drawable.ic_team_default)
+                    }
+                    tvUserStamp.text = getString(R.string.running_log_got_stamp, runningLogDetail.nickname)
                     tvTeamDetail.text = "${it.gatheringCount} 명"
-                    switchVisibility.isChecked = (runningLogDetail.isOpened == 1)
+                    switchVisibility.apply {
+                        isChecked = it.runningLog.isOpened == 1
+                        isEnabled = false
+                    }
                 }
             }
         }

@@ -24,7 +24,6 @@ class RunningAddressSearchDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         with(binding) {
             btnRegister.setOnClickListener(this@RunningAddressSearchDetailFragment)
             backBtn.setOnClickListener(this@RunningAddressSearchDetailFragment)

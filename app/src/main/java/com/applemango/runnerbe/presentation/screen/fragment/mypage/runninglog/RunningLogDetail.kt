@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Parcelize
 data class RunningLogDetail(
@@ -15,12 +16,13 @@ data class RunningLogDetail(
 @Parcelize
 data class RunningLogData (
     val status: String,
-    val runnedDate: LocalDateTime,
+    val runnedDate: ZonedDateTime,
     val userId: Int,
-    val gatheringId: Int,
+    val nickname: String,
+    val gatheringId: Int?,
     val stampCode: String,
     val contents: String,
-    val imageUrl: String,
+    val imageUrl: String?,
     val weatherDegree: Int,
     val weatherCode: String,
     val isOpened: Int,
@@ -42,6 +44,7 @@ fun parseRunningLogDetailToPresentation(runningLogResponse: DetailRunningLogResp
             status = runningLog.status,
             runnedDate = runningLog.runnedDate,
             userId = runningLog.userId,
+            nickname = runningLog.nickname,
             gatheringId = runningLog.gatheringId,
             stampCode = runningLog.stampCode,
             contents = runningLog.contents,

@@ -2,7 +2,7 @@ package com.applemango.runnerbe.di
 
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.MemberStampAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.GotStampAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
 import dagger.Module
 import dagger.Provides
@@ -33,7 +33,7 @@ class AdapterModule {
 
     @Provides
     @FragmentScoped
-    fun provideMemberStampAdapter(): MemberStampAdapter {
-        return MemberStampAdapter()
+    fun provideMemberStampAdapter(): GotStampAdapter {
+        return GotStampAdapter()
     }
 }

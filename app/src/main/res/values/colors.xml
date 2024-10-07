@@ -10,6 +10,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="logo_yellow">#FFDD62</color>
+    <color name="logo_yellow_darker">#FFDD62</color>
     <color name="kakao_yellow">#FEE500</color>
 
     <color name="dark_g1">#F5F5F5</color>

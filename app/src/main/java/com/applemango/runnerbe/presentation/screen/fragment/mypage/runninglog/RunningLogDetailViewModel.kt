@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.network.response.DetailRunningLog
@@ -34,6 +35,7 @@ class RunningLogDetailViewModel @Inject constructor(
                         is CommonResponse.Success<*> -> {
                             val runningLogDetail = response.body as? DetailRunningLogResponse
                             runningLogDetail?.let {
+                                Log.e("runningLogDetailFlow", it.toString())
                                 parseRunningLogDetailToPresentation(it)
                             } ?: throw IllegalStateException("Invalid running log data")
                         }

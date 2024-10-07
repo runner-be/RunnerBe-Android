@@ -303,10 +303,12 @@
     <string name="running_log_diary_length">%1$d/500</string>
     <string name="running_log_diary_max_length_alert">5줄 일기는 500자 이하로 작성해주세요.</string>
 
+    <string name="running_log_got_stamp">%s님이 받은 스탬프</string>
+
     <!-- 그룹 프로필-->
     <string name="group_profile_title">함께한 러너</string>
     <string name="group_profile_description">함께한 러너 프로필을 터치하여\n러닝 스탬프를 남겨봐요!</string>
-    <string name="group_profile_count">%1$d명</string>
+    <string name="group_profile_count">%d명</string>
 
     <!-- 월간 캘린더 -->
     <string name="calendar_title">캘린더</string>
