@@ -26,7 +26,7 @@ data class StampItem(
         val unavailableStampItem = StampItem(
             "unavailable",
             R.drawable.ic_stamp_unavailable,
-            "작성 불가능",
+            "터치해서 러닝 스탬프를 찍어볼까요?",
             "러닝 기록 존재하지 않음",
             false
         )

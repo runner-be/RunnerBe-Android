@@ -79,7 +79,6 @@ class PostDetailFragment :
         binding.mapView.onLowMemory()
     }
 
-
     fun refresh() {
         viewModel.post.value?.let {
             viewModel.getPostDetail(it.postId, RunnerBeApplication.mTokenPreference.getUserId())
@@ -182,8 +181,9 @@ class PostDetailFragment :
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+
                         else -> {
-                            Log.e("EditProfileFragment", "observeBind - when - else")
+                            Log.e("PostDetailFragment", "reportUiState - when - else")
                         }
                     }
                 }
@@ -217,7 +217,7 @@ class PostDetailFragment :
                             Toast.makeText(context, "문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
                         }
                         else -> {
-                            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                            Log.e("PostDetailFragment", "dropUiState - when - else")
                         }
                     }
                 }

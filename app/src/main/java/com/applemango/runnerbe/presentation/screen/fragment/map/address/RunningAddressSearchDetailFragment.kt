@@ -1,5 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.address
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -48,15 +50,18 @@ class RunningAddressSearchDetailFragment :
             }
 
             binding.btnRegister -> {
-                navigate(RunningAddressSearchDetailFragmentDirections.actionRunningAddressSearchDetailFragmentToRunningWriteFragment(
-                    AddressData(
-                        paramAddress.address.placeName,
-                        paramAddress.address.roadAddress,
-                        binding.tieAddressDetail.text.toString(),
-                        paramAddress.address.x,
-                        paramAddress.address.y,
-                    )
-                ))
+                val address = AddressData(
+                    paramAddress.address.placeName,
+                    paramAddress.address.roadAddress,
+                    binding.tieAddressDetail.text.toString(),
+                    paramAddress.address.x,
+                    paramAddress.address.y,
+                )
+                val resultIntent = Intent().apply {
+                    putExtra("address", address)
+                }
+                activity?.setResult(RESULT_OK, resultIntent)
+                activity?.finish()
             }
         }
     }

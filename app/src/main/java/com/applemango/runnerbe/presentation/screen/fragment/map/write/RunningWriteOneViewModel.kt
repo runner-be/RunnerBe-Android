@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
@@ -31,4 +32,12 @@ class RunningWriteOneViewModel : ViewModel() {
     )
 
     var coordinate = LatLng(0.0, 0.0)
+
+    fun updateCoordinate(location: AddressData) {
+        coordinate = LatLng(location.x.toDouble(), location.y.toDouble())
+    }
+
+    fun updateSelectedLocation(location: AddressData) {
+        runningSelectedLocation.value = location.getFullAddress()
+    }
 }

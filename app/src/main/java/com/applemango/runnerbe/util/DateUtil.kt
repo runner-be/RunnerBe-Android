@@ -17,6 +17,16 @@ fun parseLocalDateToKorean(localDate: LocalDate): String {
     }"
 }
 
+fun parseKoreanDateToLocalDate(koreanDate: String): LocalDate {
+    val regex = Regex("""(\d{4})년 (\d{1,2})월 (\d{1,2})일""")
+    val matchResult = regex.find(koreanDate)
+
+    val (year, month, day) = matchResult?.destructured
+        ?: throw IllegalArgumentException("날짜 형식이 잘못되었습니다.")
+
+    return LocalDate.of(year.toInt(), month.toInt(), day.toInt())
+}
+
 fun timeHourAndMinute(dateString: String): String {
     val stringToDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     val to: Date = stringToDate.parse(dateString.replace("T", " ").replace("Z", " "))

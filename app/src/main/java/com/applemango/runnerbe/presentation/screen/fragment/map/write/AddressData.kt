@@ -10,4 +10,7 @@ data class AddressData(
     val detailAddress: String,
     val x: String,
     val y: String
-) : Parcelable
+) : Parcelable {
+
+    fun getFullAddress(): String = "$roadAddress $detailAddress"
+}

@@ -3,17 +3,17 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningLogBinding
@@ -21,50 +21,50 @@ import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
-import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
+import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
+import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.bumptech.glide.Glide
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.view.touches
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
-
-const val LOG_TYPE_ALONE = 0
-const val GATHERING_ID_ALONE = 0
 
 @AndroidEntryPoint
 class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.fragment_running_log) {
 
     private val viewModel: RunningLogViewModel by viewModels()
+    private val navArgs : RunningLogFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("RunningLogFragment", "onCreate")
-        arguments?.let {
-            val strDate = it.getString("date")
-            val logId = it.getInt("logId")
-            val gatheringId = it.getInt("gatheringId")
 
-            val logType = if (gatheringId == GATHERING_ID_ALONE) {
-                RunningLogType.ALONE
-            } else RunningLogType.TEAM
+        val strDate = navArgs.date
+        val logId = navArgs.logId
+        val gatheringId = navArgs.gatheringId
 
-            viewModel.updateLogDate(strDate)
-            viewModel.updateLogId(logId)
-            viewModel.updateGatheringId(gatheringId)
-            viewModel.updateLogType(logType)
-        }
+        Log.e("RunningLogFragment onCreate gatheringId", gatheringId.toString())
+        val logType = if (gatheringId != null) {
+            RunningLogType.TEAM
+        } else RunningLogType.ALONE
+        Log.e("RunningLogFragment onCreate logType", logType.toString())
+
+        viewModel.updateLogDate(parseLocalDateToKorean(LocalDate.parse(strDate)))
+        viewModel.updateLogId(logId?.toIntOrNull())
+        viewModel.updateGatheringId(gatheringId?.toIntOrNull())
+        viewModel.updateLogType(logType)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         initListeners()
+        setupPostedRunningLog()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -87,6 +87,23 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
 
             }
         )
+    }
+
+    private fun setupPostedRunningLog() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postedRunningLogFlow.collect { response ->
+                    response?.let {
+                        val log = response.result.runningLog
+                        viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
+                        viewModel.updateStamp(getStampItemByCode(log.stampCode))
+                        viewModel.updateLogDiary(log.contents)
+                        viewModel.updateDegreeAndWeather(log.weatherDegree.toString(), getWeatherItemByCode(log.weatherCode))
+                        viewModel.updateLogVisibility(log.isOpened == 1)
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -119,10 +136,6 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             childFragmentManager,
                             prevStamp
                         ) { stamp ->
-                            Glide.with(requireContext())
-                                .load(stamp.image)
-                                .into(binding.ivStamp)
-                            tvStamp.text = stamp.name
                             viewModel.updateStamp(stamp)
                         }
                     },

@@ -46,9 +46,7 @@
             app:destination="@id/runningLogFragment" />
         <action
             android:id="@+id/action_mainFragment_to_monthlyCalendarFragment"
-            app:destination="@id/monthlyCalendarFragment"
-            app:enterAnim="@anim/slide_up"
-            app:exitAnim="@anim/slide_down" />
+            app:destination="@id/monthlyCalendarFragment" />
         <action
             android:id="@+id/action_mainFragment_to_runningLogDetailFragment"
             app:destination="@id/runningLogDetailFragment" />
@@ -100,11 +98,6 @@
         <action
             android:id="@+id/action_runningWriteFragment_to_runningWriteTwoFragment"
             app:destination="@id/runningWriteTwoFragment" />
-        <action
-            android:id="@+id/action_runningWriteFragment_to_runningAddressSearchFragment"
-            app:destination="@id/runningAddressSearchFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/runningWriteTwoFragment"
@@ -239,29 +232,6 @@
             app:argType="string[]"/>
     </fragment>
     <fragment
-        android:id="@+id/runningAddressSearchFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.address.RunningAddressSearchFragment"
-        android:label="RunningAddressSearchFragment" >
-        <action
-            android:id="@+id/action_runningAddressSearchFragment_to_runningAddressSearchDetailFragment"
-            app:destination="@id/runningAddressSearchDetailFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left" >
-        </action>
-    </fragment>
-    <fragment
-        android:id="@+id/runningAddressSearchDetailFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.address.RunningAddressSearchDetailFragment"
-        android:label="RunningAddressSearchDetailFragment">
-
-        <argument
-            android:name="address"
-            app:argType="com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressResult"/>
-        <action
-            android:id="@+id/action_runningAddressSearchDetailFragment_to_runningWriteFragment"
-            app:destination="@id/runningWriteFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/runningLogFragment"
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogFragment"
         android:label="RunningLogFragment" >
@@ -270,10 +240,12 @@
             app:argType="string" />
         <argument
             android:name="logId"
-            app:argType="integer" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="gatheringId"
-            app:argType="integer" />
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_runningLogFragment_to_groupProfilesFragment"
             app:destination="@id/groupProfilesFragment" />
@@ -312,6 +284,9 @@
         <argument
             android:name="logId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment" />
 
     </fragment>
 </navigation>

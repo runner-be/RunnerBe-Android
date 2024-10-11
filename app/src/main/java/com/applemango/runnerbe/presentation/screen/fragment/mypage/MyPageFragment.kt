@@ -72,6 +72,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         initWeeklyCalendarAdapter()
         initParticipatedRunningAdapter()
         setupJoinedRunningPosts()
+        setupThisWeekRunningLogs()
         initYearMonthSpinner()
         binding.settingButton.setOnClickListener(this)
         binding.userProfileEditButton.setOnClickListener(this)
@@ -190,6 +191,19 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         }
     }
 
+    private fun setupThisWeekRunningLogs() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.thisWeekRunningLogFlow.collectLatest { list ->
+                    val result = initWeekDays(list).also {
+                        Log.e("setupThisWeekRunningLogs", it.toString())
+                    }
+                    weeklyCalendarAdapter.submitList(result)
+                }
+            }
+        }
+    }
+
     private fun setupJoinedRunningPosts() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -213,22 +227,12 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         with(binding.rcvCalendarWeekly) {
             _weeklyCalendarAdapter = WeeklyCalendarAdapter()
             adapter = weeklyCalendarAdapter.apply {
-                submitList(
-                    initWeekDays(
-                        emptyList()
-                    )
-                )
                 setOnDateClickListener(object : OnDateClickListener {
-                    // 1-1. 개인 로그 작성
-                    // 1-2. 개인 로그 수정
-                    // 2-1. 단체 로그 작성
-                    // 2-2. 단체 로그 수정
                     override fun onDateClicked(item: DateItem) {
                         val runningLog = item.runningLog
 
                         if (runningLog != null) {
                             // 단체 로그 작성/조회
-                            Log.e("MyPageFragment", "runningLog is NOT NULL")
                             val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
@@ -238,13 +242,12 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                             )
                         } else {
                             // 개인 로그 작성/수정
-                            Log.e("MyPageFragment", "runningLog is NULL")
                             val date = item.date!!
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningLogFragment(
                                     date.toString(),
-                                    0,
-                                    0
+                                    "logId",
+                                    null
                                 )
                             )
                         }
