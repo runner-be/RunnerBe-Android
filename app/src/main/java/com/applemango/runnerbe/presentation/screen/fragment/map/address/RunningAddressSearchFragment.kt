@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.address
 
-import android.Manifest
 import android.Manifest.*
 import android.content.Context
 import android.content.pm.PackageManager
@@ -10,13 +9,11 @@ import android.location.Geocoder.GeocodeListener
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.os.CancellationSignal
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -82,10 +79,10 @@ class RunningAddressSearchFragment :
     private fun getUserLocation() {
         if (ActivityCompat.checkSelfPermission(
             requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
+            permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 requireContext(),
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED) {
             return
         }

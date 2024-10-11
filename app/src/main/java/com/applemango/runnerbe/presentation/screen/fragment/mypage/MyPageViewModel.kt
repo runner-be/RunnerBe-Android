@@ -8,21 +8,36 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.data.network.response.MyRunningLog
+import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
 import com.applemango.runnerbe.domain.usecase.PatchUserImageUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogListUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val patchUserImageUseCase: PatchUserImageUseCase
+    private val patchUserImageUseCase: PatchUserImageUseCase,
+    private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
 ) : ViewModel() {
     val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -37,6 +52,36 @@ class MyPageViewModel @Inject constructor(
 
     private val _actions = MutableSharedFlow<MyPageAction>()
     val actions get() = _actions
+
+    private val todayDateFlow = MutableStateFlow<LocalDate>(LocalDate.now())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val thisWeekRunningLogFlow: Flow<List<MyRunningLog>> = todayDateFlow
+        .flatMapLatest { today ->
+            val userId = RunnerBeApplication.mTokenPreference.getUserId()
+            val (todayYear, todayMonth)  = Pair(today.year, today.monthValue)
+            getMonthlyRunningLogListUseCase(userId, todayYear, todayMonth)
+                .map { response ->
+                    when (response) {
+                        is CommonResponse.Success<*> -> {
+                            val result = response.body as RunningLogResult
+                            result.myRunningLog
+                        }
+
+                        is CommonResponse.Failed -> {
+                            throw Exception(response.message)
+                        }
+
+                        else -> {
+                            throw Exception("MyPageViewModel-thisWeekRunningLogFlow-when-else")
+                        }
+                    }
+                }
+        }.catch { error ->
+            error.printStackTrace()
+        }
+        .flowOn(Dispatchers.IO)
+
 
     fun getUserData(userId: Int) = viewModelScope.launch {
         if (userId > -1) {

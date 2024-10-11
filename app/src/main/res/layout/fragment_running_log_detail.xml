@@ -50,6 +50,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/iv_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_more_vertical"
@@ -80,7 +81,6 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginHorizontal="24dp"
                     android:background="@drawable/bg_r_6_no_stroke_g7_clickable"
-                    android:clickable="true"
                     android:paddingHorizontal="16dp"
                     android:paddingBottom="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,6 @@
                         android:id="@+id/iv_stamp"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:clickable="true"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="15dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -147,7 +146,6 @@
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginVertical="12dp"
                     android:background="@drawable/bg_dark_6g_solid_radius_8"
-                    android:clickable="true"
                     android:minHeight="120dp"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="16dp"
@@ -190,7 +188,6 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="6dp"
                     android:background="@drawable/bg_dark_6g_solid_radius_8"
-                    android:clickable="true"
                     android:minHeight="120dp"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp"
@@ -246,7 +243,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:padding="8dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_g5_circle_shape_no_stroke"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_degree">
@@ -268,7 +264,6 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="24dp"
                     android:background="@drawable/bg_dark_6g_solid_radius_8"
-                    android:clickable="true"
                     android:minHeight="120dp"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp"
@@ -310,7 +305,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:padding="8dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_g5_circle_shape_no_stroke"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_team_detail">
@@ -366,6 +360,21 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_user_stamp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_team_stamp_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="20dp"
+                        android:layout_marginTop="20dp"
+                        android:paddingVertical="20dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:gravity="center"
+                        android:text="@string/running_log_got_stamp_empty"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="15sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_user_stamp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

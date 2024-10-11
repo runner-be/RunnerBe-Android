@@ -3,24 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.applemango.runnerbe">
 
-    <uses-feature android:name="android.hardware.camera.any" />
-
-    <!--  인터넷 권환  -->
+    <uses-feature android:name="android.hardware.camera.any" /> <!-- 인터넷 권환 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!--  저장소 권환  -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 저장소 권환 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!--  위치 권환  -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 위치 권환 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name="com.applemango.runnerbe.RunnerBeApplication"
+        android:name=".RunnerBeApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -54,7 +48,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.screen.activity.HomeActivity"
             android:exported="true"
@@ -65,17 +58,25 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".presentation.screen.activity.AddressActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.screen.activity.AdditionalInfoActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -89,11 +90,9 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="d5vu9isrg5" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
     </application>
 
 </manifest>

@@ -27,8 +27,7 @@ class PostDetailViewModel @Inject constructor(
     private val postApplyUseCase: PostApplyUseCase,
     private val dropPostUseCase: DropPostUseCase,
     private val postReportUseCase: PostReportUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private var isApplyComplete: Boolean = false //내가 신청한 모임이면 true
     val post: MutableLiveData<Posting> = MutableLiveData()

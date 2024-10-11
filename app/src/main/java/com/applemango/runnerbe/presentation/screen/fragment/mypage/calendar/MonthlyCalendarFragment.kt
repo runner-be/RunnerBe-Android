@@ -19,6 +19,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMo
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -148,8 +149,7 @@ class MonthlyCalendarFragment :
                     override fun onDateClicked(item: DateItem) {
                         val runningLog = item.runningLog
 
-                        if (runningLog != null) {
-                            // 단체 로그 작성/조회
+                        if (runningLog?.logId != null) {
                             val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             navigate(
                                 MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogDetailFragment(
@@ -158,13 +158,12 @@ class MonthlyCalendarFragment :
                                 )
                             )
                         } else {
-                            // 개인 로그 작성/수정
                             val date = item.date!!
                             navigate(
                                 MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogFragment(
                                     date.toString(),
-                                    0,
-                                    0
+                                    null,
+                                    null
                                 )
                             )
                         }

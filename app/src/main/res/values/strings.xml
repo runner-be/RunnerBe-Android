@@ -4,6 +4,10 @@
     <string name="login_kakao">카카오로 로그인</string>
     <string name="login_naver">네이버로 로그인</string>
 
+    <!-- Error -->
+    <string name="error_failed">잠시 후에 다시 시도해주세요.</string>
+    <!-- -->
+
     <string name="comma_text">%s · %s</string>
 
     <string name="setting">설정</string>
@@ -16,6 +20,9 @@
     <string name="date">일시</string>
     <string name="hour">시간</string>
     <string name="minute">분</string>
+
+    <string name="edit">수정</string>
+    <string name="delete">삭제</string>
 
     <string name="terms_of_service">이용 약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>
@@ -68,7 +75,6 @@
     <string name="msg_network_error_title">오프라인 상태예요!</string>
     <string name="msg_network_error_content">네트워크를 연결해주세요.</string>
     <string name="ready">준비됐어요!</string>
-
 
     <!--  뒷풀이  -->
     <string name="after_party_exist">뒷풀이 있음</string>
@@ -304,11 +310,13 @@
     <string name="running_log_diary_max_length_alert">5줄 일기는 500자 이하로 작성해주세요.</string>
 
     <string name="running_log_got_stamp">%s님이 받은 스탬프</string>
+    <string name="running_log_got_stamp_empty">받은 스탬프가 없어요.</string>
 
     <!-- 그룹 프로필-->
     <string name="group_profile_title">함께한 러너</string>
     <string name="group_profile_description">함께한 러너 프로필을 터치하여\n러닝 스탬프를 남겨봐요!</string>
     <string name="group_profile_count">%d명</string>
+    <string name="group_profile_count_2">%d 명</string>
 
     <!-- 월간 캘린더 -->
     <string name="calendar_title">캘린더</string>

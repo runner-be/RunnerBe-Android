@@ -119,6 +119,8 @@ dependencies {
 
     // Dagger Core
     implementation "com.google.dagger:dagger:2.37"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     kapt "com.google.dagger:dagger-compiler:2.37"
 
     // Dagger Android

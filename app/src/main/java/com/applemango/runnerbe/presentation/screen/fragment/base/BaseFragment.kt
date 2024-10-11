@@ -70,10 +70,15 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
 
     @CallSuper
     override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
         _compositeDisposable?.clear()
+        _binding = null
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
         _compositeDisposable?.dispose()
+        _compositeDisposable = null
+        super.onDestroy()
     }
 
     open fun goBack() {
