@@ -8,6 +8,9 @@
     <string name="error_failed">잠시 후에 다시 시도해주세요.</string>
     <!-- -->
 
+    <!-- 권한 -->
+    <string name="permission_denied_camera">카메라 권한이 허용되지 않았습니다.\n설정에서 권한을 허용해주세요.</string>
+
     <string name="comma_text">%s · %s</string>
 
     <string name="setting">설정</string>
@@ -23,6 +26,9 @@
 
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
+
+    <string name="camera">촬영</string>
+    <string name="album">앨범에서 선택</string>
 
     <string name="terms_of_service">이용 약관</string>
     <string name="privacy_policy">개인정보 처리방침</string>

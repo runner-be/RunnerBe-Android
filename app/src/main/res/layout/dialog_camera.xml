@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/dark_g5">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btn_capture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="16dp"
+                android:clickable="true"
+                android:background="@drawable/selector_click_g4_5_g5"
+                android:gravity="center"
+                android:text="@string/camera"
+                android:textColor="@color/primary"
+                android:textSize="14sp"/>
+
+            <View
+                android:id="@+id/view_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dark_g3_5" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btn_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/selector_click_g4_5_g5"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="16dp"
+                android:gravity="center"
+                android:text="@string/album"
+                android:textColor="@color/primary"
+                android:textSize="14sp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.cardview.widget.CardView>
+</layout>

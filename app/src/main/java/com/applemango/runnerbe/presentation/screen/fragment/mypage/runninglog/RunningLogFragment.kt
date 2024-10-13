@@ -25,6 +25,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCo
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.util.manager.SinglePhotoManager
 import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.bumptech.glide.Glide
 import com.jakewharton.rxbinding4.view.clicks
@@ -39,7 +40,10 @@ import java.util.concurrent.TimeUnit
 class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.fragment_running_log) {
 
     private val viewModel: RunningLogViewModel by viewModels()
-    private val navArgs : RunningLogFragmentArgs by navArgs()
+    private val navArgs: RunningLogFragmentArgs by navArgs()
+
+    private var _photoManager: SinglePhotoManager? = null
+    private val photoManager get() = _photoManager!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +58,7 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         } else RunningLogType.ALONE
         Log.e("RunningLogFragment onCreate logType", logType.toString())
 
-        viewModel.updateLogDate(parseLocalDateToKorean(LocalDate.parse(strDate)))
+        viewModel.updateLogDate(strDate)
         viewModel.updateLogId(logId?.toIntOrNull())
         viewModel.updateGatheringId(gatheringId?.toIntOrNull())
         viewModel.updateLogType(logType)
@@ -72,6 +76,12 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                     askAndDismissDialog()
                 }
             })
+        _photoManager = SinglePhotoManager(this, viewModel)
+    }
+
+    override fun onDestroyView() {
+        _photoManager = null
+        super.onDestroyView()
     }
 
     private fun askAndDismissDialog() {
@@ -98,7 +108,10 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                         viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
                         viewModel.updateStamp(getStampItemByCode(log.stampCode))
                         viewModel.updateLogDiary(log.contents)
-                        viewModel.updateDegreeAndWeather(log.weatherDegree.toString(), getWeatherItemByCode(log.weatherCode))
+                        viewModel.updateDegreeAndWeather(
+                            log.weatherDegree.toString(),
+                            getWeatherItemByCode(log.weatherCode)
+                        )
                         viewModel.updateLogVisibility(log.isOpened == 1)
                     }
                 }
@@ -153,33 +166,39 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             Glide.with(requireContext())
                                 .load(weather.image)
                                 .into(binding.ivWeather)
-                            tvDegree.text = parseTemperature(temperature)
-                            viewModel.updateDegreeAndWeather(temperature, weather)
+                            val parsedDegree = parseTemperature(temperature)
+                            viewModel.updateDegreeAndWeather(parsedDegree, weather)
                         }
                     },
                 constDiary.touches()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
                         etDiary.requestFocus()
-                        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        val imm =
+                            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                         imm.showSoftInput(etDiary, InputMethodManager.SHOW_IMPLICIT)
                     },
                 constImage.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        Toast.makeText(context, "이미지 추가", Toast.LENGTH_SHORT).show()
+                        photoManager.showCameraDialog()
                     },
                 etDiary.textChanges()
                     .subscribe {
                         viewModel.updateLogDiary(it.toString())
-                        tvRunningDiaryCharCount.text = getString(R.string.running_log_diary_length, it.length)
+                        tvRunningDiaryCharCount.text =
+                            getString(R.string.running_log_diary_length, it.length)
                     },
                 constTeam.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
                         if (viewModel.logType.value != RunningLogType.ALONE) {
-                            val logId = 123
-                            navigate(RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(logId))
+                            val gatheringId = 653
+                            navigate(
+                                RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
+                                    gatheringId
+                                )
+                            )
                         }
                     },
                 switchVisibility.clicks()
