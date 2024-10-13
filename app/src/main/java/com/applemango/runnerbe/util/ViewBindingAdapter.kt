@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.util
 
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -228,6 +229,13 @@ fun View.visible(isVisible: Boolean) {
 fun ImageView.setImageUrl(url: String?) {
     Glide.with(this)
         .load(url)
+        .into(this)
+}
+
+@BindingAdapter("bind:glideImageFromUri")
+fun ImageView.setImageUri(uri: Uri?) {
+    Glide.with(this)
+        .load(uri)
         .into(this)
 }
 
