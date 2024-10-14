@@ -35,7 +35,6 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updateSelectedPosition(position: Int) {
-        Log.e("UpdateSelectedPosition : ", "selectedPosition : $selectedPosition | newPosition: $position")
         selectedPosition = position
         notifyDataSetChanged()
     }

@@ -7,13 +7,26 @@ data class WeatherItem(
     val code: String,
     val image: Int,
     val name: String,
-)
+) {
+    companion object {
+        val defaultWeatherItem = WeatherItem(
+            "WEA000",
+            R.drawable.ic_weather_default,
+            "기본"
+        )
+    }
+}
 
 fun getWeatherItemByCode(code: String?) : WeatherItem {
     val weatherList = initWeatherItems()
-    return weatherList.first {
+    val context = RunnerBeApplication.ApplicationContext()
+    return weatherList.firstOrNull {
         it.code == code
-    }
+    } ?: WeatherItem(
+        "WEA001",
+        R.drawable.ic_weather_1_sunny,
+        context.getString(R.string.weather_1_sunny)
+    )
 }
 
 fun initWeatherItems(): List<WeatherItem> {

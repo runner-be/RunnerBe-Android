@@ -8,6 +8,9 @@
     <string name="error_failed">잠시 후에 다시 시도해주세요.</string>
     <!-- -->
 
+    <!-- Toast -->
+    <string name="toast_weather_degree">기온을 입력해주세요</string>
+
     <!-- 권한 -->
     <string name="permission_denied_camera">카메라 권한이 허용되지 않았습니다.\n설정에서 권한을 허용해주세요.</string>
 

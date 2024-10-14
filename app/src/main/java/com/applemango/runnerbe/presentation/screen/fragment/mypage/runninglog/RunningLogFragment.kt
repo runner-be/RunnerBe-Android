@@ -33,7 +33,6 @@ import com.jakewharton.rxbinding4.view.touches
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -192,14 +191,20 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                 constTeam.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        if (viewModel.logType.value != RunningLogType.ALONE) {
-                            val gatheringId = 653
-                            navigate(
-                                RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
-                                    gatheringId
-                                )
+                        navigate(
+                            RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
+                                653
                             )
-                        }
+                        )
+//                        if (viewModel.logType.value != RunningLogType.ALONE) {
+//                            viewModel.gatheringId.value?.let {
+//                                navigate(
+//                                    RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
+//                                        it
+//                                    )
+//                                )
+//                            }
+//                        }
                     },
                 switchVisibility.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)

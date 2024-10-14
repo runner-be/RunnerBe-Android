@@ -42,7 +42,6 @@ class RunningLogDetailViewModel @Inject constructor(
                         is CommonResponse.Success<*> -> {
                             val runningLogDetail = response.body as? DetailRunningLogResponse
                             runningLogDetail?.let {
-                                Log.e("runningLogDetailFlow", it.toString())
                                 parseRunningLogDetailToPresentation(it)
                             } ?: throw IllegalStateException("Invalid running log data")
                         }

@@ -4,9 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogBottomSheetStampBinding
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.LeftSpaceItemDecoration
 
@@ -19,8 +24,19 @@ class StampBottomSheetDialog(
     private var selectedStamp: StampItem
     private var onStampConfirmListener: OnStampConfirmListener? = null
 
+    private val stampLayoutManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
+    private val smoothScroller: SmoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+            override fun getHorizontalSnapPreference(): Int = SNAP_TO_START
+        }
+    }
+
     init {
-        this.selectedStamp = selectedStamp
+        this.selectedStamp = selectedStamp.also {
+            LogUtil.debugLog(it.toString())
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,6 +44,7 @@ class StampBottomSheetDialog(
         initStampRecyclerView()
         initClickListeners()
         initStampInfo()
+        scrollToSelectedStamp(stampLayoutManager, selectedStamp)
     }
 
     override fun onDestroyView() {
@@ -51,9 +68,17 @@ class StampBottomSheetDialog(
         }
     }
 
+    private fun scrollToSelectedStamp(
+        layoutManager: LinearLayoutManager,
+        stamp: StampItem
+    ) {
+        val stampList = initStampItems()
+        smoothScroller.targetPosition = stampList.indexOf(stamp)
+        layoutManager.startSmoothScroll(smoothScroller)
+    }
+
     private fun initStampRecyclerView() {
         with(binding.rcvStamp) {
-            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             _stampAdapter = StampAdapter()
             adapter = stampAdapter.apply {
                 submitList(initStampItems())
@@ -64,7 +89,7 @@ class StampBottomSheetDialog(
                     binding.tvStampDetail.text = stamp.description
                 }
             }
-            layoutManager = linearLayoutManager
+            layoutManager = stampLayoutManager
             val space = 24.dpToPx(context)
             addItemDecoration(LeftSpaceItemDecoration(space))
         }
