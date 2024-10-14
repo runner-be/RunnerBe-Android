@@ -21,7 +21,7 @@ class GetBeforeBookmarkListUseCase @Inject constructor(private val repo: PostRep
             emit(it)
         }.onFailure {
             it.printStackTrace()
-            emit(CommonResponse.Failed(999, it.message ?: "error"))
+            emit(CommonResponse.Failed.getDefaultFailed(it.message))
         }
     }
 }

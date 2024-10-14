@@ -15,7 +15,7 @@ class DropPostUseCase @Inject constructor(private val repo: PostRepository) {
             emit(it)
         }.onFailure {
             it.printStackTrace()
-            emit(CommonResponse.Failed(999, it.message ?: "error"))
+            emit(CommonResponse.Failed.getDefaultFailed(it.message))
         }
     }
 }

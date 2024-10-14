@@ -16,7 +16,7 @@ class WithdrawalUserUseCase @Inject constructor(private val repo : UserRepositor
             emit(it)
         }.onFailure { e ->
             e.printStackTrace()
-            emit(CommonResponse.Failed(999, e.message?:"error"))
+            emit(CommonResponse.Failed.getDefaultFailed(e.message))
         }
     }
 }

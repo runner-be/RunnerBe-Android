@@ -3,37 +3,39 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResponse
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnerListUseCase
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
+import com.applemango.runnerbe.domain.usecase.runninglog.PostStampToJoinedRunnerUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.google.android.gms.common.internal.service.Common
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMap
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupProfilesViewModel @Inject constructor(
-    private val getJoinedRunnerListUseCase: GetJoinedRunnerListUseCase
+    private val getJoinedRunnerListUseCase: GetJoinedRunnerListUseCase,
+    private val postStampToJoinedRunnerUseCase: PostStampToJoinedRunnerUseCase
 ): ViewModel() {
     private val runnerInfo = MutableStateFlow<Pair<Int, Int>?>(null)
+    private val lastSelectedUserId = MutableStateFlow<Int?>(null)
+
+    private val _stampResult = MutableStateFlow<CommonResponse>(CommonResponse.Empty)
+    val stampResult: StateFlow<CommonResponse> = _stampResult.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val joinedRunnerListFlow: Flow<List<JoinedRunnerResult>> = runnerInfo
@@ -61,6 +63,34 @@ class GroupProfilesViewModel @Inject constructor(
             throwable.printStackTrace()
         }
         .flowOn(Dispatchers.IO)
+
+    fun postStampToJoinedRunner(userId: Int, stampCode: String) {
+        viewModelScope.launch {
+            try {
+                val targetUserId = requireNotNull(lastSelectedUserId.value) {
+                    "선택된 사용자가 없습니다"
+                }
+                val stampRequest = PostStampRequest(
+                    targetUserId.toString(),
+                    stampCode
+                )
+                postStampToJoinedRunnerUseCase(userId, targetUserId, stampRequest)
+                    .onStart {
+                        _stampResult.value = CommonResponse.Loading
+                    }
+                    .collect { response ->
+                        _stampResult.value = response
+                    }
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                _stampResult.value = CommonResponse.Failed.getDefaultFailed(e.message)
+            }
+        }
+    }
+
+    fun updateLastSelectedUserId(userId: Int) {
+        lastSelectedUserId.value = userId
+    }
 
     fun updateRunnerInfo(userId: Int, logId: Int) {
         runnerInfo.value = Pair(userId, logId)

@@ -28,6 +28,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.Week
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.dpToPx
+import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import com.applemango.runnerbe.util.toUri
 import com.google.firebase.ktx.Firebase
@@ -250,7 +251,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                             val date = item.date!!
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningLogFragment(
-                                    date.toString(),
+                                    parseLocalDateToKorean(date),
                                     null,
                                     null
                                 )

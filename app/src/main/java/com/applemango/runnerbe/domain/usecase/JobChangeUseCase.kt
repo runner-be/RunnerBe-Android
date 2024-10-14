@@ -17,7 +17,8 @@ class JobChangeUseCase @Inject constructor(
         }.onSuccess {
             emit(it)
         }.onFailure { e ->
-            emit(CommonResponse.Failed(999, e.message?:"error"))
+            e.printStackTrace()
+            emit(CommonResponse.Failed.getDefaultFailed(e.message))
         }
     }
 }

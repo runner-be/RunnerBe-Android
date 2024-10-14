@@ -66,9 +66,9 @@ class GroupProfilesFragment :
 
     private fun initGroupProfileRecyclerView() {
         with(binding.rcvProfile) {
-//            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = profileAdapter.apply {
-                setOnProfileClickListener { position, stamp ->
+                setOnProfileClickListener { position, targetUserId, stamp ->
+                    viewModel.updateLastSelectedUserId(targetUserId)
                     StampBottomSheetDialog.createAndShow(
                         childFragmentManager,
                         stamp ?: StampItem(
@@ -79,7 +79,9 @@ class GroupProfilesFragment :
                             true
                         )
                     ) { stampItem ->
+                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
                         profileAdapter.updateProfileStampByPosition(position, stampItem.code)
+                        viewModel.postStampToJoinedRunner(userId, stampItem.code)
                     }
                 }
             }

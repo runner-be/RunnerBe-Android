@@ -19,7 +19,7 @@ class PostWhetherAcceptUseCase @Inject constructor(
                 emit(it)
             }.onFailure {
                 it.printStackTrace()
-                emit(CommonResponse.Failed(999, it.message ?: "error"))
+                emit(CommonResponse.Failed.getDefaultFailed(it.message))
             }
         } else {
             emit(CommonResponse.Failed(700, "문제가 발생했습니다."))
