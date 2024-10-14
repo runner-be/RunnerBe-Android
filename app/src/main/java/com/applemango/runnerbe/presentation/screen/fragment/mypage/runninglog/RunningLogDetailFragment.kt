@@ -34,6 +34,7 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
         initMemberStampRecyclerView()
         setupRunningLogDetail()
         initMenuClickListeners()
+        initClickListeners()
         setupDeleteRunningLogResult()
         viewModel.updateRunningLogArgs(Pair(args.userId, args.logId))
     }
@@ -42,6 +43,14 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
         binding.rcvTeamStamp.apply {
             adapter = gotStampAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun initClickListeners() {
+        with(binding) {
+            btnBack.setOnClickListener {
+                goBack()
+            }
         }
     }
 

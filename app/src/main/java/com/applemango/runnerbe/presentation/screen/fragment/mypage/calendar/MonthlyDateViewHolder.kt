@@ -41,6 +41,8 @@ class MonthlyDateViewHolder (
                     text = it.dayOfMonth.toString()
                     if (it == LocalDate.now()) {
                         setTextColor(ResourcesCompat.getColor(context.resources, R.color.dark_g2, null))
+                    } else {
+                        setTextColor(ResourcesCompat.getColor(context.resources, R.color.dark_g5, null))
                     }
                 }
             }

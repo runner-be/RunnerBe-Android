@@ -34,7 +34,7 @@ class WeatherBottomSheetDialog(
         initStampRecyclerView()
         initClickListeners()
 
-        binding.etTemperature.setText(currentTemperature)
+        binding.etTemperature.setText(currentTemperature.replace("+", ""))
     }
 
     override fun onDestroyView() {

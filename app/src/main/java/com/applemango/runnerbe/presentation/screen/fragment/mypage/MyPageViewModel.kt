@@ -56,7 +56,7 @@ class MyPageViewModel @Inject constructor(
     private val todayDateFlow = MutableStateFlow<LocalDate>(LocalDate.now())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val thisWeekRunningLogFlow: Flow<List<MyRunningLog>> = todayDateFlow
+    val thisWeekRunningLogFlow: Flow<RunningLogResult> = todayDateFlow
         .flatMapLatest { today ->
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             val (todayYear, todayMonth)  = Pair(today.year, today.monthValue)
@@ -64,8 +64,7 @@ class MyPageViewModel @Inject constructor(
                 .map { response ->
                     when (response) {
                         is CommonResponse.Success<*> -> {
-                            val result = response.body as RunningLogResult
-                            result.myRunningLog
+                            response.body as RunningLogResult
                         }
 
                         is CommonResponse.Failed -> {

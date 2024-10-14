@@ -180,10 +180,10 @@
                         android:id="@+id/iv_photo"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:layout_marginStart="16dp"
                         android:layout_marginTop="32dp"
+                        bind:glideImageFromUri="@{vm.logImage}"
                         android:padding="1dp"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/et_diary"
                         app:shapeAppearanceOverlay="@style/photo_round_shape_14" />

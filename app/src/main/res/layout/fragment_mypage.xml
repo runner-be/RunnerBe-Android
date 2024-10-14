@@ -376,7 +376,7 @@
                     app:selectedDotColor="@color/dark_g2" />
 
                 <TextView
-                    android:id="@+id/tv_stamp_monthly"
+                    android:id="@+id/tv_stamp_weekly"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
