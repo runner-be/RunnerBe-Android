@@ -71,7 +71,7 @@ class GroupProfilesViewModel @Inject constructor(
                     "선택된 사용자가 없습니다"
                 }
                 val stampRequest = PostStampRequest(
-                    targetUserId.toString(),
+                    targetUserId,
                     stampCode
                 )
                 postStampToJoinedRunnerUseCase(userId, targetUserId, stampRequest)
