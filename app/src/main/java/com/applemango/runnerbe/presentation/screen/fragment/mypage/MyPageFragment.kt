@@ -194,11 +194,16 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun setupThisWeekRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.thisWeekRunningLogFlow.collectLatest { list ->
-                    val result = initWeekDays(list).also {
+                viewModel.thisWeekRunningLogFlow.collectLatest { result ->
+                    val runningLogs = initWeekDays(result.myRunningLog).also {
                         Log.e("setupThisWeekRunningLogs", it.toString())
                     }
-                    weeklyCalendarAdapter.submitList(result)
+                    weeklyCalendarAdapter.submitList(runningLogs)
+                    result.totalCount?.let {
+                        binding.tvStampWeekly.text = getString(R.string.calendar_monthly_statistic,
+                            it.groupRunningCount, it.personalRunningCount
+                        )
+                    }
                 }
             }
         }
@@ -232,7 +237,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         val runningLog = item.runningLog
 
                         if (runningLog != null) {
-                            // 단체 로그 작성/조회
+                            // 러닝 로그 조회
                             val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
@@ -241,12 +246,12 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                                 )
                             )
                         } else {
-                            // 개인 로그 작성/수정
+                            // 러닝 로그 작성
                             val date = item.date!!
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningLogFragment(
                                     date.toString(),
-                                    "logId",
+                                    null,
                                     null
                                 )
                             )

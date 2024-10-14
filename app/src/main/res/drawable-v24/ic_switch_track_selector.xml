@@ -6,9 +6,9 @@
         android:state_enabled="false"
         android:state_checked="true" />
 
+
     <item
         android:drawable="@drawable/ic_switch_track_off"
-        android:state_enabled="true"
         android:state_checked="false"/>
 
     <item

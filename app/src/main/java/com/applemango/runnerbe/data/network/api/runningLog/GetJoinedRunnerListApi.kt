@@ -7,9 +7,9 @@ import retrofit2.http.Path
 
 interface GetJoinedRunnerListApi {
 
-    @GET("/runningLogs/{userId}/partners/{logId}")
+    @GET("/runningLogs/{userId}/partners/{gatheringId}")
     suspend fun getJoinedRunnerList(
         @Path("userId") userId: Int,
-        @Path("logId") logId: Int,
-    ): Response<List<JoinedRunnerResponse>>
+        @Path("gatheringId") gatheringId: Int,
+    ): Response<JoinedRunnerResponse>
 }

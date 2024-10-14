@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -42,7 +43,7 @@ class GroupProfilesFragment :
     private fun setupRunnerList() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.runnerListFlow.collectLatest { list ->
+                viewModel.joinedRunnerListFlow.collectLatest { list ->
                     if (list.isNotEmpty()) {
                         binding.tvGroupProfileCount.text = getString(R.string.group_profile_count, list.size)
                         profileAdapter.submitList(list)
@@ -77,7 +78,7 @@ class GroupProfilesFragment :
                             true
                         )
                     ) { stampItem ->
-                        profileAdapter.updateProfileStampByPosition(position, stampItem)
+                        profileAdapter.updateProfileStampByPosition(position, stampItem.code)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,11 +39,11 @@ class RunningLogViewModel @Inject constructor(
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase
 ) : ViewModel() {
     private val logId = MutableStateFlow<Int?>(null)
-    private val gatheringId = MutableStateFlow<Int?>(null)
+    private val gatheringId = MutableStateFlow<Int?>(653)
     val logDate = MutableStateFlow("")
     val logType = MutableStateFlow(RunningLogType.ALONE)
     val logDiary = MutableStateFlow("")
-    private val logImage = MutableStateFlow<String?>(null)
+    val logImage = MutableStateFlow<Uri?>(null)
     val logStamp = MutableStateFlow(StampItem.unavailableStampItem)
     val logDegree = MutableStateFlow<String?>("")
     val logWeather = MutableStateFlow(
@@ -134,8 +135,11 @@ class RunningLogViewModel @Inject constructor(
     }
 
     fun updateLogType(type: RunningLogType) {
-        Log.e("updateLogType", type.toString())
         logType.value = type
+    }
+
+    fun updateLogImage(image: Uri) {
+        logImage.value = image
     }
 
     fun updateStamp(stamp: StampItem) {

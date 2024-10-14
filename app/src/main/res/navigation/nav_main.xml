@@ -43,13 +43,25 @@
             app:destination="@id/paceInfoRegistFragment" />
         <action
             android:id="@+id/action_mainFragment_to_runningLogFragment"
-            app:destination="@id/runningLogFragment" />
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mainFragment_to_monthlyCalendarFragment"
-            app:destination="@id/monthlyCalendarFragment" />
+            app:destination="@id/monthlyCalendarFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mainFragment_to_runningLogDetailFragment"
-            app:destination="@id/runningLogDetailFragment" />
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -266,8 +278,10 @@
         <action
             android:id="@+id/action_monthlyCalendarFragment_to_runningLogFragment"
             app:destination="@id/runningLogFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_left" />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_monthlyCalendarFragment_to_runningLogDetailFragment"
             app:destination="@id/runningLogDetailFragment" />
@@ -286,7 +300,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_runningLogDetailFragment_to_runningLogFragment"
-            app:destination="@id/runningLogFragment" />
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
 
     </fragment>
 </navigation>
