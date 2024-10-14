@@ -16,7 +16,7 @@ class PatchAlarmUseCase @Inject constructor(private val repo: UserRepository) {
             emit(it)
         }.onFailure { e ->
             e.printStackTrace()
-            emit(CommonResponse.Failed(999, e.message?:"error"))
+            emit(CommonResponse.Failed.getDefaultFailed(e.message))
         }
     }
 }

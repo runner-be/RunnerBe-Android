@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import android.util.Log
 import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
@@ -10,7 +9,7 @@ import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
-import com.applemango.runnerbe.data.network.request.PatchStampRequest
+import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
 import com.applemango.runnerbe.domain.repository.RunningLogRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -47,7 +46,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "getMonthlyRunningLogList failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -72,7 +71,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "postRunningLog failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -92,7 +91,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "getRunningLogDetail failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -116,7 +115,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "patchRunningLog failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -136,7 +135,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "deleteRunningLog failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -156,7 +155,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "getJoinedRunnerList failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -176,14 +175,14 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "getStampList failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
     override suspend fun patchStampToJoinedRunner(
         userId: Int,
         logId: Int,
-        stamp: PatchStampRequest
+        stamp: PostStampRequest
     ): CommonResponse {
         return try {
             val response =
@@ -201,14 +200,14 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "patchStampToJoinedRunner failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
     override suspend fun postStampToJoinedRunner(
         userId: Int,
         logId: Int,
-        stamp: PatchStampRequest
+        stamp: PostStampRequest
     ): CommonResponse {
         return try {
             val response = postStampToJoinedRunnerApi.postStampToJoinedRunner(userId, logId, stamp)
@@ -225,7 +224,7 @@ class RunningLogRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "postStampToJoinedRunner failed")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 }

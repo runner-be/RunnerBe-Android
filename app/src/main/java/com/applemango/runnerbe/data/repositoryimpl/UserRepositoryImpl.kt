@@ -33,7 +33,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
 
     }
@@ -55,7 +55,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -72,7 +72,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
 
     }
@@ -90,7 +90,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -107,7 +107,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -127,7 +127,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -152,7 +152,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -169,7 +169,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 }

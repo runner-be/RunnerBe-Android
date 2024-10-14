@@ -67,7 +67,7 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
                 }
 
                 constProfile.setOnClickListener {
-                    onProfileClickListener.onProfileClicked(bindingAdapterPosition, getStampItemByCode(item.stampCode))
+                    onProfileClickListener.onProfileClicked(bindingAdapterPosition, item.userId, getStampItemByCode(item.stampCode))
                     updateSelectedPosition(bindingAdapterPosition)
                     if (bindingAdapterPosition == selectedPosition) {
                         binding.flProfile.setBackgroundResource(R.drawable.bg_g5_circle_shape_primary_stroke)

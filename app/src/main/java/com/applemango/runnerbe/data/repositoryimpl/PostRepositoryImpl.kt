@@ -35,7 +35,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -52,7 +52,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
 
     }
@@ -89,7 +89,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -109,7 +109,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -126,7 +126,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -143,7 +143,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -160,7 +160,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -181,7 +181,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -200,7 +200,7 @@ class PostRepositoryImpl @Inject constructor(
         } catch (e: HttpException) {
             CommonResponse.Failed(e.code(), e.message ?: "HTTP error")
         } catch (e: Exception) {
-            CommonResponse.Failed(999, e.message ?: "Unknown error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
     override suspend fun dropPost(postId: Int, userId: Int): CommonResponse {
@@ -216,7 +216,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 
@@ -233,7 +233,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            CommonResponse.Failed(999, e.message ?: "error")
+            CommonResponse.Failed.getDefaultFailed(e.message)
         }
     }
 }

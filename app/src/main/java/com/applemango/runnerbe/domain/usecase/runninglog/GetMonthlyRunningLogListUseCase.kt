@@ -17,7 +17,7 @@ class GetMonthlyRunningLogListUseCase @Inject constructor(
             emit(it)
         }.onFailure {
             it.printStackTrace()
-            emit(CommonResponse.Failed(999, it.message?:"error"))
+            emit(CommonResponse.Failed.getDefaultFailed(it.message))
         }
     }
 }

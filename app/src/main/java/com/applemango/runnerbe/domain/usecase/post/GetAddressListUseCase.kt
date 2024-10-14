@@ -36,7 +36,7 @@ class GetAddressListUseCase @Inject constructor(
         }.onFailure { e ->
             Log.e("GetAddressListUseCase", "onFailure")
             e.printStackTrace()
-            emit(CommonResponse.Failed(999, e.message ?: "GetAddressListUseCase ERROR"))
+            emit(CommonResponse.Failed.getDefaultFailed(e.message))
         }
     }
 }

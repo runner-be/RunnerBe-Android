@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api.runningLog
 
-import com.applemango.runnerbe.data.network.request.PatchStampRequest
+import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -13,6 +13,6 @@ interface PatchStampToJoinedRunnerApi {
     suspend fun patchStampToJoinedRunner(
         @Path("userId") userId: Int,
         @Path("logId") logId: Int,
-        @Body stamp: PatchStampRequest
+        @Body stamp: PostStampRequest
     ): Response<BaseResponse>
 }

@@ -19,6 +19,6 @@ class GetUserDataUseCase @Inject constructor(private val repo : UserRepository) 
         }
     }.catch { e ->
         e.printStackTrace()
-        emit(CommonResponse.Failed(999, e.message?:"error"))
+        emit(CommonResponse.Failed.getDefaultFailed(e.message))
     }
 }

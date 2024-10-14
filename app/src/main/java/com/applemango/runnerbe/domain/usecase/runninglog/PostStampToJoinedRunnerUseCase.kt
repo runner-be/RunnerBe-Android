@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.domain.usecase.runninglog
 
-import com.applemango.runnerbe.data.network.request.PatchStampRequest
+import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.domain.repository.RunningLogRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ class PostStampToJoinedRunnerUseCase @Inject constructor(
     suspend operator fun invoke(
         userId: Int,
         logId: Int,
-        stamp: PatchStampRequest
+        stamp: PostStampRequest
     ): Flow<CommonResponse> = flow {
         kotlin.runCatching {
             runningLogRepository.postStampToJoinedRunner(userId, logId, stamp)
@@ -21,7 +21,7 @@ class PostStampToJoinedRunnerUseCase @Inject constructor(
             emit(it)
         }.onFailure {
             it.printStackTrace()
-            emit(CommonResponse.Failed(999, it.message ?: "error"))
+            emit(CommonResponse.Failed.getDefaultFailed(it.message))
         }
     }
 }
