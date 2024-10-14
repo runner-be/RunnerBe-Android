@@ -145,13 +145,13 @@ class RunningLogRepositoryImpl @Inject constructor(
             val response = getJoinedRunnerListApi.getJoinedRunnerList(userId, logId)
             if (response.isSuccessful
                 && response.body() != null
-                && response.body()!!.isNotEmpty()
+                && response.body()!!.result.isNotEmpty()
             ) {
-                CommonResponse.Success(response.body()!![0].code, response.body()!!)
+                CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
                 CommonResponse.Failed(
-                    response.body()?.get(0)?.code ?: response.code(),
-                    response.body()?.get(0)?.message ?: response.message()
+                    response.body()?.code ?: response.code(),
+                    response.body()?.message ?: response.message()
                 )
             }
         } catch (e: Exception) {
