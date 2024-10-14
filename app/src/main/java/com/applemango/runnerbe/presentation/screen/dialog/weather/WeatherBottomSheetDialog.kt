@@ -2,13 +2,14 @@ package com.applemango.runnerbe.presentation.screen.dialog.weather
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.databinding.DialogBottomSheetStampBinding
 import com.applemango.runnerbe.databinding.DialogBottomSheetWeatherBinding
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.OnStampConfirmListener
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.LeftSpaceItemDecoration
 
@@ -24,6 +25,15 @@ class WeatherBottomSheetDialog(
 
     private var onWeatherConfirmListener: OnWeatherConfirmListener? = null
 
+    private val weatherLayoutManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
+    private val smoothScroller: RecyclerView.SmoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+            override fun getHorizontalSnapPreference(): Int = SNAP_TO_START
+        }
+    }
+
     init {
         this.selectedWeather = selectedWeather
         this.currentTemperature = currentDegree
@@ -33,6 +43,7 @@ class WeatherBottomSheetDialog(
         super.onViewCreated(view, savedInstanceState)
         initStampRecyclerView()
         initClickListeners()
+        scrollToSelectedStamp(weatherLayoutManager, selectedWeather)
 
         binding.etTemperature.setText(currentTemperature.replace("+", ""))
     }
@@ -45,7 +56,23 @@ class WeatherBottomSheetDialog(
     private fun initClickListeners() {
         with(binding) {
             btnRegister.setOnClickListener {
-                onWeatherConfirmListener?.onConfirmClicked(selectedWeather, etTemperature.text.toString())
+                if (binding.etTemperature.text.isNullOrBlank()) {
+                    Toast.makeText(context, getString(R.string.toast_weather_degree), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (selectedWeather == WeatherItem.defaultWeatherItem) {
+                    onWeatherConfirmListener?.onConfirmClicked(
+                        WeatherItem(
+                            "WEA001",
+                            R.drawable.ic_weather_1_sunny,
+                            requireContext().getString(R.string.weather_1_sunny)
+                        ),
+                        etTemperature.text.toString())
+                } else {
+                    onWeatherConfirmListener?.onConfirmClicked(selectedWeather, etTemperature.text.toString())
+                }
+
                 dismiss()
             }
         }
@@ -61,20 +88,30 @@ class WeatherBottomSheetDialog(
                     selectedWeather = weather
                 }
             }
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = weatherLayoutManager
             val space = 24.dpToPx(context)
             addItemDecoration(LeftSpaceItemDecoration(space))
         }
     }
 
+    private fun scrollToSelectedStamp(
+        layoutManager: LinearLayoutManager,
+        weather: WeatherItem
+    ) {
+        val weatherList = initWeatherItems()
+        val weatherItem = getWeatherItemByCode(weather.code)
+        smoothScroller.targetPosition = weatherList.indexOf(weatherItem)
+        layoutManager.startSmoothScroll(smoothScroller)
+    }
+
     companion object {
         fun createAndShow(
             fragmentManager: FragmentManager,
-            selectedStamp: WeatherItem,
+            selectedWeather: WeatherItem,
             currentDegree: String,
             onWeatherConfirmListener: OnWeatherConfirmListener
         ) {
-            val bottomSheetDialog = WeatherBottomSheetDialog(selectedStamp, currentDegree)
+            val bottomSheetDialog = WeatherBottomSheetDialog(selectedWeather, currentDegree)
             with(bottomSheetDialog) {
                 this.onWeatherConfirmListener = onWeatherConfirmListener
                 show(fragmentManager, tag)

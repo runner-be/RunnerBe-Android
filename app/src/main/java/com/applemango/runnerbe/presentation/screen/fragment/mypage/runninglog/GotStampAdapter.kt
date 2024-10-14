@@ -20,12 +20,10 @@ class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampVie
                 Glide.with(itemView.context)
                     .load(item.profileImageUrl)
                     .error(R.drawable.ic_user_default)
-//                    .transform(CenterCrop(), RoundedCorners(50))
                     .into(ivPhoto)
                 Glide.with(itemView.context)
                     .load(getStampItemByCode(item.stampCode))
                     .error(R.drawable.ic_user_default)
-//                    .transform(CenterCrop(), RoundedCorners(50))
                     .into(ivPhoto)
             }
         }

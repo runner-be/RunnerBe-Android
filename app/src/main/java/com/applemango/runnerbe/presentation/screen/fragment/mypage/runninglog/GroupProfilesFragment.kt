@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,7 +14,6 @@ import com.applemango.runnerbe.databinding.FragmentGroupProfilesBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,9 +29,12 @@ class GroupProfilesFragment :
     private val viewModel: GroupProfilesViewModel by viewModels()
     private val navArgs: GroupProfilesFragmentArgs by navArgs()
 
+    private lateinit var linearLayoutManager: LinearLayoutManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
+        linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.updateRunnerInfo(userId, navArgs.gatheringId)
         initGroupProfileRecyclerView()
         initClickListeners()
@@ -65,7 +66,7 @@ class GroupProfilesFragment :
 
     private fun initGroupProfileRecyclerView() {
         with(binding.rcvProfile) {
-            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = profileAdapter.apply {
                 setOnProfileClickListener { position, stamp ->
                     StampBottomSheetDialog.createAndShow(
