@@ -40,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -75,6 +76,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         setupJoinedRunningPosts()
         setupThisWeekRunningLogs()
         initYearMonthSpinner()
+        binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.userProfileEditButton.setOnClickListener(this)
         binding.userImgEdit.setOnClickListener(this)
@@ -266,6 +268,21 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
 
     override fun onClick(v: View?) {
         when (v) {
+            binding.constJoinedRunningPost -> {
+                try {
+                    val userInfo = requireNotNull(viewModel.userInfo.value)
+                    val targetUserId = userInfo.userId
+                    val targetNickname = requireNotNull(userInfo.nickName)
+
+                    navigate(MainFragmentDirections.actionMainFragmentToJoinPostFragment(
+                        targetUserId, targetNickname
+                    ))
+                } catch (e: IllegalArgumentException) {
+                    Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT).show()
+                    e.printStackTrace()
+                }
+            }
+
             binding.ivCalendar -> {
                 navigate(MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment())
             }

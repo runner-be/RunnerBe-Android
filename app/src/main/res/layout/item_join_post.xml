@@ -37,16 +37,6 @@
                 android:textColor="@color/dark_g2"
                 android:textSize="18dp"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/bookmark_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/post_name"
-                app:layout_constraintBottom_toBottomOf="@id/post_name"
-                app:layout_constraintRight_toRightOf="parent"
-                android:src="@{holderModel.bookmarkCheck() ? @drawable/ic_book_mark_on : @drawable/ic_book_mark_off}"
-                tools:ignore="UseAppTint"/>
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/userProfileLayout"
                 android:layout_width="match_parent"
