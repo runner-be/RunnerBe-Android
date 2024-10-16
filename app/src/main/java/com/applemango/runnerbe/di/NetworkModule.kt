@@ -269,4 +269,9 @@ object NetworkModule {
     @Singleton
     fun providePostStampToJoinedRunner(retrofit: Retrofit): PostStampToJoinedRunnerApi =
         retrofit.create(PostStampToJoinedRunnerApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetOtherUserProfile(retrofit: Retrofit): GetOtherUserProfileApi =
+        retrofit.create(GetOtherUserProfileApi::class.java)
 }

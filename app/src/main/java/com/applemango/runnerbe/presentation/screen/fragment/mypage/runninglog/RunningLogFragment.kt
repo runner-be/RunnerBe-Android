@@ -51,11 +51,9 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         val logId = navArgs.logId
         val gatheringId = navArgs.gatheringId
 
-        Log.e("RunningLogFragment onCreate gatheringId", gatheringId.toString())
         val logType = if (gatheringId != null) {
             RunningLogType.TEAM
         } else RunningLogType.ALONE
-        Log.e("RunningLogFragment onCreate logType", logType.toString())
 
         viewModel.updateLogDate(strDate)
         viewModel.updateLogId(logId?.toIntOrNull())

@@ -42,7 +42,6 @@ class AddressSearchPagingSource @Inject constructor(
                 }
                 val isEnd = body.meta.isEnd
 
-                Log.e("AddressSearchPagingSource", " $addressList")
                 LoadResult.Page(
                     data = addressList,
                     prevKey = if (currPage > START_PAGE_NUMBER) currPage - 1 else null,

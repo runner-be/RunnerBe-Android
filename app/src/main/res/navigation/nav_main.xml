@@ -269,6 +269,9 @@
         <argument
             android:name="gatheringId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_groupProfilesFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/monthlyCalendarFragment"
@@ -305,6 +308,16 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.UserProfileFragment"
+        android:label="UserProfileFragment" >
+
+        <argument
+            android:name="targetUserId"
+            app:argType="integer" />
 
     </fragment>
 </navigation>

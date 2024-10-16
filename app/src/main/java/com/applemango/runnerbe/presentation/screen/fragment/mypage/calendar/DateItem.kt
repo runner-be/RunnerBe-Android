@@ -1,20 +1,18 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
 
-import android.util.Log
-import com.applemango.runnerbe.data.network.response.MyRunningLog
+import com.applemango.runnerbe.data.network.response.RunningLog
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Month
 import java.time.YearMonth
 import java.time.temporal.TemporalAdjusters
 
 data class DateItem(
     val date: LocalDate?,
-    val runningLog: MyRunningLog?
+    val runningLog: RunningLog?
 )
 
-fun initWeekDays(runningLogList: List<MyRunningLog>): List<DateItem> {
+fun initWeekDays(runningLogList: List<RunningLog>): List<DateItem> {
     val thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
 
     return (0 .. 6).map { day ->
@@ -28,7 +26,7 @@ fun initWeekDays(runningLogList: List<MyRunningLog>): List<DateItem> {
     }
 }
 
-fun initYearMonthDays(year: Int, month: Int, runningLogList: List<MyRunningLog>): List<DateItem> {
+fun initYearMonthDays(year: Int, month: Int, runningLogList: List<RunningLog>): List<DateItem> {
     val currYearMonth = YearMonth.of(year, Month.of(month))
     val firstDayOfMonth = currYearMonth.atDay(1)
     val emptyDayOfWeekCount = (firstDayOfMonth.dayOfWeek.value - DayOfWeek.MONDAY.value).coerceAtLeast(0)

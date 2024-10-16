@@ -1,0 +1,87 @@
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.applemango.runnerbe.R
+import com.applemango.runnerbe.databinding.FragmentUserProfileBinding
+import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.JoinedRunningPostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
+import com.applemango.runnerbe.util.dpToPx
+import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_user_profile) {
+    private val viewModel: UserProfileViewModel by viewModels()
+
+    private val navArgs: UserProfileFragmentArgs by navArgs()
+    @Inject
+    lateinit var joinedRunningPostAdapter: JoinedRunningPostAdapter
+    @Inject
+    lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
+        viewModel.updateTargetUserId(navArgs.targetUserId)
+        initJoinedRunningPostRecyclerView()
+        initWeeklyCalendarAdapter()
+        setupUserData()
+    }
+
+    private fun setupUserData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setupOtherUser()
+                setupWeeklyCalendar()
+                setupJoinedRunningPost()
+            }
+        }
+    }
+
+    private fun CoroutineScope.setupOtherUser() = launch {
+        viewModel.otherUserProfileFlow.collect { _ ->
+
+        }
+    }
+
+    private fun CoroutineScope.setupWeeklyCalendar() = launch {
+        viewModel.userRunningLogs.collect { list ->
+            weeklyCalendarAdapter.submitList(initWeekDays(list))
+        }
+    }
+
+    private fun CoroutineScope.setupJoinedRunningPost() = launch {
+        viewModel.userPostings.collect { list ->
+            joinedRunningPostAdapter.submitList(list)
+        }
+    }
+
+    private fun initWeeklyCalendarAdapter() {
+        binding.rcvCalendarWeekly.apply {
+            adapter = weeklyCalendarAdapter
+            layoutManager = GridLayoutManager(context, 7)
+        }
+    }
+
+    private fun initJoinedRunningPostRecyclerView() {
+        binding.rcvJoinedRunningPost.apply {
+            adapter = joinedRunningPostAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
+        }
+    }
+}

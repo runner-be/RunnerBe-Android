@@ -52,7 +52,6 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
         private val binding: ItemGroupProfileBinding
     ) : RecyclerView.ViewHolder(binding.root){
         fun bind(item: JoinedRunnerResult, onProfileClickListener: OnProfileClickListener) {
-            Log.e("runnerListFlow", item.toString())
             with(binding) {
                 Glide.with(root.context)
                     .load(item.profileImageUrl ?: R.drawable.ic_profile_default)

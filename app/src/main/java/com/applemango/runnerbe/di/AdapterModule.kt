@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.di
 
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.GotStampAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
@@ -35,5 +36,11 @@ class AdapterModule {
     @FragmentScoped
     fun provideMemberStampAdapter(): GotStampAdapter {
         return GotStampAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideJoinedRunningPostAdapter(): JoinedRunningPostAdapter {
+        return JoinedRunningPostAdapter()
     }
 }

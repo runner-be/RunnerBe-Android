@@ -27,7 +27,7 @@ class WeeklyEmptyViewHolder (
 class WeeklyDateViewHolder (
     val binding: ItemDateWeeklyBinding
 ): RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: DateItem, listener: OnDateClickListener) {
+    fun bind(item: DateItem, listener: OnDateClickListener?) {
         with(binding) {
             item.date?.let {
                 tvDayOfWeek.text = it.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())[0].toString()
@@ -44,7 +44,7 @@ class WeeklyDateViewHolder (
                 ivStamp.setImageResource(getStampItemByCode(it.stampCode).image)
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {
-                listener.onDateClicked(item)
+                listener?.onDateClicked(item)
 //                    if (item.stampItem != StampItem.unavailableStampItem) {
 //                        listener.onDateClicked(item)
 //                    }
