@@ -28,7 +28,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceCheckSelectListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSimpleSelectListAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.AttendanceAccessionAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceSeeAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoListAdapter
@@ -54,14 +53,6 @@ fun setAttendanceAccessionAdapter(
 ) {
     if (recyclerView.adapter == null) {
         recyclerView.adapter = AttendanceAccessionAdapter(dataList, accessionClickListener)
-    }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
-@BindingAdapter("joinPostAdapter")
-fun setJoinPostAdapter(recyclerView: RecyclerView, dataList: ObservableArrayList<Posting>) {
-    if (recyclerView.adapter == null) {
-        recyclerView.adapter = JoinPostAdapter(dataList)
     }
     recyclerView.adapter?.notifyDataSetChanged()
 }

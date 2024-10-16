@@ -62,6 +62,9 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_joinPostFragment"
+            app:destination="@id/joinPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -310,14 +313,30 @@
             app:popExitAnim="@anim/to_right" />
 
     </fragment>
+
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.UserProfileFragment"
-        android:label="UserProfileFragment" >
+        android:label="UserProfileFragment">
 
         <argument
             android:name="targetUserId"
             app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/joinPostFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinedPostFragment"
+        android:label="JoinPostFragment" >
+
+        <argument
+            android:name="targetUserId"
+            app:argType="integer" />
+
+        <argument
+            android:name="nickname"
+            app:argType="string" />
 
     </fragment>
 </navigation>
