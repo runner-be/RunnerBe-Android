@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
+import com.applemango.runnerbe.data.network.api.GetOtherUserProfileApi
 import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
@@ -24,7 +25,8 @@ class RunningLogRepositoryImpl @Inject constructor(
     private val patchRunningLogApi: PatchRunningLogApi,
     private val patchStampToJoinedRunnerApi: PatchStampToJoinedRunnerApi,
     private val postRunningLogApi: PostRunningLogApi,
-    private val postStampToJoinedRunnerApi: PostStampToJoinedRunnerApi
+    private val postStampToJoinedRunnerApi: PostStampToJoinedRunnerApi,
+    private val getOtherUserProfileApi: GetOtherUserProfileApi
 ) : RunningLogRepository {
     override suspend fun getMonthlyRunningLogList(
         userId: Int,
@@ -216,6 +218,26 @@ class RunningLogRepositoryImpl @Inject constructor(
                 && response.body()!!.isSuccess
             ) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
+            } else {
+                CommonResponse.Failed(
+                    response.body()?.code ?: response.code(),
+                    response.body()?.message ?: response.message()
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            CommonResponse.Failed.getDefaultFailed(e.message)
+        }
+    }
+
+    override suspend fun getOtherUserProfile(targetUserId: Int): CommonResponse {
+        return try {
+            val response = getOtherUserProfileApi.getOtherUserProfile(targetUserId)
+            if (response.isSuccessful
+                && response.body() != null
+                && response.body()!!.isSuccess
+            ) {
+                CommonResponse.Success(response.body()!!.code, response.body()!!.result)
             } else {
                 CommonResponse.Failed(
                     response.body()?.code ?: response.code(),

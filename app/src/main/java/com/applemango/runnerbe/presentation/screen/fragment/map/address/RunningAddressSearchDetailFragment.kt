@@ -45,7 +45,6 @@ class RunningAddressSearchDetailFragment :
     override fun onClick(v: View?) {
         when (v) {
             binding.backBtn, binding.tvAddressSubEdit -> {
-                Log.e("navPopStack", findNavController().currentBackStackEntry.toString())
                 navPopStack()
             }
 

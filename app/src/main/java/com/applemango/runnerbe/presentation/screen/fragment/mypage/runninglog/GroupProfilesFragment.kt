@@ -2,6 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.applemango.runnerbe.databinding.FragmentGroupProfilesBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,6 +41,7 @@ class GroupProfilesFragment :
         initGroupProfileRecyclerView()
         initClickListeners()
         setupRunnerList()
+        setupPostStampResult()
     }
 
     private fun setupRunnerList() {
@@ -56,10 +59,32 @@ class GroupProfilesFragment :
         }
     }
 
+    private fun setupPostStampResult() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.stampResult.collectLatest { response ->
+                    when (response) {
+                        is CommonResponse.Failed -> {
+                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                        }
+
+                        else -> {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun initClickListeners() {
         with(binding) {
             btnBack.setOnClickListener {
-                goBack()
+                // TODO()
+                navigate(
+                    GroupProfilesFragmentDirections.actionGroupProfilesFragmentToUserProfileFragment(429)
+                )
+//                goBack()
             }
         }
     }

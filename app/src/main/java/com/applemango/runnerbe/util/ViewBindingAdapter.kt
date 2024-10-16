@@ -11,6 +11,7 @@ import androidx.databinding.BindingAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.presentation.model.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
@@ -55,9 +56,9 @@ fun bindDate(textView: TextView, dateString: String?) {
         val hour = format[1]
         textView.text = DateSelectData(
             formatDate = format[0],
-            AMAndPM = if(hour.toInt() in 12 ..23) "PM" else "AM",
-            hour = if(hour.toInt() >= 24) "0" else if (hour.toInt() <= 12) hour else "${hour.toInt() - 12}",
-            minute = "${if(format[2].toInt() in 0..9) "0" else ""}${format[2].toInt()}"
+            AMAndPM = if (hour.toInt() in 12..23) "PM" else "AM",
+            hour = if (hour.toInt() >= 24) "0" else if (hour.toInt() <= 12) hour else "${hour.toInt() - 12}",
+            minute = "${if (format[2].toInt() in 0..9) "0" else ""}${format[2].toInt()}"
         ).getFullDisplayDate()
     }.onFailure {
         textView.text = ""
@@ -75,7 +76,7 @@ fun bindTime(textView: TextView, dateString: String?) {
 @BindingAdapter("running_tag_string")
 fun bindRunningTag(textView: TextView, runningTag: String?) {
     runningTag?.let {
-        textView.text = when(it) {
+        textView.text = when (it) {
             RunningTag.All.tag -> textView.resources.getString(R.string.all_work)
             RunningTag.Holiday.tag -> textView.resources.getString(R.string.holiday)
             RunningTag.After.tag -> textView.resources.getString(R.string.after_work)
@@ -124,26 +125,30 @@ fun setVisibilityInvisibleUnless(view: View, visible: Boolean) {
 
 @BindingAdapter("runner_count")
 fun runnerCountText(textView: TextView, peopleNum: Int) {
-    textView.text = textView.context.resources.getString(R.string.max_people_count, peopleNum.toString())
+    textView.text =
+        textView.context.resources.getString(R.string.max_people_count, peopleNum.toString())
 }
 
 @BindingAdapter("gender_string")
-fun genderString(textView: TextView, gender : String) {
-    textView.text = if(gender == "전체") gender else textView.context.resources.getString(R.string.gender_string, gender)
+fun genderString(textView: TextView, gender: String) {
+    textView.text = if (gender == "전체") gender else textView.context.resources.getString(
+        R.string.gender_string,
+        gender
+    )
 }
 
 @BindingAdapter("nick_name_text")
 fun getNickNameString(textView: TextView, nickName: String?) {
-    textView.text = nickName?:textView.context.resources.getString(R.string.default_nickname)
+    textView.text = nickName ?: textView.context.resources.getString(R.string.default_nickname)
 }
 
 @BindingAdapter("gender_text", "age_text")
 fun getGenderAndAgeString(textView: TextView, age: String?, gender: String?) {
-    textView.text = if(age == null && gender == null) {
+    textView.text = if (age == null && gender == null) {
         ""
-    } else if(age == null) {
+    } else if (age == null) {
         gender
-    } else if(gender == null) {
+    } else if (gender == null) {
         age
     } else {
         String.format(textView.context.resources.getString(R.string.comma_text), gender, age)
@@ -182,9 +187,11 @@ fun getWhetherEndCheckStatus(textView: TextView, post: Posting) {
                 setTextAndColor(R.string.recruitment_deadline, R.color.dark_g3)
             }
         }
+
         currentTime < startTime + THREE_HOURS_IN_MILLIS + runningTime -> {
             setTextAndColor(R.string.recruitment_deadline, R.color.dark_g3)
         }
+
         else -> {
             setTextAndColor(R.string.recruitment_end, R.color.dark_g3)
         }
@@ -193,14 +200,15 @@ fun getWhetherEndCheckStatus(textView: TextView, post: Posting) {
 
 @BindingAdapter("bind:afterPartyStatus")
 fun getAfterPartyStatus(textView: TextView, isAfterParty: Int) {
-    textView.text = textView.resources.getString(if(isAfterParty == 1) R.string.after_party_exist else R.string.after_party_not_exist)
+    textView.text =
+        textView.resources.getString(if (isAfterParty == 1) R.string.after_party_exist else R.string.after_party_not_exist)
 }
 
 @BindingAdapter("bind:paceImage16")
-fun ImageView.getPaceImage16(pace : String?) {
+fun ImageView.getPaceImage16(pace: String?) {
     this.isVisible = pace != null
     this.setImageResource(
-        when(pace) {
+        when (pace) {
             Pace.BEGINNER.key -> R.drawable.ic_beginner_pace //입문
             Pace.AVERAGE.key -> R.drawable.ic_general_pace //평균
             Pace.HIGH.key -> R.drawable.ic_master_pace//고수
@@ -209,10 +217,34 @@ fun ImageView.getPaceImage16(pace : String?) {
     )
 }
 
+@BindingAdapter("bind:attendanceImage16")
+fun ImageView.getAttendanceImage16(attendande: String?) {
+    this.isVisible = attendande != null
+    this.setImageResource(
+        when (attendande) {
+            RunnerDiligence.EFFORT_RUNNER.value -> {
+                R.drawable.ic_effort_runner_face
+            }
+
+            RunnerDiligence.ERROR_RUNNER.value -> {
+                R.drawable.ic_error_runner_face
+            }
+
+            RunnerDiligence.SINCERITY_RUNNER.value -> {
+                R.drawable.ic_sincerity_runner_face
+            }
+
+            else -> {
+                R.drawable.ic_effort_runner_face
+            }
+        }
+    )
+}
+
 @BindingAdapter("bind:paceText")
 fun TextView.getPaceText(pace: String?) {
     this.isVisible = pace != null
-    this.text = when(pace) {
+    this.text = when (pace) {
         Pace.BEGINNER.key -> Pace.BEGINNER.time //입문
         Pace.AVERAGE.key -> Pace.AVERAGE.time //평균
         Pace.HIGH.key -> Pace.HIGH.time //고수
@@ -248,7 +280,10 @@ fun SwitchCompat.isChecked(isChecked: Boolean?) {
 @BindingAdapter("bind:logTeamSrc")
 fun ImageView.setLogTeamSrc(type: RunningLogType?) {
     when (type) {
-        null -> { setImageResource(R.drawable.ic_team_lock) }
+        null -> {
+            setImageResource(R.drawable.ic_team_lock)
+        }
+
         RunningLogType.ALONE -> setImageResource(R.drawable.ic_team_lock)
         RunningLogType.TEAM -> setImageResource(R.drawable.ic_team_default)
     }

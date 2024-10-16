@@ -15,4 +15,3 @@ enum class Pace(val key: String, val time: String): Parcelable {
         fun getPaceByName(name: String?) : Pace? = Pace.values().firstOrNull { it.key == name }
     }
 }
-

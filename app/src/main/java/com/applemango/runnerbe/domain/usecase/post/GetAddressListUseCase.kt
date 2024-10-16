@@ -25,7 +25,6 @@ class GetAddressListUseCase @Inject constructor(
             }.flow
         }.onSuccess { result ->
             result.collect {
-                Log.e("GetAddressListUseCase", "onSuccess, $it")
                 emit(
                     CommonResponse.Success(
                         200,
@@ -34,7 +33,6 @@ class GetAddressListUseCase @Inject constructor(
                 )
             }
         }.onFailure { e ->
-            Log.e("GetAddressListUseCase", "onFailure")
             e.printStackTrace()
             emit(CommonResponse.Failed.getDefaultFailed(e.message))
         }

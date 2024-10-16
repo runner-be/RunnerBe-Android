@@ -10,23 +10,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.response.MonthlyStampResponse
 import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -84,7 +79,7 @@ class MonthlyCalendarFragment :
                         is CommonResponse.Success<*> -> {
                             val monthlyRunningLog = response.body as? RunningLogResult
                             val monthlyStatistic = monthlyRunningLog?.totalCount
-                            val monthlyLogList = monthlyRunningLog?.myRunningLog ?: emptyList()
+                            val monthlyLogList = monthlyRunningLog?.runningLog ?: emptyList()
 
                             if (monthlyStatistic != null) {
                                 binding.tvStampMonthly.text = getString(R.string.calendar_monthly_statistic,

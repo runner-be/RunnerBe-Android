@@ -9,7 +9,7 @@ data class MonthlyStampResponse(
 
 data class RunningLogResult (
     @SerializedName("totalCount") val totalCount: TotalCount?,
-    @SerializedName("myRunningLog") val myRunningLog: List<MyRunningLog>
+    @SerializedName("myRunningLog") val runningLog: List<RunningLog>
 )
 
 data class TotalCount(
@@ -17,7 +17,7 @@ data class TotalCount(
     @SerializedName("personalRunningCount") val personalRunningCount: Int
 )
 
-data class MyRunningLog(
+data class RunningLog(
     @SerializedName("logId") val logId: Int,
     @SerializedName("gatheringId") val gatheringId: Int?,
     @SerializedName("runnedDate") val runnedDate: ZonedDateTime,

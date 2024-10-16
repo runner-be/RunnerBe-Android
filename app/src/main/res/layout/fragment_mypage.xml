@@ -302,7 +302,6 @@
                     android:text="@{myPageViewModel.userInfo.diligence}"
                     android:textColor="@color/dark_g3"
                     android:textSize="14sp"
-
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/status_img"
                     app:layout_constraintRight_toRightOf="parent"

@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @AndroidEntryPoint
 class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragment_mypage),
@@ -198,9 +197,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thisWeekRunningLogFlow.collectLatest { result ->
-                    val runningLogs = initWeekDays(result.myRunningLog).also {
-                        Log.e("setupThisWeekRunningLogs", it.toString())
-                    }
+                    val runningLogs = initWeekDays(result.runningLog)
                     weeklyCalendarAdapter.submitList(runningLogs)
                     result.totalCount?.let {
                         binding.tvStampWeekly.text = getString(R.string.calendar_monthly_statistic,

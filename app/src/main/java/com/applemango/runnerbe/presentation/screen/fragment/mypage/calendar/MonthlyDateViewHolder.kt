@@ -33,8 +33,6 @@ class MonthlyDateViewHolder (
     private val binding: ItemDateMonthlyBinding
 ): RecyclerView.ViewHolder(binding.root) {
     fun bind(item: DateItem, onDateClickListener: OnDateClickListener) {
-        Log.e("MonthlyDateViewHolder", item.toString())
-
         with(binding) {
             item.date?.let {
                 tvDate.apply {

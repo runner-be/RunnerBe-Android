@@ -10,7 +10,7 @@ import com.applemango.runnerbe.databinding.ItemDateWeeklyEmptyBinding
 import java.time.LocalDate
 
 class WeeklyCalendarAdapter: ListAdapter<DateItem, RecyclerView.ViewHolder>(weeklyDiffUtil) {
-    private lateinit var onDateClickListener: OnDateClickListener
+    private var onDateClickListener: OnDateClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
