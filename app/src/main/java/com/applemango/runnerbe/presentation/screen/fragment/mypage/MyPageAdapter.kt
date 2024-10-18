@@ -2,7 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinedPostFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.MyPostFragment
 
 /**
@@ -10,7 +10,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.MyPost
  */
 class MyPageAdapter (fragment: MyPageFragment): FragmentStateAdapter(fragment) {
 
-    private var fragmentList = mutableListOf<Fragment>(MyPostFragment(), JoinedPostFragment())
+    private var fragmentList = mutableListOf<Fragment>(MyPostFragment(), OtherUserJoinedPostFragment())
 
     override fun getItemCount(): Int {
         return fragmentList.size

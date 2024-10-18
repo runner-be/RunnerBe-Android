@@ -10,16 +10,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentUserProfileBinding
+import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,6 +75,25 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
     private fun initWeeklyCalendarAdapter() {
         binding.rcvCalendarWeekly.apply {
             adapter = weeklyCalendarAdapter
+            weeklyCalendarAdapter.setIsOtherUser(true)
+            weeklyCalendarAdapter.setOnDateClickListener { item ->
+                if (item.runningLog == null) return@setOnDateClickListener
+
+                try {
+                    val targetUserId = requireNotNull(viewModel.userInfo.value?.userId)
+                    val logId = item.runningLog.logId
+
+                    navigate(
+                        UserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
+                            targetUserId,
+                            logId
+                        )
+                    )
+                } catch (e: IllegalArgumentException) {
+                    ToastUtil.showShortToast(context, getString(R.string.error_failed))
+                    e.printStackTrace()
+                }
+            }
             layoutManager = GridLayoutManager(context, 7)
         }
     }
@@ -80,6 +101,30 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
     private fun initJoinedRunningPostRecyclerView() {
         binding.rcvJoinedRunningPost.apply {
             adapter = joinedRunningPostAdapter
+            joinedRunningPostAdapter.setPostClickListener(object: PostClickListener {
+                override fun logWriteClick(post: Posting) {
+
+                }
+
+                override fun attendanceSeeClick(post: Posting) {
+
+                }
+
+                override fun attendanceManageClick(post: Posting) {
+
+                }
+
+                override fun bookMarkClick(post: Posting) {
+
+                }
+
+                override fun postClick(post: Posting) {
+                    navigate(
+                        UserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(post)
+                    )
+                }
+
+            })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
         }

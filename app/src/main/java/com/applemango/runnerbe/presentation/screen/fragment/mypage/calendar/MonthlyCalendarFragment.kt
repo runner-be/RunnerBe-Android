@@ -1,8 +1,12 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +18,7 @@ import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectDialog
+import com.applemango.runnerbe.presentation.screen.fragment.base.BaseDialogFragment
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.jakewharton.rxbinding4.view.clicks

@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser
 
 import android.os.Bundle
 import android.view.View
@@ -9,28 +9,25 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.databinding.FragmentJoinPostBinding
+import com.applemango.runnerbe.databinding.FragmentOtherUserJoinedPostBinding
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.BottomSpaceItemDecoration
-import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
-import com.applemango.runnerbe.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class JoinedPostFragment : BaseFragment<FragmentJoinPostBinding>(R.layout.fragment_join_post) {
+class OtherUserJoinedPostFragment : BaseFragment<FragmentOtherUserJoinedPostBinding>(R.layout.fragment_other_user_joined_post) {
 
-    private val navArgs: JoinedPostFragmentArgs by navArgs()
+    private val navArgs: OtherUserJoinedPostFragmentArgs by navArgs()
 
     @Inject
-    lateinit var joinedPostAdapter: JoinedPostAdapter
+    lateinit var otherUserJoinedPostAdapter: OtherUserJoinedPostAdapter
 
-    private val viewModel: JoinedPostViewModel by viewModels()
+    private val viewModel: OtherUserJoinedPostViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +40,7 @@ class JoinedPostFragment : BaseFragment<FragmentJoinPostBinding>(R.layout.fragme
         setupJoinedPostFlow()
     }
 
-    private fun updateWithNavArgs(args: JoinedPostFragmentArgs) {
+    private fun updateWithNavArgs(args: OtherUserJoinedPostFragmentArgs) {
         viewModel.updateTargetUserId(args.targetUserId)
         viewModel.updateTargetNickname(args.nickname)
     }
@@ -52,7 +49,7 @@ class JoinedPostFragment : BaseFragment<FragmentJoinPostBinding>(R.layout.fragme
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.targetJoinedPostFlow.collectLatest { posts ->
-                    joinedPostAdapter.submitList(posts)
+                    otherUserJoinedPostAdapter.submitList(posts)
                 }
             }
         }
@@ -60,8 +57,13 @@ class JoinedPostFragment : BaseFragment<FragmentJoinPostBinding>(R.layout.fragme
 
     private fun initJoinedPostAdapter() {
         binding.rcvJoinedPost.apply {
-            adapter = joinedPostAdapter
+            adapter = otherUserJoinedPostAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            otherUserJoinedPostAdapter.setOnPostClickListener { posting ->
+                navigate(
+                    OtherUserJoinedPostFragmentDirections.actionJoinPostFragmentToPostDetailFragment(posting)
+                )
+            }
             addItemDecoration(BottomSpaceItemDecoration(12.dpToPx(context)))
         }
     }

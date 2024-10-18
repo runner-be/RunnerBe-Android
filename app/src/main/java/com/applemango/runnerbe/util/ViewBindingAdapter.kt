@@ -259,8 +259,9 @@ fun View.visible(isVisible: Boolean) {
 
 @BindingAdapter("bind:glideImageFromUrl")
 fun ImageView.setImageUrl(url: String?) {
+    val image = url ?: R.drawable.ic_user_default
     Glide.with(this)
-        .load(url)
+        .load(image)
         .into(this)
 }
 

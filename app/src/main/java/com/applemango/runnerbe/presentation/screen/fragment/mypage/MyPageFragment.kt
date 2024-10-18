@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMypageBinding
+import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
@@ -223,6 +225,30 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         with(binding.rcvJoinedRunningPost) {
             _joinedRunningPostAdapter = JoinedRunningPostAdapter()
             adapter = joinedRunningPostAdapter
+            joinedRunningPostAdapter.setPostClickListener(object: PostClickListener {
+                override fun logWriteClick(post: Posting) {
+
+                }
+
+                override fun attendanceSeeClick(post: Posting) {
+
+                }
+
+                override fun attendanceManageClick(post: Posting) {
+
+                }
+
+                override fun bookMarkClick(post: Posting) {
+
+                }
+
+                override fun postClick(post: Posting) {
+                    navigate(
+                        MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
+                    )
+                }
+
+            })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
         }

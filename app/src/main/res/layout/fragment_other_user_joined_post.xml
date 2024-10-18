@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinedPostViewModel" />
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

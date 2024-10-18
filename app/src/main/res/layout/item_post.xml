@@ -40,22 +40,11 @@
                 android:textColor="@color/dark_g1"
                 android:fontFamily="@font/pretendard_regular"
                 android:includeFontPadding="false"
-                android:layout_marginEnd="8dp"
                 android:lines="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/bookmark_btn"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/bookmark_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> clickListener.bookMarkClick(item)}"
-                android:src="@{item.bookmarkCheck() ? @drawable/ic_book_mark_on : @drawable/ic_book_mark_off}"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/post_title_view"
-                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/recruitment_info_layout"
