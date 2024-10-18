@@ -30,6 +30,14 @@ data class StampItem(
             "러닝 기록 존재하지 않음",
             false
         )
+
+        val otherUserUnavailableStampItem = StampItem(
+            "otherUser",
+            R.drawable.ic_stamp_other_user_empty,
+            "",
+            "",
+            false
+        )
     }
 }
 

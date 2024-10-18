@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser
 
 import androidx.lifecycle.ViewModel
 import com.applemango.runnerbe.data.dto.Posting
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class JoinedPostViewModel @Inject constructor(
+class OtherUserJoinedPostViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase
 ): ViewModel() {
     private val targetUserId = MutableStateFlow<Int?>(null)

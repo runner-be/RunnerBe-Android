@@ -37,7 +37,11 @@
             app:destination="@id/runningTalkDetailFragment" />
         <action
             android:id="@+id/action_mainFragment_to_postDetailFragment"
-            app:destination="@id/postDetailFragment" />
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/moveToPaceInfoFragment"
             app:destination="@id/paceInfoRegistFragment" />
@@ -64,7 +68,11 @@
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mainFragment_to_joinPostFragment"
-            app:destination="@id/joinPostFragment" />
+            app:destination="@id/joinPostFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -112,7 +120,11 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_runningWriteFragment_to_runningWriteTwoFragment"
-            app:destination="@id/runningWriteTwoFragment" />
+            app:destination="@id/runningWriteTwoFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/runningWriteTwoFragment"
@@ -263,7 +275,11 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_runningLogFragment_to_groupProfilesFragment"
-            app:destination="@id/groupProfilesFragment" />
+            app:destination="@id/groupProfilesFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/groupProfilesFragment"
@@ -274,7 +290,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_groupProfilesFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/monthlyCalendarFragment"
@@ -290,7 +310,11 @@
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_monthlyCalendarFragment_to_runningLogDetailFragment"
-            app:destination="@id/runningLogDetailFragment" />
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/runningLogDetailFragment"
@@ -322,12 +346,26 @@
         <argument
             android:name="targetUserId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
 
     </fragment>
 
     <fragment
         android:id="@+id/joinPostFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinedPostFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostFragment"
         android:label="JoinPostFragment" >
 
         <argument
@@ -337,6 +375,13 @@
         <argument
             android:name="nickname"
             app:argType="string" />
+        <action
+            android:id="@+id/action_joinPostFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
 
     </fragment>
 </navigation>

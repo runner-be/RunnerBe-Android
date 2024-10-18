@@ -9,14 +9,37 @@ import com.applemango.runnerbe.databinding.ItemDateMonthlyBinding
 import com.applemango.runnerbe.databinding.ItemDateMonthlyEmptyBinding
 import java.time.LocalDate
 
-class MonthlyCalendarAdapter: ListAdapter<DateItem, RecyclerView.ViewHolder>(monthlyDiffUtil) {
+class MonthlyCalendarAdapter : ListAdapter<DateItem, RecyclerView.ViewHolder>(monthlyDiffUtil) {
     private lateinit var onDateClickListener: OnDateClickListener
+    private var isOtherUser: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            TYPE_INVALID -> MonthlyEmptyViewHolder(ItemDateMonthlyEmptyBinding.inflate(inflater, parent, false))
-            TYPE_VALID -> MonthlyDateViewHolder(ItemDateMonthlyBinding.inflate(inflater, parent, false))
+            TYPE_INVALID -> MonthlyEmptyViewHolder(
+                ItemDateMonthlyEmptyBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+
+            TYPE_VALID -> MonthlyDateViewHolder(
+                ItemDateMonthlyBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+
+            TYPE_OTHER_USER -> MonthlyOtherUserDateViewHolder(
+                ItemDateMonthlyBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+
             else -> throw IllegalStateException("${this::class.java.name}: invalid item view type")
         }
     }
@@ -26,15 +49,24 @@ class MonthlyCalendarAdapter: ListAdapter<DateItem, RecyclerView.ViewHolder>(mon
         when (holder) {
             is MonthlyEmptyViewHolder -> holder.bind(item)
             is MonthlyDateViewHolder -> holder.bind(item, onDateClickListener)
+            is MonthlyOtherUserDateViewHolder -> holder.bind(item, onDateClickListener)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position).date
-        return if (item == null || item > LocalDate.now()) {
-            WeeklyCalendarAdapter.TYPE_INVALID
+        return if (isOtherUser) {
+            if (item == null || item > LocalDate.now()) {
+               TYPE_INVALID
+            } else {
+                TYPE_OTHER_USER
+            }
         } else {
-            WeeklyCalendarAdapter.TYPE_VALID
+            if (item == null || item > LocalDate.now()) {
+                TYPE_INVALID
+            } else {
+                TYPE_VALID
+            }
         }
     }
 
@@ -42,7 +74,12 @@ class MonthlyCalendarAdapter: ListAdapter<DateItem, RecyclerView.ViewHolder>(mon
         this.onDateClickListener = onDateClickListener
     }
 
+    fun setIsOtherUser(isOtherUser: Boolean) {
+        this.isOtherUser = isOtherUser
+    }
+
     companion object {
+        const val TYPE_OTHER_USER = -1
         const val TYPE_INVALID = 0
         const val TYPE_VALID = 1
 

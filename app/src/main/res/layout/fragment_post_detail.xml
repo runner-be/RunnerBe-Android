@@ -360,6 +360,7 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="20dp"
                     runnerInfoAdapter="@{vm.runnerInfo}"
+                    android:overScrollMode="never"
                     app:layout_constraintTop_toBottomOf="@id/joinCountLayout"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

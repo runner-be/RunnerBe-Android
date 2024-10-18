@@ -1,9 +1,12 @@
 package com.applemango.runnerbe.di
 
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinpost.JoinedPostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.GotStampAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
 import dagger.Module
@@ -15,6 +18,15 @@ import dagger.hilt.android.scopes.FragmentScoped
 @Module
 @InstallIn(FragmentComponent::class)
 class AdapterModule {
+
+    @Provides
+    @FragmentScoped
+    fun provideNavController(
+        fragment: Fragment
+    ) : NavController {
+        return fragment.findNavController()
+    }
+
     @Provides
     @FragmentScoped
     fun provideAddressAdapter(): AddressAdapter {
@@ -41,8 +53,8 @@ class AdapterModule {
 
     @Provides
     @FragmentScoped
-    fun provideJoinedPostAdapter(): JoinedPostAdapter {
-        return JoinedPostAdapter()
+    fun provideJoinedPostAdapter(): OtherUserJoinedPostAdapter {
+        return OtherUserJoinedPostAdapter()
     }
 
     @Provides

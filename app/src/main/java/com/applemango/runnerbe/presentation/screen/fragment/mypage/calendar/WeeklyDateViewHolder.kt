@@ -24,6 +24,32 @@ class WeeklyEmptyViewHolder (
     }
 }
 
+class WeeklyOtherUserDateViewHolder (
+    val binding: ItemDateWeeklyBinding
+): RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: DateItem, listener: OnDateClickListener?) {
+        with(binding) {
+            item.date?.let {
+                tvDayOfWeek.text = it.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())[0].toString()
+                tvDate.apply {
+                    text = it.dayOfMonth.toString()
+                    if (it == LocalDate.now()) {
+                        setTextColor(ResourcesCompat.getColor(context.resources, R.color.dark_g2, null))
+                    } else {
+                        setTextColor(ResourcesCompat.getColor(context.resources, R.color.dark_g5, null))
+                    }
+                }
+            }
+            item.runningLog?.let {
+                ivStamp.setImageResource(getStampItemByCode(it.stampCode).image)
+                llDate.setOnClickListener {
+                    listener?.onDateClicked(item)
+                }
+            } ?: ivStamp.setImageResource(StampItem.otherUserUnavailableStampItem.image)
+        }
+    }
+}
+
 class WeeklyDateViewHolder (
     val binding: ItemDateWeeklyBinding
 ): RecyclerView.ViewHolder(binding.root) {
@@ -45,9 +71,6 @@ class WeeklyDateViewHolder (
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {
                 listener?.onDateClicked(item)
-//                    if (item.stampItem != StampItem.unavailableStampItem) {
-//                        listener.onDateClicked(item)
-//                    }
             }
         }
     }
