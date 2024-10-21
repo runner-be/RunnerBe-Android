@@ -2,7 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.MyPostFragment
 
 /**
