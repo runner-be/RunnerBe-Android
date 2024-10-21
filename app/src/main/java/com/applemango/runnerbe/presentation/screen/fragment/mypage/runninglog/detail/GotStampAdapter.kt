@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,9 @@ import com.applemango.runnerbe.databinding.ItemGotStampBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.bumptech.glide.Glide
 
-class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampViewHolder>(GOT_STAMP_DIFF_UTIL) {
+class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampViewHolder>(
+    GOT_STAMP_DIFF_UTIL
+) {
 
     class GotStampViewHolder(
         private val binding: ItemGotStampBinding

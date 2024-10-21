@@ -1,9 +1,8 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail
 
 import android.os.Parcelable
 import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @Parcelize

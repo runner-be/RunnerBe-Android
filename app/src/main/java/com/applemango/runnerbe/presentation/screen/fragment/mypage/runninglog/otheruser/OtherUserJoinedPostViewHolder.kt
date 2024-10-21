@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser
 
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.databinding.ItemJoinPostBinding

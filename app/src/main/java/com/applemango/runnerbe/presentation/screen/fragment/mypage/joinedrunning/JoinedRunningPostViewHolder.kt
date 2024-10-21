@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.data.dto.Posting

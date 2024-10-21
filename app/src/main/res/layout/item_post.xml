@@ -42,9 +42,20 @@
                 android:includeFontPadding="false"
                 android:lines="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"/>
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_bookmark"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> clickListener.bookMarkClick(item)}"
+                app:layout_constraintTop_toTopOf="@id/post_title_view"
+                app:layout_constraintBottom_toBottomOf="@id/post_title_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@{item.bookmarkCheck() ? @drawable/ic_book_mark_on : @drawable/ic_book_mark_off}"
+                tools:ignore="UseAppTint"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/recruitment_info_layout"

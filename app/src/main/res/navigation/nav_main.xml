@@ -73,6 +73,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_joinedRunningFragment"
+            app:destination="@id/joinedRunningFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -260,7 +267,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogFragment"
         android:label="RunningLogFragment" >
         <argument
             android:name="date"
@@ -283,7 +290,7 @@
     </fragment>
     <fragment
         android:id="@+id/groupProfilesFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.GroupProfilesFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile.GroupProfilesFragment"
         android:label="GroupProfilesFragment" >
         <argument
             android:name="gatheringId"
@@ -327,7 +334,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogDetailFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogDetailFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.RunningLogDetailFragment"
         android:label="RunningLogDetailFragment" >
 
         <argument
@@ -349,7 +356,7 @@
 
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.UserProfileFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragment"
         android:label="UserProfileFragment">
 
         <argument
@@ -381,7 +388,7 @@
 
     <fragment
         android:id="@+id/joinPostFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.otheruser.OtherUserJoinedPostFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment"
         android:label="JoinPostFragment" >
 
         <argument
@@ -400,4 +407,8 @@
             app:popExitAnim="@anim/to_right" />
 
     </fragment>
+    <fragment
+        android:id="@+id/joinedRunningFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningFragment"
+        android:label="JoinedRunningFragment" />
 </navigation>

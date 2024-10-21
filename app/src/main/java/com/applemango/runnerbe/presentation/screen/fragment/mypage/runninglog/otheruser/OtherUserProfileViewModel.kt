@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser
 
 import androidx.lifecycle.ViewModel
 import com.applemango.runnerbe.data.dto.Posting
@@ -21,7 +21,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class UserProfileViewModel @Inject constructor(
+class OtherUserProfileViewModel @Inject constructor(
     private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
 ): ViewModel() {
     private val _targetUserIdFlow = MutableStateFlow<Int?>(null)

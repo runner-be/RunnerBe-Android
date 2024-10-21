@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser
 
 import android.os.Bundle
 import android.view.View
@@ -14,7 +14,7 @@ import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentUserProfileBinding
 import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.JoinedRunningPostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
 import com.applemango.runnerbe.util.ToastUtil
@@ -29,10 +29,10 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_user_profile) {
-    private val viewModel: UserProfileViewModel by viewModels()
+class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_other_user_profile) {
+    private val viewModel: OtherUserProfileViewModel by viewModels()
 
-    private val navArgs: UserProfileFragmentArgs by navArgs()
+    private val navArgs: OtherUserProfileFragmentArgs by navArgs()
     @Inject
     lateinit var joinedRunningPostAdapter: JoinedRunningPostAdapter
     @Inject
@@ -87,7 +87,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
         .subscribe {
             viewModel.targetUserIdFlow.value?.let { userId ->
                 navigate(
-                    UserProfileFragmentDirections.actionUserProfileFragmentToMonthlyCalendarFragment(
+                    OtherUserProfileFragmentDirections.actionUserProfileFragmentToMonthlyCalendarFragment(
                         userId,
                         1
                     )
@@ -107,7 +107,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
                     val logId = item.runningLog.logId
 
                     navigate(
-                        UserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
+                        OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
                             targetUserId,
                             logId
                         )
@@ -143,7 +143,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
 
                 override fun postClick(post: Posting) {
                     navigate(
-                        UserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(post)
+                        OtherUserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(post)
                     )
                 }
 

@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

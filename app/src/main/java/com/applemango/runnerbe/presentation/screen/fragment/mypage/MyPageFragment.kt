@@ -8,13 +8,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
@@ -26,6 +24,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemP
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
@@ -290,21 +289,9 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     override fun onClick(v: View?) {
         when (v) {
             binding.constJoinedRunningPost -> {
-                try {
-                    val userInfo = requireNotNull(viewModel.userInfo.value)
-                    val targetUserId = userInfo.userId
-                    val targetNickname = requireNotNull(userInfo.nickName)
-
-                    navigate(
-                        MainFragmentDirections.actionMainFragmentToJoinPostFragment(
-                            targetUserId, targetNickname
-                        )
-                    )
-                } catch (e: IllegalArgumentException) {
-                    Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT)
-                        .show()
-                    e.printStackTrace()
-                }
+                navigate(
+                    MainFragmentDirections.actionMainFragmentToJoinedRunningFragment()
+                )
             }
 
             binding.ivCalendar -> {

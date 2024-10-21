@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_g7"
-        tools:context=".presentation.screen.fragment.mypage.runninglog.GroupProfilesFragment">
+        tools:context=".presentation.screen.fragment.mypage.runninglog.groupprofile.GroupProfilesFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_top"
