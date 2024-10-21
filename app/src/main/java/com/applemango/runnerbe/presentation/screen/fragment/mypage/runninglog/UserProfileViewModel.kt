@@ -24,7 +24,8 @@ import javax.inject.Inject
 class UserProfileViewModel @Inject constructor(
     private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
 ): ViewModel() {
-    private val targetUserIdFlow = MutableStateFlow<Int?>(null)
+    private val _targetUserIdFlow = MutableStateFlow<Int?>(null)
+    val targetUserIdFlow : StateFlow<Int?> get() = _targetUserIdFlow.asStateFlow()
 
     private val date = LocalDate.now()
     val today: String = "${date.year}년 ${date.monthValue}월"
@@ -39,7 +40,7 @@ class UserProfileViewModel @Inject constructor(
     val userPostings: StateFlow<List<Posting>> = _userPostings.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val otherUserProfileFlow: Flow<String> = targetUserIdFlow
+    val otherUserProfileFlow: Flow<String> = _targetUserIdFlow
         .filterNotNull()
         .flatMapLatest { id ->
             getOtherUserProfileUseCase(id)
@@ -63,6 +64,6 @@ class UserProfileViewModel @Inject constructor(
         }
 
     fun updateTargetUserId(targetUserId: Int) {
-        targetUserIdFlow.value = targetUserId
+        _targetUserIdFlow.value = targetUserId
     }
 }

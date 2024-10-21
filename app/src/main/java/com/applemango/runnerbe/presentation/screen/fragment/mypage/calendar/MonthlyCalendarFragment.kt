@@ -1,16 +1,13 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
@@ -18,7 +15,6 @@ import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectDialog
-import com.applemango.runnerbe.presentation.screen.fragment.base.BaseDialogFragment
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.jakewharton.rxbinding4.view.clicks
@@ -35,20 +31,31 @@ class MonthlyCalendarFragment :
 
     private val viewModel: MonthlyCalendarViewModel by viewModels()
 
+    private val navArgs: MonthlyCalendarFragmentArgs by navArgs()
+
     private var _monthlyCalendarAdapter: MonthlyCalendarAdapter? = null
     private val monthlyCalendarAdapter get() = _monthlyCalendarAdapter!!
 
     private var _dayOfWeekAdapter: DayOfWeekAdapter? = null
     private val dayOfWeekAdapter get() = _dayOfWeekAdapter!!
 
+    private var isOtherUserProfile: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        parseNavArgs(navArgs)
         initYearMonthSpinner()
         initDayOfWeekAdapter()
         initCalendarAdapter()
         setListeners()
         setupStampStatistic()
         setupCalendarFlow()
+    }
+
+    private fun parseNavArgs(navArgs: MonthlyCalendarFragmentArgs) {
+        val targetUserId = navArgs.userId
+        isOtherUserProfile = navArgs.isOtherUser == 1
+        viewModel.updateTargetUserId(targetUserId)
     }
 
     private fun setListeners() {
@@ -145,30 +152,29 @@ class MonthlyCalendarFragment :
         with(binding.rcvCalendarDate) {
             _monthlyCalendarAdapter = MonthlyCalendarAdapter()
             adapter = monthlyCalendarAdapter.apply {
-                setOnDateClickListener(object : OnDateClickListener {
-                    override fun onDateClicked(item: DateItem) {
-                        val runningLog = item.runningLog
+                setIsOtherUser(isOtherUserProfile)
+                setOnDateClickListener { item ->
+                    val runningLog = item.runningLog
 
-                        if (runningLog?.logId != null) {
-                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                            navigate(
-                                MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogDetailFragment(
-                                    userId,
-                                    runningLog.logId
-                                )
+                    if (runningLog?.logId != null) {
+                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                        navigate(
+                            MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogDetailFragment(
+                                userId,
+                                runningLog.logId
                             )
-                        } else {
-                            val date = item.date!!
-                            navigate(
-                                MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogFragment(
-                                    date.toString(),
-                                    null,
-                                    null
-                                )
+                        )
+                    } else {
+                        val date = item.date!!
+                        navigate(
+                            MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogFragment(
+                                date.toString(),
+                                null,
+                                null
                             )
-                        }
+                        )
                     }
-                })
+                }
             }
             layoutManager = GridLayoutManager(context, 7)
         }
