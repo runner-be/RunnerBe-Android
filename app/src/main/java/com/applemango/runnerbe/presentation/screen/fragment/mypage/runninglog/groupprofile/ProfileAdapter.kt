@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,9 +11,12 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.databinding.ItemGroupProfileBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
 import com.bumptech.glide.Glide
 
-class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileViewHolder>(profileDiffUtil) {
+class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileViewHolder>(
+    profileDiffUtil
+) {
     private lateinit var otherUserProfileClickListener: OtherUserProfileClickListener
     private var selectedPosition = 0
 

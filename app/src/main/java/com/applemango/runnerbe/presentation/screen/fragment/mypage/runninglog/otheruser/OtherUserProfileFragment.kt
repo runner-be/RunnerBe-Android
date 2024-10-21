@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_user_profile) {
+class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_other_user_profile) {
     private val viewModel: OtherUserProfileViewModel by viewModels()
 
     private val navArgs: OtherUserProfileFragmentArgs by navArgs()

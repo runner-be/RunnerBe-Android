@@ -1,9 +1,8 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast

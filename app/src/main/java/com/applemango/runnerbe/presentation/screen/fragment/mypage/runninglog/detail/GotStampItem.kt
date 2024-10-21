@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail
 
 data class GotStampItem(
     val nickname: String,

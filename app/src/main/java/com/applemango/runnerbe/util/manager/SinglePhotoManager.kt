@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraDialog
 import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraOptionSelectListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

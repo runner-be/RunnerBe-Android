@@ -16,7 +16,7 @@ import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogType
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners

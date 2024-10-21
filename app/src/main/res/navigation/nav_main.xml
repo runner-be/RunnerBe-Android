@@ -267,7 +267,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogFragment"
         android:label="RunningLogFragment" >
         <argument
             android:name="date"
@@ -334,7 +334,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogDetailFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.RunningLogDetailFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.RunningLogDetailFragment"
         android:label="RunningLogDetailFragment" >
 
         <argument

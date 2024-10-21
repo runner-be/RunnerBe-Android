@@ -14,8 +14,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.OtherUserProfileClickListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

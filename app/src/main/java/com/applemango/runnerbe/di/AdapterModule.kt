@@ -7,8 +7,8 @@ import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressA
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.GotStampAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.GotStampAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile.ProfileAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
