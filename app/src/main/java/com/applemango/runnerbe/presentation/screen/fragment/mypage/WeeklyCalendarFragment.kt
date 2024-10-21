@@ -23,14 +23,15 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WeeklyCalendarFragment(
-    private val position: Int
-) : BaseFragment<FragmentWeeklyCalendarBinding>(R.layout.fragment_weekly_calendar) {
+class WeeklyCalendarFragment() : BaseFragment<FragmentWeeklyCalendarBinding>(R.layout.fragment_weekly_calendar) {
 
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
 
     private val viewModel: MyPageViewModel by activityViewModels()
+    private val position: Int by lazy {
+        arguments?.getInt(ARG_POSITION) ?: POSITION_DEFAULT
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -99,10 +100,10 @@ class WeeklyCalendarFragment(
         private const val POSITION_DEFAULT = 2
 
         fun newInstance(date: LocalDate, position: Int): WeeklyCalendarFragment {
-            val fragment = WeeklyCalendarFragment(position)
+            val fragment = WeeklyCalendarFragment()
             val args = Bundle()
             args.putSerializable(ARG_DATE, date)
-            args.putSerializable(ARG_POSITION, position)
+            args.putInt(ARG_POSITION, position)
             fragment.arguments = args
             return fragment
         }
