@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile
 
 import android.os.Bundle
 import android.view.View
@@ -11,10 +11,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.databinding.FragmentGroupProfilesBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.OtherUserProfileClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.ProfileAdapter
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +24,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class GroupProfilesFragment :
-    BaseFragment<FragmentGroupProfilesBinding>(R.layout.fragment_group_profiles) {
+    BaseFragment<com.applemango.runnerbe.databinding.FragmentGroupProfilesBinding>(R.layout.fragment_group_profiles) {
 
     @Inject
     lateinit var profileAdapter: ProfileAdapter
@@ -39,7 +40,6 @@ class GroupProfilesFragment :
         linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         viewModel.updateRunnerInfo(userId, navArgs.gatheringId)
         initGroupProfileRecyclerView()
-        initClickListeners()
         setupRunnerList()
         setupPostStampResult()
     }
@@ -77,38 +77,38 @@ class GroupProfilesFragment :
         }
     }
 
-    private fun initClickListeners() {
-        with(binding) {
-            btnBack.setOnClickListener {
-                // TODO()
-                navigate(
-                    GroupProfilesFragmentDirections.actionGroupProfilesFragmentToUserProfileFragment(429)
-                )
-//                goBack()
-            }
-        }
-    }
-
     private fun initGroupProfileRecyclerView() {
         with(binding.rcvProfile) {
             adapter = profileAdapter.apply {
-                setOnProfileClickListener { position, targetUserId, stamp ->
-                    viewModel.updateLastSelectedUserId(targetUserId)
-                    StampBottomSheetDialog.createAndShow(
-                        childFragmentManager,
-                        stamp ?: StampItem(
-                            "default",
-                            R.drawable.ic_stamp_1_personal,
-                            context.getString(R.string.stamp_1_name),
-                            context.getString(R.string.stamp_1_description),
-                            true
+                setOnProfileClickListener(object: OtherUserProfileClickListener {
+                    override fun onProfileImageClicked(userId: Int) {
+                        navigate(
+                            GroupProfilesFragmentDirections.actionGroupProfilesFragmentToUserProfileFragment(userId)
                         )
-                    ) { stampItem ->
-                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                        profileAdapter.updateProfileStampByPosition(position, stampItem.code)
-                        viewModel.postStampToJoinedRunner(userId, stampItem.code)
                     }
-                }
+
+                    override fun onProfileClicked(
+                        position: Int,
+                        targetUserId: Int,
+                        stamp: StampItem?
+                    ) {
+                        viewModel.updateLastSelectedUserId(targetUserId)
+                        StampBottomSheetDialog.createAndShow(
+                            childFragmentManager,
+                            stamp ?: StampItem(
+                                "default",
+                                R.drawable.ic_stamp_1_personal,
+                                context.getString(R.string.stamp_1_name),
+                                context.getString(R.string.stamp_1_description),
+                                true
+                            )
+                        ) { stampItem ->
+                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                            profileAdapter.updateProfileStampByPosition(position, stampItem.code)
+                            viewModel.postStampToJoinedRunner(userId, stampItem.code)
+                        }
+                    }
+                })
             }
             layoutManager = linearLayoutManager
         }
