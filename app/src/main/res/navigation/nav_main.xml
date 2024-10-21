@@ -301,6 +301,15 @@
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.MonthlyCalendarFragment"
         android:label="fragment_monthly_calendar"
         tools:layout="@layout/fragment_monthly_calendar" >
+
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+
+        <argument
+            android:name="isOtherUser"
+            app:argType="integer" />
+
         <action
             android:id="@+id/action_monthlyCalendarFragment_to_runningLogFragment"
             app:destination="@id/runningLogFragment"
@@ -356,6 +365,13 @@
         <action
             android:id="@+id/action_userProfileFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_monthlyCalendarFragment"
+            app:destination="@id/monthlyCalendarFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"

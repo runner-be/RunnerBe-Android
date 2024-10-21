@@ -20,9 +20,11 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.init
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,6 +44,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
         initJoinedRunningPostRecyclerView()
         initWeeklyCalendarAdapter()
         setupUserData()
+        initDisposables()
     }
 
     private fun setupUserData() {
@@ -71,6 +74,25 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
             joinedRunningPostAdapter.submitList(list)
         }
     }
+
+    private fun initDisposables() {
+        compositeDisposable.addAll(
+            getCalendarClickDisposable()
+        )
+    }
+
+    private fun getCalendarClickDisposable() = binding.ivCalendar.clicks()
+        .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+        .subscribe {
+            viewModel.targetUserIdFlow.value?.let { userId ->
+                navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToMonthlyCalendarFragment(
+                        userId,
+                        1
+                    )
+                )
+            }
+        }
 
     private fun initWeeklyCalendarAdapter() {
         binding.rcvCalendarWeekly.apply {

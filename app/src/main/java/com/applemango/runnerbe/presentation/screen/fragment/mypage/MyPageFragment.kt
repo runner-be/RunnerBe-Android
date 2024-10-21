@@ -307,7 +307,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.ivCalendar -> {
-                navigate(MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment())
+                val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                navigate(MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(userId, 0))
             }
 
             binding.settingButton -> {
