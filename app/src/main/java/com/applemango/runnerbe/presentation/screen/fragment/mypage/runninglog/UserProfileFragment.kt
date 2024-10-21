@@ -24,6 +24,7 @@ import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -65,7 +66,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fr
 
     private fun CoroutineScope.setupWeeklyCalendar() = launch {
         viewModel.userRunningLogs.collect { list ->
-            weeklyCalendarAdapter.submitList(initWeekDays(list))
+            weeklyCalendarAdapter.submitList(initWeekDays(LocalDate.now(), list))
         }
     }
 

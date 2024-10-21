@@ -21,6 +21,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -35,6 +37,9 @@ class MyPageViewModel @Inject constructor(
     private val patchUserImageUseCase: PatchUserImageUseCase,
     private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
 ) : ViewModel() {
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+
     val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
     val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
@@ -131,6 +136,14 @@ class MyPageViewModel @Inject constructor(
     fun postUpdate(posting: Posting) {
         val index = myPosts.indexOf(posting)
         if (index != -1) myPosts[index] = posting.copy()
+    }
+
+    fun updateWeeklyViewPagerPosition(position: Int) {
+        _currentWeeklyViewPagerPosition.value = position
+    }
+
+    fun refreshRunningLogs() {
+        todayDateFlow.value = LocalDate.now()
     }
 }
 

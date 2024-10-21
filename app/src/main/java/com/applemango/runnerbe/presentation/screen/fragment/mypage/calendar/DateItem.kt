@@ -12,8 +12,8 @@ data class DateItem(
     val runningLog: RunningLog?
 )
 
-fun initWeekDays(runningLogList: List<RunningLog>): List<DateItem> {
-    val thisMonday = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+fun initWeekDays(today: LocalDate, runningLogList: List<RunningLog>): List<DateItem> {
+    val thisMonday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
 
     return (0 .. 6).map { day ->
         val date = thisMonday.plusDays(day.toLong())

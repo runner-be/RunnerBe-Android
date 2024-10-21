@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
@@ -24,13 +26,9 @@ import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemP
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.DateItem
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.OnDateClickListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
-import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import com.applemango.runnerbe.util.toUri
 import com.google.firebase.ktx.Firebase
@@ -42,24 +40,24 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.time.LocalDate
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragment_mypage),
     View.OnClickListener {
 
-    private val viewModel: MyPageViewModel by viewModels()
+    private val viewModel: MyPageViewModel by activityViewModels()
 
     private val mainViewModel: MainViewModel by viewModels(
         ownerProducer = { requireParentFragment() }
     )
 
-    private var _joinedRunningPostAdapter: JoinedRunningPostAdapter? = null
-    private val joinedRunningPostAdapter get() = _joinedRunningPostAdapter!!
+    @Inject
+    internal lateinit var joinedRunningPostAdapter: JoinedRunningPostAdapter
 
-    private var _weeklyCalendarAdapter: WeeklyCalendarAdapter? = null
-    private val weeklyCalendarAdapter get() = _weeklyCalendarAdapter!!
+    private var _weeklyCalendarPagerAdapter: WeeklyCalendarPagerAdapter? = null
+    private val weeklyCalendarPagerAdapter get() = _weeklyCalendarPagerAdapter!!
 
     //이 두개를 사용하는 부분은 추후에 fragment가 아니라 viewModel 및 다른 클래스에서 처리하도록 작성하자
     lateinit var reference: StorageReference
@@ -72,11 +70,11 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         requireActivity()
             .supportFragmentManager
             .setFragmentResultListener("refresh", viewLifecycleOwner) { _, _ -> refresh() }
-        initWeeklyCalendarAdapter()
         initParticipatedRunningAdapter()
         setupJoinedRunningPosts()
         setupThisWeekRunningLogs()
         initYearMonthSpinner()
+        setupWeeklyViewPagerPosition()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.userProfileEditButton.setOnClickListener(this)
@@ -90,6 +88,11 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.isShowInfoDialog.emit(true)
         }
+    }
+
+    override fun onDestroyView() {
+        _weeklyCalendarPagerAdapter = null
+        super.onDestroyView()
     }
 
     private fun observeBind() {
@@ -195,14 +198,41 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         }
     }
 
+    private fun setupWeeklyViewPagerPosition() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
+                    LogUtil.errorLog("CurrentViewPager position: $position")
+                    position?.let {
+                        binding.vpWeeklyCalendar.setCurrentItem(position, false)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initWeeklyViewPagerAdapter() {
+        binding.vpWeeklyCalendar.apply {
+            _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
+                childFragmentManager,
+                viewLifecycleOwner.lifecycle,
+            )
+            adapter = weeklyCalendarPagerAdapter
+        }
+        if (viewModel.currentWeeklyViewPagerPosition.value == null) {
+            viewModel.updateWeeklyViewPagerPosition(2)
+        }
+        initDotsIndicator()
+    }
+
     private fun setupThisWeekRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thisWeekRunningLogFlow.collectLatest { result ->
-                    val runningLogs = initWeekDays(result.runningLog)
-                    weeklyCalendarAdapter.submitList(runningLogs)
+                    initWeeklyViewPagerAdapter()
                     result.totalCount?.let {
-                        binding.tvStampWeekly.text = getString(R.string.calendar_monthly_statistic,
+                        binding.tvStampWeekly.text = getString(
+                            R.string.calendar_monthly_statistic,
                             it.groupRunningCount, it.personalRunningCount
                         )
                     }
@@ -223,9 +253,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
 
     private fun initParticipatedRunningAdapter() {
         with(binding.rcvJoinedRunningPost) {
-            _joinedRunningPostAdapter = JoinedRunningPostAdapter()
             adapter = joinedRunningPostAdapter
-            joinedRunningPostAdapter.setPostClickListener(object: PostClickListener {
+            joinedRunningPostAdapter.setPostClickListener(object : PostClickListener {
                 override fun logWriteClick(post: Posting) {
 
                 }
@@ -254,39 +283,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         }
     }
 
-    private fun initWeeklyCalendarAdapter() {
-        with(binding.rcvCalendarWeekly) {
-            _weeklyCalendarAdapter = WeeklyCalendarAdapter()
-            adapter = weeklyCalendarAdapter.apply {
-                setOnDateClickListener(object : OnDateClickListener {
-                    override fun onDateClicked(item: DateItem) {
-                        val runningLog = item.runningLog
-
-                        if (runningLog != null) {
-                            // 러닝 로그 조회
-                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                            navigate(
-                                MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
-                                    userId,
-                                    runningLog.logId
-                                )
-                            )
-                        } else {
-                            // 러닝 로그 작성
-                            val date = item.date!!
-                            navigate(
-                                MainFragmentDirections.actionMainFragmentToRunningLogFragment(
-                                    parseLocalDateToKorean(date),
-                                    null,
-                                    null
-                                )
-                            )
-                        }
-                    }
-                })
-            }
-            layoutManager = GridLayoutManager(context, 7)
-        }
+    private fun initDotsIndicator() {
+        binding.indicatorDots.attachTo(binding.vpWeeklyCalendar)
     }
 
     override fun onClick(v: View?) {
@@ -297,18 +295,26 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                     val targetUserId = userInfo.userId
                     val targetNickname = requireNotNull(userInfo.nickName)
 
-                    navigate(MainFragmentDirections.actionMainFragmentToJoinPostFragment(
-                        targetUserId, targetNickname
-                    ))
+                    navigate(
+                        MainFragmentDirections.actionMainFragmentToJoinPostFragment(
+                            targetUserId, targetNickname
+                        )
+                    )
                 } catch (e: IllegalArgumentException) {
-                    Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT)
+                        .show()
                     e.printStackTrace()
                 }
             }
 
             binding.ivCalendar -> {
                 val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                navigate(MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(userId, 0))
+                navigate(
+                    MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(
+                        userId,
+                        0
+                    )
+                )
             }
 
             binding.settingButton -> {
