@@ -32,6 +32,7 @@ import com.jakewharton.rxbinding4.view.touches
 import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -54,7 +55,7 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
             RunningLogType.TEAM
         } else RunningLogType.ALONE
 
-        viewModel.updateLogDate(strDate)
+        viewModel.updateLogDate(parseLocalDateToKorean(LocalDate.parse(strDate)))
         viewModel.updateLogId(logId?.toIntOrNull())
         viewModel.updateGatheringId(gatheringId?.toIntOrNull())
         viewModel.updateLogType(logType)

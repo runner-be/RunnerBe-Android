@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
 import java.util.Calendar
 
 @BindingAdapter("imageDrawable")
@@ -46,13 +47,10 @@ fun bindProfileImageFromUrl(view: ImageView, url: String?) {
 }
 
 @BindingAdapter("date_string")
-fun bindDate(textView: TextView, dateString: String?) {
+fun bindDate(textView: TextView, dateString: ZonedDateTime?) {
     runCatching {
-        val temp = dateString?.replace("T", " ")?.replace("Z", " ")
-        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(temp)
-        val calendar = Calendar.getInstance()
-        calendar.time = date!!
-        val format = SimpleDateFormat("M/d (E)-k-mm").format(date).split("-")
+        val time = dateString?.toInstant()?.toEpochMilli()
+        val format = SimpleDateFormat("M/d (E)-k-mm").format(time).split("-")
         val hour = format[1]
         textView.text = DateSelectData(
             formatDate = format[0],
@@ -257,11 +255,12 @@ fun View.visible(isVisible: Boolean) {
     this.isVisible = isVisible
 }
 
-@BindingAdapter("bind:glideImageFromUrl")
+@BindingAdapter("bind:glideProfileImageFromUrl")
 fun ImageView.setImageUrl(url: String?) {
     val image = url ?: R.drawable.ic_user_default
     Glide.with(this)
         .load(image)
+        .error(R.drawable.ic_user_default)
         .into(this)
 }
 
