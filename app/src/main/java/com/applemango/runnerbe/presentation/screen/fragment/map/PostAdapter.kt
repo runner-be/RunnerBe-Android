@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.presentation.model.PostIncomingType
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 
 class PostAdapter(
     private val dataList: ObservableArrayList<Posting>,
-    private val clickListener: PostClickListener,
+    private val clickListener: JoinedRunningClickListener,
     private val type: PostIncomingType
     ) : RecyclerView.Adapter<PostViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         return PostViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context), R.layout.item_post, parent, false
+                LayoutInflater.from(parent.context), R.layout.item_join_post_with_bookmark, parent, false
             ), clickListener
         )
     }

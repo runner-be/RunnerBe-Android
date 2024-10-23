@@ -2,13 +2,14 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.databinding.ItemPostBinding
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.databinding.ItemJoinPostWithBookmarkBinding
+import com.applemango.runnerbe.util.LogUtil
 
 class JoinedRunningPostViewHolder(
-    private val binding: ItemPostBinding
+    private val binding: ItemJoinPostWithBookmarkBinding
 ): RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Posting, listener: PostClickListener) {
+    fun bind(item: Posting, listener: JoinedRunningClickListener) {
+        LogUtil.errorLog(item.toString())
         binding.item = item
         binding.clickListener = listener
     }

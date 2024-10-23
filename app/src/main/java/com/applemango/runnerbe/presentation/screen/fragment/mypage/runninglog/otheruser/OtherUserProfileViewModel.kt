@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUser
 import com.applemango.runnerbe.data.network.response.OtherUserInfo
+import com.applemango.runnerbe.data.network.response.OtherUserPosting
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -36,8 +37,8 @@ class OtherUserProfileViewModel @Inject constructor(
     private val _userRunningLogs = MutableStateFlow<List<RunningLog>>(emptyList())
     val userRunningLogs: StateFlow<List<RunningLog>> = _userRunningLogs.asStateFlow()
 
-    private val _userPostings = MutableStateFlow<List<Posting>>(emptyList())
-    val userPostings: StateFlow<List<Posting>> = _userPostings.asStateFlow()
+    private val _userPostings = MutableStateFlow<List<OtherUserPosting>>(emptyList())
+    val userPostings: StateFlow<List<OtherUserPosting>> = _userPostings.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val otherUserProfileFlow: Flow<String> = _targetUserIdFlow

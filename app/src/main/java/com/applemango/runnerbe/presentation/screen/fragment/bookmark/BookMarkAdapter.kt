@@ -9,14 +9,18 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
 
-class BookMarkAdapter(private val dataList : ObservableArrayList<Posting>,private val bookMarkListener : BookMarkClickListener): RecyclerView.Adapter<BookMarkViewHolder>() {
+class BookMarkAdapter(
+    private val dataList: ObservableArrayList<Posting>,
+) : RecyclerView.Adapter<BookMarkViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookMarkViewHolder {
-        return BookMarkViewHolder(DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context),
-            R.layout.item_posting,
-            parent,
-            false
-        ), bookMarkListener)
+        return BookMarkViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.item_join_post_with_bookmark,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: BookMarkViewHolder, position: Int) {

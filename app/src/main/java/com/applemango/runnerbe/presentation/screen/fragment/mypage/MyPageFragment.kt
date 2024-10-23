@@ -17,13 +17,13 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMypageBinding
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.LogUtil
@@ -253,7 +253,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun initParticipatedRunningAdapter() {
         with(binding.rcvJoinedRunningPost) {
             adapter = joinedRunningPostAdapter
-            joinedRunningPostAdapter.setPostClickListener(object : PostClickListener {
+            joinedRunningPostAdapter.setPostClickListener(object : JoinedRunningClickListener {
                 override fun logWriteClick(post: Posting) {
 
                 }

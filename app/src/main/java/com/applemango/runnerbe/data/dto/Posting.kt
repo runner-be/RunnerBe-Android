@@ -6,6 +6,7 @@ import com.applemango.runnerbe.util.dateStringToLongTime
 import com.applemango.runnerbe.util.timeStringToLongTime
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
 import java.util.Calendar
 
 // 메인페이지(postingResult), 찜목록 조회(bookMarkList), 마이페이지(myPosting, myRunning)
@@ -19,7 +20,7 @@ data class Posting(
     @SerializedName("profileImageUrl") val profileImageUrl: String?,
     @SerializedName("title") val title: String,
     @SerializedName("runningTime") val runningTime: String?,
-    @SerializedName("gatheringTime") val gatheringTime: String?,
+    @SerializedName("gatheringTime") val gatheringTime: ZonedDateTime?,
     @SerializedName("gatherLongitude") val gatherLongitude: String?,
     @SerializedName("gatherLatitude") val gatherLatitude: String?,
     @SerializedName("locationInfo") val locationInfo: String?,

@@ -14,7 +14,7 @@
             type="com.applemango.runnerbe.presentation.model.PostIncomingType" />
         <variable
             name="clickListener"
-            type="com.applemango.runnerbe.presentation.model.listener.PostClickListener" />
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView

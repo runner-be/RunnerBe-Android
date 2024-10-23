@@ -5,17 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.databinding.ItemPostBinding
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.databinding.ItemJoinPostWithBookmarkBinding
 
 class JoinedRunningPostAdapter : ListAdapter<Posting, JoinedRunningPostViewHolder>(
     joinedRunningPostDiffUtil
 ) {
-    private lateinit var listener: PostClickListener
+    private lateinit var listener: JoinedRunningClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JoinedRunningPostViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return JoinedRunningPostViewHolder(ItemPostBinding.inflate(inflater, parent, false))
+        return JoinedRunningPostViewHolder(ItemJoinPostWithBookmarkBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: JoinedRunningPostViewHolder, position: Int) {
@@ -25,7 +24,7 @@ class JoinedRunningPostAdapter : ListAdapter<Posting, JoinedRunningPostViewHolde
         }
     }
 
-    fun setPostClickListener(listener: PostClickListener) {
+    fun setPostClickListener(listener: JoinedRunningClickListener) {
         this.listener = listener
     }
 
