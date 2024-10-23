@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,12 @@ import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.databinding.ItemGroupProfileBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
-import com.bumptech.glide.Glide
 
 class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileViewHolder>(
     profileDiffUtil
 ) {
     private lateinit var otherUserProfileClickListener: OtherUserProfileClickListener
-    private var selectedPosition = 0
+    private var selectedPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -32,10 +30,12 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateSelectedPosition(position: Int) {
+        val prevPosition = selectedPosition
         selectedPosition = position
-        notifyDataSetChanged()
+
+        notifyItemChanged(prevPosition)
+        notifyItemChanged(position)
     }
 
     fun setOnProfileClickListener(listener: OtherUserProfileClickListener) {
@@ -51,29 +51,20 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
         private val binding: ItemGroupProfileBinding
     ) : RecyclerView.ViewHolder(binding.root){
         fun bind(item: JoinedRunnerResult, otherUserProfileClickListener: OtherUserProfileClickListener) {
-            with(binding) {
-                Glide.with(root.context)
-                    .load(item.profileImageUrl ?: R.drawable.ic_profile_default)
-                    .into(ivProfile)
-                tvProfileName.text = item.nickname
-                ivLeader.visibility = if(item.isCaptain == 1) View.VISIBLE else View.GONE
-                if (item.stampCode == null) {
-                    flStamp.visibility = View.GONE
-                } else {
-                    flStamp.visibility = View.VISIBLE
-                    ivStamp.setImageResource(getStampItemByCode(item.stampCode).image)
-                }
-
-                constProfile.setOnClickListener {
-                    otherUserProfileClickListener.onProfileClicked(bindingAdapterPosition, item.userId, getStampItemByCode(item.stampCode))
-                    updateSelectedPosition(bindingAdapterPosition)
-                    if (bindingAdapterPosition == selectedPosition) {
-                        binding.flProfile.setBackgroundResource(R.drawable.bg_g5_circle_shape_primary_stroke)
-                    } else {
-                        binding.flProfile.setBackgroundResource(R.drawable.bg_g5_circle_shape_no_stroke)
-                    }
-                }
+            val listener = View.OnClickListener {
+                otherUserProfileClickListener.onProfileClicked(bindingAdapterPosition, item.userId, getStampItemByCode(item.stampCode))
+                updateSelectedPosition(bindingAdapterPosition)
             }
+
+            if (bindingAdapterPosition == selectedPosition) {
+                binding.flProfile.setBackgroundResource(R.drawable.bg_g5_circle_shape_primary_stroke)
+            } else {
+                binding.flProfile.setBackgroundResource(R.drawable.bg_g7_circle_shape_no_stroke)
+            }
+
+            binding.item = item
+            binding.stamp = getStampItemByCode(item.stampCode)
+            binding.clickListener = listener
         }
     }
 

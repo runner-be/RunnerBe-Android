@@ -7,7 +7,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
         clickedPost.value = posting
     }
 
-    fun getPostClickListener() = object: PostClickListener {
+    fun getPostClickListener() = object: JoinedRunningClickListener {
         override fun logWriteClick(post: Posting) {}
 
         override fun attendanceSeeClick(post: Posting) {}
