@@ -1,14 +1,12 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser
 
 import androidx.lifecycle.ViewModel
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUser
 import com.applemango.runnerbe.data.network.response.OtherUserInfo
 import com.applemango.runnerbe.data.network.response.OtherUserPosting
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -53,7 +51,6 @@ class OtherUserProfileViewModel @Inject constructor(
                             _userRunningLogs.value = result?.userLogInfo ?: emptyList()
                             _userPostings.value = result?.userPosting ?: emptyList()
 
-                            LogUtil.errorLog(result.toString())
                             "Success"
                         }
 

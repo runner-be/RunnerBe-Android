@@ -3,6 +3,8 @@ package com.applemango.runnerbe.di
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
@@ -61,5 +63,17 @@ class AdapterModule {
     @FragmentScoped
     fun provideJoinedRunningPostAdapter(): JoinedRunningPostAdapter {
         return JoinedRunningPostAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideBookmarkAdapter(): BookMarkAdapter {
+        return BookMarkAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun providePostAdapter(): PostAdapter {
+        return PostAdapter()
     }
 }

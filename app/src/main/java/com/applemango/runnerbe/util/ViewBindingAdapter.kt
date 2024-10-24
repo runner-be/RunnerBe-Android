@@ -310,3 +310,13 @@ fun ImageView.setWeatherImageSrc(weatherItem: WeatherItem?) {
 fun SwitchCompat.setLogVisibility(visibility: Boolean) {
     isChecked = visibility
 }
+
+@BindingAdapter("bind:bookmarkSrc")
+fun ImageView.setBookmarkImageSrc(isBookmarked: Boolean) {
+    val src = if (isBookmarked) {
+        R.drawable.ic_book_mark_on
+    } else {
+        R.drawable.ic_book_mark_off
+    }
+    setImageResource(src)
+}

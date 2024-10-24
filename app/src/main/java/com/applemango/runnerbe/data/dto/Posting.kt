@@ -28,7 +28,7 @@ data class Posting(
     @SerializedName("age") val age: String,
     @SerializedName("DISTANCE") val DISTANCE: String?,
     @SerializedName("gender") val gender: String?,
-    // N: 마감X, Y: 마감O
+    // D: 마감X, Y: 마감O,
     @SerializedName("whetherEnd") val whetherEnd: String?,
     @SerializedName("job") val job: String?,
     @SerializedName("peopleNum") val peopleNum: Int,
@@ -57,7 +57,8 @@ data class Posting(
     }
 
     fun attentionCheck(): Boolean {
-        return this.whetherCheck == "Y" && this.attendance == 1
+//        return this.whetherCheck == "Y" && this.attendance == 1 -> 의도가 뭔지?
+        return this.whetherCheck == "Y"
     }
 
     fun isWhetherEnded(): Boolean = whetherEnd == "Y"

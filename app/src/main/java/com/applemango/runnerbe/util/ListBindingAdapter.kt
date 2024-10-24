@@ -89,18 +89,6 @@ fun setSelectListAdapter(
     recyclerView.adapter?.notifyDataSetChanged()
 }
 
-@BindingAdapter("bind:postAdapter", "bind:postClickListener", "bind:postIncomingType")
-fun setPostAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<Posting>,
-    clickListener: JoinedRunningClickListener,
-    type: PostIncomingType
-) {
-    if (recyclerView.adapter == null)
-        recyclerView.adapter = PostAdapter(dataList, clickListener, type)
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
 @BindingAdapter("runnerInfoAdapter")
 fun setRunnerInfoAdapter(
     recyclerView: RecyclerView,
