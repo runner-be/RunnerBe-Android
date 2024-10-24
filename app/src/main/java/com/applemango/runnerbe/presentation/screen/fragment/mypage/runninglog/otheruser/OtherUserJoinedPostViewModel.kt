@@ -2,8 +2,11 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.o
 
 import androidx.lifecycle.ViewModel
 import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.data.network.response.OtherUser
+import com.applemango.runnerbe.data.network.response.OtherUserPosting
 import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -16,21 +19,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OtherUserJoinedPostViewModel @Inject constructor(
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
 ): ViewModel() {
     private val targetUserId = MutableStateFlow<Int?>(null)
     val targetNickname = MutableStateFlow<String?>(null)
     val postSize = MutableStateFlow<Int>(0)
 
     @OptIn(FlowPreview::class)
-    val targetJoinedPostFlow: Flow<List<Posting>> = targetUserId
+    val targetJoinedPostFlow: Flow<List<OtherUserPosting>> = targetUserId
         .filterNotNull()
         .flatMapMerge { userId ->
-            getUserDataUseCase(userId).map { response ->
+            getOtherUserProfileUseCase(userId).map { response ->
                 when (response) {
                     is CommonResponse.Success<*> -> {
-                        val result = response.body as? UserDataResponse
-                        (result?.result?.myRunning ?: emptyList()).also {
+                        val result = response.body as? OtherUser
+                        (result?.userPosting ?: emptyList()).also {
                             postSize.value = it.size
                         }
                     }

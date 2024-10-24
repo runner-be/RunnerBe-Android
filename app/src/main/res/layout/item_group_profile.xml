@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/tools">
     <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="stamp"
+            type="com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem" />
+
+        <variable
+            name="item"
+            type="com.applemango.runnerbe.data.network.response.JoinedRunnerResult" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
@@ -11,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:onClick="@{clickListener}"
         android:background="@color/dark_g7"
         android:paddingHorizontal="22dp"
         android:paddingVertical="12dp">
@@ -20,7 +36,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:duplicateParentState="true"
-            android:background="@drawable/bg_g5_circle_shape_no_stroke"
+            android:padding="2dp"
+            android:background="@drawable/bg_g7_circle_shape_no_stroke"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                tools:src="@color/white" />
+                bind:glideProfileImageFromUrl="@{item.profileImageUrl}" />
 
         </FrameLayout>
 
@@ -38,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            tools:text="김민규"
+            android:text="@{item.nickname}"
             android:textColor="@color/dark_g1"
             android:textSize="17sp"
             android:ellipsize="end"
@@ -54,6 +71,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_mini_runnerbe_logo"
+            android:visibility="@{item.isCaptain() == 1 ? View.VISIBLE : View.GONE}"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="@id/tv_profile_name"
             app:layout_constraintBottom_toBottomOf="@id/tv_profile_name"
@@ -64,6 +82,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="6dp"
+            android:visibility="@{item.stampCode == null ? View.GONE : View.VISIBLE}"
             android:duplicateParentState="true"
             android:background="@drawable/bg_g5_circle_shape_no_stroke"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +93,7 @@
                 android:id="@+id/iv_stamp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:src="@drawable/ic_stamp_4_durability"
+                bind:stampSrc="@{stamp}"
                 android:scaleType="fitXY" />
 
         </FrameLayout>

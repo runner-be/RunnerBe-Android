@@ -60,9 +60,10 @@ class OtherUserJoinedPostFragment : BaseFragment<FragmentOtherUserJoinedPostBind
             adapter = otherUserJoinedPostAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             otherUserJoinedPostAdapter.setOnPostClickListener { posting ->
-                navigate(
-                    OtherUserJoinedPostFragmentDirections.actionJoinPostFragmentToPostDetailFragment(posting)
-                )
+                // TODO
+//                navigate(
+//                    OtherUserJoinedPostFragmentDirections.actionJoinPostFragmentToPostDetailFragment(posting)
+//                )
             }
             addItemDecoration(BottomSpaceItemDecoration(12.dpToPx(context)))
         }

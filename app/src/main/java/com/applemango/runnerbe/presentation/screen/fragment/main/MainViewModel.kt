@@ -7,13 +7,19 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookmarkChangedFrom
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class BookmarkChangedEvent (
+    val changedFrom: BookmarkChangedFrom,
+    val posting: Posting
+)
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -23,7 +29,7 @@ class MainViewModel @Inject constructor(
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
     val clickedPost: MutableStateFlow<Posting?> = MutableStateFlow(null)
 
-    private val _bookmarkPost : MutableSharedFlow<Posting> = MutableSharedFlow()
+    private val _bookmarkPost : MutableSharedFlow<BookmarkChangedEvent> = MutableSharedFlow()
     val bookmarkPost get() = _bookmarkPost
 
     private var _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
@@ -37,24 +43,7 @@ class MainViewModel @Inject constructor(
         clickedPost.value = posting
     }
 
-    fun getPostClickListener() = object: PostClickListener {
-        override fun logWriteClick(post: Posting) {}
-
-        override fun attendanceSeeClick(post: Posting) {}
-
-        override fun attendanceManageClick(post: Posting) {}
-
-        override fun bookMarkClick(post: Posting) {
-            bookmarkStatusChange(post)
-        }
-
-        override fun postClick(post: Posting) {
-            clickedPost.value = if (clickedPost.value == post) null else post
-        }
-
-    }
-
-    fun bookmarkStatusChange(post: Posting) = viewModelScope.launch {
+    fun bookmarkStatusChange(changedFrom: BookmarkChangedFrom, post: Posting) = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             bookMarkStatusChangeUseCase(
@@ -65,8 +54,12 @@ class MainViewModel @Inject constructor(
                 when(it) {
                     is CommonResponse.Success<*> -> {
                         if(it.body is BaseResponse && it.body.isSuccess) {
-                            post.bookMark = if(post.bookmarkCheck()) 0 else 1
-                            _bookmarkPost.emit(post)
+                            _bookmarkPost.emit(
+                                BookmarkChangedEvent(
+                                    changedFrom,
+                                    post
+                                )
+                            )
                         }
                     }
                     else -> {

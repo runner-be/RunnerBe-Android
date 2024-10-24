@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map
 
 import android.util.Log
-import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
@@ -18,12 +17,18 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +38,8 @@ class RunnerMapViewModel @Inject constructor(
     private val getRunningListUseCase: GetRunningListUseCase
 ) : ViewModel() {
 
-    val postList: ObservableArrayList<Posting> = ObservableArrayList()
+    val postList: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
+
     private val pageSize = 10
     var isEndPage = false
     var coordinator: LatLng = LatLng(37.5666805, 126.9784147) //서울시청 디폴트
@@ -45,7 +51,7 @@ class RunnerMapViewModel @Inject constructor(
 
     private var refreshCount = 0
     val filterRunningTag: MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
-    private var preFilterRunningTag: RunningTag = filterRunningTag.value
+    private var preFilterRunningTag: RunningTag? = filterRunningTag.value
     val filterPriorityTag: MutableStateFlow<PriorityFilterTag> =
         MutableStateFlow(PriorityFilterTag.BY_DISTANCE)
     private var prePriorityTag = filterPriorityTag.value
@@ -65,7 +71,7 @@ class RunnerMapViewModel @Inject constructor(
         )
     private var preFilterData = filterData.value
     private val isRefresh: StateFlow<Int> = combine(
-        filterRunningTag,
+        filterRunningTag.filterNotNull(),
         filterPriorityTag,
         includeFinish,
         filterData
@@ -93,10 +99,98 @@ class RunnerMapViewModel @Inject constructor(
         }
     }
 
+    fun getRunningList(userId: Int?, isRefresh: Boolean = false) = viewModelScope.launch {
+        val request = GetRunningListRequest(
+            userLat = coordinator.latitude,
+            userLng = coordinator.longitude,
+            paceFilter = filterData.value.paceTags.joinToString(","),
+            jobFilter = filterData.value.jobTag,
+            gender = filterData.value.genderTag,
+            distanceFilter = "N",
+            minAge = if (filterData.value.minAge == 0) "N" else filterData.value.minAge.toString(),
+            maxAge = if (filterData.value.maxAge > 65) "N" else filterData.value.maxAge.toString(),
+            priorityFilter = filterPriorityTag.value.tag,
+            afterPartyFilter = "A", // TODO 필터 추가
+            userId = userId,
+            whetherEnd = if (includeFinish.value) "Y" else "N",
+            pageSize = pageSize,
+            page = postList.value.size / pageSize + 1
+        )
+        getRunningListUseCase(filterRunningTag.value, request).collect {
+            if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
+                if (it.body.isSuccess) {
+                    if (isRefresh) postList.value = emptyList()
+                    isEndPage = it.body.runningList.size < pageSize
+                    it.body.runningList.forEach { post ->
+                        Log.e(post.postId.toString(), post.profileUrlList.toString())
+                        if (!postList.value.contains(post)) {
+                            val prevList = postList.value.toMutableList()
+                            prevList.add(post)
+                            postList.value = prevList
+                        }
+                    }
+                }
+            }
+            _listUpdateUiState.emit(
+                when (it) {
+                    is CommonResponse.Success<*> -> UiState.Success(it.code)
+                    is CommonResponse.Failed -> {
+                        if (it.code >= 999) UiState.NetworkError
+                        else UiState.Failed(it.message)
+                    }
+
+                    is CommonResponse.Loading -> UiState.Loading
+                    else -> UiState.Empty
+                }
+            )
+        }
+    }
+//
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    val runningListFlow: Flow<List<Posting>> = combine(
+//        filterRunningTag.filterNotNull(),
+//        runningListRequestFlow.filterNotNull()
+//    ) { runningTag, request ->
+//        runningTag to request
+//    }.flatMapLatest { datas ->
+//        getRunningListUseCase(datas.first, datas.second)
+//            .map { response ->
+//                when (response) {
+//                    is CommonResponse.Success<*> -> {
+//                        if (response.body is GetRunningListResponse) {
+//                            isEndPage = response.body.runningList.size < pageSize
+//                            response.body.runningList
+//                        } else emptyList()
+//                    }
+//
+//                    is CommonResponse.Failed -> {
+//                        emptyList()
+//                    }
+//
+//                    else -> {
+//                        throw Exception("RunningLogDetailViewModel-runningLogDetailFlow-when-else")
+//                    }
+//                }
+//            }
+//    }
+
     fun refresh() {
-        postList.clear()
+        postList.value = emptyList()
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        getRunningList(if (userId > 0) userId else null, isRefresh = true)
+        getRunningList(null, isRefresh = true)
+    }
+
+    fun updatePostBookmark(post: Posting) {
+        val postList: MutableList<Posting> = postList.value.toMutableList()
+        val parsedPostList = postList.map { item ->
+            if (item.postId == post.postId) {
+                val prevBookmark = if (post.bookMark == 1) 0 else 1
+                item.copy(bookMark = prevBookmark)
+            } else {
+                item
+            }
+        }
+        this.postList.value = parsedPostList
     }
 
     fun setFilter(
@@ -168,55 +262,12 @@ class RunnerMapViewModel @Inject constructor(
         }
     }
 
-    fun getRunningList(userId: Int?, isRefresh: Boolean = false) = viewModelScope.launch {
-        val request = GetRunningListRequest(
-            userLat = coordinator.latitude,
-            userLng = coordinator.longitude,
-            paceFilter = filterData.value.paceTags.joinToString(","),
-            jobFilter = filterData.value.jobTag,
-            gender = filterData.value.genderTag,
-            distanceFilter = "N",
-            minAge = if (filterData.value.minAge == 0) "N" else filterData.value.minAge.toString(),
-            maxAge = if (filterData.value.maxAge > 65) "N" else filterData.value.maxAge.toString(),
-            priorityFilter = filterPriorityTag.value.tag,
-            afterPartyFilter = "A", // TODO 필터 추가
-            userId = userId,
-            whetherEnd = if (includeFinish.value) "Y" else "N",
-            pageSize = pageSize,
-            page = postList.size / pageSize + 1
-        )
-        getRunningListUseCase(filterRunningTag.value, request).collect {
-            if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
-                if (it.body.isSuccess) {
-                    if (isRefresh) postList.clear()
-                    isEndPage = it.body.runningList.size < pageSize
-                    it.body.runningList.forEach { post ->
-                        Log.e(post.postId.toString(), post.profileUrlList.toString())
-                        if (!postList.contains(post)) postList.add(post)
-                    }
-                }
-            }
-            _listUpdateUiState.emit(
-                when (it) {
-                    is CommonResponse.Success<*> -> UiState.Success(it.code)
-                    is CommonResponse.Failed -> {
-                        if (it.code >= 999) UiState.NetworkError
-                        else UiState.Failed(it.message)
-                    }
+    sealed class RunnerMapAction {
+        object MoveToWrite : RunnerMapAction()
+        data class ShowSelectListDialog(
+            val list: List<SelectItemParameter>
+        ) : RunnerMapAction()
 
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
-                }
-            )
-        }
+        data class MoveToRunningFilter(val filterData: MapFilterData) : RunnerMapAction()
     }
-}
-
-sealed class RunnerMapAction {
-    object MoveToWrite : RunnerMapAction()
-    data class ShowSelectListDialog(
-        val list: List<SelectItemParameter>
-    ) : RunnerMapAction()
-
-    data class MoveToRunningFilter(val filterData: MapFilterData) : RunnerMapAction()
 }

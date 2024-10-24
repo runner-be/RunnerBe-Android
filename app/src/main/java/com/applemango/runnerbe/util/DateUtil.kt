@@ -2,6 +2,7 @@ package com.applemango.runnerbe.util
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Date
@@ -57,12 +58,8 @@ fun dateStringToString(dateString: String, format: SimpleDateFormat): String? {
 
 fun DateStringInT(dateString: String): String = dateString.substring(0, dateString.indexOf("T"))
 
-fun dateStringToLongTime(dateString: String): Long {
-    val temp = dateString.replace("T", " ").replace("Z", " ")
-    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-//    formatter.timeZone = TimeZone.getTimeZone("KST")
-    val date = formatter.parse(temp)
-    return date?.time ?: 0L
+fun dateStringToLongTime(dateString: ZonedDateTime): Long {
+    return dateString.toInstant().toEpochMilli()
 }
 
 fun timeStringToLongTime(timeString: String): Long {

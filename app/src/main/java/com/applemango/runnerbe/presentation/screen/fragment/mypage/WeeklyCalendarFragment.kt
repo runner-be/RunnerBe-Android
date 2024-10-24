@@ -81,7 +81,7 @@ class WeeklyCalendarFragment() : BaseFragment<FragmentWeeklyCalendarBinding>(R.l
                     item.date?.let { itemDate ->
                         navigate(
                             MainFragmentDirections.actionMainFragmentToRunningLogFragment(
-                                parseLocalDateToKorean(itemDate),
+                                itemDate.toString(),
                                 null,
                                 null
                             )

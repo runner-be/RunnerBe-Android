@@ -10,11 +10,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.databinding.FragmentUserProfileBinding
-import com.applemango.runnerbe.presentation.model.listener.PostClickListener
+import com.applemango.runnerbe.databinding.FragmentOtherUserProfileBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
 import com.applemango.runnerbe.util.ToastUtil
@@ -29,12 +26,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layout.fragment_other_user_profile) {
+class OtherUserProfileFragment : BaseFragment<FragmentOtherUserProfileBinding>(R.layout.fragment_other_user_profile) {
     private val viewModel: OtherUserProfileViewModel by viewModels()
 
     private val navArgs: OtherUserProfileFragmentArgs by navArgs()
     @Inject
-    lateinit var joinedRunningPostAdapter: JoinedRunningPostAdapter
+    lateinit var otherUserJoinedPostAdapter: OtherUserJoinedPostAdapter
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
 
@@ -72,7 +69,7 @@ class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layo
 
     private fun CoroutineScope.setupJoinedRunningPost() = launch {
         viewModel.userPostings.collect { list ->
-            joinedRunningPostAdapter.submitList(list)
+            otherUserJoinedPostAdapter.submitList(list)
         }
     }
 
@@ -123,31 +120,15 @@ class OtherUserProfileFragment : BaseFragment<FragmentUserProfileBinding>(R.layo
 
     private fun initJoinedRunningPostRecyclerView() {
         binding.rcvJoinedRunningPost.apply {
-            adapter = joinedRunningPostAdapter
-            joinedRunningPostAdapter.setPostClickListener(object: PostClickListener {
-                override fun logWriteClick(post: Posting) {
-
-                }
-
-                override fun attendanceSeeClick(post: Posting) {
-
-                }
-
-                override fun attendanceManageClick(post: Posting) {
-
-                }
-
-                override fun bookMarkClick(post: Posting) {
-
-                }
-
-                override fun postClick(post: Posting) {
-                    navigate(
-                        OtherUserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(post)
-                    )
-                }
-
-            })
+            adapter = otherUserJoinedPostAdapter
+            otherUserJoinedPostAdapter.setOnPostClickListener { item ->
+                // TODO
+//                navigate(
+//                    OtherUserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(
+//                        item
+//                    )
+//                )
+            }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
         }

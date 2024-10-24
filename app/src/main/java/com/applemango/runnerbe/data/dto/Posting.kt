@@ -6,6 +6,7 @@ import com.applemango.runnerbe.util.dateStringToLongTime
 import com.applemango.runnerbe.util.timeStringToLongTime
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
 import java.util.Calendar
 
 // 메인페이지(postingResult), 찜목록 조회(bookMarkList), 마이페이지(myPosting, myRunning)
@@ -19,7 +20,7 @@ data class Posting(
     @SerializedName("profileImageUrl") val profileImageUrl: String?,
     @SerializedName("title") val title: String,
     @SerializedName("runningTime") val runningTime: String?,
-    @SerializedName("gatheringTime") val gatheringTime: String?,
+    @SerializedName("gatheringTime") val gatheringTime: ZonedDateTime?,
     @SerializedName("gatherLongitude") val gatherLongitude: String?,
     @SerializedName("gatherLatitude") val gatherLatitude: String?,
     @SerializedName("locationInfo") val locationInfo: String?,
@@ -27,7 +28,7 @@ data class Posting(
     @SerializedName("age") val age: String,
     @SerializedName("DISTANCE") val DISTANCE: String?,
     @SerializedName("gender") val gender: String?,
-    // N: 마감X, Y: 마감O
+    // D: 마감X, Y: 마감O,
     @SerializedName("whetherEnd") val whetherEnd: String?,
     @SerializedName("job") val job: String?,
     @SerializedName("peopleNum") val peopleNum: Int,
@@ -56,7 +57,8 @@ data class Posting(
     }
 
     fun attentionCheck(): Boolean {
-        return this.whetherCheck == "Y" && this.attendance == 1
+//        return this.whetherCheck == "Y" && this.attendance == 1 -> 의도가 뭔지?
+        return this.whetherCheck == "Y"
     }
 
     fun isWhetherEnded(): Boolean = whetherEnd == "Y"

@@ -28,6 +28,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceCheckSelectListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.paceselect.PaceSimpleSelectListAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.AttendanceAccessionAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceSeeAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoListAdapter
@@ -85,30 +86,6 @@ fun setSelectListAdapter(
     if (recyclerView.adapter == null) {
         recyclerView.adapter = SelectListItemAdapter(dataList)
     }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
-@BindingAdapter("postListAdapter", "bookmarkEvent")
-fun setPostListAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<Posting>,
-    bookMarkListener: BookMarkClickListener
-) {
-    if (recyclerView.adapter == null) {
-        recyclerView.adapter = BookMarkAdapter(dataList, bookMarkListener)
-    }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
-@BindingAdapter("bind:postAdapter", "bind:postClickListener", "bind:postIncomingType")
-fun setPostAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<Posting>,
-    clickListener: PostClickListener,
-    type: PostIncomingType
-) {
-    if (recyclerView.adapter == null)
-        recyclerView.adapter = PostAdapter(dataList, clickListener, type)
     recyclerView.adapter?.notifyDataSetChanged()
 }
 

@@ -4,17 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentRunnerMapBinding
 import com.applemango.runnerbe.presentation.model.NestedScrollableViewHelper
+import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookmarkChangedFrom
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
 import com.applemango.runnerbe.util.setHeight
@@ -26,7 +32,10 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -42,6 +51,9 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     private val viewModel: RunnerMapViewModel by viewModels({ requireParentFragment() })
     private val mainViewModel: MainViewModel by viewModels({ requireParentFragment() })
+
+    @Inject
+    lateinit var postAdapter: PostAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,41 +77,42 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
             }
         }
+        initPostRecyclerView()
+        setupPostFlow()
     }
 
     private fun observeBind() {
         viewLifecycleOwner.lifecycleScope.launch {
             launch {
-                mainViewModel.clickedPost.collect {
-                    runCatching {
-                        val index = viewModel.postList.indexOf(it)
-                        if (index != -1) onClickMarker(markerList[index], it)
-                        else viewModel.refresh()
-                    }
+                mainViewModel.bookmarkPost.collect { changedEvent ->
+                    postAdapter.updatePostBookmark(changedEvent.posting)
                 }
             }
             launch {
-                mainViewModel.bookmarkPost.collect {
-                    val index = viewModel.postList.indexOf(it)
-                    if (index != -1) viewModel.postList[index] = it.copy()
+                mainViewModel.clickedPost.collect {
+                    runCatching {
+                        val index = viewModel.postList.value.indexOf(it)
+                        if (index != -1) onClickMarker(markerList[index], it)
+                        else return@collect
+                    }
                 }
             }
             launch {
                 viewModel.actions.collect {
                     when(it) {
-                        is RunnerMapAction.MoveToWrite -> {
+                        is RunnerMapViewModel.RunnerMapAction.MoveToWrite -> {
                             checkAdditionalUserInfo {
                                 if(RunnerBeApplication.mTokenPreference.getMyRunningPace().isNullOrBlank()) {
                                     navigate(MainFragmentDirections.moveToPaceInfoFragment("map"))
                                 } else navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment(null))
                             }
                         }
-                        is RunnerMapAction.ShowSelectListDialog -> {
+                        is RunnerMapViewModel.RunnerMapAction.ShowSelectListDialog -> {
                             context?.let { context ->
                                 SelectItemDialog.createShow(context, it.list)
                             }
                         }
-                        is RunnerMapAction.MoveToRunningFilter -> {
+                        is RunnerMapViewModel.RunnerMapAction.MoveToRunningFilter -> {
                             val filter = it.filterData
                             navigate(
                                 MainFragmentDirections.actionMainFragmentToRunningFilterFragment(
@@ -140,6 +153,44 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     override fun onLowMemory() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
+    }
+
+    private fun setupPostFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.postList.collectLatest { postList ->
+                postAdapter.submitList(postList)
+            }
+        }
+    }
+
+    private fun initPostRecyclerView() {
+        binding.postListLayout.postRecyclerView.apply {
+            adapter = postAdapter.apply {
+                setPostClickListener(object: JoinedRunningClickListener {
+                    override fun logWriteClick(post: Posting) {
+                    }
+
+                    override fun attendanceSeeClick(post: Posting) {
+                    }
+
+                    override fun attendanceManageClick(post: Posting) {
+                    }
+
+                    override fun bookMarkClick(post: Posting) {
+                        mainViewModel.bookmarkStatusChange(BookmarkChangedFrom.RUNNINGPOST, post) // 북마크 화면에 추가/제거할 아이템 설정
+                        viewModel.updatePostBookmark(post) // 게시글 화면에 해당 아이템 북마크 상태 변경
+                    }
+
+                    override fun postClick(post: Posting) {
+                    }
+
+                })
+
+                setIncomingType(PostIncomingType.HOME)
+            }
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            itemAnimator = null
+        }
     }
 
     override fun onMapReady(map: NaverMap) {
@@ -201,24 +252,23 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     private fun markerUpdate() {
         markerClear()
-        viewModel.postList.forEach { post ->
-            runCatching {
-                val lat = post.gatherLatitude?.toDouble()
-                val lng = post.gatherLongitude?.toDouble()
-                if (lat != null && lng != null) {
-                    val marker = Marker().apply {
-                        position = LatLng(lat, lng)
-                        map = mNaverMap
-                        icon = OverlayImage.fromResource(getNoSelectMapMarkerResource(post))
-                        setOnClickListener {
-                            mainViewModel.clickPost(post)
-                            true
-                        }
+        viewModel.postList.value.forEach { post ->
+            try {
+                val lat = requireNotNull(post.gatherLatitude?.toDouble())
+                val lng = requireNotNull(post.gatherLongitude?.toDouble())
+
+                val marker = Marker().apply {
+                    position = LatLng(lat, lng)
+                    map = mNaverMap
+                    icon = OverlayImage.fromResource(getNoSelectMapMarkerResource(post))
+                    setOnClickListener {
+                        mainViewModel.clickPost(post)
+                        true
                     }
-                    markerList.add(marker)
                 }
-            }.onFailure {
-                it.printStackTrace()
+                markerList.add(marker)
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
             }
         }
     }

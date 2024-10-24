@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.data.network.response.OtherUserPosting
 
-class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewHolder>(
+class OtherUserJoinedPostAdapter : ListAdapter<OtherUserPosting, OtherUserJoinedPostViewHolder>(
     joinedPostDiffUtil
 ) {
     private lateinit var onPostClickListener: OtherUserJoinedPostClickListener
@@ -17,7 +18,7 @@ class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewH
         return OtherUserJoinedPostViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_join_post,
+                R.layout.item_join_post_without_bookmark,
                 parent,
                 false
             )
@@ -36,12 +37,12 @@ class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewH
     }
 
     companion object {
-        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
-            override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<OtherUserPosting>() {
+            override fun areItemsTheSame(oldItem: OtherUserPosting, newItem: OtherUserPosting): Boolean {
                 return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+            override fun areContentsTheSame(oldItem: OtherUserPosting, newItem: OtherUserPosting): Boolean {
                 return oldItem == newItem
             }
         }
