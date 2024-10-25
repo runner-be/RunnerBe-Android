@@ -16,7 +16,8 @@ class MyPostAttendanceSeeFragment : BaseFragment<FragmentMyPostAttendanceSeeBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        viewModel.userListUpdate(args.users.toList())
+        // TODO - 네비게이션 아규먼트 수정 후 usecase 호출해서 리스트 보여주기...
+//        viewModel.userListUpdate(args.users.toList())
         context?.let {
             binding.attendanceSeeRecyclerView.addItemDecoration(RecyclerViewItemDeco(it, 18))
         }

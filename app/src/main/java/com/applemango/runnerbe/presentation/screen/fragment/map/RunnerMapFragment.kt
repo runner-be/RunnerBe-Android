@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
@@ -17,7 +15,6 @@ import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookmarkChangedFrom
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
@@ -84,8 +81,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     private fun observeBind() {
         viewLifecycleOwner.lifecycleScope.launch {
             launch {
-                mainViewModel.bookmarkPost.collect { changedEvent ->
-                    postAdapter.updatePostBookmark(changedEvent.posting)
+                mainViewModel.bookmarkPost.collect { posting ->
+                    postAdapter.updatePostBookmark(posting)
                 }
             }
             launch {
@@ -177,7 +174,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                     }
 
                     override fun bookMarkClick(post: Posting) {
-                        mainViewModel.bookmarkStatusChange(BookmarkChangedFrom.RUNNINGPOST, post) // 북마크 화면에 추가/제거할 아이템 설정
+                        mainViewModel.bookmarkStatusChange(post) // 북마크 화면에 추가/제거할 아이템 설정
                         viewModel.updatePostBookmark(post) // 게시글 화면에 해당 아이템 북마크 상태 변경
                     }
 
