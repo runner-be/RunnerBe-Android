@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
 
 import android.os.Bundle
 import android.view.View
@@ -13,9 +13,7 @@ import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
-import com.applemango.runnerbe.util.parseLocalDateToKorean
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
