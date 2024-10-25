@@ -7,19 +7,12 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
-import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookmarkChangedFrom
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-data class BookmarkChangedEvent (
-    val changedFrom: BookmarkChangedFrom,
-    val posting: Posting
-)
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -29,7 +22,7 @@ class MainViewModel @Inject constructor(
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
     val clickedPost: MutableStateFlow<Posting?> = MutableStateFlow(null)
 
-    private val _bookmarkPost : MutableSharedFlow<BookmarkChangedEvent> = MutableSharedFlow()
+    private val _bookmarkPost : MutableSharedFlow<Posting> = MutableSharedFlow()
     val bookmarkPost get() = _bookmarkPost
 
     private var _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
@@ -43,7 +36,7 @@ class MainViewModel @Inject constructor(
         clickedPost.value = posting
     }
 
-    fun bookmarkStatusChange(changedFrom: BookmarkChangedFrom, post: Posting) = viewModelScope.launch {
+    fun bookmarkStatusChange(post: Posting) = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             bookMarkStatusChangeUseCase(
@@ -54,12 +47,7 @@ class MainViewModel @Inject constructor(
                 when(it) {
                     is CommonResponse.Success<*> -> {
                         if(it.body is BaseResponse && it.body.isSuccess) {
-                            _bookmarkPost.emit(
-                                BookmarkChangedEvent(
-                                    changedFrom,
-                                    post
-                                )
-                            )
+                            _bookmarkPost.emit(post)
                         }
                     }
                     else -> {
