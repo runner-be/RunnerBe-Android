@@ -23,7 +23,6 @@ class MyPostAttendanceAccessionFragment : BaseFragment<FragmentMyPostAttendanceA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        viewModel.postId = args.postId
         viewModel.userListUpdate(args.users.toList())
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.submitState.collect {

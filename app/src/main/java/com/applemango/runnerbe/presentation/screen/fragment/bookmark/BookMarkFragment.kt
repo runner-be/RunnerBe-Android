@@ -10,7 +10,6 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentBookMarkBinding
 import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
@@ -58,9 +57,7 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
                     }
 
                     override fun bookMarkClick(post: Posting) {
-                        // 북마크 화면에서 해당 아이템 제거
-                        // 게시글 화면에서 해당 아이템 북마크 상태 변경
-                        mainViewModel.bookmarkStatusChange(BookmarkChangedFrom.BOOKMARK, post)
+                        mainViewModel.bookmarkStatusChange(post)
                         viewModel.addOrRemoveBookmarkedPost(post)
                     }
 
@@ -95,18 +92,8 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
                 }
 
                 launch {
-                    // 게시글 화면에서 북마크 상태 변경된 아이템 collect
-                    mainViewModel.bookmarkPost.collect { changedEvent ->
-                        viewModel.addOrRemoveBookmarkedPost(changedEvent.posting)
-//                        when (changedEvent.changedFrom) {
-//                            BookmarkChangedFrom.BOOKMARK -> {
-//                                viewModel.addOrRemoveBookmarkedPost(changedEvent.posting)
-//                            }
-//
-//                            BookmarkChangedFrom.RUNNINGPOST -> {
-//                                viewModel.updatePostBookmark(changedEvent.posting)
-//                            }
-//                        }
+                    mainViewModel.bookmarkPost.collect { posting ->
+                        viewModel.addOrRemoveBookmarkedPost(posting)
                     }
                 }
             }

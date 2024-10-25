@@ -17,16 +17,17 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMypageBinding
+import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import com.applemango.runnerbe.util.toUri
@@ -201,7 +202,6 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
-                    LogUtil.errorLog("CurrentViewPager position: $position")
                     position?.let {
                         binding.vpWeeklyCalendar.setCurrentItem(position, false)
                     }
@@ -252,31 +252,33 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
 
     private fun initParticipatedRunningAdapter() {
         with(binding.rcvJoinedRunningPost) {
-            adapter = joinedRunningPostAdapter
-            joinedRunningPostAdapter.setPostClickListener(object : JoinedRunningClickListener {
-                override fun logWriteClick(post: Posting) {
+            adapter = joinedRunningPostAdapter.apply {
+                setPostClickListener(object : JoinedRunningClickListener {
+                    override fun logWriteClick(post: Posting) {
 
-                }
+                    }
 
-                override fun attendanceSeeClick(post: Posting) {
+                    override fun attendanceSeeClick(post: Posting) {
 
-                }
+                    }
 
-                override fun attendanceManageClick(post: Posting) {
+                    override fun attendanceManageClick(post: Posting) {
 
-                }
+                    }
 
-                override fun bookMarkClick(post: Posting) {
+                    override fun bookMarkClick(post: Posting) {
 
-                }
+                    }
 
-                override fun postClick(post: Posting) {
-                    navigate(
-                        MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
-                    )
-                }
+                    override fun postClick(post: Posting) {
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
+                        )
+                    }
+                })
 
-            })
+                setIncomingType(PostIncomingType.HOME)
+            }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
         }

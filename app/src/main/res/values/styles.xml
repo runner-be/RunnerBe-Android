@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="base_font">
+        <item name="fontFamily">@font/pretendard_regular</item>
+    </style>
 
     <style name="tab_text" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16dp</item>
@@ -15,5 +18,9 @@
 
     <style name="photo_round_shape_14">
         <item name="cornerSize">14dp</item>
+    </style>
+
+    <style name="tab_item_selected" parent="base_font">
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

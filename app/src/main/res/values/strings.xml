@@ -342,6 +342,8 @@
     <string name="sunday">일</string>
 
     <!-- 참여한 러닝/내가 만든 모임-->
-    <string name="joined_post_nickname">%s님 참여한 러닝</string>
+    <string name="joined_post_title">참여한 러닝</string>
+    <string name="joined_post_category_all">전체</string>
+    <string name="joined_post_category_my">내가 만든 모임</string>
 
 </resources>

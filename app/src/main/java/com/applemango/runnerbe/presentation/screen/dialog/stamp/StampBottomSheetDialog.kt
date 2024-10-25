@@ -5,13 +5,10 @@ import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogBottomSheetStampBinding
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.LeftSpaceItemDecoration
 
@@ -34,9 +31,7 @@ class StampBottomSheetDialog(
     }
 
     init {
-        this.selectedStamp = selectedStamp.also {
-            LogUtil.debugLog(it.toString())
-        }
+        this.selectedStamp = selectedStamp
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

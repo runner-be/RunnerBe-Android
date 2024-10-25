@@ -27,12 +27,6 @@
             android:id="@+id/action_mainFragment_to_runningFilterFragment"
             app:destination="@id/runningFilterFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_myPostAttendanceSeeFragment"
-            app:destination="@id/myPostAttendanceSeeFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_myPostAttendanceAccessionFragment"
-            app:destination="@id/myPostAttendanceAccessionFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_runningTalkDetailFragment"
             app:destination="@id/runningTalkDetailFragment" />
         <action
@@ -173,7 +167,7 @@
 
         <argument
             android:name="users"
-            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]"/>
+            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]" />
     </fragment>
     <fragment
         android:id="@+id/myPostAttendanceAccessionFragment"
@@ -182,12 +176,8 @@
         android:label="MyPostAttendanceAccessionFragment">
 
         <argument
-            android:name="postId"
-            app:argType="integer"/>
-
-        <argument
             android:name="users"
-            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]"/>
+            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]" />
 
     </fragment>
     <fragment
@@ -410,5 +400,15 @@
     <fragment
         android:id="@+id/joinedRunningFragment"
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningFragment"
-        android:label="JoinedRunningFragment" />
+        android:label="JoinedRunningFragment" >
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceSeeFragment"
+            app:destination="@id/myPostAttendanceSeeFragment" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceAccessionFragment"
+            app:destination="@id/myPostAttendanceAccessionFragment" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment" />
+    </fragment>
 </navigation>
