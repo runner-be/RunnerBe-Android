@@ -86,11 +86,9 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
 
                     override fun attendanceSeeClick(post: Posting) {
                         try {
-                            val userId = requireNotNull(post.userId)
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceSeeFragment(
-                                    post.postId,
-                                    userId
+                                    post.runnerList?.toTypedArray() ?: arrayOf()
                                 )
                             )
                         } catch (e: IllegalArgumentException) {
@@ -101,11 +99,9 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
 
                     override fun attendanceManageClick(post: Posting) {
                         try {
-                            val userId = requireNotNull(post.userId)
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceAccessionFragment(
-                                    post.postId,
-                                    userId
+                                    post.runnerList?.toTypedArray() ?: arrayOf()
                                 )
                             )
                         } catch (e: IllegalArgumentException) {

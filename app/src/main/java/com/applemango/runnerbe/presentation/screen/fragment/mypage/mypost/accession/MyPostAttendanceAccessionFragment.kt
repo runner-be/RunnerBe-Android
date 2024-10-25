@@ -23,9 +23,7 @@ class MyPostAttendanceAccessionFragment : BaseFragment<FragmentMyPostAttendanceA
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        viewModel.postId = args.postId
-        // TODO - 네비게이션 아규먼트 수정 후 usecase 호출해서 리스트 보여주기...
-//        viewModel.userListUpdate(args.users.toList())
+        viewModel.userListUpdate(args.users.toList())
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.submitState.collect {
                 context?.let { context ->
