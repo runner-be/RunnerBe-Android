@@ -17,11 +17,14 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewMod
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WeeklyCalendarFragment() : BaseFragment<FragmentWeeklyCalendarBinding>(R.layout.fragment_weekly_calendar) {
+class WeeklyCalendarFragment() :
+    BaseFragment<FragmentWeeklyCalendarBinding>(R.layout.fragment_weekly_calendar) {
 
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
@@ -41,9 +44,11 @@ class WeeklyCalendarFragment() : BaseFragment<FragmentWeeklyCalendarBinding>(R.l
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thisWeekRunningLogFlow.collectLatest {
-                    val thisWeekStartDate = LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
-                    val thisWeekLogs = parseRunningLogs(thisWeekStartDate, it.runningLog)
-                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekStartDate, thisWeekLogs))
+                    val thisWeekMonday =
+                        LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
+                            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                    val thisWeekLogs = parseRunningLogs(thisWeekMonday, it.runningLog)
+                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                 }
             }
         }
@@ -87,7 +92,7 @@ class WeeklyCalendarFragment() : BaseFragment<FragmentWeeklyCalendarBinding>(R.l
                     }
                 }
             }
-
+            itemAnimator = null
             layoutManager = GridLayoutManager(context, 7)
         }
     }
