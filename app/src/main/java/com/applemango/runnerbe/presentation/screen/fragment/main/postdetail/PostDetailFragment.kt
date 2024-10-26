@@ -1,5 +1,8 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main.postdetail
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +23,8 @@ import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDia
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
+import com.applemango.runnerbe.util.ToastUtil
+import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
@@ -29,6 +34,7 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class PostDetailFragment :
@@ -48,6 +54,7 @@ class PostDetailFragment :
         binding.vm = viewModel
         viewModel.post.value = args.posting
         observeBind()
+        initListeners()
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
     }
@@ -83,6 +90,24 @@ class PostDetailFragment :
         viewModel.post.value?.let {
             viewModel.getPostDetail(it.postId, RunnerBeApplication.mTokenPreference.getUserId())
         }
+    }
+
+    fun initListeners() {
+        compositeDisposable.addAll(
+            binding.tvTextCopy.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    context?.let {
+                        val clipboardManager = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val address = viewModel.post.value?.placeAddress
+                        if (address != null) {
+                            val copiedAddress = ClipData.newPlainText("address", address)
+                            clipboardManager.setPrimaryClip(copiedAddress)
+                            ToastUtil.showShortToast(it, getString(R.string.text_copy_success))
+                        }
+                    }
+                }
+        )
     }
 
     fun observeBind() {

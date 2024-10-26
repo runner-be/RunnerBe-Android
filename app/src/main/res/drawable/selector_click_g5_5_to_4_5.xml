@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/bg_dark_4_5g_solid_radius_8"
+        android:state_pressed="true"/>
+    <item
+        android:drawable="@drawable/bg_dark_5_5g_solid_radius_8"
+        android:state_pressed="false"/>
+</selector>
