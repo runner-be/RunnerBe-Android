@@ -12,11 +12,9 @@ data class DateItem(
     val runningLog: RunningLog?
 )
 
-fun initWeekDays(today: LocalDate, runningLogList: List<RunningLog>): List<DateItem> {
-    val thisMonday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-
+fun initWeekDays(thisWeekMonday: LocalDate, runningLogList: List<RunningLog>): List<DateItem> {
     return (0 .. 6).map { day ->
-        val date = thisMonday.plusDays(day.toLong())
+        val date = thisWeekMonday.plusDays(day.toLong())
         DateItem(
             date,
             runningLogList.firstOrNull { log ->

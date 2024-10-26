@@ -11,7 +11,6 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentJoinedRunningBinding
-import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
@@ -67,7 +66,6 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
     private fun initRunningRecyclerView() {
         binding.rcvPosting.apply {
             adapter = joinedRunningPostAdapter.apply {
-                setIncomingType(PostIncomingType.PROFILE)
                 setPostClickListener(object: JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
                         try {

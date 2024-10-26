@@ -8,8 +8,8 @@ data class AddressData(
     val placeName: String,
     val roadAddress: String,
     val detailAddress: String,
-    val x: String,
-    val y: String
+    val longitude: String,
+    val latitude: String
 ) : Parcelable {
 
     fun getFullAddress(): String = "$roadAddress $detailAddress"

@@ -6,6 +6,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.WriteRunningRequest
 import com.applemango.runnerbe.data.network.response.BaseResponse
+import com.applemango.runnerbe.data.vo.PlaceData
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
 import com.applemango.runnerbe.domain.usecase.post.WriteRunningUseCase
 import com.applemango.runnerbe.presentation.model.GenderTag
@@ -17,6 +18,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoList
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.util.LogUtil
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -37,7 +39,8 @@ class RunningWriteTwoViewModel @Inject constructor(
             runningDisplayDate = DateSelectData.defaultNowDisplayDate(),
             runningDisplayTime = TimeSelectData.getDefaultTimeData(),
             runningTag = RunningTag.All,
-            coordinate = LatLng(0.0, 0.0)
+            coordinate = LatLng(0.0, 0.0),
+            placeData = PlaceData.defaultPlaceData
         )
     )
 
@@ -51,8 +54,6 @@ class RunningWriteTwoViewModel @Inject constructor(
     val isAllAgeChecked: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val recruitmentStartAge: MutableStateFlow<Int> = MutableStateFlow(20)
     val recruitmentEndAge: MutableStateFlow<Int> = MutableStateFlow(40)
-    val locationInfo: MutableStateFlow<String> =
-        MutableStateFlow(RunnerBeApplication.instance.applicationContext.getString(R.string.no_location_info))
     val isConfirmButtonEnabled = combine(paceList) { data ->
         data[0].any { it.isSelected }
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(1000L),initialValue = false)
@@ -88,6 +89,12 @@ class RunningWriteTwoViewModel @Inject constructor(
     }
 
     fun writeRunning(userId: Int) = viewModelScope.launch {
+        val placedata = oneData.value.placeData
+
+        LogUtil.errorLog(
+            "latitude: ${oneData.value.coordinate.latitude}\n longitude: ${oneData.value.coordinate.latitude}"
+        )
+
         writeUseCase(userId, WriteRunningRequest(
             runningTitle = oneData.value.runningTitle,
             runningTag = oneData.value.runningTag.tag,
@@ -103,7 +110,9 @@ class RunningWriteTwoViewModel @Inject constructor(
             maxAge = if (isAllAgeChecked.value) 100 else recruitmentEndAge.value,
             latitude = oneData.value.coordinate.latitude,
             longitude = oneData.value.coordinate.longitude,
-            locationInfo = locationInfo.value,
+            placeName = placedata.placeName,
+            placeAddress = placedata.placeAddress,
+            placeExplain = placedata.placeExplain,
             contents = content.value.ifEmpty { null },
             paceGrade = paceList.value.firstOrNull{ it.isSelected }?.pace?.key?:"",
             isAfterParty = when(afterPartyRadioChecked.value) {

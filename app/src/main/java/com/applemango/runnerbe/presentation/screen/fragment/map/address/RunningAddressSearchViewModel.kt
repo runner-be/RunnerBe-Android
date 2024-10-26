@@ -19,7 +19,6 @@ import javax.inject.Inject
 class RunningAddressSearchViewModel @Inject constructor(
     private val getAddressListUseCase: GetAddressListUseCase
 ) : ViewModel() {
-
     private val _addressResultFlow = MutableStateFlow<PagingData<AddressResult>>(PagingData.empty())
     val addressResultFlow : Flow<PagingData<AddressResult>> = _addressResultFlow
         .asStateFlow()

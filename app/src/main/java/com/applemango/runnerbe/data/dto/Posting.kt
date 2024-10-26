@@ -23,12 +23,19 @@ data class Posting(
     @SerializedName("gatheringTime") val gatheringTime: ZonedDateTime?,
     @SerializedName("gatherLongitude") val gatherLongitude: String?,
     @SerializedName("gatherLatitude") val gatherLatitude: String?,
-    @SerializedName("locationInfo") val locationInfo: String?,
+    /**
+     * placeName : 장소 이름
+     * placeAddress : 장소 주소
+     * planeExplain : 장소 설명
+     */
+    @SerializedName("placeName") val placeName: String?,
+    @SerializedName("placeAddress") val placeAddress: String?,
+    @SerializedName("placeExplain") val placeExplain: String?,
     @SerializedName("runningTag") val runningTag: String?,
     @SerializedName("age") val age: String,
     @SerializedName("DISTANCE") val DISTANCE: String?,
     @SerializedName("gender") val gender: String?,
-    // D: 마감X, Y: 마감O,
+    // N: 마감X, Y: 마감O, D: 비노출(시간이 지나서 DB 상에서 삭제됨)
     @SerializedName("whetherEnd") val whetherEnd: String?,
     @SerializedName("job") val job: String?,
     @SerializedName("peopleNum") val peopleNum: Int,
@@ -43,8 +50,15 @@ data class Posting(
     @SerializedName("runnerList") val runnerList: List<UserInfo>?,
     @SerializedName("whetherPostUser") val whetherPostUser: String?,
     @SerializedName("pace") val pace: String?,
-    @SerializedName("afterParty") val afterParty: Int?
+    @SerializedName("afterParty") val afterParty: Int?,
+    // 모임 종료(러닝 끝난 후)부터 3시간 지났는지 여부
+    @SerializedName("attendTimeOver") val attendTimeOver: String?
 ) : Parcelable {
+
+    // 모임 종료 후 3시간이 지났다면 출석 확인, 지나지 않았다면 출석 관리
+    fun attendanceCheckable(): Boolean {
+        return attendTimeOver == "Y"
+    }
     fun bookmarkCheck(): Boolean {
         return this.bookMark == 1
     }

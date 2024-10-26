@@ -5,13 +5,13 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
-        <import type="com.applemango.runnerbe.presentation.model.PostIncomingType"/>
+        <import type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom"/>
+        <variable
+            name="postFrom"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom" />
         <variable
             name="item"
             type="com.applemango.runnerbe.data.dto.Posting" />
-        <variable
-            name="incomingType"
-            type="com.applemango.runnerbe.presentation.model.PostIncomingType" />
         <variable
             name="clickListener"
             type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener" />
@@ -201,7 +201,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                bind:isVisible="@{incomingType == PostIncomingType.PROFILE}"
+                bind:isVisible="@{postFrom == PostCalledFrom.MY_PAGE}"
                 app:layout_constraintTop_toBottomOf="@id/pace_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -227,7 +227,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    bind:isVisible="@{item.whetherEnded}"
+                    bind:isVisible="@{!item.attendanceCheckable()}"
                     android:onClick="@{() -> clickListener.attendanceManageClick(item)}"
                     android:text="@string/attendance_manage"
                     android:textSize="14sp"
@@ -242,7 +242,7 @@
                     android:id="@+id/after_running_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    bind:isVisible="@{item.whetherEnded}"
+                    bind:isVisible="@{item.attendanceCheckable()}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 

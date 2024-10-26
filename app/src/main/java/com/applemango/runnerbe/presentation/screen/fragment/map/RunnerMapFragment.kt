@@ -11,13 +11,13 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentRunnerMapBinding
 import com.applemango.runnerbe.presentation.model.NestedScrollableViewHelper
-import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
 import com.applemango.runnerbe.util.setHeight
@@ -100,7 +100,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                         is RunnerMapViewModel.RunnerMapAction.MoveToWrite -> {
                             checkAdditionalUserInfo {
                                 if(RunnerBeApplication.mTokenPreference.getMyRunningPace().isNullOrBlank()) {
-                                    navigate(MainFragmentDirections.moveToPaceInfoFragment("map"))
+                                    navigate(MainFragmentDirections.actionMainFragmentToPaceInfoFragment("map"))
                                 } else navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment(null))
                             }
                         }
@@ -163,6 +163,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     private fun initPostRecyclerView() {
         binding.postListLayout.postRecyclerView.apply {
             adapter = postAdapter.apply {
+                setPostFrom(PostCalledFrom.HOME)
                 setPostClickListener(object: JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
                     }
@@ -179,11 +180,12 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                     }
 
                     override fun postClick(post: Posting) {
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
+                        )
                     }
 
                 })
-
-                setIncomingType(PostIncomingType.HOME)
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             itemAnimator = null

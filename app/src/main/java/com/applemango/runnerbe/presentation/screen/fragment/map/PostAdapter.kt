@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 
 class PostAdapter : ListAdapter<Posting, PostViewHolder>(postDiffUtil) {
     private lateinit var listener: JoinedRunningClickListener
-    private lateinit var incomingType: PostIncomingType
+    private lateinit var postFrom: PostCalledFrom
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         return PostViewHolder(
@@ -28,7 +28,7 @@ class PostAdapter : ListAdapter<Posting, PostViewHolder>(postDiffUtil) {
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val item = currentList[position]
         if (item != null) {
-            holder.bind(item, incomingType)
+            holder.bind(item, postFrom)
         }
     }
 
@@ -36,8 +36,8 @@ class PostAdapter : ListAdapter<Posting, PostViewHolder>(postDiffUtil) {
         this.listener = listener
     }
 
-    fun setIncomingType(incomingType: PostIncomingType) {
-        this.incomingType = incomingType
+    fun setPostFrom(from: PostCalledFrom) {
+        this.postFrom = from
     }
 
     fun updatePostBookmark(posting: Posting) {

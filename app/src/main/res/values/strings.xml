@@ -178,7 +178,7 @@
     <string name="report">신고</string>
     <string name="msg_warning_report">부적절한 신고는 수락되지 않으며,활동 제재의 원인이 될 수 있습니다.정말 신고하시겠어요?</string>
     <string name="report_complete">신고처리 되었습니다.</string>
-    <string name="image_count_alert">이미지는 한 번에 3장까지 등록 가능합니다.</string>
+    <string name="image_count_alert">이미지는 3장까지만 업로드할 수 있어요</string>
 
     <!-- 마이 페이지 -->
     <string name="attendance_manage">출석 관리</string>
@@ -195,6 +195,7 @@
     <string name="present">출석</string>
     <string name="do_profile_edit">프로필 수정하기</string>
     <string name="pace_registration_description">페이스를 등록하세요!</string>
+    <string name="pace_edit">페이스 수정하기</string>
 
     <!-- 내정보 수정  -->
     <string name="msg_impossible_nickname_change">* 닉네임 변경이 완료되어 추가 변경은 불가능해요!</string>
@@ -345,5 +346,8 @@
     <string name="joined_post_title">참여한 러닝</string>
     <string name="joined_post_category_all">전체</string>
     <string name="joined_post_category_my">내가 만든 모임</string>
+
+    <!-- 게시글 상세 -->
+    <string name="text_copy_success">주소 복사 완료</string>
 
 </resources>

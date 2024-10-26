@@ -299,7 +299,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginHorizontal="16dp"
-                        android:text="@{vm.runningSelectedLocation}"
+                        android:text="@{vm.runningPlaceInfo.placeAddress}"
                         android:textColor="@color/dark_g1"/>
 
                     <androidx.appcompat.widget.AppCompatImageView
