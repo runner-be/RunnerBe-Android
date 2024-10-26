@@ -223,6 +223,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="@{myPageViewModel.pace == null ? View.GONE : View.VISIBLE}"
                 app:cardCornerRadius="4dp"
+                android:background="@color/transparent"
                 app:layout_constraintBottom_toBottomOf="@id/paceAndDiligenceBackgroundLayout"
                 app:layout_constraintLeft_toLeftOf="@id/paceAndDiligenceBackgroundLayout"
                 app:layout_constraintRight_toLeftOf="@id/divider"
@@ -231,7 +232,6 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/dark_g4_5"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingVertical="4dp"
@@ -309,6 +309,20 @@
                     tools:text="성실러너" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_pace_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="@string/pace_edit"
+                android:textColor="@color/dark_g2"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/paceAndDiligenceBackgroundLayout"
+                app:layout_constraintTop_toBottomOf="@id/paceAndDiligenceBackgroundLayout" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/const_calendar_weekly"
                 android:layout_width="match_parent"
@@ -316,7 +330,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/paceAndDiligenceBackgroundLayout">
+                app:layout_constraintTop_toBottomOf="@+id/tv_pace_edit">
 
                 <TextView
                     android:id="@+id/tv_week"

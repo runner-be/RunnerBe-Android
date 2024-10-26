@@ -7,11 +7,6 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.applemango.runnerbe.presentation.model.PostIncomingType"/>
-
-        <variable
-            name="incomingType"
-            type="com.applemango.runnerbe.presentation.model.PostIncomingType" />
 
         <variable
             name="vm"

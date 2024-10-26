@@ -37,7 +37,7 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/moveToPaceInfoFragment"
+            android:id="@+id/action_mainFragment_to_paceInfoFragment"
             app:destination="@id/paceInfoRegistFragment" />
         <action
             android:id="@+id/action_mainFragment_to_runningLogFragment"
