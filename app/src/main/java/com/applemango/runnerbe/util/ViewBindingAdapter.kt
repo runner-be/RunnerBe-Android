@@ -13,6 +13,7 @@ import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.getDiligenceFromString
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
@@ -216,25 +217,27 @@ fun ImageView.getPaceImage16(pace: String?) {
 }
 
 @BindingAdapter("bind:attendanceImage16")
-fun ImageView.getAttendanceImage16(attendande: String?) {
-    this.isVisible = attendande != null
+fun ImageView.getAttendanceImage16(attendance: String?) {
+    this.isVisible = attendance != null
+    val diligence = getDiligenceFromString(attendance)
     this.setImageResource(
-        when (attendande) {
-            RunnerDiligence.EFFORT_RUNNER.value -> {
-                R.drawable.ic_effort_runner_face
+        when (diligence) {
+            RunnerDiligence.SINCERITY_RUNNER -> {
+                R.drawable.ic_attendance_grade_a
             }
 
-            RunnerDiligence.ERROR_RUNNER.value -> {
-                R.drawable.ic_error_runner_face
+            RunnerDiligence.BEGINNER_RUNNER -> {
+                R.drawable.ic_attendance_grade_b
             }
 
-            RunnerDiligence.SINCERITY_RUNNER.value -> {
-                R.drawable.ic_sincerity_runner_face
+            RunnerDiligence.EFFORT_RUNNER -> {
+                R.drawable.ic_attendance_grade_c
             }
 
-            else -> {
-                R.drawable.ic_effort_runner_face
+            RunnerDiligence.ERROR_RUNNER -> {
+                R.drawable.ic_attendance_grade_d
             }
+
         }
     )
 }
