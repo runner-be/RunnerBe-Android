@@ -17,7 +17,6 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMypageBinding
-import com.applemango.runnerbe.presentation.model.PostIncomingType
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
@@ -27,6 +26,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
@@ -36,11 +36,13 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,6 +77,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         setupThisWeekRunningLogs()
         initYearMonthSpinner()
         setupWeeklyViewPagerPosition()
+        initListeners()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.userProfileEditButton.setOnClickListener(this)
@@ -95,12 +98,24 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         super.onDestroyView()
     }
 
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.tvPaceEdit.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    navigate(
+                        MainFragmentDirections.actionMainFragmentToPaceInfoFragment("myPage")
+                    )
+                }
+        )
+    }
+
     private fun observeBind() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.actions.collect {
                 when (it) {
                     is MyPageAction.MoveToPaceRegistration -> {
-                        navigate(MainFragmentDirections.moveToPaceInfoFragment("myPage"))
+                        navigate(MainFragmentDirections.actionMainFragmentToPaceInfoFragment("myPage"))
                     }
                 }
             }
@@ -253,6 +268,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun initParticipatedRunningAdapter() {
         with(binding.rcvJoinedRunningPost) {
             adapter = joinedRunningPostAdapter.apply {
+                setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object : JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
 
@@ -276,8 +292,6 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         )
                     }
                 })
-
-                setIncomingType(PostIncomingType.HOME)
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
