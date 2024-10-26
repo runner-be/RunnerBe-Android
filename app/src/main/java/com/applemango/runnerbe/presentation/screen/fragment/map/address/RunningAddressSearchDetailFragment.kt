@@ -13,12 +13,13 @@ import com.applemango.runnerbe.databinding.FragmentRunningAddressSearchDetailBin
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailFragmentArgs
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.AddressData
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class RunningAddressSearchDetailFragment :
-    BaseFragment<FragmentRunningAddressSearchDetailBinding>(R.layout.fragment_running_address_search_detail),
-    View.OnClickListener {
+    BaseFragment<FragmentRunningAddressSearchDetailBinding>(R.layout.fragment_running_address_search_detail) {
 
     private val paramAddress: RunningAddressSearchDetailFragmentArgs by navArgs()
     private val viewModel: RunningAddressSearchDetailViewModel by viewModels()
@@ -27,41 +28,40 @@ class RunningAddressSearchDetailFragment :
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            btnRegister.setOnClickListener(this@RunningAddressSearchDetailFragment)
-            backBtn.setOnClickListener(this@RunningAddressSearchDetailFragment)
-            tvAddressSubEdit.setOnClickListener(this@RunningAddressSearchDetailFragment)
             tvAddressMain.text = paramAddress.address.placeName
             tvAddressSub.text = paramAddress.address.roadAddress
-//            tieAddressDetail.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-//                if (hasFocus) {
-//                    tieAddressDetail.hint = getString(R.string.running_location_search_detail_hint_1)
-//                } else {
-//                    tieAddressDetail.hint = getString(R.string.running_location_search_detail_hint_2)
-//                }
-//            }
         }
+        initListeners()
     }
 
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.backBtn, binding.tvAddressSubEdit -> {
-                navPopStack()
-            }
-
-            binding.btnRegister -> {
-                val address = AddressData(
-                    paramAddress.address.placeName,
-                    paramAddress.address.roadAddress,
-                    binding.tieAddressDetail.text.toString(),
-                    paramAddress.address.x,
-                    paramAddress.address.y,
-                )
-                val resultIntent = Intent().apply {
-                    putExtra("address", address)
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.backBtn.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    activity?.finish()
+                },
+            binding.tvAddressSubEdit.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    navPopStack()
+                },
+            binding.btnRegister.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val address = AddressData(
+                        paramAddress.address.placeName,
+                        paramAddress.address.roadAddress,
+                        binding.tieAddressDetail.text.toString(),
+                        paramAddress.address.x,
+                        paramAddress.address.y,
+                    )
+                    val resultIntent = Intent().apply {
+                        putExtra("address", address)
+                    }
+                    activity?.setResult(RESULT_OK, resultIntent)
+                    activity?.finish()
                 }
-                activity?.setResult(RESULT_OK, resultIntent)
-                activity?.finish()
-            }
-        }
+        )
     }
 }

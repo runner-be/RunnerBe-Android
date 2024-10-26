@@ -6,3 +6,11 @@ enum class RunnerDiligence(val value : String) {
     EFFORT_RUNNER("노력러너"),
     BEGINNER_RUNNER("초보러너")
 }
+
+fun getDiligenceFromString(text: String?): RunnerDiligence =
+    when(text) {
+        "성실러너" -> RunnerDiligence.ERROR_RUNNER
+        "초보러너" -> RunnerDiligence.ERROR_RUNNER
+        "노력러너" -> RunnerDiligence.ERROR_RUNNER
+        else -> RunnerDiligence.ERROR_RUNNER
+    }

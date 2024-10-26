@@ -31,6 +31,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectD
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectPickerDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.AddressUtil
+import com.applemango.runnerbe.util.LogUtil
 import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
@@ -46,19 +47,11 @@ import java.util.concurrent.TimeUnit
 
 /**
  * @author niaka
- *
  */
 class RunningWriteOneFragment :
-    BaseFragment<FragmentRunningWriteBinding>(R.layout.fragment_running_write),
-    OnMapReadyCallback {
-
-    private val navArgs: RunningWriteOneFragmentArgs by navArgs()
-
-    private var centerMarker: Marker? = null
-    private var markerInfoView: InfoWindow = InfoWindow()
+    BaseFragment<FragmentRunningWriteBinding>(R.layout.fragment_running_write) {
 
     private val PERMISSION_REQUEST_CODE = 100
-    private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
 
     private val viewModel: RunningWriteOneViewModel by activityViewModels()
@@ -94,8 +87,8 @@ class RunningWriteOneFragment :
                 data.getParcelableExtra("address")
             }
             address?.let {
-                viewModel.updateSelectedLocation(it)
-                viewModel.updateCoordinate(it)
+                LogUtil.errorLog("Input addressData\blatitude:${it.latitude} longitude:${it.longitude}")
+                viewModel.updateAddress(it)
             }
         }
     }
@@ -113,88 +106,7 @@ class RunningWriteOneFragment :
         }
     }
 
-    override fun onMapReady(map: NaverMap) {
-        mNaverMap = map
-        createCenterMarker()
-        initMarkerInfoView()
-        mNaverMap.mapType = NaverMap.MapType.Navi
-        mNaverMap.isNightModeEnabled = true
-        mNaverMap.locationSource = locationSource
-        mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
-
-        mNaverMap.addOnCameraChangeListener { _, _ ->
-            if (centerMarker?.infoWindow != null) {
-                markerInfoView.close()
-            }
-            val center = LatLng(
-                mNaverMap.cameraPosition.target.latitude,
-                mNaverMap.cameraPosition.target.longitude
-            )
-            viewModel.coordinate = center
-            centerMarker?.position = center
-        }
-    }
-
-    private fun createCenterMarker() {
-        centerMarker = Marker()
-        centerMarker?.apply {
-            position = LatLng(
-                mNaverMap.cameraPosition.target.latitude,
-                mNaverMap.cameraPosition.target.longitude
-            )
-            map = mNaverMap
-            icon = OverlayImage.fromResource(R.drawable.ic_select_map_marker_no_profile)
-            this.setOnClickListener {
-                val marker = it as Marker
-                if (marker.infoWindow == null) {
-                    openAddressView(marker)
-                } else {
-                    markerInfoView.close()
-                }
-                true
-            }
-        }
-        mNaverMap.setOnMapClickListener { _, _ ->
-            markerInfoView.close()
-        }
-    }
-
     //이 부분은 추후 리팩토링이 들어가야 할 듯 합니다.
-    private fun initMarkerInfoView() {
-        markerInfoView.adapter = object : InfoWindow.DefaultViewAdapter(requireContext()) {
-            override fun getContentView(p0: InfoWindow): View {
-                val view: ItemMapInfoBinding =
-                    DataBindingUtil.inflate(layoutInflater, R.layout.item_map_info, null, false)
-                val address = AddressUtil.getAddressSimpleLine(
-                    context,
-                    viewModel.coordinate.latitude,
-                    viewModel.coordinate.longitude
-                )
-                val addressLine = AddressUtil.getAddressSimpleLine(
-                    context,
-                    viewModel.coordinate.latitude,
-                    viewModel.coordinate.longitude
-                ).split(" ")
-                if (addressLine.size > 1) {
-                    view.oneTextView.text =
-                        addressLine.filterIndexed { index, _ -> index != 0 && index <= addressLine.size / 2 }
-                            .joinToString(separator = " ")
-                    view.twoTextView.text =
-                        addressLine.filterIndexed { index, _ -> index > addressLine.size / 2 }
-                            .joinToString(separator = " ")
-                } else {
-                    view.oneTextView.text = address
-                }
-
-                return view.root
-            }
-        }
-    }
-
-    private fun openAddressView(marker: Marker) {
-        markerInfoView.open(marker)
-    }
-
     private fun setupListeners() {
         with(binding) {
             compositeDisposable.addAll(
@@ -250,7 +162,8 @@ class RunningWriteOneFragment :
                                         R.id.afterTab -> RunningTag.After
                                         R.id.holidayTab -> RunningTag.Holiday
                                         else -> RunningTag.Before
-                                    }
+                                    },
+                                    placeData = viewModel.runningPlaceInfo.value
                                 )
                             )
                         )

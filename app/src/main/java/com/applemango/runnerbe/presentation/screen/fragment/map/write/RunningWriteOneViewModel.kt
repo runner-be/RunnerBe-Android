@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.data.vo.PlaceData
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressResult
@@ -21,7 +22,7 @@ class RunningWriteOneViewModel : ViewModel() {
     var runningDate : Date = Calendar.getInstance().time
     val runningDisplayDate : MutableStateFlow<DateSelectData> = MutableStateFlow(DateSelectData.defaultNowDisplayDate())
     val runningDisplayTime : MutableStateFlow<TimeSelectData> = MutableStateFlow(TimeSelectData.getDefaultTimeData())
-    val runningSelectedLocation : MutableStateFlow<String> = MutableStateFlow("위치 정보 추가")
+    val runningPlaceInfo : MutableStateFlow<PlaceData> = MutableStateFlow(PlaceData.defaultPlaceData)
 
     val onNext = combine(runningTitle, runningDisplayTime) { title, time ->
         title.replace("\\s".toRegex(), "").isNotEmpty() && (time.hour.toInt() + time.minute.toInt()) > 0
@@ -33,11 +34,12 @@ class RunningWriteOneViewModel : ViewModel() {
 
     var coordinate = LatLng(0.0, 0.0)
 
-    fun updateCoordinate(location: AddressData) {
-        coordinate = LatLng(location.x.toDouble(), location.y.toDouble())
-    }
-
-    fun updateSelectedLocation(location: AddressData) {
-        runningSelectedLocation.value = location.getFullAddress()
+    fun updateAddress(location: AddressData) {
+        coordinate = LatLng(location.latitude.toDouble(), location.longitude.toDouble())
+        runningPlaceInfo.value = PlaceData(
+            location.placeName,
+            location.roadAddress,
+            location.detailAddress
+        )
     }
 }

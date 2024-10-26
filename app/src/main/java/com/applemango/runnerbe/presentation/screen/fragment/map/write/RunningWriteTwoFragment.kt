@@ -35,9 +35,6 @@ class RunningWriteTwoFragment :
 //    OnMapReadyCallback, View.OnClickListener {
     View.OnClickListener {
 
-    private lateinit var mNaverMap: NaverMap
-    private var centerMarker : Marker? = null
-
     private val viewModel: RunningWriteTwoViewModel by viewModels()
     private val args : RunningWriteTwoFragmentArgs by navArgs()
 

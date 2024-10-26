@@ -14,6 +14,22 @@ data class RunningWriteTransferData(
     val runningDate : Date,
     val runningDisplayDate : DateSelectData,
     val runningDisplayTime : TimeSelectData,
+    val runningTag : RunningTag,
     val coordinate : LatLng,
-    val runningTag : RunningTag
+    val placeData: PlaceData
 ): Parcelable
+
+@Parcelize
+data class PlaceData(
+    val placeName: String,
+    val placeAddress: String,
+    val placeExplain: String,
+) : Parcelable {
+    companion object {
+        val defaultPlaceData = PlaceData(
+            "장소 정보 없음",
+            "주소 확인 불가",
+            "상세 정보 입력"
+        )
+    }
+}

@@ -20,22 +20,25 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningAddressSearchBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.sql.Time
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RunningAddressSearchFragment :
-    BaseFragment<FragmentRunningAddressSearchBinding>(R.layout.fragment_running_address_search),
-    View.OnClickListener {
+    BaseFragment<FragmentRunningAddressSearchBinding>(R.layout.fragment_running_address_search) {
 
     @Inject
     lateinit var addressAdapter: AddressAdapter
@@ -68,22 +71,22 @@ class RunningAddressSearchFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.constLocationDetect.setOnClickListener(this)
-        binding.btnClose.setOnClickListener(this)
         initSearchEditText()
         setupAddressSearchResult()
         initAddressAdapter()
         observeLoadState()
+        initListeners()
     }
 
     private fun getUserLocation() {
         if (ActivityCompat.checkSelfPermission(
-            requireContext(),
-            permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 requireContext(),
-            permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED) {
+                permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
 
@@ -94,7 +97,7 @@ class RunningAddressSearchFragment :
                     val longitude = location.longitude
                     getAddressFromLatLng(requireContext(), latitude, longitude) { addressResult ->
                         addressResult?.let {
-                            Log.e("getAddressFromLatLng", it )
+                            Log.e("getAddressFromLatLng", it)
                             navigateToSearchDetailFragment(
                                 AddressResult(
                                     "장소 정보 없음",
@@ -198,9 +201,12 @@ class RunningAddressSearchFragment :
                         && addressAdapter.itemCount == 0
                 with(binding) {
                     if (isResultEmpty) {
-                        llSearchDesc.visibility = View.VISIBLE
+                        if (binding.tieSearch.text.isNotEmpty()) {
+                            llResultEmpty.visibility = View.VISIBLE
+                        }
                         rcvAddress.visibility = View.GONE
                     } else {
+                        llResultEmpty.visibility = View.GONE
                         llSearchDesc.visibility = View.GONE
                         rcvAddress.visibility = View.VISIBLE
                     }
@@ -211,20 +217,29 @@ class RunningAddressSearchFragment :
 
     private fun navigateToSearchDetailFragment(address: AddressResult) {
         navigate(
-            RunningAddressSearchFragmentDirections.actionRunningAddressSearchFragmentToRunningAddressSearchDetailFragment(address)
+            RunningAddressSearchFragmentDirections.actionRunningAddressSearchFragmentToRunningAddressSearchDetailFragment(
+                address
+            )
         )
     }
 
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.constLocationDetect -> {
-                locationPermissionRequest.launch(
-                    arrayOf(
-                        permission.ACCESS_FINE_LOCATION,
-                        permission.ACCESS_COARSE_LOCATION
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.btnClose.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    activity?.finish()
+                },
+            binding.constLocationDetect.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    locationPermissionRequest.launch(
+                        arrayOf(
+                            permission.ACCESS_FINE_LOCATION,
+                            permission.ACCESS_COARSE_LOCATION
+                        )
                     )
-                )
-            }
-        }
+                }
+        )
     }
 }
