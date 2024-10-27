@@ -19,6 +19,7 @@ class StampBottomSheetDialog(
     private val stampAdapter get() = _stampAdapter!!
 
     private var selectedStamp: StampItem
+    private var isPersonalLog: Boolean = true
     private var onStampConfirmListener: OnStampConfirmListener? = null
 
     private val stampLayoutManager: LinearLayoutManager by lazy {
@@ -74,7 +75,9 @@ class StampBottomSheetDialog(
 
     private fun initStampRecyclerView() {
         with(binding.rcvStamp) {
-            _stampAdapter = StampAdapter()
+            _stampAdapter = StampAdapter().apply {
+                setIsPersonalLog(isPersonalLog)
+            }
             adapter = stampAdapter.apply {
                 submitList(initStampItems())
                 setSelectedStamp(selectedStamp)
@@ -94,11 +97,13 @@ class StampBottomSheetDialog(
         fun createAndShow(
             fragmentManager: FragmentManager,
             selectedStamp: StampItem,
+            isPersonalLog: Boolean,
             onStampConfirmListener: OnStampConfirmListener
         ) {
             val bottomSheetDialog = StampBottomSheetDialog(selectedStamp)
             with(bottomSheetDialog) {
                 this.onStampConfirmListener = onStampConfirmListener
+                this.isPersonalLog = isPersonalLog
                 show(fragmentManager, tag)
             }
         }
