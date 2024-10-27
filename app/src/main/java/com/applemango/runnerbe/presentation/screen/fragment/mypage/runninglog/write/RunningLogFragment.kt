@@ -24,6 +24,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCo
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.manager.SinglePhotoManager
 import com.applemango.runnerbe.util.parseLocalDateToKorean
 import com.bumptech.glide.Glide
@@ -120,6 +121,11 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
     private fun initListeners() {
         with(binding) {
             compositeDisposable.addAll(
+                binding.flWeather.clicks()
+                    .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                    .subscribe {
+                        binding.constWeather.performClick()
+                    },
                 btnBack.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
@@ -129,7 +135,6 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
                         val prevStampData = viewModel.logStamp.value
-
                         val prevStamp = if (prevStampData == StampItem.unavailableStampItem) {
                             StampItem(
                                 "RUN001",
@@ -144,7 +149,8 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
 
                         StampBottomSheetDialog.createAndShow(
                             childFragmentManager,
-                            prevStamp
+                            prevStamp,
+                            viewModel.gatheringId.value == null
                         ) { stamp ->
                             viewModel.updateStamp(stamp)
                         }
@@ -181,28 +187,34 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                         photoManager.showCameraDialog()
                     },
                 etDiary.textChanges()
-                    .subscribe {
-                        viewModel.updateLogDiary(it.toString())
+                    .subscribe { diary ->
+                        context?.let {
+                            if (diary.length >= 500) {
+                                ToastUtil.showShortToast(it, getString(R.string.running_log_diary_max_length_alert))
+                                return@subscribe
+                            }
+                        }
+
+                        viewModel.updateLogDiary(diary.toString())
                         tvRunningDiaryCharCount.text =
-                            getString(R.string.running_log_diary_length, it.length)
+                            getString(R.string.running_log_diary_length, diary.length)
                     },
                 constTeam.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        navigate(
-                            RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
-                                653
-                            )
-                        )
-//                        if (viewModel.logType.value != RunningLogType.ALONE) {
-//                            viewModel.gatheringId.value?.let {
-//                                navigate(
-//                                    RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
-//                                        it
-//                                    )
-//                                )
-//                            }
-//                        }
+                        if (viewModel.logType.value == RunningLogType.ALONE) {
+                            context?.let {
+                                ToastUtil.showShortToast(it, "같이 뛰면 사용할 수 있어요!")
+                            }
+                        } else {
+                            viewModel.gatheringId.value?.let {
+                                navigate(
+                                    RunningLogFragmentDirections.actionRunningLogFragmentToGroupProfilesFragment(
+                                        it
+                                    )
+                                )
+                            }
+                        }
                     },
                 switchVisibility.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)

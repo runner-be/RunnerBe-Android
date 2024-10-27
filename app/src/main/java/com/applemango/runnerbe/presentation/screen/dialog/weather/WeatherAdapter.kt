@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ItemStampBinding
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampAdapter.*
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherAdapter.*
 import com.bumptech.glide.Glide
 

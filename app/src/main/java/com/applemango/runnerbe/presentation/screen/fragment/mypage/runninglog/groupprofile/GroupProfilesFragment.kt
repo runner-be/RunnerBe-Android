@@ -100,7 +100,8 @@ class GroupProfilesFragment :
                                 context.getString(R.string.stamp_1_name),
                                 context.getString(R.string.stamp_1_description),
                                 true
-                            )
+                            ),
+                            false
                         ) { stampItem ->
                             val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             profileAdapter.updateProfileStampByPosition(position, stampItem.code)

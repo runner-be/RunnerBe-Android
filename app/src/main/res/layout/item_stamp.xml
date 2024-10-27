@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+        <variable
+            name="item"
+            type="com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem" />
+    </data>
+
     <FrameLayout
         android:id="@+id/fl_stamp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:padding="16dp"
-        android:clickable="true">
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/iv_stamp"

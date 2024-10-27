@@ -84,6 +84,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_pace_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
@@ -103,6 +104,33 @@
                     bind:paceCheckSelectListener="@{vm.paceInfoCheckSelectListener}"
                     android:layout_marginHorizontal="16dp"
                     app:layout_constraintTop_toBottomOf="@id/paceTextView"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_tooltip_pace_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintWidth_percent="0.6"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_dark_5_5g_solid_radius_14"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:padding="12dp"
+                    android:visibility="gone"
+                    android:text="@string/pace_regist_description"
+                    android:textColor="@color/logo_yellow"
+                    android:textSize="12sp"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_pace_info"
+                    app:layout_constraintStart_toStartOf="@id/iv_tooltip_direction"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_tooltip_direction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_bottom_triangle"
+                    android:rotation="180"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="@id/iv_pace_info"
+                    app:layout_constraintEnd_toEndOf="@id/iv_pace_info"
+                    app:layout_constraintBottom_toTopOf="@id/tv_tooltip_pace_info" />
 
                 <View
                     android:id="@+id/paceIndicator"

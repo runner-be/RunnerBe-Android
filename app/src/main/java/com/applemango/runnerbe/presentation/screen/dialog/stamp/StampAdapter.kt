@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ItemStampBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampAdapter.*
+import com.applemango.runnerbe.util.ToastUtil
 import com.bumptech.glide.Glide
 
 class StampAdapter : ListAdapter<StampItem, StampViewHolder>(stampDiffUtil) {
     private lateinit var onStampClickListener: OnStampClickListener
+    private var isPersonalLog: Boolean = false
     var selectedPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StampViewHolder {
@@ -24,7 +26,7 @@ class StampAdapter : ListAdapter<StampItem, StampViewHolder>(stampDiffUtil) {
     override fun onBindViewHolder(holder: StampViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(item, onStampClickListener)
+            holder.bind(item, onStampClickListener, isPersonalLog)
         }
     }
 
@@ -47,11 +49,33 @@ class StampAdapter : ListAdapter<StampItem, StampViewHolder>(stampDiffUtil) {
         this.onStampClickListener = listener
     }
 
+    fun setIsPersonalLog(isPersonalLog: Boolean) {
+        this.isPersonalLog = isPersonalLog
+    }
+
     inner class StampViewHolder (
         private val binding: ItemStampBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: StampItem, onStampClickListener: OnStampClickListener) {
+        fun bind(item: StampItem, onStampClickListener: OnStampClickListener, isPersonalLog: Boolean) {
+            if (isPersonalLog) {
+                if (item.code == "RUN001") {
+                    binding.flStamp.setOnClickListener {
+                        updateSelectedPosition(bindingAdapterPosition)
+                        onStampClickListener.onStampSelected(item)
+                    }
+                } else {
+                    binding.flStamp.setOnClickListener {
+                        ToastUtil.showShortToast(itemView.context, "같이 뛰면 사용할 수 있어요!")
+                    }
+                }
+            } else {
+                binding.flStamp.setOnClickListener {
+                    updateSelectedPosition(bindingAdapterPosition)
+                    onStampClickListener.onStampSelected(item)
+                }
+            }
+
             Glide.with(binding.root.context)
                 .load(item.image)
                 .into(binding.ivStamp)
@@ -60,10 +84,6 @@ class StampAdapter : ListAdapter<StampItem, StampViewHolder>(stampDiffUtil) {
                 binding.flStamp.setBackgroundResource(R.drawable.bg_g5_circle_shape_primary_stroke)
             } else {
                 binding.flStamp.setBackgroundResource(R.drawable.bg_g5_circle_shape_no_stroke)
-            }
-            binding.flStamp.setOnClickListener {
-                updateSelectedPosition(bindingAdapterPosition)
-                onStampClickListener.onStampSelected(item)
             }
         }
     }

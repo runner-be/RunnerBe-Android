@@ -1,7 +1,12 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.filter
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResult
@@ -12,9 +17,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningFilterBinding
+import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.google.android.material.slider.RangeSlider
+import com.jakewharton.rxbinding4.view.clicks
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class RunningFilterFragment :
     BaseFragment<FragmentRunningFilterBinding>(R.layout.fragment_running_filter) {
@@ -28,6 +36,7 @@ class RunningFilterFragment :
         initSetting()
         filterSetting()
         sliderSetting()
+        initListeners()
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.recruitmentStartAge.collect {
@@ -60,6 +69,46 @@ class RunningFilterFragment :
                 }
             }
         }
+    }
+
+    private fun getIsTooltipVisible(): Boolean = binding.tvTooltipPaceInfo.visibility == View.VISIBLE
+
+    private fun controlPaceTooltip(isTooltipVisible: Boolean) {
+        if (isTooltipVisible) {
+            hidePaceTooltip()
+        } else {
+            showPaceTooltipWithTimeout()
+        }
+    }
+
+    private fun showPaceTooltipWithTimeout() {
+        with(binding) {
+            tvTooltipPaceInfo.visibility = View.VISIBLE
+            ivTooltipDirection.visibility = View.VISIBLE
+
+            tvTooltipPaceInfo.postDelayed({
+                tvTooltipPaceInfo.visibility = View.GONE
+                ivTooltipDirection.visibility = View.GONE
+            }, 2500L)
+        }
+    }
+
+    private fun hidePaceTooltip() {
+        with(binding) {
+            tvTooltipPaceInfo.visibility = View.GONE
+            ivTooltipDirection.visibility = View.GONE
+        }
+    }
+
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.ivPaceInfo.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val isTooltipVisible = getIsTooltipVisible()
+                    controlPaceTooltip(isTooltipVisible)
+                },
+        )
     }
 
     private fun initSetting() {

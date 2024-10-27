@@ -30,7 +30,7 @@ class RunningLogViewModel @Inject constructor(
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase
 ) : ViewModel() {
     private val logId = MutableStateFlow<Int?>(null)
-    private val gatheringId = MutableStateFlow<Int?>(653)
+    val gatheringId = MutableStateFlow<Int?>(null)
     val logDate = MutableStateFlow("")
     val logType = MutableStateFlow(RunningLogType.ALONE)
     val logDiary = MutableStateFlow("")
