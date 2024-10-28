@@ -22,6 +22,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheet
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
+import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.ToastUtil
@@ -234,6 +235,20 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             return@subscribe
                         }
 
+                        if (viewModel.logStamp.value == StampItem.unavailableStampItem) {
+                            context?.let {
+                                ToastUtil.showShortToast(it, getString(R.string.toast_stamp_missing))
+                            }
+                            return@subscribe
+                        }
+
+                        if (viewModel.logWeather.value == WeatherItem.defaultWeatherItem) {
+                            context?.let {
+                                ToastUtil.showShortToast(it, getString(R.string.toast_weather_missing))
+                            }
+                            return@subscribe
+                        }
+
                         val userId = RunnerBeApplication.mTokenPreference.getUserId()
                         viewLifecycleOwner.lifecycleScope.launch {
                             val result = viewModel.postRunningLog(userId)
@@ -241,7 +256,9 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             if (result.first) {
                                 findNavController().popBackStack()
                             } else {
-                                Toast.makeText(context, result.second, Toast.LENGTH_SHORT).show()
+                                context?.let {
+                                    ToastUtil.showShortToast(it, result.second ?: "Error")
+                                }
                             }
                         }
                     },
