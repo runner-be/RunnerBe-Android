@@ -416,7 +416,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
-                        tools:text="@{vm.getJoinRunnerCount(vm.runnerInfo.size(), vm.post.peopleNum)}"
                         android:textColor="@color/dark_g3_5"
                         android:textSize="16sp"/>
 
@@ -428,7 +427,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:layout_marginTop="20dp"
-                    runnerInfoAdapter="@{vm.runnerInfo}"
                     android:overScrollMode="never"
                     app:layout_constraintTop_toBottomOf="@id/joinCountLayout"
                     app:layout_constraintLeft_toLeftOf="parent"

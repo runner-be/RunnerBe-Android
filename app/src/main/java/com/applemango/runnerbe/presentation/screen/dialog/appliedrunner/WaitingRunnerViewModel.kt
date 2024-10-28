@@ -12,6 +12,8 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,25 +24,21 @@ class WaitingRunnerViewModel @Inject constructor(
 ) : ViewModel() {
     var post: Posting? = null
     var roomId : Int? = null
-    val waitingInfo: ObservableArrayList<UserInfo> = ObservableArrayList()
+    private val _waitingInfoList: MutableStateFlow<List<UserInfo>> = MutableStateFlow(emptyList())
+    val waitingInfoList: StateFlow<List<UserInfo>> get() = _waitingInfoList.asStateFlow()
 
     private val _acceptUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
     val acceptUiState get() = _acceptUiState
-    val acceptListener = object : PostAcceptListener {
-        override fun onAcceptClick(userInfo: UserInfo) {
-            acceptClick(userInfo, "Y")
-        }
-
-        override fun onRefuseClick(userInfo: UserInfo) {
-            acceptClick(userInfo, "D")
-        }
-    }
 
     fun acceptClick(userInfo: UserInfo, whetherAccept: String) {
         val postId = post?.postId
         if (postId != null) {
             postWhetherAccept(postId, userInfo, whetherAccept)
         } else _acceptUiState.value = UiState.AnonymousFailed()
+    }
+
+    fun updateWaitingInfoList(list: List<UserInfo>) {
+        _waitingInfoList.value = list
     }
 
     fun postClose() = viewModelScope.launch {
@@ -70,7 +68,9 @@ class WaitingRunnerViewModel @Inject constructor(
                 _acceptUiState.emit(
                     when (it) {
                         is CommonResponse.Success<*> -> {
-                            waitingInfo.remove(userInfo)
+                            val itemRemovedList = waitingInfoList.value.toMutableList()
+                            itemRemovedList.remove(userInfo)
+                            _waitingInfoList.value = itemRemovedList
                             UiState.Success(it.code)
                         }
                         is CommonResponse.Failed -> {

@@ -9,7 +9,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
@@ -33,8 +35,10 @@ import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostDetailFragment :
@@ -49,12 +53,17 @@ class PostDetailFragment :
 
     private lateinit var mNaverMap: NaverMap
 
+    @Inject
+    lateinit var runnerInfoAdapter: RunnerInfoAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         viewModel.post.value = args.posting
         observeBind()
         initListeners()
+        initJoinedRunnerRecyclerView()
+        setupJoinedRunnerList()
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
     }
@@ -92,7 +101,36 @@ class PostDetailFragment :
         }
     }
 
-    fun initListeners() {
+    private fun setupJoinedRunnerList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.runnerInfoList.collectLatest {
+                    runnerInfoAdapter.submitList(it)
+                }
+            }
+        }
+    }
+
+    private fun initJoinedRunnerRecyclerView() {
+        binding.joinRunnerRecyclerView.apply {
+            adapter = runnerInfoAdapter.apply {
+                setRunnerInfoClickListener { userInfo ->
+                    val userId = userInfo.userId
+//                    val myUserId = RunnerBeApplication.mTokenPreference.getUserId()
+//
+//                    if (userId == myUserId) return@setRunnerInfoClickListener
+
+                    navigate(
+                        PostDetailFragmentDirections.actionPostDetailFragmentToOtherUserProfileFragment(
+                            userId
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private fun initListeners() {
         compositeDisposable.addAll(
             binding.tvTextCopy.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)

@@ -6,7 +6,8 @@ import com.applemango.runnerbe.databinding.ItemRunnerInfoBinding
 
 class RunnerInfoViewHolder(val binding: ItemRunnerInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: UserInfo) {
+    fun bind(item: UserInfo, runnerInfoClickListener: RunnerInfoClickListener) {
         binding.userInfo = item
+        binding.listener = runnerInfoClickListener
     }
 }

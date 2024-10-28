@@ -8,7 +8,12 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.domain.usecase.post.*
+import com.applemango.runnerbe.domain.usecase.post.DropPostUseCase
+import com.applemango.runnerbe.domain.usecase.post.GetPostDetailUseCase
+import com.applemango.runnerbe.domain.usecase.post.PostApplyUseCase
+import com.applemango.runnerbe.domain.usecase.post.PostClosingUseCase
+import com.applemango.runnerbe.domain.usecase.post.PostDetailManufacture
+import com.applemango.runnerbe.domain.usecase.post.PostReportUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
@@ -33,7 +38,7 @@ class PostDetailViewModel @Inject constructor(
     val post: MutableLiveData<Posting> = MutableLiveData()
     var roomId: Int? = null
     val waitingInfo: ObservableArrayList<UserInfo> = ObservableArrayList()
-    val runnerInfo: ObservableArrayList<UserInfo> = ObservableArrayList()
+    val runnerInfoList: MutableStateFlow<List<UserInfo>> = MutableStateFlow(emptyList())
     private val _processUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
     val processUiState get() = _processUiState
 
@@ -57,8 +62,7 @@ class PostDetailViewModel @Inject constructor(
             if (it is CommonResponse.Success<*> && it.body is PostDetailManufacture) {
                 isApplyComplete = it.body.code == 1015
                 post.value = it.body.post
-                runnerInfo.clear()
-                it.body.runnerInfo?.let { runnerList -> runnerInfo.addAll(runnerList) }
+                it.body.runnerInfo?.let { runnerList -> runnerInfoList.value = runnerList }
                 waitingInfo.clear()
                 it.body.waitingInfo?.let { waitingList -> waitingInfo.addAll(waitingList) }
                 roomId = it.body.roomId
@@ -102,13 +106,14 @@ class PostDetailViewModel @Inject constructor(
     fun bottomBtnClicked() {
         val resources = RunnerBeApplication.instance.resources
         viewModelScope.launch {
-            _actions.emit(PostDetailAction.ShowTwoBtnDialog(
-                titleText = resources.getString(if (isMyPost()) R.string.question_post_close else R.string.question_post_apply),
-                firstBtnText = resources.getString(R.string.no),
-                secondBtnText = resources.getString(R.string.yes),
-                firstEvent = {},
-                secondEvent = { bottomProcess() }
-            )
+            _actions.emit(
+                PostDetailAction.ShowTwoBtnDialog(
+                    titleText = resources.getString(if (isMyPost()) R.string.question_post_close else R.string.question_post_apply),
+                    firstBtnText = resources.getString(R.string.no),
+                    secondBtnText = resources.getString(R.string.yes),
+                    firstEvent = {},
+                    secondEvent = { bottomProcess() }
+                )
             )
         }
     }
@@ -139,6 +144,7 @@ class PostDetailViewModel @Inject constructor(
             ))
         }
     }
+
     fun moveToMessageClicked() {
         viewModelScope.launch {
             val id = roomId ?: return@launch
@@ -213,7 +219,7 @@ class PostDetailViewModel @Inject constructor(
     }
 
     fun isParticipatePostIn(posting: Posting): Boolean =
-        runnerInfo.any { it.userId == RunnerBeApplication.mTokenPreference.getUserId() }
+        runnerInfoList.value.any { it.userId == RunnerBeApplication.mTokenPreference.getUserId() }
 
     private fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
     fun isMyPost(): Boolean =
@@ -244,6 +250,7 @@ sealed class PostDetailAction() {
         val firstEvent: () -> Unit,
         val secondEvent: () -> Unit,
     ) : PostDetailAction()
+
     data class ShowSelectListDialog(
         val list: List<SelectItemParameter>
     ) : PostDetailAction()

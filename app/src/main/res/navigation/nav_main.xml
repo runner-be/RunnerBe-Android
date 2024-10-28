@@ -222,6 +222,13 @@
         <action
             android:id="@+id/action_postDetailFragment_to_runningTalkDetailFragment"
             app:destination="@id/runningTalkDetailFragment" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/paceInfoRegistFragment"
@@ -287,7 +294,7 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_groupProfilesFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
@@ -345,9 +352,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/userProfileFragment"
+        android:id="@+id/otherUserProfileFragment"
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragment"
-        android:label="UserProfileFragment">
+        android:label="OtherUserProfileFragment">
 
         <argument
             android:name="targetUserId"
@@ -410,5 +417,17 @@
         <action
             android:id="@+id/action_joinedRunningFragment_to_runningLogFragment"
             app:destination="@id/runningLogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/waitingRunnerListDialog"
+        android:name="com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerListDialog"
+        android:label="WaitingRunnerListDialog" >
+        <action
+            android:id="@+id/action_waitingRunnerListDialog_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 </navigation>

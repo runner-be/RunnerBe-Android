@@ -94,10 +94,12 @@
                     app:layout_constraintStart_toEndOf="@id/iv_profile"
                     tools:text="닉네임" />
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_profile"
                     android:layout_width="88dp"
                     android:layout_height="88dp"
+                    android:scaleType="fitXY"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

@@ -3,7 +3,9 @@ package com.applemango.runnerbe.di
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
@@ -76,4 +78,17 @@ class AdapterModule {
     fun providePostAdapter(): PostAdapter {
         return PostAdapter()
     }
+
+    @Provides
+    @FragmentScoped
+    fun provideWaitingRunnerInfoAdapter() : WaitingRunnerInfoAdapter {
+        return WaitingRunnerInfoAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideRunnerInfoAdapter() : RunnerInfoAdapter {
+        return RunnerInfoAdapter()
+    }
+
 }
