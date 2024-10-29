@@ -3,15 +3,12 @@ package com.applemango.runnerbe.presentation.screen.fragment.map.address
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningAddressSearchDetailBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailFragmentArgs
 import com.applemango.runnerbe.presentation.screen.fragment.map.write.AddressData
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,8 +50,8 @@ class RunningAddressSearchDetailFragment :
                         paramAddress.address.placeName,
                         paramAddress.address.roadAddress,
                         binding.tieAddressDetail.text.toString(),
-                        paramAddress.address.x,
-                        paramAddress.address.y,
+                        paramAddress.address.latitude,
+                        paramAddress.address.longitude,
                     )
                     val resultIntent = Intent().apply {
                         putExtra("address", address)

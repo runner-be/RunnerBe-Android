@@ -8,12 +8,16 @@
         <variable
             name="userInfo"
             type="com.applemango.runnerbe.data.dto.UserInfo" />
+        <variable
+            name="listener"
+            type="com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoClickListener" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/userLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dark_g7"
+        android:onClick="@{() -> listener.onRunnerInfoClicked(userInfo)}"
         android:paddingVertical="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
