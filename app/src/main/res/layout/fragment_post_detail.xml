@@ -480,11 +480,11 @@
                 android:src="@drawable/selector_message_circle"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_apply"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:onClick="@{() -> vm.bottomBtnClicked()}"
                 isEnabled="@{vm.isBottomButtonEnabled(vm.post.whetherEnd)}"
                 android:background="@drawable/selector_main_primary_button"
                 android:paddingTop="8dp"
