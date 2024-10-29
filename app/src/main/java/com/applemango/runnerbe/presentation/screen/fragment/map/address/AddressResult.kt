@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class AddressResult (
     val placeName: String,
     val roadAddress: String,
-    val x: String,
-    val y: String,
+    val latitude: String,
+    val longitude: String,
     val pageNumber: Int,
 ): Parcelable
