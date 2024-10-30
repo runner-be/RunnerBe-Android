@@ -15,8 +15,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.FragmentPostDetailBinding
 import com.applemango.runnerbe.databinding.ItemMapInfoBinding
+import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.listener.PostDialogListener
 import com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerListDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
@@ -142,6 +144,27 @@ class PostDetailFragment :
                             val copiedAddress = ClipData.newPlainText("address", address)
                             clipboardManager.setPrimaryClip(copiedAddress)
                             ToastUtil.showShortToast(it, getString(R.string.text_copy_success))
+                        }
+                    }
+                },
+            binding.tvApply.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    checkAdditionalUserInfo {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                            val userPace = viewModel.getUserPace(userId)
+
+                            if (userPace != null) {
+                                viewModel.acceptUserApply()
+                            } else {
+                                navigate(
+                                    PostDetailFragmentDirections
+                                        .actionPostDetailFragmentToPaceInfoRegistFragment(
+                                            "map"
+                                        )
+                                )
+                            }
                         }
                     }
                 }

@@ -8,6 +8,9 @@
     <string name="error_failed">잠시 후에 다시 시도해주세요.</string>
     <!-- -->
 
+    <!-- Dialog -->
+    <string name="dialog_pace_exit">페이스 등록을 취소하시겠어요?</string>
+
     <!-- Toast -->
     <string name="toast_back_press_twice">한번 더 뒤로가기 버튼을 누르면 종료됩니다</string>
     <string name="toast_weather_degree">기온을 입력해주세요</string>
@@ -198,6 +201,7 @@
     <string name="do_profile_edit">프로필 수정하기</string>
     <string name="pace_registration_description">페이스를 등록하세요!</string>
     <string name="pace_edit">페이스 수정하기</string>
+    <string name="joined_running_empty">참여한 러닝이 없어요</string>
 
     <!-- 내정보 수정  -->
     <string name="msg_impossible_nickname_change">* 닉네임 변경이 완료되어 추가 변경은 불가능해요!</string>

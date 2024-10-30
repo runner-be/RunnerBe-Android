@@ -46,27 +46,30 @@ class PaceInfoViewModel @Inject constructor(val patchUserPaceUseCase: PatchUserP
     fun backClicked() = viewModelScope.launch {
        _action.emit(PaceInfoRegistAction.MoveToBack)
     }
-    fun confirmClicked() = viewModelScope.launch {
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        val selectedPace = paceInfoList.value.firstOrNull { it.isSelected } ?: return@launch
-        patchUserPaceUseCase(userId, selectedPace.pace).collect {
-            if(it is CommonResponse.Success<*>) {
-                RunnerBeApplication.mTokenPreference.setMyRunningPace(selectedPace.pace.key)
-                _action.emit(PaceInfoRegistAction.ShowCompleteDialog(selectedPace.pace, R.string.pace_complete_title, R.string.pace_complete_description))
-            }
-            _paceInfoUiState.postValue(
-                when(it) {
-                    is CommonResponse.Failed -> {
-                        if (it.code <= 999) UiState.NetworkError
-                        else UiState.Failed(it.message)
-                    }
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
+    fun patchUserPace() {
+        viewModelScope.launch {
+            val userId = RunnerBeApplication.mTokenPreference.getUserId()
+            val selectedPace = paceInfoList.value.firstOrNull { it.isSelected } ?: return@launch
+            patchUserPaceUseCase(userId, selectedPace.pace).collect {
+                if(it is CommonResponse.Success<*>) {
+                    RunnerBeApplication.mTokenPreference.setMyRunningPace(selectedPace.pace.key)
+                    _action.emit(PaceInfoRegistAction.ShowCompleteDialog(selectedPace.pace, R.string.pace_complete_title, R.string.pace_complete_description))
                 }
-            )
+                _paceInfoUiState.postValue(
+                    when(it) {
+                        is CommonResponse.Failed -> {
+                            if (it.code <= 999) UiState.NetworkError
+                            else UiState.Failed(it.message)
+                        }
+                        is CommonResponse.Loading -> UiState.Loading
+                        else -> UiState.Empty
+                    }
+                )
+            }
         }
     }
-}
+
+    }
 
 sealed class PaceInfoRegistAction {
     object MoveToBack : PaceInfoRegistAction()

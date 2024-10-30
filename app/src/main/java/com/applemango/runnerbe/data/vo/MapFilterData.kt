@@ -8,6 +8,7 @@ import kotlinx.parcelize.Parcelize
 data class MapFilterData(
     val paceTags: List<Pace>,
     val genderTag: String,
+    val afterPartyTag: String,
     val jobTag: String,
     val minAge: Int,
     val maxAge: Int

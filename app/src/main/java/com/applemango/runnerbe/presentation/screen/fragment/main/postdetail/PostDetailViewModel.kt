@@ -8,6 +8,12 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.data.network.api.GetUserDataApi
+import com.applemango.runnerbe.data.network.response.GetMyPageResult
+import com.applemango.runnerbe.data.network.response.GetOtherUserResponse
+import com.applemango.runnerbe.data.network.response.UserDataResponse
+import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
 import com.applemango.runnerbe.domain.usecase.post.DropPostUseCase
 import com.applemango.runnerbe.domain.usecase.post.GetPostDetailUseCase
 import com.applemango.runnerbe.domain.usecase.post.PostApplyUseCase
@@ -22,6 +28,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +39,8 @@ class PostDetailViewModel @Inject constructor(
     private val postClosingUseCase: PostClosingUseCase,
     private val postApplyUseCase: PostApplyUseCase,
     private val dropPostUseCase: DropPostUseCase,
-    private val postReportUseCase: PostReportUseCase
+    private val postReportUseCase: PostReportUseCase,
+    private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
 
     private var isApplyComplete: Boolean = false //내가 신청한 모임이면 true
@@ -91,6 +100,27 @@ class PostDetailViewModel @Inject constructor(
         } else _processUiState.emit(UiState.AnonymousFailed())
     }
 
+    suspend fun getUserPace(userId: Int): Pace? {
+        return getUserDataUseCase(userId)
+            .map { response ->
+                when(response) {
+                    is CommonResponse.Success<*> -> {
+                        val userData = response.body as? UserDataResponse
+                        if (userData == null) {
+                            // 약관 동의 화면 켜기
+                        }
+
+                        val userPaceName = userData?.result?.userInfo?.pace
+                        Pace.getPaceByName(userPaceName)
+                    }
+
+                    else -> {
+                        null
+                    }
+                }
+            }.firstOrNull()
+    }
+
     fun backClicked() {
         viewModelScope.launch {
             _actions.emit(PostDetailAction.MoveToBack)
@@ -103,7 +133,7 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun bottomBtnClicked() {
+    fun acceptUserApply() {
         val resources = RunnerBeApplication.instance.resources
         viewModelScope.launch {
             _actions.emit(

@@ -2,6 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,13 +12,16 @@ import com.applemango.runnerbe.databinding.FragmentRegistPaceInfoBinding
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
+import com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialog
 import com.applemango.runnerbe.presentation.screen.dialog.pace.OneButtonClickListener
 import com.applemango.runnerbe.presentation.screen.dialog.pace.OneButtonImageTextData
 import com.applemango.runnerbe.presentation.screen.dialog.pace.OneButtonImageTextDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class PaceInfoRegistFragment :
@@ -55,6 +59,43 @@ class PaceInfoRegistFragment :
                 }
             }
         }
+        initBackPressDispatcher()
+        initListener()
+    }
+
+    private fun initBackPressDispatcher() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showMessageDialog()
+                }
+            })
+    }
+
+    private fun showMessageDialog() {
+        YesNoButtonDialog.createShow(
+            requireContext(),
+            getString(R.string.dialog_pace_exit),
+            getString(R.string.yes),
+            getString(R.string.no),
+            positiveEvent = fun() {
+                goBack()
+            },
+            negativeEvent = fun() {
+
+            }
+        )
+    }
+
+    private fun initListener() {
+        compositeDisposable.addAll(
+            binding.ivClose.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    showMessageDialog()
+                }
+        )
     }
 
     private fun createCompleteDialog(pace: Pace, title : String, description: String) {

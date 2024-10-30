@@ -150,6 +150,9 @@
             android:name="gender"
             app:argType="string"/>
         <argument
+            android:name="afterParty"
+            app:argType="string"/>
+        <argument
             android:name="job"
             app:argType="string" />
         <argument
@@ -229,6 +232,9 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_paceInfoRegistFragment"
+            app:destination="@id/paceInfoRegistFragment" />
     </fragment>
     <fragment
         android:id="@+id/paceInfoRegistFragment"

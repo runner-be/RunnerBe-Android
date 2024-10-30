@@ -10,6 +10,7 @@ import com.applemango.runnerbe.data.network.response.GetRunningListResponse
 import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.domain.usecase.post.GetRunningListUseCase
+import com.applemango.runnerbe.presentation.model.AfterPartyTag
 import com.applemango.runnerbe.presentation.model.PriorityFilterTag
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
@@ -17,18 +18,13 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,6 +48,10 @@ class RunnerMapViewModel @Inject constructor(
     private var refreshCount = 0
     val filterRunningTag: MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
     private var preFilterRunningTag: RunningTag? = filterRunningTag.value
+
+    private val filterAfterPartyTag: MutableStateFlow<AfterPartyTag> = MutableStateFlow(AfterPartyTag.ALL)
+    private var preFilterAfterPartyTag: AfterPartyTag? = filterAfterPartyTag.value
+
     val filterPriorityTag: MutableStateFlow<PriorityFilterTag> =
         MutableStateFlow(PriorityFilterTag.BY_DISTANCE)
     private var prePriorityTag = filterPriorityTag.value
@@ -66,19 +66,25 @@ class RunnerMapViewModel @Inject constructor(
                     Pace.AVERAGE,
                     Pace.HIGH,
                     Pace.MASTER
-                ), "A", "N", 0, 100
+                ), "A", "A", "N", 0, 100
             )
         )
     private var preFilterData = filterData.value
     private val isRefresh: StateFlow<Int> = combine(
         filterRunningTag.filterNotNull(),
+        filterAfterPartyTag.filterNotNull(),
         filterPriorityTag,
         includeFinish,
         filterData
-    ) { currentRunningTag: RunningTag, currentPriorityTag: PriorityFilterTag, currentIncludeFinish: Boolean, currentMapFilterData: MapFilterData ->
+    ) { currentRunningTag: RunningTag, currentAfterPartyTag: AfterPartyTag, currentPriorityTag: PriorityFilterTag, currentIncludeFinish: Boolean, currentMapFilterData: MapFilterData ->
         val result =
-            preFilterRunningTag != currentRunningTag || prePriorityTag != currentPriorityTag || preIncludeFinish != currentIncludeFinish || preFilterData != currentMapFilterData
+            preFilterRunningTag != currentRunningTag
+                    || preFilterAfterPartyTag != currentAfterPartyTag
+                    || prePriorityTag != currentPriorityTag
+                    || preIncludeFinish != currentIncludeFinish
+                    || preFilterData != currentMapFilterData
         preFilterRunningTag = currentRunningTag
+        preFilterAfterPartyTag = currentAfterPartyTag
         prePriorityTag = currentPriorityTag
         preIncludeFinish = currentIncludeFinish
         preFilterData = currentMapFilterData
@@ -110,7 +116,7 @@ class RunnerMapViewModel @Inject constructor(
             minAge = if (filterData.value.minAge == 0) "N" else filterData.value.minAge.toString(),
             maxAge = if (filterData.value.maxAge > 65) "N" else filterData.value.maxAge.toString(),
             priorityFilter = filterPriorityTag.value.tag,
-            afterPartyFilter = "A", // TODO 필터 추가
+            afterPartyFilter = filterData.value.afterPartyTag,
             userId = userId,
             whetherEnd = if (includeFinish.value) "Y" else "N",
             pageSize = pageSize,
@@ -196,6 +202,7 @@ class RunnerMapViewModel @Inject constructor(
     fun setFilter(
         paces: List<Pace>,
         gender: String?,
+        afterParty: String?,
         jobTag: String?,
         minAge: Int? = 0,
         maxAge: Int?
@@ -203,6 +210,7 @@ class RunnerMapViewModel @Inject constructor(
         filterData.value = MapFilterData(
             paces,
             gender ?: "A",
+            afterParty ?: "all",
             jobTag ?: "N",
             minAge ?: 0,
             maxAge ?: 100

@@ -56,6 +56,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             viewModel.setFilter(
                 paces = paces,
                 gender = bundle.getString("gender"),
+                afterParty = bundle.getString("afterParty"),
                 jobTag = bundle.getString("job"),
                 minAge = bundle.getInt("minAge"),
                 maxAge = bundle.getInt("maxAge")
