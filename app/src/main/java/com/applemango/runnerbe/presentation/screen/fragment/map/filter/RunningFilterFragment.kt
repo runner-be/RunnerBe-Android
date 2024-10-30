@@ -114,6 +114,7 @@ class RunningFilterFragment :
     private fun initSetting() {
         viewModel.setPaceTags(args.paces.toList())
         viewModel.setGenderTag(args.gender)
+        viewModel.setAfterPartyTag(args.afterParty)
         viewModel.setJobTag(args.job)
         viewModel.isAllAgeChecked.value = isAllCheckAge(args.minAge, args.maxAge)
         if(!isAllCheckAge(args.minAge, args.maxAge)) {

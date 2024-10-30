@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.presentation.model.AfterPartyTag
 import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.JobButtonId
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
@@ -25,6 +26,7 @@ class RunningFilterViewModel : ViewModel() {
 
     val paceCheckedList: MutableStateFlow<List<Pace>> = MutableStateFlow(emptyList())
     val genderRadioChecked: MutableStateFlow<Int> = MutableStateFlow(R.id.allTab)
+    val afterPartyRadioChecked: MutableStateFlow<Int> = MutableStateFlow(R.id.rb_all_after_party)
     val jobRadioChecked: MutableStateFlow<Int> = MutableStateFlow(-1)
     val isAllAgeChecked: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val recruitmentStartAge: MutableStateFlow<Int> = MutableStateFlow(20)
@@ -45,6 +47,7 @@ class RunningFilterViewModel : ViewModel() {
     fun refresh() {
         paceCheckedList.value = listOf(Pace.ALL)
         genderRadioChecked.value = R.id.allTab
+        afterPartyRadioChecked.value = R.id.rb_all_after_party
         isAllAgeChecked.value = true
         recruitmentStartAge.value = 20
         recruitmentEndAge.value = 40
@@ -139,6 +142,20 @@ class RunningFilterViewModel : ViewModel() {
         }
     }
 
+    private fun getAfterPartyTag(): String = when (afterPartyRadioChecked.value) {
+        R.id.rb_no_after_party -> AfterPartyTag.NO
+        R.id.rb_yes_after_party -> AfterPartyTag.YES
+        else -> AfterPartyTag.ALL
+    }.tag
+
+    fun setAfterPartyTag(afterParty: String) {
+        afterPartyRadioChecked.value = when (afterParty) {
+            AfterPartyTag.NO.tag -> R.id.rb_no_after_party
+            AfterPartyTag.YES.tag -> R.id.rb_yes_after_party
+            else -> R.id.rb_all_after_party
+        }
+    }
+
     private fun getJobTag(): String? = JobButtonId.findById(jobRadioChecked.value)?.job
 
     fun setJobTag(jobTag: String) {
@@ -148,6 +165,7 @@ class RunningFilterViewModel : ViewModel() {
     private fun getFilterToBundle(): Bundle = Bundle().apply {
         putParcelableArray("paces", getPaceTags().toTypedArray())
         putString("gender", getGenderTag())
+        putSerializable("afterParty", getAfterPartyTag())
         putString("job", (getJobTag() ?: "N"))
         putInt("minAge", if (isAllAgeChecked.value) 0 else recruitmentStartAge.value)
         putInt("maxAge", if (isAllAgeChecked.value) 100 else recruitmentEndAge.value)
