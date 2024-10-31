@@ -1,21 +1,20 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail
 
+import android.net.Uri
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-interface ImageDetailViewModel {
+@HiltViewModel
+class ImageDetailViewModel @Inject constructor(): ViewModel() {
+    private val _imageList: MutableStateFlow<List<Uri>> = MutableStateFlow(emptyList())
+    val imageList: StateFlow<List<Uri>> get() = _imageList.asStateFlow()
 
-    val title: StateFlow<String>
-    val imageList: StateFlow<List<ImageDetailUiState>>
-    val currentPageNumber: StateFlow<Int>
-    val actions: SharedFlow<ImageDetailAction>
-
-
-    fun backClicked()
-    fun leftMoveClicked()
-    fun rightMoveClicked()
-}
-
-sealed class ImageDetailAction {
-    object MoveToBack : ImageDetailAction()
+    fun updateImageList(list: List<Uri>) {
+        _imageList.value = list
+    }
 }

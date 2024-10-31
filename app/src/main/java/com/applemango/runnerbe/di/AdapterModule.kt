@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailViewPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
@@ -89,6 +90,12 @@ class AdapterModule {
     @FragmentScoped
     fun provideRunnerInfoAdapter() : RunnerInfoAdapter {
         return RunnerInfoAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideImageDetailViewPagerAdapter(): ImageDetailViewPagerAdapter {
+        return ImageDetailViewPagerAdapter()
     }
 
 }

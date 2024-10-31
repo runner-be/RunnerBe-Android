@@ -75,7 +75,9 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                     askAndDismissDialog()
                 }
             })
-        _photoManager = SinglePhotoManager(this, viewModel)
+        _photoManager = SinglePhotoManager(this) { croppedImage ->
+            viewModel.updateLogImage(croppedImage)
+        }
     }
 
     override fun onDestroyView() {
@@ -122,7 +124,22 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
     private fun initListeners() {
         with(binding) {
             compositeDisposable.addAll(
-                binding.flWeather.clicks()
+                ivPhoto.clicks()
+                    .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                    .subscribe {
+                        val imageUri = viewModel.logImage.value
+                        imageUri?.let { uri ->
+                            // TODO 추후에 사진 여러장 저장으로 수정
+                            navigate(
+                                RunningLogFragmentDirections
+                                    .actionRunningLogFragmentToImageDetailFragment(
+                                        "",
+                                        arrayOf(uri.toString()),
+                                    )
+                            )
+                        }
+                    },
+                flWeather.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
                         binding.constWeather.performClick()
