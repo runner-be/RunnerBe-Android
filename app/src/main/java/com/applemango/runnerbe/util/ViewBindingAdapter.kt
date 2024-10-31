@@ -17,6 +17,7 @@ import com.applemango.runnerbe.presentation.model.getDiligenceFromString
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
+import com.applemango.runnerbe.presentation.screen.fragment.image.CropRectRatio
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -322,4 +323,19 @@ fun ImageView.setBookmarkImageSrc(isBookmarked: Boolean) {
         R.drawable.ic_book_mark_off
     }
     setImageResource(src)
+}
+
+@BindingAdapter("bind:cropRatioBackground")
+fun TextView.setSelectedRatioBackground(ratio: CropRectRatio) {
+    val background = if (this.id == ratio.viewId) {
+        R.drawable.bg_primary_stroke_radius_10
+    } else {
+        0
+    }
+    this.setBackgroundResource(background)
+}
+
+@BindingAdapter("bind:imageDetailSrc")
+fun ImageView.setImageDetailSrc(imageUri: Uri) {
+    setImageUri(imageUri)
 }
