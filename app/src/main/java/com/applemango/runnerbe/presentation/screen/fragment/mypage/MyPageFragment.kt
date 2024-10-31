@@ -244,16 +244,6 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.thisWeekRunningLogFlow.collectLatest { result ->
                     initWeeklyViewPagerAdapter()
-                    binding.tvStampWeekly.text = result.totalCount?.let {
-                        if (it.groupRunningCount == 0 && it.personalRunningCount == 0) {
-                            getString(R.string.lets_add_stamp)
-                        } else {
-                            getString(
-                                R.string.calendar_monthly_statistic,
-                                it.groupRunningCount, it.personalRunningCount
-                            )
-                        }
-                    } ?: getString(R.string.lets_add_stamp)
                 }
             }
         }

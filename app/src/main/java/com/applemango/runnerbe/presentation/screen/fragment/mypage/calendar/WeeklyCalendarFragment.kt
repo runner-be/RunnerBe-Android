@@ -9,6 +9,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.network.response.GatheringData
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
@@ -43,15 +44,41 @@ class WeeklyCalendarFragment() :
     private fun setupWeeklyRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.thisWeekRunningLogFlow.collectLatest {
+                viewModel.thisWeekRunningLogFlow.collectLatest { result ->
                     val thisWeekMonday =
                         LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
                             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                    val thisWeekLogs = parseRunningLogs(thisWeekMonday, it.runningLog)
+                    val parsedRunningLogs = combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
+                    val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
+                    val personalCount = thisWeekLogs.count()
+                    val groupCount = thisWeekLogs.count { it.gatheringId != null }
+
+                    binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
+                        getString(R.string.lets_add_stamp)
+                    } else {
+                        getString(
+                            R.string.calendar_monthly_statistic,
+                            groupCount, personalCount
+                        )
+                    }
                     weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                 }
             }
         }
+    }
+
+    private fun combineGatheringDataToRunningLogs(
+        gatheringDataList: List<GatheringData>,
+        runningLogList: List<RunningLog>
+    ): List<RunningLog> {
+        val groupLogData = gatheringDataList.associateBy { it.date }
+        val runningLogs = runningLogList.toMutableList()
+        runningLogs.forEach { runningLog ->
+            groupLogData[runningLog.runnedDate]?.let { gatheringData ->
+                runningLog.gatheringId = gatheringData.gatheringId
+            }
+        }
+        return runningLogs
     }
 
     private fun parseRunningLogs(
