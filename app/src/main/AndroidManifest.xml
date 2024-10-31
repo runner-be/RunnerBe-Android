@@ -60,6 +60,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".presentation.screen.fragment.image.ImageCropActivity"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar"
+            android:exported="false" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".presentation.screen.activity.AddressActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar"

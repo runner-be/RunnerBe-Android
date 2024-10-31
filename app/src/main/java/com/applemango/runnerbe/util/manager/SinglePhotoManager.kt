@@ -19,7 +19,9 @@ import androidx.fragment.app.Fragment
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraDialog
 import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraOptionSelectListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogViewModel
+import com.applemango.runnerbe.presentation.screen.fragment.image.ImageCropActivity
+import com.applemango.runnerbe.presentation.screen.fragment.image.ImageCropListener
+import com.applemango.runnerbe.util.LogUtil
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -28,14 +30,14 @@ import javax.inject.Inject
 
 class SinglePhotoManager @Inject constructor(
     fragment: Fragment,
-    private val viewModel: RunningLogViewModel,
+    private val imageCropListener: ImageCropListener
 ) {
     private val context: Context = fragment.requireContext()
 
     private var selectedPhoto: Uri = Uri.EMPTY
         set(value) {
             if (value == field) return
-            viewModel.updateLogImage(value)
+//            viewModel.updateLogImage(value)
             field = value
         }
 
@@ -43,6 +45,20 @@ class SinglePhotoManager @Inject constructor(
         fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 processSelectedPhoto(result)
+            }
+        }
+
+    private val cropImageLauncher =
+        fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { data ->
+                    val croppedImageUriString = data.getStringExtra("CROPPED_IMAGE_URI")
+                    val croppedImageUri: Uri? = croppedImageUriString?.let { Uri.parse(it) }
+                    if (croppedImageUri != null) {
+                        selectedPhoto = croppedImageUri
+                        imageCropListener.onImageCropped(croppedImageUri)
+                    }
+                }
             }
         }
 
@@ -140,9 +156,28 @@ class SinglePhotoManager @Inject constructor(
     }
 
     private fun processSelectedPhoto(result: ActivityResult) {
-        result.data?.let { photo ->
-            selectedPhoto = photo.data ?: Uri.EMPTY
+        if (result.resultCode == Activity.RESULT_OK) {
+            if (selectedPhoto != Uri.EMPTY) {
+                startCropActivity(selectedPhoto)
+            } else {
+                // 앨범에서 선택한 경우
+                result.data?.let { photo ->
+                    val uri = photo.data
+                    if (uri != null) {
+                        selectedPhoto = uri
+                        startCropActivity(selectedPhoto)
+                    }
+                }
+            }
         }
+    }
+
+    private fun startCropActivity(imageUri: Uri) {
+        LogUtil.errorLog("startCropActivity called")
+        val cropIntent = Intent(context, ImageCropActivity::class.java).apply {
+            putExtra("IMAGE_URI", imageUri.toString())
+        }
+        cropImageLauncher.launch(cropIntent)
     }
 
     companion object {

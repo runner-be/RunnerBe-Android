@@ -4,20 +4,16 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.presentation.model.CreatorImageAndPosition
 import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.presentation.model.listener.*
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewHorizontalItemDeco
-import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectListData
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectListItemAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailListClickListener
-import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailUiState
-import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailViewPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
@@ -154,17 +150,4 @@ fun setTalkImageAdapter(
     }
     val adapter = recyclerView.adapter
     if (adapter is RunningTalkDetailImageAdapter) adapter.submitList(dataList)
-}
-
-@BindingAdapter("bind:imageDetailAdapter")
-fun setImageDetailAdapter(
-    viewPager: ViewPager2,
-    dataList: List<ImageDetailUiState>
-) {
-    viewPager.adapter ?: run {
-        viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        viewPager.adapter = ImageDetailViewPagerAdapter()
-    }
-    val adapter = viewPager.adapter
-    if(adapter is ImageDetailViewPagerAdapter) adapter.submitList(dataList)
 }
