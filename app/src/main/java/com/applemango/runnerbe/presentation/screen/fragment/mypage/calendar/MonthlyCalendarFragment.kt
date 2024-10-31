@@ -11,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.network.response.GatheringData
+import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
@@ -82,6 +84,20 @@ class MonthlyCalendarFragment :
         }
     }
 
+    private fun combineGatheringDataToRunningLogs(
+        gatheringDataList: List<GatheringData>,
+        runningLogList: List<RunningLog>
+    ): List<RunningLog> {
+        val groupLogData = gatheringDataList.associateBy { it.date }
+        val runningLogs = runningLogList.toMutableList()
+        runningLogs.forEach { runningLog ->
+            groupLogData[runningLog.runnedDate]?.let { gatheringData ->
+                runningLog.gatheringId = gatheringData.gatheringId
+            }
+        }
+        return runningLogs
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun setupCalendarFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -91,7 +107,12 @@ class MonthlyCalendarFragment :
                         is CommonResponse.Success<*> -> {
                             val monthlyRunningLog = response.body as? RunningLogResult
                             val monthlyStatistic = monthlyRunningLog?.totalCount
+                            val monthlyGatheringData = monthlyRunningLog?.gatheringDays
                             val monthlyLogList = monthlyRunningLog?.runningLog ?: emptyList()
+                            val parsedRunningLogs = combineGatheringDataToRunningLogs(
+                                monthlyGatheringData ?: emptyList(),
+                                monthlyLogList
+                            )
 
                             if (monthlyStatistic != null) {
                                 binding.tvStampMonthly.text = getString(R.string.calendar_monthly_statistic,
@@ -104,7 +125,7 @@ class MonthlyCalendarFragment :
                             val newCalendarData = initYearMonthDays(
                                 viewModel.selectedYearMonth.value.first,
                                 viewModel.selectedYearMonth.value.second,
-                                monthlyLogList
+                                parsedRunningLogs
                             )
                             monthlyCalendarAdapter.submitList(newCalendarData)
                         }
