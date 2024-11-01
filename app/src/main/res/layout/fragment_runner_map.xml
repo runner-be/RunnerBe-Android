@@ -143,13 +143,13 @@
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_map_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:onClick="@{() -> vm.refresh()}"
             android:visibility="@{vm.refreshThisLocation ? View.VISIBLE : View.GONE}"
             android:background="@drawable/bg_dark_g7_solid_radius_20"
             app:layout_constraintLeft_toLeftOf="parent"

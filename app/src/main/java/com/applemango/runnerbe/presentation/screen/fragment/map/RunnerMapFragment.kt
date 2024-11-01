@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
@@ -20,7 +22,10 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
+import com.applemango.runnerbe.util.LogUtil
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.setHeight
+import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
@@ -31,9 +36,9 @@ import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-
+import kotlin.IllegalArgumentException
 
 @AndroidEntryPoint
 class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragment_runner_map),
@@ -54,6 +59,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        LogUtil.errorLog("onViewCreated")
+
         RunnerBeApplication.instance.firebaseTokenUpdate()
         binding.vm = viewModel
         binding.postListLayout.vm = viewModel
@@ -69,12 +76,22 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         observeBind()
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
-        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
-            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
+        viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
+        parentFragmentManager.setFragmentResultListener("postCreated", viewLifecycleOwner) { _, result ->
+            Log.d("AAA", " childFragmentManager.setFragmentResultListener $result")
+            val refresh = result.getBoolean("refresh", false)
+            if (refresh) {
+                Log.d("AAA MainFragment", "Result received: Refreshing post list")
                 viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
             }
         }
+//        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
+//            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
+//                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
+//            }
+//        }
         initPostRecyclerView()
+        initListeners()
         setupPostFlow()
     }
 
@@ -130,20 +147,24 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onStart() {
         super.onStart()
+        LogUtil.errorLog("onStart")
         binding.mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
+        LogUtil.errorLog("onResume")
         binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
+        LogUtil.errorLog("onPause")
         binding.mapView.onPause()
     }
 
     override fun onStop() {
+        LogUtil.errorLog("onStop")
         super.onStop()
         binding.mapView.onStop()
     }
@@ -153,10 +174,33 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.mapView.onLowMemory()
     }
 
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.llMapRefresh.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    try {
+                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                        require(userId != -1) {
+                            "사용자 정보를 불러올 수 없어요. 약관에 동의해주세요"
+                        }
+                        viewModel.refresh()
+                    } catch (e: IllegalArgumentException) {
+                        e.printStackTrace()
+                        context?.let {
+                            ToastUtil.showShortToast(it, e.message!!)
+                        }
+                    }
+                }
+        )
+    }
+
     private fun setupPostFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.postList.collectLatest { postList ->
-                postAdapter.submitList(postList)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.postList.collectLatest { postList ->
+                    postAdapter.submitList(postList)
+                }
             }
         }
     }

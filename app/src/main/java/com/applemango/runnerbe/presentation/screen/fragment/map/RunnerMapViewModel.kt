@@ -53,7 +53,7 @@ class RunnerMapViewModel @Inject constructor(
     private var preFilterAfterPartyTag: AfterPartyTag? = filterAfterPartyTag.value
 
     val filterPriorityTag: MutableStateFlow<PriorityFilterTag> =
-        MutableStateFlow(PriorityFilterTag.BY_DISTANCE)
+        MutableStateFlow(PriorityFilterTag.NEWEST)
     private var prePriorityTag = filterPriorityTag.value
     val includeFinish: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var preIncludeFinish = includeFinish.value
@@ -128,7 +128,6 @@ class RunnerMapViewModel @Inject constructor(
                     if (isRefresh) postList.value = emptyList()
                     isEndPage = it.body.runningList.size < pageSize
                     it.body.runningList.forEach { post ->
-                        Log.e(post.postId.toString(), post.profileUrlList.toString())
                         if (!postList.value.contains(post)) {
                             val prevList = postList.value.toMutableList()
                             prevList.add(post)
@@ -151,39 +150,11 @@ class RunnerMapViewModel @Inject constructor(
             )
         }
     }
-//
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    val runningListFlow: Flow<List<Posting>> = combine(
-//        filterRunningTag.filterNotNull(),
-//        runningListRequestFlow.filterNotNull()
-//    ) { runningTag, request ->
-//        runningTag to request
-//    }.flatMapLatest { datas ->
-//        getRunningListUseCase(datas.first, datas.second)
-//            .map { response ->
-//                when (response) {
-//                    is CommonResponse.Success<*> -> {
-//                        if (response.body is GetRunningListResponse) {
-//                            isEndPage = response.body.runningList.size < pageSize
-//                            response.body.runningList
-//                        } else emptyList()
-//                    }
-//
-//                    is CommonResponse.Failed -> {
-//                        emptyList()
-//                    }
-//
-//                    else -> {
-//                        throw Exception("RunningLogDetailViewModel-runningLogDetailFlow-when-else")
-//                    }
-//                }
-//            }
-//    }
 
     fun refresh() {
         postList.value = emptyList()
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        getRunningList(null, isRefresh = true)
+        getRunningList(userId, isRefresh = true)
     }
 
     fun updatePostBookmark(post: Posting) {
