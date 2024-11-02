@@ -36,7 +36,7 @@ class RunningLogViewModel @Inject constructor(
     val logDiary = MutableStateFlow("")
     val logImage = MutableStateFlow<Uri?>(null)
     val logStamp = MutableStateFlow(StampItem.unavailableStampItem)
-    val logDegree = MutableStateFlow<String?>("")
+    val logDegree = MutableStateFlow<String?>("-")
     val logWeather = MutableStateFlow(
         WeatherItem(
             "WEA000",
