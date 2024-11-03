@@ -10,10 +10,9 @@ import com.applemango.runnerbe.databinding.DialogDateSelectBinding
 import com.applemango.runnerbe.presentation.model.DateResultListener
 import com.applemango.runnerbe.util.NumberUtil
 import com.applemango.runnerbe.util.TimeUtil
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.getDateList
 import com.applemango.runnerbe.util.getYearListByDay
-import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
-import com.github.gzuliyujiang.wheelview.widget.WheelView
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -63,6 +62,18 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
 
     private fun initListener() {
         binding.tvConfirm.setOnClickListener {
+            if (getIsToday(binding.wvDate.getCurrentItem())) {
+                val calendar = Calendar.getInstance()
+                val currentAmPm = binding.wvAmPm.getCurrentItem<String>()
+                val ampmData = if (currentAmPm == "PM") 12 else 0
+                val selectedHour = binding.wvHour.getCurrentItem<String>().toInt() + ampmData
+                val currentHour = calendar.get(Calendar.HOUR)
+                if (currentHour > selectedHour) {
+                    ToastUtil.showShortToast(context, "현재 시각 이후만 선택이 가능해요")
+                }
+                return@setOnClickListener
+            }
+
             changeDisplayToDate()?.let { completeDate ->
                 result.getDate(
                     completeDate, DateSelectData(
@@ -80,73 +91,37 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
     private fun initWheelViewData() {
         with(binding) {
             val dateList = getDateList(DEFAULT_DATE_SIZE)
-            val hourList = getTodayHourList()
+            val hourList = NumberUtil.getRange(0, 12)
             val minuteList = NumberUtil.getUnitNumber(0, 55, 5)
-            val calendar = Calendar.getInstance()
-            val currentHour = calendar.get(Calendar.HOUR)
 
-            wvDate.apply {
-                setData(
-                    dateList,
-                    dateList.indexOf(currentDate?.formatDate)
-                )
-                setOnWheelChangedListener(object : OnWheelChangedListener {
-                    override fun onWheelScrolled(view: WheelView?, offset: Int) {
-                    }
-
-                    override fun onWheelSelected(view: WheelView?, position: Int) {
-                        val selectedDate = dateList[position]
-                        val calendar = Calendar.getInstance()
-                        val currentAmPm = calendar.get(Calendar.AM_PM)
-                        val currentHour = calendar.get(Calendar.HOUR)
-                        val isToday = getIsToday(selectedDate)
-
-                        val updatedAmPmList = if (isToday && currentAmPm == Calendar.PM) {
-                            listOf("PM")
-                        } else {
-                            listOf("AM", "PM")
-                        }
-                        val updatedHourList = if (isToday) {
-                            NumberUtil.getRange(currentHour + 1, 12)
-                        } else {
-                            NumberUtil.getRange(0, 12)
-                        }
-                        wvAmPm.setData(updatedAmPmList, updatedAmPmList.indexOf(currentAmPm.toString()))
-                        wvHour.setData(updatedHourList, 0)
-                    }
-
-                    override fun onWheelScrollStateChanged(view: WheelView?, state: Int) {
-                    }
-
-                    override fun onWheelLoopFinished(view: WheelView?) {
-                    }
-
-                })
-            }
-            wvAmPm.setData(getTodayAmPmList(), if (isAm) 0 else 1)
+            wvDate.setData(
+                dateList,
+                dateList.indexOf(currentDate?.formatDate)
+            )
+            wvAmPm.setData(listOf("AM", "PM"), if (isAm) 0 else 1)
             wvHour.setData(hourList, 0)
             wvMinute.setData(minuteList, minuteList.indexOf(currentDate?.minute))
         }
     }
 
-    private fun getTodayHourList(): List<String> {
-        val calendar = Calendar.getInstance()
-        val currentHour = calendar.get(Calendar.HOUR)
-        return NumberUtil.getRange(currentHour + 1, 12)
-    }
-
-    private fun getTodayAmPmList(): List<String> {
-        val today = LocalDate.now()
-        val todayString = "${today.monthValue}/${today.dayOfMonth}"
-        val calendar = Calendar.getInstance()
-        val currentAmPm = calendar.get(Calendar.AM_PM)
-        val isToday = getIsToday(todayString)
-        return if (isToday && currentAmPm == Calendar.PM) {
-            listOf("PM")
-        } else {
-            listOf("AM", "PM")
-        }
-    }
+//    private fun getTodayHourList(): List<String> {
+//        val calendar = Calendar.getInstance()
+//        val currentHour = calendar.get(Calendar.HOUR)
+//        return NumberUtil.getRange(currentHour + 1, 12)
+//    }
+//
+//    private fun getTodayAmPmList(): List<String> {
+//        val today = LocalDate.now()
+//        val todayString = "${today.monthValue}/${today.dayOfMonth}"
+//        val calendar = Calendar.getInstance()
+//        val currentAmPm = calendar.get(Calendar.AM_PM)
+//        val isToday = getIsToday(todayString)
+//        return if (isToday && currentAmPm == Calendar.PM) {
+//            listOf("PM")
+//        } else {
+//            listOf("AM", "PM")
+//        }
+//    }
 
     private fun getIsToday(dateString: String): Boolean {
         val inputDate = dateString.split(" ")[0] // "11/3 (월)" -> "11/3"
