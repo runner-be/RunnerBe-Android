@@ -80,11 +80,11 @@ android {
     productFlavors {
         dev {
             dimension "server"
-            buildConfigField "String", "BASE_URL", "\"https://new-runnerbe.shop\""
+            buildConfigField "String", "BASE_URL", "\"https://runnerbe.shop\""
         }
         real {
             dimension "server"
-            buildConfigField "String", "BASE_URL", "\"https://new-runnerbe.shop\""
+            buildConfigField "String", "BASE_URL", "\"https://runnerbe.shop\""
         }
     }
 }
