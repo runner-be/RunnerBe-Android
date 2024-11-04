@@ -24,7 +24,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
-import java.util.Calendar
 
 @BindingAdapter("imageDrawable")
 fun bindImageFromRes(view: ImageView, drawableId: Int) {
@@ -335,7 +334,16 @@ fun TextView.setSelectedRatioBackground(ratio: CropRectRatio) {
     this.setBackgroundResource(background)
 }
 
-@BindingAdapter("bind:imageDetailSrc")
-fun ImageView.setImageDetailSrc(imageUri: Uri) {
-    setImageUri(imageUri)
+@BindingAdapter("bind:setPostMinMaxGuideVisibility")
+fun TextView.setPostWriteAttendanceGuideVisibility(size: Int) {
+    this.visibility = if (size == 2 || size == 8) View.VISIBLE else View.GONE
+}
+
+@BindingAdapter("bind:setPostMinMaxGuideText")
+fun TextView.setPostWriteAttendanceGuide(size: Int) {
+    this.text = when (size) {
+        2 -> context.getString(R.string.msg_recruitment_count_minimum)
+        8 -> context.getString(R.string.msg_recruitment_count_maximum)
+        else -> ""
+    }
 }
