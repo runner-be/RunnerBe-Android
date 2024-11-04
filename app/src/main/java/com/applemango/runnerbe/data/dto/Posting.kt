@@ -2,6 +2,7 @@ package com.applemango.runnerbe.data.dto
 
 import android.os.Parcelable
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.util.dateStringToLongTime
 import com.applemango.runnerbe.util.timeStringToLongTime
 import com.google.gson.annotations.SerializedName
@@ -55,8 +56,12 @@ data class Posting(
     @SerializedName("attendTimeOver") val attendTimeOver: String?
 ) : Parcelable {
 
+    private fun getMyUserId(): Int = RunnerBeApplication.mTokenPreference.getUserId()
+
+    fun isRunningCaptain() = (getMyUserId() == this.postUserId)
+
     // 모임 종료 후 3시간이 지났다면 출석 확인, 지나지 않았다면 출석 관리
-    fun attendanceCheckable(): Boolean {
+    fun attendanceCheck(): Boolean {
         return attendTimeOver == "Y"
     }
     fun bookmarkCheck(): Boolean {

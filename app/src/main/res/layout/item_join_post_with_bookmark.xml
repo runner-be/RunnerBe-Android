@@ -13,6 +13,15 @@
             name="item"
             type="com.applemango.runnerbe.data.dto.Posting" />
         <variable
+            name="runningEndTextViewVisibility"
+            type="Boolean" />
+        <variable
+            name="attendanceCheckButtonVisibility"
+            type="Boolean" />
+        <variable
+            name="attendanceSeeButtonVisibility"
+            type="Boolean" />
+        <variable
             name="clickListener"
             type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener" />
     </data>
@@ -212,7 +221,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    bind:isVisible="@{!item.whetherEnded}"
+                    bind:isVisible="@{runningEndTextViewVisibility}"
                     android:text="@string/before_running_management_button_text"
                     android:textSize="14sp"
                     android:textColor="@color/dark_g4"
@@ -227,7 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    bind:isVisible="@{!item.attendanceCheckable()}"
+                    bind:isVisible="@{attendanceCheckButtonVisibility}"
                     android:onClick="@{() -> clickListener.attendanceManageClick(item)}"
                     android:text="@string/attendance_manage"
                     android:textSize="14sp"
@@ -242,7 +251,7 @@
                     android:id="@+id/after_running_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    bind:isVisible="@{item.attendanceCheckable()}"
+                    bind:isVisible="@{attendanceSeeButtonVisibility}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
@@ -252,7 +261,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginEnd="8dp"
                         android:onClick="@{() -> clickListener.attendanceSeeClick(item)}"
                         android:text="@string/attendance_see"
                         android:textSize="14sp"
