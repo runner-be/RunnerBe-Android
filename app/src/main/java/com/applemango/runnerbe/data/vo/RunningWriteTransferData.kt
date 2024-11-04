@@ -28,7 +28,7 @@ data class PlaceData(
     companion object {
         val defaultPlaceData = PlaceData(
             "장소 정보 없음",
-            "주소 확인 불가",
+            "주소 추가 필요",
             "상세 정보 입력"
         )
     }
