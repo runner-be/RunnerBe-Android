@@ -13,6 +13,8 @@ import com.applemango.runnerbe.util.TimeUtil
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.getDateList
 import com.applemango.runnerbe.util.getYearListByDay
+import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
+import com.github.gzuliyujiang.wheelview.widget.WheelView
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -29,8 +31,8 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
     }
 
     var isAm = true
+    lateinit var dateResultListener: DateResultListener
     var currentDate: DateSelectData? = null
-    lateinit var result: DateResultListener
     private val yearList = getYearListByDay(DEFAULT_DATE_SIZE)
 
     companion object {
@@ -47,7 +49,7 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
                 this.isAm = isAm
                 this.currentDate = displayDate
                 this.isAm = displayDate?.AMAndPM == "AM"
-                this.result = resultListener
+                this.dateResultListener = resultListener
                 show()
             }
         }
@@ -58,24 +60,18 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
         setContentView(binding.root)
         initWheelViewData()
         initListener()
+        initAmPmChangeListener()
     }
 
     private fun initListener() {
         binding.tvConfirm.setOnClickListener {
-            if (getIsToday(binding.wvDate.getCurrentItem())) {
-                val calendar = Calendar.getInstance()
-                val currentAmPm = binding.wvAmPm.getCurrentItem<String>()
-                val ampmData = if (currentAmPm == "PM") 12 else 0
-                val selectedHour = binding.wvHour.getCurrentItem<String>().toInt() + ampmData
-                val currentHour = calendar.get(Calendar.HOUR)
-                if (currentHour > selectedHour) {
-                    ToastUtil.showShortToast(context, "현재 시각 이후만 선택이 가능해요")
-                }
+            if (getIsSelectedItemInvalid(binding.wvDate.getCurrentItem())) {
+                ToastUtil.showShortToast(context, "현재 시각 이후만 선택이 가능해요")
                 return@setOnClickListener
             }
 
             changeDisplayToDate()?.let { completeDate ->
-                result.getDate(
+                dateResultListener.getDate(
                     completeDate, DateSelectData(
                         formatDate = getDate(),
                         AMAndPM = getAm(),
@@ -84,22 +80,50 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
                     )
                 )
             }
+
             dismiss()
         }
+    }
+
+    private fun initAmPmChangeListener() {
+        binding.wvAmPm.setOnWheelChangedListener(object: OnWheelChangedListener {
+            override fun onWheelScrolled(view: WheelView?, offset: Int) {
+            }
+
+            override fun onWheelSelected(view: WheelView?, position: Int) {
+                if (position == 0) {
+                    binding.wvHour.data = NumberUtil.getRange(0, 11)
+                } else {
+                    binding.wvHour.data = listOf(12) + NumberUtil.getRange(1, 11)
+                }
+            }
+
+            override fun onWheelScrollStateChanged(view: WheelView?, state: Int) {
+            }
+
+            override fun onWheelLoopFinished(view: WheelView?) {
+            }
+
+        })
     }
 
     private fun initWheelViewData() {
         with(binding) {
             val dateList = getDateList(DEFAULT_DATE_SIZE)
-            val hourList = NumberUtil.getRange(0, 12)
+            val ampmList = listOf("AM", "PM")
+            val hourList: List<String> = if (isAm) {
+                NumberUtil.getRange(0, 11)
+            } else {
+                listOf("12") + NumberUtil.getRange(1, 11)
+            }
             val minuteList = NumberUtil.getUnitNumber(0, 55, 5)
 
             wvDate.setData(
                 dateList,
                 dateList.indexOf(currentDate?.formatDate)
             )
-            wvAmPm.setData(listOf("AM", "PM"), if (isAm) 0 else 1)
-            wvHour.setData(hourList, 0)
+            wvAmPm.setData(ampmList, if (isAm) 0 else 1)
+            wvHour.setData(hourList, hourList.indexOf(currentDate?.hour))
             wvMinute.setData(minuteList, minuteList.indexOf(currentDate?.minute))
         }
     }
@@ -132,14 +156,27 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
         return (month == today.monthValue) && (date == today.dayOfMonth)
     }
 
+    /**
+     * @return 현재 시각 + 1 이상인 값이 선택됐는지
+     * @sample (현재 시각이 3시라면) 4시 이후부터 선택 가능
+     */
+    private fun getIsSelectedItemInvalid(selectedItem: String): Boolean {
+        val calendar = Calendar.getInstance()
+        val currentAmPm = binding.wvAmPm.getCurrentItem<String>()
+        val ampmData = if (currentAmPm == "PM") 12 else 0
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val selectedHour = binding.wvHour.getCurrentItem<String>().toInt() + ampmData
+        return getIsToday(selectedItem) && (currentHour >= selectedHour)
+    }
+
+
     private fun changeDisplayToDate(): Date? {
         val dateSplit = getDate().split("/")
         val hour = TimeUtil.getAMAndPMTo24(
             binding.wvAmPm.getCurrentItem<String>() == "AM",
             binding.wvHour.getCurrentItem<String>().toInt()
         )
-        val date = "${yearList[binding.wvDate.currentPosition]}-${dateSplit[0]}-${
-            dateSplit[1].split(" ")[0]
+        val date = "${yearList[binding.wvDate.currentPosition]}-${dateSplit[0]}-${dateSplit[1].split(" ")[0]
         } $hour:${binding.wvMinute.getCurrentItem<String>()}:00"
         return SimpleDateFormat("yyyy-MM-dd kk:mm:ss").parse(date)
     }

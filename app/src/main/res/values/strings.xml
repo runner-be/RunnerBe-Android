@@ -158,6 +158,7 @@
     <string name="recruitment_content">하고싶은 말 (선택)</string>
     <string name="after_party">뒤풀이</string>
     <string name="msg_recruitment_count_minimum">모임 인원은 최소 2명부터 가능해요!</string>
+    <string name="msg_recruitment_count_maximum">모임 인원은 최대 8명까지 가능해요!</string>
     <string name="hint_content_write">함께할 러너들에게 하실 말씀이 있나요?\nex) ㅇㅇ마트 앞에서 만나요~</string>
     <string name="limit_five_hundred">%s/500</string>
     <string name="display_recruitment_age_setting">%s세 - %s세</string>
