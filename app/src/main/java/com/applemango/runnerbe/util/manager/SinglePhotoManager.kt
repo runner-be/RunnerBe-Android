@@ -173,7 +173,6 @@ class SinglePhotoManager @Inject constructor(
     }
 
     private fun startCropActivity(imageUri: Uri) {
-        LogUtil.errorLog("startCropActivity called")
         val cropIntent = Intent(context, ImageCropActivity::class.java).apply {
             putExtra("IMAGE_URI", imageUri.toString())
         }

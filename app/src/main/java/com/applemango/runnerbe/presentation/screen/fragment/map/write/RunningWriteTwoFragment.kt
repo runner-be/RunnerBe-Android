@@ -3,25 +3,23 @@ package com.applemango.runnerbe.presentation.screen.fragment.map.write
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
+import com.applemango.runnerbe.data.vo.PlaceData
 import com.applemango.runnerbe.databinding.FragmentRunningWriteTwoBinding
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.AddressUtil
+import com.applemango.runnerbe.util.ToastUtil
 import com.google.android.material.slider.RangeSlider.OnChangeListener
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.OverlayImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -31,16 +29,30 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class RunningWriteTwoFragment :
-    BaseFragment<FragmentRunningWriteTwoBinding>(R.layout.fragment_running_write_two),
-//    OnMapReadyCallback, View.OnClickListener {
-    View.OnClickListener {
+    BaseFragment<FragmentRunningWriteTwoBinding>(R.layout.fragment_running_write_two)
+    ,View.OnClickListener {
 
     private val viewModel: RunningWriteTwoViewModel by viewModels()
     private val args : RunningWriteTwoFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.oneData.value = args.data
+        val isTestMode = RunnerBeApplication.mTokenPreference.getIsTestMode()
+        viewModel.oneData.value = if (isTestMode) {
+            context?.let {
+                ToastUtil.showShortToast(it, "테스트 모드입니다. 일부 데이터가 현재 위치와 일치하지 않을 수 있습니다")
+            }
+
+            val testLatLng = LatLng(37.3419817, 127.0940174)
+            val testPlaceData = PlaceData(placeName="장소 정보 없음", placeAddress="대한민국 경기도 용인시 수지구 동천동", placeExplain="162-5")
+            args.data.copy(
+                coordinate = testLatLng,
+                placeData = testPlaceData
+            )
+        } else {
+            args.data
+        }
+
         binding.vm = viewModel
         binding.backBtn.setOnClickListener(this)
         binding.ageSlider.addOnChangeListener(OnChangeListener { slider, _, _ ->
@@ -82,9 +94,19 @@ class RunningWriteTwoFragment :
                             resources.getString(R.string.complete_running_write),
                             Toast.LENGTH_SHORT
                         ).show()
-                        navPopStack(R.id.mainFragment)
+                        activity?.supportFragmentManager?.setFragmentResult("postCreated", bundleOf("refresh" to true))
+                        findNavController().popBackStack(R.id.mainFragment, false)
                     }
-                    else -> {
+
+                    is UiState.Loading -> {
+
+                    }
+
+                    is UiState.Empty -> {
+
+                    }
+
+                    is UiState.AnonymousFailed -> {
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -3,6 +3,7 @@ package com.applemango.runnerbe.di
 import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.data.network.BearerInterceptor
 import com.applemango.runnerbe.data.network.XAccessTokenInterceptor
+import com.applemango.runnerbe.data.network.ZonedDateTimeConverter
 import com.applemango.runnerbe.data.network.api.*
 import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
@@ -14,15 +15,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRun
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,10 +23,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -68,19 +57,6 @@ object NetworkModule {
     private val gson = GsonBuilder()
         .registerTypeAdapter(ZonedDateTime::class.java, ZonedDateTimeConverter())
         .create()
-
-    class ZonedDateTimeConverter : TypeAdapter<ZonedDateTime>() {
-        private val formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME  // ISO 8601 포맷터
-
-        override fun write(out: JsonWriter, value: ZonedDateTime?) {
-            out.value(value?.format(formatter))
-        }
-
-        override fun read(input: JsonReader): ZonedDateTime {
-            val date = input.nextString()
-            return ZonedDateTime.parse(date, formatter)
-        }
-    }
 
     @Singleton
     @Provides

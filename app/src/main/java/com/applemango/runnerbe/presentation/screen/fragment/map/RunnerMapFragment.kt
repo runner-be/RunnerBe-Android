@@ -15,6 +15,7 @@ import com.applemango.runnerbe.databinding.FragmentRunnerMapBinding
 import com.applemango.runnerbe.presentation.model.NestedScrollableViewHelper
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
+import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
@@ -22,7 +23,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.setHeight
 import com.jakewharton.rxbinding4.view.clicks
@@ -34,8 +34,10 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.IllegalArgumentException
@@ -59,8 +61,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LogUtil.errorLog("onViewCreated")
-
         RunnerBeApplication.instance.firebaseTokenUpdate()
         binding.vm = viewModel
         binding.postListLayout.vm = viewModel
@@ -76,23 +76,24 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         observeBind()
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
-        viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
-        parentFragmentManager.setFragmentResultListener("postCreated", viewLifecycleOwner) { _, result ->
-            Log.d("AAA", " childFragmentManager.setFragmentResultListener $result")
-            val refresh = result.getBoolean("refresh", false)
-            if (refresh) {
-                Log.d("AAA MainFragment", "Result received: Refreshing post list")
+        setOnPostCreatedListener()
+        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
+            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
                 viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
             }
         }
-//        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
-//            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
-//                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
-//            }
-//        }
         initPostRecyclerView()
         initListeners()
         setupPostFlow()
+    }
+
+    private fun setOnPostCreatedListener() {
+        activity?.supportFragmentManager?.setFragmentResultListener("postCreated", viewLifecycleOwner) { _, result ->
+            val refresh = result.getBoolean("refresh", false)
+            if (refresh) {
+                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = true)
+            }
+        }
     }
 
     private fun observeBind() {
@@ -147,24 +148,20 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onStart() {
         super.onStart()
-        LogUtil.errorLog("onStart")
         binding.mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        LogUtil.errorLog("onResume")
         binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        LogUtil.errorLog("onPause")
         binding.mapView.onPause()
     }
 
     override fun onStop() {
-        LogUtil.errorLog("onStop")
         super.onStop()
         binding.mapView.onStop()
     }
@@ -179,19 +176,47 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             binding.llMapRefresh.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    try {
-                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                        require(userId != -1) {
-                            "사용자 정보를 불러올 수 없어요. 약관에 동의해주세요"
-                        }
-                        viewModel.refresh()
-                    } catch (e: IllegalArgumentException) {
-                        e.printStackTrace()
+                    val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                    if (userId == -1) {
                         context?.let {
-                            ToastUtil.showShortToast(it, e.message!!)
+                            ToastUtil.showShortToast(it, "사용자 정보를 불러올 수 없어요. 약관에 동의해주세요")
                         }
+                        return@subscribe
                     }
-                }
+
+                    viewModel.refresh()
+                },
+            binding.topTxt.clicks()
+                .window(3)
+                .flatMapSingle { it.toList() }
+                .filter { it.size >= 3 }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe (
+                    {
+                        // TODO 테스트 용도이므로 기능 테스트 종료 시 삭제
+                        val isTestMode = RunnerBeApplication.mTokenPreference.getIsTestMode()
+                        val dialogMessage = if (!isTestMode)
+                            "테스트 모드를 활성화하시겠어요?\n\n1. 이후 작성하는 게시글의 경도/위도/장소 데이터가 고정된 값으로 적용됩니다.\n2. 러닝 목록이 (용인시 동천동) 데이터로 고정됩니다."
+                        else "테스트 모드를 비활성화하시겠어요?"
+
+                        context?.let {
+                            TwoButtonDialog.createShow(
+                                it,
+                                title = dialogMessage,
+                                firstButtonText = resources.getString(R.string.no),
+                                secondButtonText = resources.getString(R.string.yes),
+                                firstEvent = {},
+                                secondEvent = {
+                                    RunnerBeApplication.mTokenPreference.setIsTestMode(!isTestMode)
+                                    viewModel.refresh()
+                                }
+                            )
+                        }
+                    },
+                    { throwable ->
+                        throwable.printStackTrace()
+                    }
+                )
         )
     }
 
@@ -246,11 +271,21 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         //SlidingUpPanelLayout이 크기를 자꾸 변경하는 문제가 있어서 레이아웃 사이즈를 초기에 고정시켜버리기
         binding.mapLayout.setHeight(binding.mapLayout.measuredHeight)
         //현재위치로 주소 디폴트 셋팅
-        binding.topTxt.text = AddressUtil.getAddress(
-            requireContext(),
-            mNaverMap.cameraPosition.target.latitude,
-            mNaverMap.cameraPosition.target.longitude
-        )
+        // TODO 테스트 용도이므로 완료 시 삭제
+        binding.topTxt.text = if (RunnerBeApplication.mTokenPreference.getIsTestMode()) {
+            val testData = LatLng(37.3419817, 127.0940174)
+            AddressUtil.getAddress(
+                requireContext(),
+                testData.latitude,
+                testData.longitude
+            )
+        } else {
+            AddressUtil.getAddress(
+                requireContext(),
+                mNaverMap.cameraPosition.target.latitude,
+                mNaverMap.cameraPosition.target.longitude
+            )
+        }
 
         //위치가 바뀔 때마다 주소 업데이트
         mNaverMap.addOnLocationChangeListener { location ->
@@ -312,6 +347,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 }
                 markerList.add(marker)
             } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+            } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
         }

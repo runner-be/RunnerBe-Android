@@ -15,9 +15,12 @@ import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.BottomSpaceItemDecoration
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.checkedChanges
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +34,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        initCategoryRadioGroup()
+        initListeners()
         initRunningRecyclerView()
         setupRunningLogsFlow()
         getUserPostings()
@@ -52,20 +55,28 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
         }
     }
 
-    private fun initCategoryRadioGroup() {
-        binding.rgCategory.apply {
-            setOnCheckedChangeListener { _, checkedId ->
-                when (checkedId) {
-                    R.id.rb_all -> viewModel.updateSelectedCategory(JoinedRunningCategory.ALL)
-                    R.id.rb_my -> viewModel.updateSelectedCategory(JoinedRunningCategory.MY)
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.rgCategory.checkedChanges()
+                .throttleFirst(500L, TimeUnit.MILLISECONDS)
+                .subscribe { checkedId ->
+                    when (checkedId) {
+                        R.id.rb_all -> viewModel.updateSelectedCategory(JoinedRunningCategory.ALL)
+                        R.id.rb_my -> viewModel.updateSelectedCategory(JoinedRunningCategory.MY)
+                    }
+                },
+            binding.btnBack.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    goBack()
                 }
-            }
-        }
+        )
     }
 
     private fun initRunningRecyclerView() {
         binding.rcvPosting.apply {
             adapter = joinedRunningPostAdapter.apply {
+                setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object: JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
                         try {

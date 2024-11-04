@@ -1,6 +1,5 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
@@ -16,6 +15,7 @@ import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.util.LogUtil
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -106,9 +106,16 @@ class RunnerMapViewModel @Inject constructor(
     }
 
     fun getRunningList(userId: Int?, isRefresh: Boolean = false) = viewModelScope.launch {
+        // TODO  테스트 용도이므로 종료 시 삭제
+        val iCoordinator = if (RunnerBeApplication.mTokenPreference.getIsTestMode()) {
+            LatLng(37.3419817000, 127.0940174000)
+        } else {
+            coordinator
+        }
+        LogUtil.errorLog("AAA getRunningList called! $userId \n $iCoordinator")
         val request = GetRunningListRequest(
-            userLat = coordinator.latitude,
-            userLng = coordinator.longitude,
+            userLat = iCoordinator.latitude,
+            userLng = iCoordinator.longitude,
             paceFilter = filterData.value.paceTags.joinToString(","),
             jobFilter = filterData.value.jobTag,
             gender = filterData.value.genderTag,
@@ -120,20 +127,16 @@ class RunnerMapViewModel @Inject constructor(
             userId = userId,
             whetherEnd = if (includeFinish.value) "Y" else "N",
             pageSize = pageSize,
-            page = postList.value.size / pageSize + 1
+            page = if (isRefresh) 1 else postList.value.size / pageSize + 1
         )
         getRunningListUseCase(filterRunningTag.value, request).collect {
             if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
                 if (it.body.isSuccess) {
                     if (isRefresh) postList.value = emptyList()
                     isEndPage = it.body.runningList.size < pageSize
-                    it.body.runningList.forEach { post ->
-                        if (!postList.value.contains(post)) {
-                            val prevList = postList.value.toMutableList()
-                            prevList.add(post)
-                            postList.value = prevList
-                        }
-                    }
+                    val prevList = postList.value
+                    val newList = it.body.runningList
+                    postList.value = prevList + newList
                 }
             }
             _listUpdateUiState.emit(
