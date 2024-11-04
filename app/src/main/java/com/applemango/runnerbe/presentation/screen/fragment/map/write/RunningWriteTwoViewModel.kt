@@ -18,7 +18,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoList
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.LogUtil
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -90,10 +89,6 @@ class RunningWriteTwoViewModel @Inject constructor(
 
     fun writeRunning(userId: Int) = viewModelScope.launch {
         val placedata = oneData.value.placeData
-
-        LogUtil.errorLog(
-            "latitude: ${oneData.value.coordinate.latitude}\n longitude: ${oneData.value.coordinate.latitude}"
-        )
 
         writeUseCase(userId, WriteRunningRequest(
             runningTitle = oneData.value.runningTitle,
