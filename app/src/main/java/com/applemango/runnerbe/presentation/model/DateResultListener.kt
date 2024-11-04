@@ -4,7 +4,5 @@ import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectD
 import java.util.Date
 
 interface DateResultListener {
-    fun getDate(date : Date, displayDate : DateSelectData) {
-
-    }
+    fun getDate(date : Date, displayDate : DateSelectData)
 }
