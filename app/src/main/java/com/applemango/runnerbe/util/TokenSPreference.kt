@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.applemango.runnerbe.presentation.model.LoginType
 
-class TokenSPreference(private val applicationContext : Context) {
+class TokenSPreference(applicationContext : Context) {
     val sSharedPreferences: SharedPreferences = applicationContext.getSharedPreferences("runnerBe", Application.MODE_PRIVATE)
     val editor: SharedPreferences.Editor = sSharedPreferences.edit()
 
@@ -21,6 +21,15 @@ class TokenSPreference(private val applicationContext : Context) {
         removeUuid()
         removeLoginType()
     }
+
+    fun setIsTestMode(isTestMode: Boolean) {
+        editor.putBoolean("IS_TEST_MODE", isTestMode).commit()
+    }
+
+    fun getIsTestMode(): Boolean {
+        return sSharedPreferences.getBoolean("IS_TEST_MODE", false)
+    }
+
     fun setToken(token : String) {
         editor.putString("X-ACCESS-TOKEN", token).commit()
     }
