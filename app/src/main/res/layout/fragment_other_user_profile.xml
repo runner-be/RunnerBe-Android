@@ -6,8 +6,6 @@
 
     <data>
 
-        <import type="com.applemango.runnerbe.util.ResourceUtil" />
-
         <variable
             name="pace"
             type="com.applemango.runnerbe.domain.entity.Pace" />
