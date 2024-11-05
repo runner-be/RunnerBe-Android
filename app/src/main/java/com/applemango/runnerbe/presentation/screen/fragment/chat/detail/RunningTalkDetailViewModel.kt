@@ -68,14 +68,13 @@ class RunningTalkDetailViewModel @Inject constructor(
                     if (isRefresh) messageList.clear()
                     roomInfo.emit(it.body.result.roomInfo[0])
                     messageList.addAll(it.body.result.messages)
-                    talkList.value =
-                        RunningTalkDetailMapper.messagesToRunningTalkUiState(it.body.result.messages)
+                    talkList.value = RunningTalkDetailMapper.messagesToRunningTalkUiState(it.body.result.messages)
                 }
             }
         }
     }
 
-    fun messageSend(content: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun sendMessage(content: String) = viewModelScope.launch(Dispatchers.IO) {
         failedImageList.clear()
         successImageList.clear()
         roomId?.let {
@@ -242,32 +241,6 @@ class RunningTalkDetailViewModel @Inject constructor(
             "content",
             ignoreCase = true
         ) && MediaStore.AUTHORITY == uri.authority
-    }
-
-    fun getImageSelectListener() = object : RunningTalkDetailImageSelectListener {
-        override fun imageDeleteClick(position: Int) {
-            attachImageUrls.value = ArrayList(attachImageUrls.value).apply {
-                this.removeAt(position)
-            }
-        }
-    }
-
-    fun getTalkClickListener() = object : RunningTalkDetailListClickListener {
-        override fun imageClicked(imageUrl: String, talkIdList: List<Int>, clickItemId: Int) {
-            val images =
-                messageList.filter { talkIdList.contains(it.messageId) && it.imageUrl != null }
-            val i = images.indexOfFirst { it.messageId == clickItemId }
-            val index = if (i < 0) 0 else i
-            viewModelScope.launch {
-                actions.emit(
-                    RunningTalkDetailAction.MoveToImageDetail(
-                        clickPageNumber = index,
-                        images = images.map { it.imageUrl ?: "" },
-                        title = images[index].nickName
-                    )
-                )
-            }
-        }
     }
 }
 

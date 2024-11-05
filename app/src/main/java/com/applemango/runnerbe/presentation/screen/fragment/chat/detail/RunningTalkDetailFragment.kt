@@ -9,23 +9,33 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningTalkDetailBinding
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.component.PaceComponentMini
+import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewHorizontalItemDeco
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.toUri
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -35,17 +45,21 @@ class RunningTalkDetailFragment :
     private val viewModel: RunningTalkDetailViewModel by viewModels()
     private val args: RunningTalkDetailFragmentArgs by navArgs()
 
+    @Inject
+    lateinit var talkDetailListAdapter: RunningTalkDetailListAdapter
+    @Inject
+    lateinit var runningTalkDetailImageAdapter: RunningTalkDetailImageAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         binding.fragment = this
         viewModel.roomId = args.roomId
         viewModel.roomRepName = args.roomRepUserName
-        context?.let {
-            binding.messageRecyclerView.addItemDecoration(RecyclerViewItemDeco(it, 24))
-        }
-        refresh()
         observeBind()
+        initTalkDetailRecyclerView()
+        initTalkAttachedImageRecyclerView()
+        refresh()
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object :
             OnBackPressedCallback(true) {
@@ -56,6 +70,76 @@ class RunningTalkDetailFragment :
         })
 
         binding.topMessageLayout.setOnClickListener { hideKeyBoard() }
+        setupTalkDetail()
+        setupTalkAttachedImages()
+    }
+
+    private fun setupTalkDetail() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.talkList.collectLatest { messages ->
+                    talkDetailListAdapter.submitList(messages) {
+                        binding.rcvMessage.scrollToPosition(messages.size - 1)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupTalkAttachedImages() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.attachImageUrls.collectLatest { attachedImages ->
+                    runningTalkDetailImageAdapter.submitList(attachedImages)
+                }
+            }
+        }
+    }
+
+    private fun initTalkAttachedImageRecyclerView() {
+        binding.rcvAttachedImage.apply {
+            adapter = runningTalkDetailImageAdapter.apply {
+                setRunningDetailImageListener(object: RunningTalkDetailImageSelectListener {
+                    override fun imageDeleteClick(position: Int) {
+                        val prevAttachedUrls = viewModel.attachImageUrls.value
+                        viewModel.attachImageUrls.value = ArrayList(prevAttachedUrls).apply {
+                            this.removeAt(position)
+                        }
+                    }
+                })
+            }
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            itemAnimator = null
+            addItemDecoration(RecyclerViewHorizontalItemDeco(context, 8))
+        }
+    }
+
+    private fun initTalkDetailRecyclerView() {
+        binding.rcvMessage.apply {
+            adapter = talkDetailListAdapter.apply {
+                setTalkDetailClickListener(object : RunningTalkDetailClickListener {
+                    override fun imageClicked(
+                        imageUrl: String,
+                        talkIdList: List<Int>,
+                        clickItemId: Int
+                    ) {
+                        val images =
+                            viewModel.messageList.filter { talkIdList.contains(it.messageId) && it.imageUrl != null }
+                        val i = images.indexOfFirst { it.messageId == clickItemId }
+                        val index = if (i < 0) 0 else i
+                        navigate(
+                            RunningTalkDetailFragmentDirections.moveToImageDetailFragment(
+                                pageNumber = index,
+                                images = images.mapNotNull { it.imageUrl }.toTypedArray(),
+                                title = images[index].nickName
+                            )
+                        )
+                    }
+                })
+            }
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(RecyclerViewItemDeco(context, 24))
+        }
     }
 
     private fun observeBind() {
@@ -129,8 +213,10 @@ class RunningTalkDetailFragment :
     }
 
     private fun refresh() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getDetailData(true)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getDetailData(true)
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ItemMeImageTalkBinding
 import com.applemango.runnerbe.databinding.ItemMeMessageTalkBinding
 import com.applemango.runnerbe.databinding.ItemMyTalkContainerBinding
+import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.util.dpToPx
@@ -20,9 +21,8 @@ import com.bumptech.glide.request.RequestOptions
 
 class RunningTalkDetailMyContainerViewHolder(
     val binding: ItemMyTalkContainerBinding,
-    private val listener: RunningTalkDetailListClickListener
-) :
-    RecyclerView.ViewHolder(binding.root) {
+    private val listener: RunningTalkDetailClickListener
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RunningTalkUiState.MyRunningTalkUiState) {
         val context = binding.root.context
         binding.messageContainerView.removeAllViews()

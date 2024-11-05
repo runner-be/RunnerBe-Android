@@ -7,23 +7,22 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.databinding.ItemMyTalkContainerBinding
 import com.applemango.runnerbe.databinding.ItemOtherTalkContainerBinding
+import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 
-class RunningTalkDetailListAdapter(val listener: RunningTalkDetailListClickListener) :
-    ListAdapter<RunningTalkUiState, RecyclerView.ViewHolder>(RunningTalkDetailDiffCallBack()) {
-
-    private val myViewType = 1
-    private val otherViewType = 2
+class RunningTalkDetailListAdapter :
+    ListAdapter<RunningTalkUiState, RecyclerView.ViewHolder>(talkDetailDiffUtil) {
+    private var talkDetailClickListener: RunningTalkDetailClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            myViewType -> {
+            VIEW_TYPE_MY -> {
                 RunningTalkDetailMyContainerViewHolder(
                     ItemMyTalkContainerBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    ), listener = listener
+                    ), talkDetailClickListener!!
                 )
             }
 
@@ -33,7 +32,7 @@ class RunningTalkDetailListAdapter(val listener: RunningTalkDetailListClickListe
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    ), listener = listener
+                    ), talkDetailClickListener!!
                 )
             }
         }
@@ -53,39 +52,43 @@ class RunningTalkDetailListAdapter(val listener: RunningTalkDetailListClickListe
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is RunningTalkUiState.MyRunningTalkUiState -> myViewType
-            is RunningTalkUiState.OtherRunningTalkUiState -> otherViewType
+            is RunningTalkUiState.MyRunningTalkUiState -> VIEW_TYPE_MY
+            is RunningTalkUiState.OtherRunningTalkUiState -> VIEW_TYPE_OTHER
         }
     }
-}
 
-class RunningTalkDetailDiffCallBack : DiffUtil.ItemCallback<RunningTalkUiState>() {
-    override fun areItemsTheSame(
-        oldItem: RunningTalkUiState,
-        newItem: RunningTalkUiState
-    ): Boolean = oldItem == newItem
+    fun setTalkDetailClickListener(listener: RunningTalkDetailClickListener) {
+        this.talkDetailClickListener = listener
+    }
 
+    companion object {
+        private const val VIEW_TYPE_MY = 1
+        private const val VIEW_TYPE_OTHER = 2
+        private val talkDetailDiffUtil = object : DiffUtil.ItemCallback<RunningTalkUiState>() {
+            override fun areItemsTheSame(
+                oldItem: RunningTalkUiState,
+                newItem: RunningTalkUiState
+            ): Boolean = when (oldItem) {
+                is RunningTalkUiState.MyRunningTalkUiState -> {
+                    if (newItem is RunningTalkUiState.MyRunningTalkUiState) {
+                        oldItem.items == newItem.items
+                    } else false
+                }
 
-    override fun areContentsTheSame(
-        oldItem: RunningTalkUiState,
-        newItem: RunningTalkUiState
-    ): Boolean {
-        return when (oldItem) {
-            is RunningTalkUiState.MyRunningTalkUiState -> {
-                if (newItem is RunningTalkUiState.MyRunningTalkUiState) {
-                    oldItem == newItem
-                } else false
+                is RunningTalkUiState.OtherRunningTalkUiState -> {
+                    if (newItem is RunningTalkUiState.OtherRunningTalkUiState) {
+                        oldItem.items == newItem.items
+                    } else false
+                }
             }
 
-            is RunningTalkUiState.OtherRunningTalkUiState -> {
-                if (newItem is RunningTalkUiState.OtherRunningTalkUiState) {
-                    oldItem == newItem
-                } else false
+
+            override fun areContentsTheSame(
+                oldItem: RunningTalkUiState,
+                newItem: RunningTalkUiState
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }
-}
-
-interface RunningTalkDetailListClickListener {
-    fun imageClicked(imageUrl: String, talkIdList: List<Int>, clickItemId: Int)
 }

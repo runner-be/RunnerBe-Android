@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 object RunningTalkDetailMapper {
-
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
     fun messagesToRunningTalkUiState(messages: List<Messages>): List<RunningTalkUiState> {
         val result: ArrayList<RunningTalkUiState> = arrayListOf()
@@ -33,12 +32,12 @@ object RunningTalkDetailMapper {
                         index++
                     } else break
                 }
-                result.add(if(target.from.lowercase() == "me") RunningTalkUiState.MyRunningTalkUiState(
+                result.add(
+                    if(target.from.lowercase() == "me") RunningTalkUiState.MyRunningTalkUiState(
                     createTime = timeHourAndMinute(target.createAt),
                     isPostWriter = target.whetherPostUser.uppercase() == "Y",
                     items = items
-                )
-                else RunningTalkUiState.OtherRunningTalkUiState(
+                ) else RunningTalkUiState.OtherRunningTalkUiState(
                     createTime = timeHourAndMinute(target.createAt),
                     isPostWriter = target.whetherPostUser.uppercase() == "Y",
                     isReportMode = false,
