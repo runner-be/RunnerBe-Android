@@ -8,7 +8,7 @@ data class RunningLogRequest(
     @SerializedName("stampCode") val stampCode: String,
 //    @SerializedName("gatheringId") val gatheringId: Int?,
     @SerializedName("contents") val contents: String,
-    @SerializedName("weatherDegree") val weatherDegree: Int,
-    @SerializedName("weatherIcon") val weatherIcon: String,
+    @SerializedName("weatherDegree") val weatherDegree: Int?,
+    @SerializedName("weatherIcon") val weatherIcon: String?,
     @SerializedName("isOpened") val isOpened: Int
 )
