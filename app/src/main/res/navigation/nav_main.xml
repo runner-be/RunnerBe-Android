@@ -28,7 +28,11 @@
             app:destination="@id/runningFilterFragment" />
         <action
             android:id="@+id/action_mainFragment_to_runningTalkDetailFragment"
-            app:destination="@id/runningTalkDetailFragment" />
+            app:destination="@id/runningTalkDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mainFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"

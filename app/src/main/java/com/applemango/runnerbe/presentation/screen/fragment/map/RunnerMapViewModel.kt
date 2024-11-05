@@ -112,7 +112,6 @@ class RunnerMapViewModel @Inject constructor(
         } else {
             coordinator
         }
-        LogUtil.errorLog("AAA getRunningList called! $userId \n $iCoordinator")
         val request = GetRunningListRequest(
             userLat = iCoordinator.latitude,
             userLng = iCoordinator.longitude,

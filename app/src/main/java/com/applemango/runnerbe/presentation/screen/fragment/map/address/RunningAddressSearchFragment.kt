@@ -97,7 +97,6 @@ class RunningAddressSearchFragment :
                     val longitude = location.longitude
                     getAddressFromLatLng(requireContext(), latitude, longitude) { addressResult ->
                         addressResult?.let {
-                            Log.e("getAddressFromLatLng", it)
                             navigateToSearchDetailFragment(
                                 AddressResult(
                                     "장소 정보 없음",
