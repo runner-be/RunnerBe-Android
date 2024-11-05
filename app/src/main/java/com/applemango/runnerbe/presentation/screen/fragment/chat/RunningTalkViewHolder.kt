@@ -4,14 +4,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.databinding.ItemRunningTalkBinding
 import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.presentation.model.listener.RoomClickListener
+import com.applemango.runnerbe.util.LogUtil
 
 class RunningTalkViewHolder(
-    val binding: ItemRunningTalkBinding,
-    private val roomClickListener: RoomClickListener
+    val binding: ItemRunningTalkBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Room) {
+    fun bind(item: Room, listener: RoomClickListener) {
         binding.item = item
-        binding.clickListener = roomClickListener
+        binding.clickListener = listener
+        binding.executePendingBindings()
     }
 }
