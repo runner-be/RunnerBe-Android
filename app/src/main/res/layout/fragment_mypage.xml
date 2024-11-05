@@ -150,8 +150,8 @@
                 android:layout_marginTop="22dp"
                 android:background="@drawable/bg_black_solid_radius_4"
                 android:elevation="-1dp"
-                app:layout_constraintTop_toBottomOf="@id/userMainLayout"
-                app:layout_constraintBottom_toBottomOf="@id/paceRegistrationLayout" />
+                app:layout_constraintBottom_toBottomOf="@id/paceRegistrationLayout"
+                app:layout_constraintTop_toBottomOf="@id/userMainLayout" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -191,7 +191,6 @@
                 android:id="@+id/paceRegistrationLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_g4_stroke_radius_100"
                 android:onClick="@{() -> myPageViewModel.paceRegistrationClicked()}"
                 android:paddingHorizontal="8dp"
                 android:visibility="@{myPageViewModel.pace == null ? View.VISIBLE : View.INVISIBLE}"
@@ -200,20 +199,21 @@
                 app:layout_constraintRight_toLeftOf="@id/divider"
                 app:layout_constraintTop_toTopOf="@id/paceAndDiligenceBackgroundLayout">
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_primary_24" />
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:includeFontPadding="false"
                     android:text="@string/pace_regist_with_emoji"
                     android:textColor="@color/dark_g3"
                     android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:src="@drawable/ic_plus_16" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -311,8 +311,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:padding="8dp"
                 android:fontFamily="@font/pretendard_regular"
+                android:padding="8dp"
                 android:text="@string/pace_edit"
                 android:textColor="@color/dark_g2"
                 android:textSize="12sp"
