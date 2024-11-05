@@ -40,7 +40,8 @@ class MyPageViewModel @Inject constructor(
     private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
     val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
-    val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
+    val userInfo: MutableStateFlow<UserInfo?> = MutableStateFlow(null)
+    val diligence: MutableStateFlow<String?> = MutableStateFlow(null)
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
     val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
     val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
@@ -90,7 +91,6 @@ class MyPageViewModel @Inject constructor(
                     is CommonResponse.Success<*> -> {
                         if (it.body is UserDataResponse) {
                             val result = it.body.result
-                            userInfo.postValue(result.userInfo)
                             myPosts.clear()
                             joinPosts.value = result.myRunning
                             result.posting?.let { postingList ->
@@ -98,6 +98,7 @@ class MyPageViewModel @Inject constructor(
                             }
                             RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
                             pace.emit(result.userInfo.pace)
+                            diligence.emit(result.userInfo.diligence)
                         }
                     }
 
