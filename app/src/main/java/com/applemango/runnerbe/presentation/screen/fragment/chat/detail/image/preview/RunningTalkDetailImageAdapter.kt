@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.databinding.ItemRunningTalkDetailSelectImageBinding
 
-class RunningTalkDetailImageAdapter(val listener: RunningTalkDetailImageSelectListener) :
+class RunningTalkDetailImageAdapter() :
     ListAdapter<String, RunningTalkDetailImageViewHolder>(RunningTalkDetailSelectImageDiffCallBack()) {
+    lateinit var listener: RunningTalkDetailImageSelectListener
+
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): RunningTalkDetailImageViewHolder {
         return RunningTalkDetailImageViewHolder(
             ItemRunningTalkDetailSelectImageBinding.inflate(
@@ -20,6 +22,10 @@ class RunningTalkDetailImageAdapter(val listener: RunningTalkDetailImageSelectLi
 
     override fun onBindViewHolder(holder: RunningTalkDetailImageViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun setRunningDetailImageListener(listener: RunningTalkDetailImageSelectListener) {
+        this.listener = listener
     }
 }
 

@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.databinding.ItemRunningTalkBinding
 import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.presentation.model.listener.RoomClickListener
-import com.applemango.runnerbe.util.LogUtil
 
 class RunningTalkViewHolder(
     val binding: ItemRunningTalkBinding
