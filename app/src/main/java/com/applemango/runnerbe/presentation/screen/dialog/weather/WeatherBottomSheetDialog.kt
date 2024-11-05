@@ -36,7 +36,11 @@ class WeatherBottomSheetDialog(
 
     init {
         this.selectedWeather = selectedWeather
-        this.currentTemperature = currentDegree
+        this.currentTemperature = if (currentDegree == "-") {
+            ""
+        } else {
+            currentDegree
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +60,6 @@ class WeatherBottomSheetDialog(
     private fun initClickListeners() {
         with(binding) {
             btnRegister.setOnClickListener {
-                if (binding.etTemperature.text.isNullOrBlank()) {
-                    Toast.makeText(context, getString(R.string.toast_weather_degree), Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
                 if (selectedWeather == WeatherItem.defaultWeatherItem) {
                     onWeatherConfirmListener?.onConfirmClicked(
                         WeatherItem(
