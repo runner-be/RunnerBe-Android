@@ -218,7 +218,7 @@
     <string name="my_job">나의 직군</string>
     <string name="double_check">중복확인</string>
     <string name="pace_regist">페이스 등록</string>
-    <string name="pace_regist_with_emoji">👟 페이스 등록</string>
+    <string name="pace_regist_with_emoji">페이스 등록</string>
     <string name="pace_level">페이스 난이도</string>
     <string name="pace_regist_description_title">나의 러닝 페이스를 선택해주세요!</string>
     <string name="pace_regist_description">페이스는 1km당 달리는데 걸리는 시간에 대한\n나의 러닝 페이스를 의미해요.</string>
