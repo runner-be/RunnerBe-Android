@@ -21,7 +21,6 @@ import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraDialog
 import com.applemango.runnerbe.presentation.screen.dialog.camera.CameraOptionSelectListener
 import com.applemango.runnerbe.presentation.screen.fragment.image.ImageCropActivity
 import com.applemango.runnerbe.presentation.screen.fragment.image.ImageCropListener
-import com.applemango.runnerbe.util.LogUtil
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
