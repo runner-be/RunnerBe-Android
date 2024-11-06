@@ -57,7 +57,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="7dp"
+                        android:layout_marginStart="6dp"
                         android:fontFamily="@font/pretendard_bold"
                         android:includeFontPadding="false"
                         android:text="@string/filter"
@@ -70,7 +70,7 @@
                     android:id="@+id/priorityButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_5_5g_solid_radius_14"
                     android:gravity="center"
                     android:onClick="@{() -> vm.priorityTagClicked()}"
@@ -102,7 +102,7 @@
                     android:id="@+id/runningTagButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_5_5g_solid_radius_14"
                     android:gravity="center"
                     android:onClick="@{() -> vm.runningTagClicked()}"
@@ -133,7 +133,7 @@
                 <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/selector_filter"
                     android:button="@null"
                     android:checked="@={vm.includeFinish}"
@@ -160,9 +160,9 @@
                 android:paddingHorizontal="12dp"
                 android:paddingTop="20dp"
                 android:paddingBottom="16dp"
+                android:overScrollMode="never"
                 android:visibility="@{vm.postList.empty ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filterLayout" />
@@ -170,7 +170,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/emptyTextView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:gravity="center"
                 android:paddingVertical="83dp"
                 android:text="@string/empty_post"
@@ -179,6 +179,7 @@
                 android:visibility="@{vm.postList.empty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filterLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
