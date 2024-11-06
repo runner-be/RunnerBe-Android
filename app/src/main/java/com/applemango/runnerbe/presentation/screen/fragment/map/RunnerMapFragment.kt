@@ -2,12 +2,14 @@ package com.applemango.runnerbe.presentation.screen.fragment.map
 
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
@@ -23,6 +25,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.setHeight
 import com.jakewharton.rxbinding4.view.clicks
@@ -33,6 +36,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.collectLatest
@@ -65,9 +69,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.vm = viewModel
         binding.postListLayout.vm = viewModel
         binding.postListLayout.mainVm = mainViewModel
-        context?.let {
-            binding.postListLayout.postRecyclerView.addItemDecoration(RecyclerViewItemDeco(it, 12))
-        }
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.isShowInfoDialog.emit(true)
         }
@@ -83,6 +84,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             }
         }
         initPostRecyclerView()
+        initSlideLayoutListener()
         initListeners()
         setupPostFlow()
     }
@@ -169,6 +171,60 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     override fun onLowMemory() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
+    }
+
+    private fun initSlideLayoutListener() {
+        binding.slideLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View?, slideOffset: Float) {
+                if (panel?.top == 0) {
+                    binding.bottomDrawerLayout.setBackgroundResource(R.drawable.bg_top_rectangle)
+                } else {
+                    binding.bottomDrawerLayout.setBackgroundResource(R.drawable.bg_top_rounded)
+                }
+                binding.llMapRefresh.visibility = if ((panel?.top ?: 0) < 150) View.GONE else View.VISIBLE
+                val twelveDpInPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    12f,
+                    binding.llMapRefresh.resources.displayMetrics
+                )
+                val offsetY = (binding.bottomDrawerLayout.top - binding.llMapRefresh.height - twelveDpInPx)
+                binding.llMapRefresh.translationY = offsetY
+            }
+
+            override fun onPanelStateChanged(
+                panel: View?,
+                previousState: SlidingUpPanelLayout.PanelState?,
+                newState: SlidingUpPanelLayout.PanelState?
+            ) {
+                when (newState) {
+                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
+                        binding.postListLayout.postRecyclerView.isNestedScrollingEnabled = true
+                    }
+
+                    SlidingUpPanelLayout.PanelState.DRAGGING -> {
+                        if (previousState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                            binding.llMapRefresh.visibility = View.VISIBLE
+                        }
+                    }
+
+                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
+                        binding.llMapRefresh.visibility = View.VISIBLE
+                    }
+
+                    SlidingUpPanelLayout.PanelState.ANCHORED -> {
+
+                    }
+
+                    SlidingUpPanelLayout.PanelState.HIDDEN -> {
+
+                    }
+
+                    null -> {
+
+                    }
+                }
+            }
+        })
     }
 
     private fun initListeners() {
@@ -258,7 +314,23 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 })
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(RecyclerViewItemDeco(context, 12))
             itemAnimator = null
+
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        if (binding.slideLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                            binding.slideLayout.post {
+                                binding.slideLayout.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+                            }
+                            LogUtil.errorLog("${binding.slideLayout.panelState}")
+                            recyclerView.stopScroll()
+                        }
+                    }
+                }
+            })
         }
     }
 
