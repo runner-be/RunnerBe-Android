@@ -420,10 +420,10 @@
             <TextView
                 android:id="@+id/tv_joined_running_empty"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_medium"
+                android:layout_height="120dp"
                 android:gravity="center"
-                android:paddingVertical="25dp"
+                android:paddingVertical="30dp"
+                android:fontFamily="@font/pretendard_medium"
                 android:text="@string/joined_running_empty"
                 android:textColor="@color/dark_g3_5"
                 android:textSize="15sp"
