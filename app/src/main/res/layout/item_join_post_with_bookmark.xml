@@ -92,12 +92,12 @@
                     android:textColor="@color/dark_g3"
                     android:fontFamily="@font/pretendard_regular"
                     android:includeFontPadding="false"
-                    android:layout_marginLeft="6dp"/>
+                    android:layout_marginStart="6dp"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     tools:text="여성만"
                     android:text="@{item.genderString()}"
                     android:textColor="@color/dark_g3"
@@ -149,7 +149,7 @@
                     tools:text="3/31 (금) AM 6:00"
                     android:textSize="12sp"
                     android:textColor="@color/dark_g3"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:includeFontPadding="false"/>
 
@@ -160,7 +160,7 @@
                     bind:afterPartyStatus="@{item.afterParty}"
                     android:textSize="12sp"
                     android:textColor="@color/dark_g3"
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:includeFontPadding="false"/>
 
@@ -194,7 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="700 ~ 900"
-                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="8dp"
                         bind:paceText="@{item.pace}"
                         android:textColor="@color/dark_g1"
                         android:textSize="12sp"
