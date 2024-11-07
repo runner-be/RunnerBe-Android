@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.RunningTag
@@ -200,6 +201,22 @@ fun getWhetherEndCheckStatus(textView: TextView, post: Posting) {
 fun getAfterPartyStatus(textView: TextView, isAfterParty: Int) {
     textView.text =
         textView.resources.getString(if (isAfterParty == 1) R.string.after_party_exist else R.string.after_party_not_exist)
+}
+
+@BindingAdapter("bind:filterRedDotVisibility")
+fun ImageView.filterVisibility(filterData: MapFilterData) {
+    val visibility = if (MapFilterData.isFilterApplied(filterData)) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+    this.visibility = visibility
+}
+
+@BindingAdapter("bind:backgroundTop")
+fun View.backgroundTop(panelTop: Int?) {
+    val resource = if (panelTop == 0) R.drawable.bg_top_rectangle else R.drawable.bg_top_rounded
+    this.setBackgroundResource(resource)
 }
 
 @BindingAdapter("bind:paceImage16")

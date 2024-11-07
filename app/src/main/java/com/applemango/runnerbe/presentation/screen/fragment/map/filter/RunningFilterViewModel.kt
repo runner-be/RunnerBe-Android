@@ -45,6 +45,9 @@ class RunningFilterViewModel : ViewModel() {
 
     val actions: MutableSharedFlow<RunningFilterAction> = MutableSharedFlow()
     fun refresh() {
+        paceList.value = initPaceInfoListWithAll().map { pace ->
+            pace.copy(isSelected = true)
+        }
         paceCheckedList.value = listOf(Pace.ALL)
         genderRadioChecked.value = R.id.allTab
         afterPartyRadioChecked.value = R.id.rb_all_after_party
