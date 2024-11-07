@@ -1,12 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.filter
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResult
@@ -17,8 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningFilterBinding
-import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.util.ToastUtil
 import com.google.android.material.slider.RangeSlider
 import com.jakewharton.rxbinding4.view.clicks
 import kotlinx.coroutines.launch
@@ -60,10 +55,16 @@ class RunningFilterFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.actions.collect {
-                    when(it) {
+                    when (it) {
                         is RunningFilterAction.MoveToBack -> {
-                            setFragmentResult("filter", it.bundle)
-                            navPopStack()
+                            if (viewModel.paceCheckedList.value.isEmpty()) {
+                                context?.let { ctxt ->
+                                    ToastUtil.showShortToast(ctxt, getString(R.string.toast_error_pace_selected_empty))
+                                }
+                            } else {
+                                setFragmentResult("filter", it.bundle)
+                                navPopStack()
+                            }
                         }
                     }
                 }
@@ -71,7 +72,8 @@ class RunningFilterFragment :
         }
     }
 
-    private fun getIsTooltipVisible(): Boolean = binding.tvTooltipPaceInfo.visibility == View.VISIBLE
+    private fun getIsTooltipVisible(): Boolean =
+        binding.tvTooltipPaceInfo.visibility == View.VISIBLE
 
     private fun controlPaceTooltip(isTooltipVisible: Boolean) {
         if (isTooltipVisible) {
@@ -117,7 +119,7 @@ class RunningFilterFragment :
         viewModel.setAfterPartyTag(args.afterParty)
         viewModel.setJobTag(args.job)
         viewModel.isAllAgeChecked.value = isAllCheckAge(args.minAge, args.maxAge)
-        if(!isAllCheckAge(args.minAge, args.maxAge)) {
+        if (!isAllCheckAge(args.minAge, args.maxAge)) {
             viewModel.recruitmentStartAge.value = args.minAge
             viewModel.recruitmentEndAge.value = args.maxAge
             binding.ageSlider.values = listOf(
@@ -127,7 +129,7 @@ class RunningFilterFragment :
         }
     }
 
-    private fun isAllCheckAge(minAge : Int, maxAge : Int) = minAge == 0 && maxAge == 100
+    private fun isAllCheckAge(minAge: Int, maxAge: Int) = minAge == 0 && maxAge == 100
     private fun sliderSetting() {
         binding.ageSlider.addOnChangeListener(RangeSlider.OnChangeListener { slider, _, _ ->
             val ages = slider.values
@@ -145,8 +147,9 @@ class RunningFilterFragment :
                     if (count != 0) {
                         viewModel.backClicked()
                     } else {
-                        // 팝업 출력
-                        Toast.makeText(requireContext(), "페이스 선택해주세요", Toast.LENGTH_SHORT).show()
+                        context?.let { ctxt ->
+                            ToastUtil.showShortToast(ctxt, getString(R.string.toast_error_pace_selected_empty))
+                        }
                     }
                 }
             })
