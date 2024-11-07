@@ -18,6 +18,8 @@
     <string name="toast_weather_degree">기온을 입력해주세요</string>
     <string name="toast_stamp_missing">스탬프를 선택해주세요!</string>
     <string name="toast_weather_missing">날씨를 선택해주세요!</string>
+    <string name="toast_error_move_to_current_location">현재 위치 정보를 가져올 수 없어요</string>
+    <string name="toast_error_pace_selected_empty">페이스 난이도를 선택해주세요</string>
 
     <!-- 권한 -->
     <string name="permission_denied_camera">카메라 권한이 허용되지 않았습니다.\n설정에서 권한을 허용해주세요.</string>
