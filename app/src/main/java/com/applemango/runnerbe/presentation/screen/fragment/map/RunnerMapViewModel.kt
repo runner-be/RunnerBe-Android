@@ -34,9 +34,10 @@ class RunnerMapViewModel @Inject constructor(
 ) : ViewModel() {
 
     val postList: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
+    val panelTop: MutableStateFlow<Int?> = MutableStateFlow(null)
 
     private val pageSize = 10
-    var isEndPage = false
+    private var isEndPage = false
     var coordinator: LatLng = LatLng(37.5666805, 126.9784147) //서울시청 디폴트
 
     private val _listUpdateUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
@@ -48,7 +49,8 @@ class RunnerMapViewModel @Inject constructor(
     val filterRunningTag: MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
     private var preFilterRunningTag: RunningTag? = filterRunningTag.value
 
-    private val filterAfterPartyTag: MutableStateFlow<AfterPartyTag> = MutableStateFlow(AfterPartyTag.ALL)
+    private val filterAfterPartyTag: MutableStateFlow<AfterPartyTag> =
+        MutableStateFlow(AfterPartyTag.ALL)
     private var preFilterAfterPartyTag: AfterPartyTag? = filterAfterPartyTag.value
 
     val filterPriorityTag: MutableStateFlow<PriorityFilterTag> =
@@ -56,7 +58,7 @@ class RunnerMapViewModel @Inject constructor(
     private var prePriorityTag = filterPriorityTag.value
     val includeFinish: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var preIncludeFinish = includeFinish.value
-    private val filterData: MutableStateFlow<MapFilterData> =
+    val filterData: MutableStateFlow<MapFilterData> =
         MutableStateFlow(
             MapFilterData(
                 listOf(
