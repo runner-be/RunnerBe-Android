@@ -405,14 +405,16 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 }
 
                 PanelState.ANCHORED -> {
-                    val bottomLayoutHeight = binding.bottomDrawerLayout.height
+                    val bottomDrawerTabLayoutHeight = binding.bottomDrawerTabLayout.height
                     val mapHeight = binding.mapView.height
 
-                    val adjustmentRatio = (bottomLayoutHeight.toFloat() / 2) / mapHeight
+                    val visibleMapVerticalCenter = (mapHeight + bottomDrawerTabLayoutHeight) / 4
 
+                    // 현재 위치의 스크린 좌표 계산
                     val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
-                    screenPosition.y -= (mapHeight * adjustmentRatio).toInt()
+                    screenPosition.y += visibleMapVerticalCenter.toFloat()
 
+                    // 조정된 화면 위치에 대한 위도/경도 계산
                     val adjustedLatLng = mNaverMap.projection.fromScreenLocation(screenPosition)
 
                     CameraUpdate.scrollTo(adjustedLatLng)
@@ -447,7 +449,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             }
         }
     }
-
 
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
@@ -486,13 +487,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 mNaverMap.cameraPosition.target.latitude,
                 mNaverMap.cameraPosition.target.longitude
             )
-
-            if (mNaverMap.locationTrackingMode == LocationTrackingMode.Follow) {
-                mNaverMap.locationTrackingMode = LocationTrackingMode.None
-                viewModel.refreshThisLocation.value = false
-            } else {
-                viewModel.refreshThisLocation.value = true
-            }
+            viewModel.refreshThisLocation.value =
+                (mNaverMap.locationTrackingMode != LocationTrackingMode.Follow)
             viewModel.coordinator = center
         }
         viewLifecycleOwner.lifecycleScope.launch {
