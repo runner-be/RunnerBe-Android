@@ -410,11 +410,9 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
                     val visibleMapVerticalCenter = (mapHeight + bottomDrawerTabLayoutHeight) / 4
 
-                    // 현재 위치의 스크린 좌표 계산
                     val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
                     screenPosition.y += visibleMapVerticalCenter.toFloat()
 
-                    // 조정된 화면 위치에 대한 위도/경도 계산
                     val adjustedLatLng = mNaverMap.projection.fromScreenLocation(screenPosition)
 
                     CameraUpdate.scrollTo(adjustedLatLng)
