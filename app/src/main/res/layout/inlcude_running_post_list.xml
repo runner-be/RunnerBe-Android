@@ -34,7 +34,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/filterTagButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -43,16 +43,31 @@
                     android:onClick="@{() -> vm.filterClicked()}"
                     android:orientation="horizontal"
                     android:paddingStart="10dp"
-                    android:paddingEnd="12dp"
-                    android:paddingVertical="7dp"
+                    android:paddingEnd="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_filter_primary" />
+                        android:layout_marginVertical="5dp"
+                        android:src="@drawable/ic_filter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_filter_red_dot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:src="@drawable/ic_red_dot_7"
+                        app:layout_constraintEnd_toEndOf="@id/iv_filter"
+                        app:layout_constraintTop_toTopOf="@id/iv_filter"
+                        bind:filterRedDotVisibility="@{vm.filterData}" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -62,14 +77,17 @@
                         android:includeFontPadding="false"
                         android:text="@string/filter"
                         android:textColor="@color/dark_g2"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_filter"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/priorityButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_5_5g_solid_radius_14"
                     android:gravity="center"
@@ -101,7 +119,7 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/runningTagButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_5_5g_solid_radius_14"
                     android:gravity="center"
@@ -132,7 +150,7 @@
 
                 <CheckBox
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/selector_filter"
                     android:button="@null"
@@ -157,11 +175,10 @@
                 android:id="@+id/postRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 android:paddingHorizontal="12dp"
                 android:paddingTop="20dp"
                 android:paddingBottom="16dp"
-                android:overScrollMode="never"
-                android:visibility="@{vm.postList.empty ? View.GONE : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -170,16 +187,15 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/emptyTextView"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="180dp"
                 android:gravity="center"
-                android:paddingVertical="83dp"
+                android:paddingVertical="60dp"
                 android:text="@string/empty_post"
                 android:textColor="@color/dark_g4"
                 android:textSize="18sp"
                 android:visibility="@{vm.postList.empty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/filterLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

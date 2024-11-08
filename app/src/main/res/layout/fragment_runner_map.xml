@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.applemango.runnerbe.presentation.screen.fragment.map.RunnerMapViewModel" />
@@ -32,16 +35,16 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_medium"
                 android:gravity="center_horizontal"
+                android:paddingVertical="10dp"
                 android:text="address"
                 android:textColor="@color/dark_g3_5"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:paddingVertical="10dp"
-                tools:text="서울시 동작구"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="서울시 동작구" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_bell"
@@ -62,15 +65,15 @@
             android:layout_height="0dp"
             android:gravity="bottom"
             android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mapTopLayout"
+            app:umanoAnchorPoint="0.5"
             app:umanoDragView="@id/bottomDrawerTabLayout"
             app:umanoFadeColor="@android:color/transparent"
+            app:umanoInitialState="anchored"
             app:umanoOverlay="true"
             app:umanoPanelHeight="74dp"
-            app:umanoShadowHeight="0dp"
-            app:umanoAnchorPoint="0.5"
-            app:umanoInitialState="anchored"
-            app:layout_constraintTop_toBottomOf="@id/mapTopLayout"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:umanoShadowHeight="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mapLayout"
@@ -82,7 +85,7 @@
                     android:id="@+id/map_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,7 +100,8 @@
                     android:id="@+id/bottomDrawerTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    bind:backgroundTop="@{vm.panelTop}">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
@@ -130,39 +134,49 @@
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_current_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_current_location"
+            android:visibility="@{vm.refreshThisLocation ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mapTopLayout" />
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ll_map_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_dark_g7_solid_radius_20"
+            android:gravity="center"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp"
-            android:layout_marginEnd="12dp"
-            android:gravity="center"
             android:visibility="@{vm.refreshThisLocation ? View.VISIBLE : View.GONE}"
-            android:background="@drawable/bg_dark_g7_solid_radius_20"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_current_location"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mapTopLayout">
+            app:layout_constraintTop_toTopOf="@+id/iv_current_location">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="4dp"
-                android:src="@drawable/ic_refresh"/>
+                android:src="@drawable/ic_refresh" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/refresh_this_location"
-                android:textSize="14sp"
-                android:textColor="@color/dark_g3"/>
+                android:textColor="@color/dark_g3"
+                android:textSize="14sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/runningAddButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="20dp"
+            android:layout_margin="12dp"
             android:onClick="@{() -> vm.writeClicked()}"
             android:src="@drawable/ic_running_plus"
             app:layout_constraintBottom_toBottomOf="parent"

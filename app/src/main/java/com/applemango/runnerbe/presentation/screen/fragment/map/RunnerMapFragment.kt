@@ -2,8 +2,9 @@ package com.applemango.runnerbe.presentation.screen.fragment.map
 
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +31,8 @@ import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.setHeight
 import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -37,19 +40,18 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.NumberFormatException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.IllegalArgumentException
 
 @AndroidEntryPoint
 class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragment_runner_map),
     OnMapReadyCallback {
-    var userId = -1
+    var userId = RunnerBeApplication.mTokenPreference.getUserId()
     private val PERMISSION_REQUEST_CODE = 100
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -78,19 +80,32 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         observeBind()
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
         setOnPostCreatedListener()
-        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
-            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
-                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
+//        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
+//            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
+//                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
+//            }
+//        }
+
+        binding.slideLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                updatePanelViewsPosition(binding.slideLayout.panelState, 0.5f)
+                binding.slideLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
-        }
+        })
+
         initPostRecyclerView()
         initSlideLayoutListener()
         initListeners()
         setupPostFlow()
+        setupIsPanelTopZero()
     }
 
     private fun setOnPostCreatedListener() {
-        activity?.supportFragmentManager?.setFragmentResultListener("postCreated", viewLifecycleOwner) { _, result ->
+        activity?.supportFragmentManager?.setFragmentResultListener(
+            "postCreated",
+            viewLifecycleOwner
+        ) { _, result ->
             val refresh = result.getBoolean("refresh", false)
             if (refresh) {
                 viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = true)
@@ -116,19 +131,31 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             }
             launch {
                 viewModel.actions.collect {
-                    when(it) {
+                    when (it) {
                         is RunnerMapViewModel.RunnerMapAction.MoveToWrite -> {
                             checkAdditionalUserInfo {
-                                if(RunnerBeApplication.mTokenPreference.getMyRunningPace().isNullOrBlank()) {
-                                    navigate(MainFragmentDirections.actionMainFragmentToPaceInfoFragment("map"))
-                                } else navigate(MainFragmentDirections.actionMainFragmentToRunningWriteFragment(null))
+                                if (RunnerBeApplication.mTokenPreference.getMyRunningPace()
+                                        .isNullOrBlank()
+                                ) {
+                                    navigate(
+                                        MainFragmentDirections.actionMainFragmentToPaceInfoFragment(
+                                            "map"
+                                        )
+                                    )
+                                } else navigate(
+                                    MainFragmentDirections.actionMainFragmentToRunningWriteFragment(
+                                        null
+                                    )
+                                )
                             }
                         }
+
                         is RunnerMapViewModel.RunnerMapAction.ShowSelectListDialog -> {
                             context?.let { context ->
                                 SelectItemDialog.createShow(context, it.list)
                             }
                         }
+
                         is RunnerMapViewModel.RunnerMapAction.MoveToRunningFilter -> {
                             val filter = it.filterData
                             navigate(
@@ -173,53 +200,61 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.mapView.onLowMemory()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mapView.onDestroy()
+    }
+
+    private fun updatePanelViewsPosition(panelState: PanelState, slideOffset: Float) {
+        val bottomDrawerTop = when (panelState) {
+            PanelState.EXPANDED -> binding.bottomDrawerLayout.top
+            PanelState.ANCHORED -> (binding.bottomDrawerLayout.top * slideOffset).toInt()
+            PanelState.COLLAPSED -> binding.slideLayout.panelHeight
+            else -> binding.bottomDrawerLayout.top
+        }
+        val locationOffsetY = (bottomDrawerTop - binding.ivCurrentLocation.height).toFloat()
+
+        binding.llMapRefresh.translationY = locationOffsetY
+        binding.ivCurrentLocation.translationY = locationOffsetY
+    }
+
+    private fun setupIsPanelTopZero() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.panelTop.collectLatest { panelTop ->
+                if (panelTop == null || panelTop < 150) {
+                    binding.llMapRefresh.visibility = View.GONE
+                    binding.ivCurrentLocation.visibility = View.GONE
+                    return@collectLatest
+                } else {
+                    binding.llMapRefresh.visibility = View.VISIBLE
+                    binding.ivCurrentLocation.visibility = View.VISIBLE
+                }
+
+                binding.llMapRefresh.translationY = (binding.mapLayout.height - panelTop).toFloat()
+                binding.ivCurrentLocation.translationY =
+                    (binding.mapLayout.height - panelTop).toFloat()
+            }
+        }
+    }
+
     private fun initSlideLayoutListener() {
         binding.slideLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
-                if (panel?.top == 0) {
-                    binding.bottomDrawerLayout.setBackgroundResource(R.drawable.bg_top_rectangle)
-                } else {
-                    binding.bottomDrawerLayout.setBackgroundResource(R.drawable.bg_top_rounded)
-                }
-                binding.llMapRefresh.visibility = if ((panel?.top ?: 0) < 150) View.GONE else View.VISIBLE
-                val twelveDpInPx = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    12f,
-                    binding.llMapRefresh.resources.displayMetrics
-                )
-                val offsetY = (binding.bottomDrawerLayout.top - binding.llMapRefresh.height - twelveDpInPx)
-                binding.llMapRefresh.translationY = offsetY
+                viewModel.panelTop.value = panel?.top ?: 0
+                updatePanelViewsPosition(binding.slideLayout.panelState, slideOffset)
             }
 
             override fun onPanelStateChanged(
                 panel: View?,
-                previousState: SlidingUpPanelLayout.PanelState?,
-                newState: SlidingUpPanelLayout.PanelState?
+                previousState: PanelState?,
+                newState: PanelState?
             ) {
                 when (newState) {
-                    SlidingUpPanelLayout.PanelState.EXPANDED -> {
+                    PanelState.EXPANDED -> {
                         binding.postListLayout.postRecyclerView.isNestedScrollingEnabled = true
                     }
 
-                    SlidingUpPanelLayout.PanelState.DRAGGING -> {
-                        if (previousState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                            binding.llMapRefresh.visibility = View.VISIBLE
-                        }
-                    }
-
-                    SlidingUpPanelLayout.PanelState.COLLAPSED -> {
-                        binding.llMapRefresh.visibility = View.VISIBLE
-                    }
-
-                    SlidingUpPanelLayout.PanelState.ANCHORED -> {
-
-                    }
-
-                    SlidingUpPanelLayout.PanelState.HIDDEN -> {
-
-                    }
-
-                    null -> {
+                    else -> {
 
                     }
                 }
@@ -229,6 +264,11 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     private fun initListeners() {
         compositeDisposable.addAll(
+            binding.ivCurrentLocation.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    moveToCurrentLocation(binding.slideLayout.panelState)
+                },
             binding.llMapRefresh.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
@@ -247,7 +287,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 .flatMapSingle { it.toList() }
                 .filter { it.size >= 3 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe (
+                .subscribe(
                     {
                         // TODO 테스트 용도이므로 기능 테스트 종료 시 삭제
                         val isTestMode = RunnerBeApplication.mTokenPreference.getIsTestMode()
@@ -290,7 +330,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.postListLayout.postRecyclerView.apply {
             adapter = postAdapter.apply {
                 setPostFrom(PostCalledFrom.HOME)
-                setPostClickListener(object: JoinedRunningClickListener {
+                setPostClickListener(object : JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
                     }
 
@@ -317,15 +357,33 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             addItemDecoration(RecyclerViewItemDeco(context, 12))
             itemAnimator = null
 
-            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+                override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                    return false
+                }
+
+                override fun onTouchEvent(recyclerView: RecyclerView, e: MotionEvent) {
+                    if (binding.slideLayout.panelState != PanelState.EXPANDED) {
+                        recyclerView.onInterceptTouchEvent(e)
+                        binding.slideLayout.post {
+                            binding.slideLayout.panelState = PanelState.EXPANDED
+                        }
+                    }
+                }
+
+                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+                }
+
+            })
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        if (binding.slideLayout.panelState != SlidingUpPanelLayout.PanelState.EXPANDED) {
+                        if (binding.slideLayout.panelState != PanelState.EXPANDED) {
                             binding.slideLayout.post {
-                                binding.slideLayout.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+                                binding.slideLayout.panelState = PanelState.EXPANDED
                             }
-                            LogUtil.errorLog("${binding.slideLayout.panelState}")
                             recyclerView.stopScroll()
                         }
                     }
@@ -333,6 +391,63 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             })
         }
     }
+
+    private fun moveToCurrentLocation(panelState: PanelState) {
+        LogUtil.errorLog(panelState.toString())
+        val location = locationSource.lastLocation
+        if (location != null) {
+            val currentLatLng = LatLng(location.latitude, location.longitude)
+
+            val cameraUpdate = when (panelState) {
+                PanelState.COLLAPSED -> {
+                    CameraUpdate.scrollTo(currentLatLng)
+                        .animate(CameraAnimation.Easing)
+                }
+
+                PanelState.ANCHORED -> {
+                    val bottomLayoutHeight = binding.bottomDrawerLayout.height
+                    val mapHeight = binding.mapView.height
+
+                    val adjustmentRatio = (bottomLayoutHeight.toFloat() / 2) / mapHeight
+
+                    val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
+                    screenPosition.y -= (mapHeight * adjustmentRatio).toInt()
+
+                    val adjustedLatLng = mNaverMap.projection.fromScreenLocation(screenPosition)
+
+                    CameraUpdate.scrollTo(adjustedLatLng)
+                        .animate(CameraAnimation.Easing)
+                }
+
+                PanelState.EXPANDED -> {
+                    val bottomLayoutHeight = binding.bottomDrawerLayout.height
+                    val mapHeight = binding.mapView.height
+
+                    val adjustmentRatio = (bottomLayoutHeight.toFloat() / 2) / mapHeight
+
+                    val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
+                    screenPosition.y -= (mapHeight * adjustmentRatio).toInt()
+
+                    val adjustedLatLng = mNaverMap.projection.fromScreenLocation(screenPosition)
+
+                    CameraUpdate.scrollTo(adjustedLatLng)
+                        .animate(CameraAnimation.Easing)
+                }
+
+                else -> null
+            }
+
+            cameraUpdate?.let { mNaverMap.moveCamera(it) }
+        } else {
+            context?.let {
+                ToastUtil.showShortToast(
+                    it,
+                    getString(R.string.toast_error_move_to_current_location)
+                )
+            }
+        }
+    }
+
 
     override fun onMapReady(map: NaverMap) {
         mNaverMap = map
@@ -342,8 +457,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         mNaverMap.locationTrackingMode = LocationTrackingMode.Follow
         //SlidingUpPanelLayout이 크기를 자꾸 변경하는 문제가 있어서 레이아웃 사이즈를 초기에 고정시켜버리기
         binding.mapLayout.setHeight(binding.mapLayout.measuredHeight)
-        //현재위치로 주소 디폴트 셋팅
-        // TODO 테스트 용도이므로 완료 시 삭제
+        // 현재위치로 주소 디폴트 셋팅
+        // TODO  테스트 용도이므로 완료 시 삭제
         binding.topTxt.text = if (RunnerBeApplication.mTokenPreference.getIsTestMode()) {
             val testData = LatLng(37.3419817, 127.0940174)
             AddressUtil.getAddress(
@@ -359,7 +474,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             )
         }
 
-        //위치가 바뀔 때마다 주소 업데이트
         mNaverMap.addOnLocationChangeListener { location ->
             binding.topTxt.run {
                 text =
@@ -372,8 +486,13 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 mNaverMap.cameraPosition.target.latitude,
                 mNaverMap.cameraPosition.target.longitude
             )
-            viewModel.refreshThisLocation.value =
-                mNaverMap.locationTrackingMode != LocationTrackingMode.Follow
+
+            if (mNaverMap.locationTrackingMode == LocationTrackingMode.Follow) {
+                mNaverMap.locationTrackingMode = LocationTrackingMode.None
+                viewModel.refreshThisLocation.value = false
+            } else {
+                viewModel.refreshThisLocation.value = true
+            }
             viewModel.coordinator = center
         }
         viewLifecycleOwner.lifecycleScope.launch {
