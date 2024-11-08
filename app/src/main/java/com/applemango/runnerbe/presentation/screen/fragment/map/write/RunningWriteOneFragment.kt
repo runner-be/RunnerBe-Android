@@ -23,9 +23,11 @@ import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateTimePic
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectPickerDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.util.ToastUtil
 import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -46,7 +48,7 @@ class RunningWriteOneFragment :
         binding.vm = viewModel
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         binding.scrollView.requestDisallowInterceptTouchEvent(true)
-        setupListeners()
+        initListeners()
         addressLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 processUserLocation(result)
@@ -90,7 +92,7 @@ class RunningWriteOneFragment :
     }
 
     //이 부분은 추후 리팩토링이 들어가야 할 듯 합니다.
-    private fun setupListeners() {
+    private fun initListeners() {
         with(binding) {
             compositeDisposable.addAll(
                 dateLayout.clicks()
@@ -133,6 +135,13 @@ class RunningWriteOneFragment :
                 nextButton.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe ({
+                        if (isSelectedTimeExpired()) {
+                            context?.let {
+                                ToastUtil.showShortToast(it, "선택된 시간이 올바르지 않아요")
+                            }
+                            return@subscribe
+                        }
+
                         navigate(
                             RunningWriteOneFragmentDirections.actionRunningWriteFragmentToRunningWriteTwoFragment(
                                 RunningWriteTransferData(
@@ -155,5 +164,36 @@ class RunningWriteOneFragment :
                     }),
             )
         }
+    }
+
+    private fun isSelectedTimeExpired(): Boolean {
+        val calendar = Calendar.getInstance()
+        val currentDateTime = calendar.time
+
+        val displayedData = viewModel.runningDisplayDate.value
+        val date = displayedData.formatDate
+        val hour: String = displayedData.hour
+        val amPm: String = displayedData.AMAndPM
+
+        val displayedCalendar = Calendar.getInstance().apply {
+            val dateFormat = SimpleDateFormat("M/d (E)", java.util.Locale.getDefault())
+            time = dateFormat.parse(date) ?: return false // 날짜를 파싱하고 실패 시 false 반환
+
+            // AM/PM 설정 대신 24시간 형식 사용
+            if (amPm == "PM" && hour.toInt() != 12) {
+                set(Calendar.HOUR_OF_DAY, hour.toInt() + 12) // 오후이고 12시가 아닌 경우 24시간 형식으로 변환
+            } else if (amPm == "AM" && hour.toInt() == 12) {
+                set(Calendar.HOUR_OF_DAY, 0) // 오전 12시는 24시간 형식에서 0시로 설정
+            } else {
+                set(Calendar.HOUR_OF_DAY, hour.toInt())
+            }
+
+            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        return displayedCalendar.time.before(currentDateTime)
     }
 }
