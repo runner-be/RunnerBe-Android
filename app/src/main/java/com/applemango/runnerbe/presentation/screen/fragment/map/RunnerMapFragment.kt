@@ -200,11 +200,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.mapView.onLowMemory()
     }
 
-    override fun onDestroy() {
-        binding.mapView.onDestroy()
-        super.onDestroy()
-    }
-
     private fun updatePanelViewsPosition(panelState: PanelState, slideOffset: Float) {
         val bottomDrawerTop = when (panelState) {
             PanelState.EXPANDED -> binding.bottomDrawerLayout.top
@@ -393,7 +388,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     }
 
     private fun moveToCurrentLocation(panelState: PanelState) {
-        LogUtil.errorLog(panelState.toString())
         val location = locationSource.lastLocation
         if (location != null) {
             val currentLatLng = LatLng(location.latitude, location.longitude)
