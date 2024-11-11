@@ -2,6 +2,8 @@ package com.applemango.runnerbe.presentation.screen.fragment.chat.detail
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.applemango.runnerbe.databinding.ItemOtherTalkContainerBinding
 import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.glide.GranularRoundedAndBorderTransform
 import com.bumptech.glide.Glide
@@ -60,6 +63,7 @@ class RunningTalkDetailOtherContainerViewHolder(
                             null
                         )
                         if (item.items.last() == it) {
+                            LogUtil.errorLog("AAA createDateView ${item.createTime}")
                             createDateView.text = item.createTime
                             createDateView.visibility = View.VISIBLE
                         } else {
@@ -107,6 +111,15 @@ class RunningTalkDetailOtherContainerViewHolder(
                 }
             }
             binding.messageContainerView.addView(itemBinding.root)
+            val layoutParams = itemBinding.root.layoutParams
+            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            if (item.items.last() != it) {
+                if (layoutParams is LinearLayoutCompat.LayoutParams) {
+                    layoutParams.setMargins(0, 0, 0, 8.dpToPx(context))
+                    itemBinding.root.layoutParams = layoutParams
+                }
+            }
         }
     }
 }
