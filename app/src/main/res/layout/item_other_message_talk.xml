@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -7,30 +6,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/background_layout"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/message_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="여기에 텍스트가 들어갈 예정입니다."
+        android:textSize="14sp"
+        android:fontFamily="@font/pretendard_regular"
+        android:includeFontPadding="false"
         android:paddingVertical="8dp"
         android:paddingHorizontal="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/message_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="여기에 텍스트가 들어갈 예정입니다."
-            android:textSize="14sp"
-            android:fontFamily="@font/pretendard_regular"
-            android:includeFontPadding="false"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/create_date_view"
@@ -42,7 +30,7 @@
         android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/background_layout"
+        app:layout_constraintLeft_toRightOf="@id/message_view"
         tools:text="3/31" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
@@ -50,10 +38,10 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:button="@null"
-        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:layout_marginStart="4dp"
         android:background="@drawable/selector_check_box"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/background_layout"/>
+        app:layout_constraintLeft_toRightOf="@id/message_view"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -201,8 +201,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         binding.mapView.onDestroy()
+        super.onDestroy()
     }
 
     private fun updatePanelViewsPosition(panelState: PanelState, slideOffset: Float) {
@@ -405,13 +405,14 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 }
 
                 PanelState.ANCHORED -> {
-                    val bottomDrawerTabLayoutHeight = binding.bottomDrawerTabLayout.height
+                    val bottomDrawerHeight = binding.bottomDrawerLayout.height
                     val mapHeight = binding.mapView.height
+                    val visibleMapHeight = mapHeight - bottomDrawerHeight
 
-                    val visibleMapVerticalCenter = (mapHeight + bottomDrawerTabLayoutHeight) / 4
+                    val adjustmentRatio = visibleMapHeight / 2
 
                     val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
-                    screenPosition.y += visibleMapVerticalCenter.toFloat()
+                    screenPosition.y += adjustmentRatio.toFloat()
 
                     val adjustedLatLng = mNaverMap.projection.fromScreenLocation(screenPosition)
 
@@ -421,9 +422,10 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
                 PanelState.EXPANDED -> {
                     val bottomLayoutHeight = binding.bottomDrawerLayout.height
-                    val mapHeight = binding.mapView.height
+                    val bottomTabLayoutHeight = binding.bottomDrawerTabLayout.height
+                    val mapHeight = binding.mapLayout.height
 
-                    val adjustmentRatio = (bottomLayoutHeight.toFloat() / 2) / mapHeight
+                    val adjustmentRatio = ((bottomLayoutHeight - bottomTabLayoutHeight).toFloat() / 2) / mapHeight
 
                     val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
                     screenPosition.y -= (mapHeight * adjustmentRatio).toInt()

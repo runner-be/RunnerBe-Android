@@ -139,7 +139,7 @@ class RunningTalkDetailFragment :
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             itemAnimator = null
-            addItemDecoration(RecyclerViewItemDeco(context, 24))
+            addItemDecoration(RecyclerViewItemDeco(context, 16))
         }
     }
 

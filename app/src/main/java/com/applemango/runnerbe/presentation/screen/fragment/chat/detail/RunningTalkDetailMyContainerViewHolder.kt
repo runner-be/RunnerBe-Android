@@ -13,6 +13,7 @@ import com.applemango.runnerbe.databinding.ItemMyTalkContainerBinding
 import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.glide.GranularRoundedAndBorderTransform
 import com.bumptech.glide.Glide
@@ -95,7 +96,7 @@ class RunningTalkDetailMyContainerViewHolder(
             layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
             if (item.items.last() != it) {
                 if (layoutParams is LinearLayoutCompat.LayoutParams) {
-                    layoutParams.setMargins(0, 0, 0, 10.dpToPx(context))
+                    layoutParams.setMargins(0, 0, 0, 8.dpToPx(context))
                     itemBinding.root.layoutParams = layoutParams
                 }
             }
