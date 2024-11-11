@@ -46,7 +46,7 @@
 
                 <TextView
                     android:id="@+id/top_txt"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center_horizontal"
@@ -54,8 +54,8 @@
                     android:textColor="@color/dark_g3_5"
                     android:textSize="18sp"
                     android:layout_marginHorizontal="10dp"
-                    app:layout_constraintStart_toEndOf="@id/iv_back"
-                    app:layout_constraintEnd_toStartOf="@id/tv_report"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,8 +130,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="20dp"
+                android:paddingTop="20dp"
                 android:overScrollMode="never"
+                android:clipToPadding="false"
                 app:layout_constraintBottom_toTopOf="@id/rcv_attached_image"
                 app:layout_constraintTop_toBottomOf="@id/titleLayout" />
 

@@ -14,7 +14,6 @@ import com.applemango.runnerbe.databinding.ItemOtherTalkContainerBinding
 import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDetailClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.glide.GranularRoundedAndBorderTransform
 import com.bumptech.glide.Glide
@@ -63,7 +62,6 @@ class RunningTalkDetailOtherContainerViewHolder(
                             null
                         )
                         if (item.items.last() == it) {
-                            LogUtil.errorLog("AAA createDateView ${item.createTime}")
                             createDateView.text = item.createTime
                             createDateView.visibility = View.VISIBLE
                         } else {
