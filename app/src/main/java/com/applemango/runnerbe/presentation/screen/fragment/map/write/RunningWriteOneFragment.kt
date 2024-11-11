@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit
 class RunningWriteOneFragment :
     BaseFragment<FragmentRunningWriteBinding>(R.layout.fragment_running_write) {
 
-    private val PERMISSION_REQUEST_CODE = 100
     private lateinit var locationSource: FusedLocationSource
 
     private val viewModel: RunningWriteOneViewModel by viewModels()
@@ -176,14 +175,13 @@ class RunningWriteOneFragment :
         val amPm: String = displayedData.AMAndPM
 
         val displayedCalendar = Calendar.getInstance().apply {
-            val dateFormat = SimpleDateFormat("M/d (E)", java.util.Locale.getDefault())
-            time = dateFormat.parse(date) ?: return false // 날짜를 파싱하고 실패 시 false 반환
+            val dateFormat = SimpleDateFormat("M/d (E)", Locale.getDefault())
+            time = dateFormat.parse(date) ?: return false
 
-            // AM/PM 설정 대신 24시간 형식 사용
             if (amPm == "PM" && hour.toInt() != 12) {
-                set(Calendar.HOUR_OF_DAY, hour.toInt() + 12) // 오후이고 12시가 아닌 경우 24시간 형식으로 변환
+                set(Calendar.HOUR_OF_DAY, hour.toInt() + 12)
             } else if (amPm == "AM" && hour.toInt() == 12) {
-                set(Calendar.HOUR_OF_DAY, 0) // 오전 12시는 24시간 형식에서 0시로 설정
+                set(Calendar.HOUR_OF_DAY, 0)
             } else {
                 set(Calendar.HOUR_OF_DAY, hour.toInt())
             }
@@ -195,5 +193,9 @@ class RunningWriteOneFragment :
         }
 
         return displayedCalendar.time.before(currentDateTime)
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100
     }
 }
