@@ -72,6 +72,15 @@ class RunningTalkDetailFragment :
         binding.topMessageLayout.setOnClickListener { hideKeyBoard() }
         setupTalkDetail()
         setupTalkAttachedImages()
+        setupTalkUpdate()
+    }
+
+    private fun setupTalkUpdate() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                refresh()
+            }
+        }
     }
 
     private fun setupTalkDetail() {
@@ -214,11 +223,7 @@ class RunningTalkDetailFragment :
     }
 
     private fun refresh() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getDetailData(true)
-            }
-        }
+        viewModel.getDetailData(true)
     }
 
     private fun handleAction(action: RunningTalkDetailAction) {

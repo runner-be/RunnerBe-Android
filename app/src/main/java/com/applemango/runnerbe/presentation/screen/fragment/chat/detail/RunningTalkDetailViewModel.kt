@@ -16,7 +16,6 @@ import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.domain.usecase.runningtalk.GetRunningTalkDetailUseCase
 import com.applemango.runnerbe.domain.usecase.runningtalk.MessageReportUseCase
 import com.applemango.runnerbe.domain.usecase.runningtalk.MessageSendUseCase
-import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.RunningTalkDetailMapper
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -61,14 +60,16 @@ class RunningTalkDetailViewModel @Inject constructor(
     private val successImageList = ArrayList<String>()
     private val maxImageCount = 3
 
-    fun getDetailData(isRefresh: Boolean) = viewModelScope.launch {
-        roomId?.let { roomId ->
-            runningTalkDetailUseCase(roomId).collect {
-                if (it is CommonResponse.Success<*> && it.body is RunningTalkDetailResponse) {
-                    if (isRefresh) messageList.clear()
-                    roomInfo.emit(it.body.result.roomInfo[0])
-                    messageList.addAll(it.body.result.messages)
-                    talkList.value = RunningTalkDetailMapper.messagesToRunningTalkUiState(it.body.result.messages)
+    fun getDetailData(isRefresh: Boolean) {
+        viewModelScope.launch {
+            roomId?.let { roomId ->
+                runningTalkDetailUseCase(roomId).collect {
+                    if (it is CommonResponse.Success<*> && it.body is RunningTalkDetailResponse) {
+                        if (isRefresh) messageList.clear()
+                        roomInfo.emit(it.body.result.roomInfo[0])
+                        messageList.addAll(it.body.result.messages)
+                        talkList.value = RunningTalkDetailMapper.messagesToRunningTalkUiState(it.body.result.messages)
+                    }
                 }
             }
         }
