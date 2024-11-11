@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.UserInfo
@@ -103,12 +102,12 @@ class WaitingRunnerListDialog(
             adapter = waitingRunnerInfoAdapter.apply {
                 setProfileClickListener(object : WaitingRunnerClickListener {
                     override fun onProfileClicked(userInfo: UserInfo) {
-                        findNavController().navigate(
-                            WaitingRunnerListDialogDirections
-                                .actionWaitingRunnerListDialogToOtherUserProfileFragment(
-                                    userInfo.userId
-                                )
-                        )
+//                        findNavController().navigate(
+//                            WaitingRunnerListDialogDirections
+//                                .actionWaitingRunnerListDialogToOtherUserProfileFragment(
+//                                    userInfo.userId
+//                                )
+//                        )
                     }
 
                     override fun onRefuseClicked(userInfo: UserInfo) {
