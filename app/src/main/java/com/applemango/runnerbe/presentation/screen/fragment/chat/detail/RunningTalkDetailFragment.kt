@@ -202,7 +202,7 @@ class RunningTalkDetailFragment :
                         }
 
                         else -> {
-                            Log.e(this.javaClass.name, "observeBind - when - else - UiState")
+                            Log.e(this.javaClass.name, "observeBind - when - else - UiState | $it")
                         }
                     }
                 }

@@ -68,7 +68,7 @@ class RunningTalkDetailViewModel @Inject constructor(
                         if (isRefresh) messageList.clear()
                         roomInfo.emit(it.body.result.roomInfo[0])
                         messageList.addAll(it.body.result.messages)
-                        talkList.value = RunningTalkDetailMapper.messagesToRunningTalkUiState(it.body.result.messages)
+                        talkList.value = RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
                     }
                 }
             }
