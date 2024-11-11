@@ -14,13 +14,13 @@
         tools:text="3/31"
         android:layout_gravity="bottom"
         android:fontFamily="@font/pretendard_regular"
-        android:textSize="11sp"
-        android:layout_marginEnd="4dp"/>
+        android:textSize="11sp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/message_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:paddingVertical="8dp"
         android:paddingHorizontal="10dp"
         tools:text="여기에 텍스트가 들어갈 예정입니다."
