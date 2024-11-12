@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,10 +16,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.FragmentPostDetailBinding
 import com.applemango.runnerbe.databinding.ItemMapInfoBinding
-import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.listener.PostDialogListener
 import com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerListDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
@@ -288,7 +287,8 @@ class PostDetailFragment :
                                 resources.getString(R.string.delete_complete),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            navPopStack()
+                            activity?.supportFragmentManager?.setFragmentResult("postListUpdate", bundleOf("refresh" to true))
+                            goBack()
                         }
                         is UiState.Failed -> {
                             context?.let { context ->

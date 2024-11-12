@@ -83,7 +83,6 @@ class MyPageViewModel @Inject constructor(
         }
         .flowOn(Dispatchers.IO)
 
-
     fun getUserData(userId: Int) = viewModelScope.launch {
         if (userId > -1) {
             getUserDataUseCase(userId).collect {
@@ -134,17 +133,8 @@ class MyPageViewModel @Inject constructor(
         _actions.emit(MyPageAction.MoveToPaceRegistration)
     }
 
-    fun postUpdate(posting: Posting) {
-        val index = myPosts.indexOf(posting)
-        if (index != -1) myPosts[index] = posting.copy()
-    }
-
     fun updateWeeklyViewPagerPosition(position: Int) {
         _currentWeeklyViewPagerPosition.value = position
-    }
-
-    fun refreshRunningLogs() {
-        todayDateFlow.value = LocalDate.now()
     }
 }
 
