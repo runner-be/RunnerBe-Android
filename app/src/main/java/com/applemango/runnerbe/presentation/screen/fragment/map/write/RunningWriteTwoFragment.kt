@@ -94,7 +94,7 @@ class RunningWriteTwoFragment :
                             resources.getString(R.string.complete_running_write),
                             Toast.LENGTH_SHORT
                         ).show()
-                        activity?.supportFragmentManager?.setFragmentResult("postCreated", bundleOf("refresh" to true))
+                        activity?.supportFragmentManager?.setFragmentResult("postListUpdate", bundleOf("refresh" to true))
                         findNavController().popBackStack(R.id.mainFragment, false)
                     }
 

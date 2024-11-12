@@ -79,7 +79,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         observeBind()
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
-        setOnPostCreatedListener()
+        setOnPostListUpdateListener()
 //        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
 //            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
 //                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
@@ -101,9 +101,9 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         setupIsPanelTopZero()
     }
 
-    private fun setOnPostCreatedListener() {
+    private fun setOnPostListUpdateListener() {
         activity?.supportFragmentManager?.setFragmentResultListener(
-            "postCreated",
+            "postListUpdate",
             viewLifecycleOwner
         ) { _, result ->
             val refresh = result.getBoolean("refresh", false)
