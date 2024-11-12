@@ -16,29 +16,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.creator.CreatorAdapter
 
-@BindingAdapter("attendanceSeeAdapter")
-fun setAttendanceSeeAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<UserInfo>
-) {
-    if (recyclerView.adapter == null) {
-        recyclerView.adapter = AttendanceSeeAdapter(dataList)
-    }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
-@BindingAdapter("attendanceAccessionAdapter", "attendanceAccessionClickListener")
-fun setAttendanceAccessionAdapter(
-    recyclerView: RecyclerView,
-    dataList: ObservableArrayList<UserInfo>,
-    accessionClickListener: AttendanceAccessionClickListener
-) {
-    if (recyclerView.adapter == null) {
-        recyclerView.adapter = AttendanceAccessionAdapter(dataList, accessionClickListener)
-    }
-    recyclerView.adapter?.notifyDataSetChanged()
-}
-
 @BindingAdapter("creatorAdapter")
 fun setCreatorAdapter(recyclerView: RecyclerView, dataList: List<CreatorImageAndPosition>) {
     if (recyclerView.adapter == null) {

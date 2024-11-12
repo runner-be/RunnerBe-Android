@@ -14,6 +14,8 @@ import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.AttendanceAccessionAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceSeeAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.GotStampAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile.ProfileAdapter
@@ -117,5 +119,17 @@ class AdapterModule {
     @FragmentScoped
     fun provideRunningTalkDetailImageAdapter(): RunningTalkDetailImageAdapter {
         return RunningTalkDetailImageAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideAttendanceSeeAdapter(): AttendanceSeeAdapter {
+        return AttendanceSeeAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideAttendanceAccessionAdapter(): AttendanceAccessionAdapter {
+        return AttendanceAccessionAdapter()
     }
 }

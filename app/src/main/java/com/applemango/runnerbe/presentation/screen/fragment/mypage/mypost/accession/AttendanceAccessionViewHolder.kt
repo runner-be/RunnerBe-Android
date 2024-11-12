@@ -7,6 +7,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.ItemAttendanceAccessionBinding
 import com.applemango.runnerbe.presentation.model.listener.AttendanceAccessionClickListener
+import com.applemango.runnerbe.util.LogUtil
 import kotlin.properties.Delegates
 
 class AttendanceAccessionViewHolder(
@@ -34,6 +35,7 @@ class AttendanceAccessionViewHolder(
     }
 
     fun bind(item: UserInfo) {
+        LogUtil.errorLog(item.toString())
         binding.userInfo = item
         binding.refuseButton.setOnClickListener {
             item.attendanceState = false
