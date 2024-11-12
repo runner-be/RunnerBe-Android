@@ -173,8 +173,11 @@
         android:label="MyPostAttendanceSeeFragment" >
 
         <argument
-            android:name="users"
-            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]" />
+            android:name="postId"
+            app:argType="integer"/>
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/myPostAttendanceAccessionFragment"
@@ -183,9 +186,11 @@
         android:label="MyPostAttendanceAccessionFragment">
 
         <argument
-            android:name="users"
-            app:argType="com.applemango.runnerbe.data.dto.UserInfo[]" />
-
+            android:name="postId"
+            app:argType="integer"/>
+        <argument
+            android:name="userId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/runningTalkDetailFragment"

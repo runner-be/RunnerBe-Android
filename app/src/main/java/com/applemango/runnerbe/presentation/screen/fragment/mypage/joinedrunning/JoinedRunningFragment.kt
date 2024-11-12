@@ -97,7 +97,8 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                         try {
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceSeeFragment(
-                                    post.runnerList?.toTypedArray() ?: arrayOf()
+                                    post.postId,
+                                    RunnerBeApplication.mTokenPreference.getUserId()
                                 )
                             )
                         } catch (e: IllegalArgumentException) {
@@ -110,7 +111,8 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                         try {
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceAccessionFragment(
-                                    post.runnerList?.toTypedArray() ?: arrayOf()
+                                    post.postId,
+                                    RunnerBeApplication.mTokenPreference.getUserId()
                                 )
                             )
                         } catch (e: IllegalArgumentException) {
