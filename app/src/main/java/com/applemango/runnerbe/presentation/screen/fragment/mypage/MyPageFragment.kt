@@ -80,7 +80,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         initListeners()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
-        binding.userProfileEditButton.setOnClickListener(this)
+        binding.btnProfileEdit.setOnClickListener(this)
         binding.userImgEdit.setOnClickListener(this)
         binding.ivCalendar.setOnClickListener(this)
     }
@@ -323,7 +323,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 navigate(MainFragmentDirections.actionMainFragmentToSettingFragment(viewModel.userInfo.value?.pushOn == "Y"))
             }
 
-            binding.userProfileEditButton -> {
+            binding.btnProfileEdit -> {
                 checkAdditionalUserInfo {
                     viewModel.userInfo.value?.let {
                         navigate(

@@ -95,9 +95,10 @@ class MyPageViewModel @Inject constructor(
                             result.posting?.let { postingList ->
                                 myPosts.addAll(postingList)
                             }
-                            RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
+                            RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace ?: "")
+                            userInfo.value = result.userInfo
                             pace.emit(result.userInfo.pace)
-                            diligence.emit(result.userInfo.diligence)
+                            diligence.emit(result.userInfo.diligence ?: "초보 출석")
                         }
                     }
 
