@@ -432,13 +432,25 @@
         android:label="JoinedRunningFragment" >
         <action
             android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceSeeFragment"
-            app:destination="@id/myPostAttendanceSeeFragment" />
+            app:destination="@id/myPostAttendanceSeeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceAccessionFragment"
-            app:destination="@id/myPostAttendanceAccessionFragment" />
+            app:destination="@id/myPostAttendanceAccessionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_joinedRunningFragment_to_runningLogFragment"
-            app:destination="@id/runningLogFragment" />
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/waitingRunnerListDialog"

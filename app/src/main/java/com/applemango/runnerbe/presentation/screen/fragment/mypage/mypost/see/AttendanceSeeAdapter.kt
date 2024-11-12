@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.UserInfo
 
-class AttendanceSeeAdapter(private val dataList : ObservableArrayList<UserInfo>) : RecyclerView.Adapter<AttendanceSeeViewHolder>() {
+class AttendanceSeeAdapter() : ListAdapter<UserInfo, AttendanceSeeViewHolder>(attendanceSeeDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceSeeViewHolder {
         return AttendanceSeeViewHolder(DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
@@ -18,9 +20,21 @@ class AttendanceSeeAdapter(private val dataList : ObservableArrayList<UserInfo>)
         ))
     }
 
-    override fun getItemCount(): Int = dataList.size
-
     override fun onBindViewHolder(holder: AttendanceSeeViewHolder, position: Int) {
-        holder.bind(dataList[position])
+        val item = currentList[position]
+        holder.bind(item)
+    }
+
+    companion object {
+        private val attendanceSeeDiffUtil = object : DiffUtil.ItemCallback<UserInfo>() {
+            override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+                return oldItem.userId == newItem.userId
+            }
+
+        }
     }
 }
