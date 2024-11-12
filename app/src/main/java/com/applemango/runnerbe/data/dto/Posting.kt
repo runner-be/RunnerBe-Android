@@ -80,7 +80,7 @@ data class Posting(
         return this.whetherCheck == "Y"
     }
 
-    fun isWhetherEnded(): Boolean = whetherEnd == "Y"
+    fun isWhetherEnded(): Boolean = whetherEnd != "N"
 
     fun groupString(): String {
         return try {

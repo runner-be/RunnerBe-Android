@@ -3,6 +3,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.ItemJoinPostWithBookmarkBinding
+import com.applemango.runnerbe.util.LogUtil
 
 class JoinedRunningPostViewHolder(
     private val binding: ItemJoinPostWithBookmarkBinding
@@ -13,13 +14,13 @@ class JoinedRunningPostViewHolder(
             clickListener = listener
             postFrom = from
 
-            val isRunningEnd = item.isWhetherEnded()
-            val isThreeHoursAfter = item.attendanceCheck()
-            val isCaptain = item.isRunningCaptain()
+            val firstButtonVisibility = item.whetherEnd == "N"
+            val secondButtonVisibility = item.whetherEnd == "Y" && item.isRunningCaptain()
+            val thirdButtonVisibility = item.whetherEnd == "D"
 
-            runningEndTextViewVisibility = isRunningEnd
-            attendanceCheckButtonVisibility = isRunningEnd && (!isThreeHoursAfter && isCaptain)
-            attendanceSeeButtonVisibility = isRunningEnd && isThreeHoursAfter
+            runningEndTextViewVisibility = firstButtonVisibility
+            attendanceCheckButtonVisibility = secondButtonVisibility
+            attendanceSeeButtonVisibility = thirdButtonVisibility
         }
     }
 }
