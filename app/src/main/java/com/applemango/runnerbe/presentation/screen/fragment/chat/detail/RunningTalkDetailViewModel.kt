@@ -20,6 +20,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.R
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.util.LogUtil
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -68,7 +69,8 @@ class RunningTalkDetailViewModel @Inject constructor(
                         if (isRefresh) messageList.clear()
                         roomInfo.emit(it.body.result.roomInfo[0])
                         messageList.addAll(it.body.result.messages)
-                        talkList.value = RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
+                        talkList.value =
+                            RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
                     }
                 }
             }
@@ -207,11 +209,9 @@ class RunningTalkDetailViewModel @Inject constructor(
     }
 
     fun selectImage(uri: Uri) {
-        attachImageUrls.value = ArrayList(attachImageUrls.value).apply {
-            getRealPath(uri)?.let {
-                add(it)
-            }
-        }
+        val prevList = attachImageUrls.value.toMutableList()
+        prevList.add(uri.toString())
+        attachImageUrls.value = prevList
     }
 
     private fun getRealPath(uri: Uri): String? {
