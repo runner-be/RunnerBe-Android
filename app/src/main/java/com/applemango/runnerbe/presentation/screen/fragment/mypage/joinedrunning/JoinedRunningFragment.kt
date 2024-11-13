@@ -126,7 +126,11 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                     }
 
                     override fun postClick(post: Posting) {
-
+                        navigate(
+                            JoinedRunningFragmentDirections.actionJoinedRunningFragmentToPostDetailFragment(
+                                post
+                            )
+                        )
                     }
 
                 })
