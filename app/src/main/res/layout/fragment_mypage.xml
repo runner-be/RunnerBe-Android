@@ -126,7 +126,7 @@
                     tools:text="기획/전략/경영" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/userProfileEditButton"
+                    android:id="@+id/btn_profile_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -154,7 +154,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="6dp"
                 android:visibility="@{myPageViewModel.pace == null ? View.VISIBLE : View.INVISIBLE}"
                 app:layout_constraintBottom_toTopOf="@id/paceRegistrationLayout"
                 app:layout_constraintLeft_toLeftOf="@id/paceRegistrationLayout"
@@ -164,7 +164,6 @@
                     android:id="@+id/paceRegistrationDescriptionPopUpView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_dark_5_5g_solid_radius_14"
                     android:fontFamily="@font/pretendard_regular"
                     android:padding="12dp"

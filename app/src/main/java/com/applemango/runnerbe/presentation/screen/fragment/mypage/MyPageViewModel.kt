@@ -90,14 +90,15 @@ class MyPageViewModel @Inject constructor(
                     is CommonResponse.Success<*> -> {
                         if (it.body is UserDataResponse) {
                             val result = it.body.result
+                            val userInfo = result.userInfo
                             myPosts.clear()
                             joinPosts.value = result.myRunning
-                            result.posting?.let { postingList ->
+                            result.myPosting?.let { postingList ->
                                 myPosts.addAll(postingList)
                             }
-                            RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace ?: "")
-                            userInfo.value = result.userInfo
-                            pace.emit(result.userInfo.pace)
+                            this@MyPageViewModel.userInfo.value = userInfo
+                            RunnerBeApplication.mTokenPreference.setMyRunningPace(userInfo.pace ?: "")
+                            pace.emit(userInfo.pace)
                             diligence.emit(result.userInfo.diligence ?: "초보 출석")
                         }
                     }
