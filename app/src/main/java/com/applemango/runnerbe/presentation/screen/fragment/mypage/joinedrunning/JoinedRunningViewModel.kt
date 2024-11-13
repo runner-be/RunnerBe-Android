@@ -58,7 +58,7 @@ class JoinedRunningViewModel @Inject constructor(
                         is CommonResponse.Success<*> -> {
                             if (response.body is UserDataResponse) {
                                 val result = response.body.result as? GetMyPageResult
-                                userPostings.value = result?.posting ?: emptyList()
+                                userPostings.value = result?.myRunning ?: emptyList()
                             }
                         }
 

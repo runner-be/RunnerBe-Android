@@ -75,6 +75,7 @@
                     android:id="@+id/status_img"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
                     bind:paceImage16="@{userInfo.diligence}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
