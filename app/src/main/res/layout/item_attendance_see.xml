@@ -63,22 +63,58 @@
                 tools:text="여성 · 20대 후반" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/runnerStatus"
+                android:id="@+id/const_pace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:layout_marginStart="12dp"
-                android:background="@drawable/bg_radius_20_dark_g4_stroke"
+                android:paddingVertical="2dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="6dp"
+                android:background="@drawable/bg_dark_4_5g_solid_radius_4"
                 app:layout_constraintTop_toBottomOf="@id/userNameView"
                 app:layout_constraintBottom_toBottomOf="@id/profileImageView"
-                app:layout_constraintLeft_toRightOf="@id/profileImageView">
+                app:layout_constraintStart_toStartOf="@+id/userNameView">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_pace"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    bind:paceImage16="@{userInfo.pace}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_pace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    bind:paceText="@{userInfo.pace}"
+                    android:textColor="@color/dark_g1"
+                    android:textSize="10sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/iv_pace"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="700 ~ 900" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/runnerStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_radius_20_dark_g4_stroke"
+                app:layout_constraintTop_toTopOf="@id/const_pace"
+                app:layout_constraintBottom_toBottomOf="@id/const_pace"
+                app:layout_constraintLeft_toRightOf="@id/const_pace">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/status_img"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginStart="8dp"
-                    bind:paceImage16="@{userInfo.diligence}"
+                    bind:attendanceImage16="@{userInfo.diligence}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,19 +140,18 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/user_job_txt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/bg_dark_g5_radius_24"
                 android:paddingLeft="8dp"
-                android:paddingTop="4dp"
                 android:paddingRight="8dp"
-                android:paddingBottom="4dp"
+                android:paddingVertical="4dp"
                 android:text="@{userInfo.job}"
                 android:textColor="@color/logo_yellow"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="@id/runnerStatus"
+                app:layout_constraintTop_toTopOf="@id/const_pace"
+                app:layout_constraintBottom_toBottomOf="@id/const_pace"
                 app:layout_constraintLeft_toRightOf="@id/runnerStatus"
-                app:layout_constraintTop_toTopOf="@id/runnerStatus"
                 tools:text="기획/전략/경영"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
