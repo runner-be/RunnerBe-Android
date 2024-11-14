@@ -219,6 +219,11 @@ fun View.backgroundTop(panelTop: Int?) {
     this.setBackgroundResource(resource)
 }
 
+@BindingAdapter("bind:paceText")
+fun TextView.getPaceImage16(pace: String?) {
+    this.text = Pace.getPaceByName(pace)?.time
+}
+
 @BindingAdapter("bind:paceImage16")
 fun ImageView.getPaceImage16(pace: String?) {
     this.isVisible = pace != null
