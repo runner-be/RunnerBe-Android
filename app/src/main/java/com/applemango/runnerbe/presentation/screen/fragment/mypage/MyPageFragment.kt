@@ -270,19 +270,30 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object : JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
-
+                        // TODO logId를 어떻게 가져올 것인가?
                     }
 
                     override fun attendanceSeeClick(post: Posting) {
-
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToMyPostAttendanceSeeFragment(
+                                post.postId,
+                                RunnerBeApplication.mTokenPreference.getUserId()
+                            )
+                        )
                     }
 
                     override fun attendanceManageClick(post: Posting) {
-
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToMyPostAttendanceAccessionFragment(
+                                post.postId,
+                                RunnerBeApplication.mTokenPreference.getUserId()
+                            )
+                        )
                     }
 
                     override fun bookMarkClick(post: Posting) {
-
+                        mainViewModel.bookmarkStatusChange(post)
+                        viewModel.updatePostBookmark(post)
                     }
 
                     override fun postClick(post: Posting) {
