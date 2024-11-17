@@ -192,6 +192,13 @@
         <argument
             android:name="userId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_myPostAttendanceSeeFragment_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/myPostAttendanceAccessionFragment"
@@ -412,6 +419,13 @@
         <action
             android:id="@+id/action_userProfileFragment_to_monthlyCalendarFragment"
             app:destination="@id/monthlyCalendarFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherUserProfileFragment_to_myPostAttendanceSeeFragment"
+            app:destination="@id/myPostAttendanceSeeFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"

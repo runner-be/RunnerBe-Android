@@ -11,9 +11,11 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentMyPostAttendanceSeeBinding
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +32,17 @@ class MyPostAttendanceSeeFragment : BaseFragment<FragmentMyPostAttendanceSeeBind
         viewModel.getUserList(args.postId, args.userId)
         initUserListRecyclerView()
         setupUserListFlow()
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        compositeDisposable.addAll(
+            binding.backBtn.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    goBack()
+                }
+        )
     }
 
     private fun setupUserListFlow() {
@@ -44,7 +57,15 @@ class MyPostAttendanceSeeFragment : BaseFragment<FragmentMyPostAttendanceSeeBind
 
     private fun initUserListRecyclerView() {
         binding.rcvAttendanceSee.apply {
-            adapter = attendanceSeeAdapter
+            adapter = attendanceSeeAdapter.apply {
+                initProfileClickListener { userId ->
+                    navigate(
+                        MyPostAttendanceSeeFragmentDirections.actionMyPostAttendanceSeeFragmentToOtherUserProfileFragment(
+                            userId
+                        )
+                    )
+                }
+            }
             addItemDecoration(RecyclerViewItemDeco(context, 18))
         }
     }
