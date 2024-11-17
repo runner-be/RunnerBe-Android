@@ -113,6 +113,20 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun updatePostBookmark(post: Posting) {
+        val postList: MutableList<Posting> = joinPosts.value.toMutableList()
+        val parsedPostList = postList.map { item ->
+            if (item.postId == post.postId) {
+                val prevBookmark = if (post.bookMark == 1) 0 else 1
+                item.copy(bookMark = prevBookmark)
+            } else {
+                item
+            }
+        }
+        this.joinPosts.value = parsedPostList
+    }
+
+
     fun userProfileImageChange(imageUrl : String?) = viewModelScope.launch {
         patchUserImageUseCase(imageUrl).collect {
             _updateUserImageState.postValue(

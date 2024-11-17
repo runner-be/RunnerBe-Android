@@ -205,17 +205,21 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                         photoManager.showCameraDialog()
                     },
                 etDiary.textChanges()
-                    .subscribe { diary ->
-                        context?.let {
-                            if (diary.length >= 500) {
+                    .doOnNext { diary ->
+                        if (diary.length == 500) {
+                            context?.let {
                                 ToastUtil.showShortToast(it, getString(R.string.running_log_diary_max_length_alert))
-                                return@subscribe
                             }
                         }
-
+                    }
+                    .filter { diary -> diary.length <= 500 }
+                    .subscribe { diary ->
                         viewModel.updateLogDiary(diary.toString())
                         tvRunningDiaryCharCount.text =
                             getString(R.string.running_log_diary_length, diary.length)
+                        scrollView.post {
+                            scrollView.smoothScrollTo(0, etDiary.bottom)
+                        }
                     },
                 constTeam.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
