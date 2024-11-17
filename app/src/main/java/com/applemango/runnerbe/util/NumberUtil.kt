@@ -8,6 +8,4 @@ object NumberUtil {
 
     fun getRange(start: Int, end: Int) : List<String> =
         IntRange(start, end).map { it.toString() }
-
-
 }

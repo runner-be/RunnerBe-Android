@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogDateSelectBinding
 import com.applemango.runnerbe.presentation.model.DateResultListener
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.NumberUtil
 import com.applemango.runnerbe.util.TimeUtil
 import com.applemango.runnerbe.util.ToastUtil
@@ -94,7 +95,7 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
                 if (position == 0) {
                     binding.wvHour.data = NumberUtil.getRange(0, 11)
                 } else {
-                    binding.wvHour.data = listOf(12) + NumberUtil.getRange(1, 11)
+                    binding.wvHour.data = listOf("12") + NumberUtil.getRange(1, 11)
                 }
             }
 
@@ -128,25 +129,6 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
         }
     }
 
-//    private fun getTodayHourList(): List<String> {
-//        val calendar = Calendar.getInstance()
-//        val currentHour = calendar.get(Calendar.HOUR)
-//        return NumberUtil.getRange(currentHour + 1, 12)
-//    }
-//
-//    private fun getTodayAmPmList(): List<String> {
-//        val today = LocalDate.now()
-//        val todayString = "${today.monthValue}/${today.dayOfMonth}"
-//        val calendar = Calendar.getInstance()
-//        val currentAmPm = calendar.get(Calendar.AM_PM)
-//        val isToday = getIsToday(todayString)
-//        return if (isToday && currentAmPm == Calendar.PM) {
-//            listOf("PM")
-//        } else {
-//            listOf("AM", "PM")
-//        }
-//    }
-
     private fun getIsToday(dateString: String): Boolean {
         val inputDate = dateString.split(" ")[0] // "11/3 (월)" -> "11/3"
         val splittedDate = inputDate.split("/")
@@ -166,7 +148,11 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
         val ampmData = if (currentAmPm == "PM") 12 else 0
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val selectedHour = binding.wvHour.getCurrentItem<String>().toInt() + ampmData
-        return getIsToday(selectedItem) && (currentHour >= selectedHour)
+        return if (selectedHour == 24) {
+            true
+        } else {
+            getIsToday(selectedItem) && (currentHour >= selectedHour)
+        }
     }
 
 
