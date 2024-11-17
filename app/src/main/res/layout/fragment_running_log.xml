@@ -53,6 +53,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +82,11 @@
                         android:id="@+id/iv_stamp"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:clickable="true"
+                        android:focusable="false"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="15dp"
                         bind:stampSrc="@{vm.logStamp}"
+                        android:duplicateParentState="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -171,6 +173,7 @@
                         android:hint="@string/running_log_5_line_diary_hint"
                         android:textColorHint="@color/dark_g3_5"
                         android:textColor="@color/dark_g3_5"
+                        android:maxLength="500"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
