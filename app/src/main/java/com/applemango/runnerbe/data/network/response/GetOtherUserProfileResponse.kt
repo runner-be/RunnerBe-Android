@@ -25,20 +25,3 @@ data class OtherUserInfo(
     @SerializedName("profileImageUrl") val profileImageUrl: String?,
     @SerializedName("pace") val pace: String,
 )
-
-data class OtherUserPosting(
-    @SerializedName("postId") val postId: Int,
-    @SerializedName("postingTime") val postingTime: ZonedDateTime,
-    @SerializedName("postUserId") val postUserId: Int,
-    @SerializedName("title") val title: String,
-    @SerializedName("gatheringTime") val gatheringTime: ZonedDateTime,
-    @SerializedName("runningTag") val runningTag: String,
-    @SerializedName("age") val age: String,
-    @SerializedName("gender") val gender: String,
-    @SerializedName("whetherEnd") val whetherEnd: String,
-    @SerializedName("pace") val pace: String,
-    @SerializedName("afterParty") val afterParty: Int,
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("gatheringId") val gatheringId: Int?,
-    @SerializedName("logId") val logId: Int?
-)
