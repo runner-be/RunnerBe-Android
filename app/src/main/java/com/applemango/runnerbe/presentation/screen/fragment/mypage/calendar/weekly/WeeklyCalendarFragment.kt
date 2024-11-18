@@ -11,6 +11,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.response.GatheringData
 import com.applemango.runnerbe.data.network.response.RunningLog
+import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
@@ -51,8 +52,7 @@ class WeeklyCalendarFragment() :
                             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                     val parsedRunningLogs = combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
                     val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
-                    val personalCount = thisWeekLogs.count()
-                    val groupCount = thisWeekLogs.count { it.gatheringId != null }
+                    val (groupCount, personalCount) = result.totalCount ?: TotalCount(0, 0)
 
                     binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
                         getString(R.string.lets_add_stamp)
