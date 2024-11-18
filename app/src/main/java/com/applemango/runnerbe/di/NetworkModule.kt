@@ -9,7 +9,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetStampListApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
@@ -220,11 +219,6 @@ object NetworkModule {
     @Singleton
     fun provideGetRunningLogDetail(retrofit: Retrofit): GetRunningLogDetailApi =
         retrofit.create(GetRunningLogDetailApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideGetStampList(retrofit: Retrofit): GetStampListApi =
-        retrofit.create(GetStampListApi::class.java)
 
     @Provides
     @Singleton

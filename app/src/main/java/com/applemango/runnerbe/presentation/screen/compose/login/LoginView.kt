@@ -35,7 +35,6 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.screen.activity.HomeActivity
 import com.applemango.runnerbe.presentation.screen.compose.ui.theme.aggro
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
@@ -161,7 +160,6 @@ fun KakaoLoginView(modifier: Modifier) {
 
     Button(
         onClick = {
-
             /* 카카오 로그인 기능 */
             var keyHash = Utility.getKeyHash(mContext)
             Log.i("keyHash", keyHash)

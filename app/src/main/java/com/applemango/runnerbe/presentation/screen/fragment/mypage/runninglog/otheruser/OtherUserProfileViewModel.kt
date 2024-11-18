@@ -5,21 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUser
 import com.applemango.runnerbe.data.network.response.OtherUserInfo
-import com.applemango.runnerbe.data.network.response.OtherUserPosting
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -41,7 +35,6 @@ class OtherUserProfileViewModel @Inject constructor(
     val userPostings: StateFlow<List<Posting>> = _userPostings.asStateFlow()
 
     fun getOtherUserProfile(userId: Int) {
-        LogUtil.errorLog("UserId $userId")
         viewModelScope.launch {
             getOtherUserProfileUseCase(userId)
                 .collectLatest { response ->

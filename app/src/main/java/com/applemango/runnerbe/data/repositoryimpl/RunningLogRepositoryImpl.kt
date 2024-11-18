@@ -5,7 +5,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetStampListApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
@@ -21,7 +20,6 @@ class RunningLogRepositoryImpl @Inject constructor(
     private val getJoinedRunnerListApi: GetJoinedRunnerListApi,
     private val getMonthlyRunningLogListApi: GetMonthlyRunningLogListApi,
     private val getRunningLogDetailApi: GetRunningLogDetailApi,
-    private val getStampListApi: GetStampListApi,
     private val patchRunningLogApi: PatchRunningLogApi,
     private val patchStampToJoinedRunnerApi: PatchStampToJoinedRunnerApi,
     private val postRunningLogApi: PostRunningLogApi,
@@ -147,26 +145,6 @@ class RunningLogRepositoryImpl @Inject constructor(
             if (response.isSuccessful
                 && response.body() != null
                 && response.body()!!.result.isNotEmpty()
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun getStampList(userId: Int, year: Int, month: Int): CommonResponse {
-        return try {
-            val response = getStampListApi.getStampList(userId, year, month)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
             ) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {

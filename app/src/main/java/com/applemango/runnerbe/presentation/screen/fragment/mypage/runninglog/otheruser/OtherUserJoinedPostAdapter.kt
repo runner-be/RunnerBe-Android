@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.OtherUserPosting
 
 class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewHolder>(
     joinedPostDiffUtil
