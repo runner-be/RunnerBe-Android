@@ -26,19 +26,22 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OtherUserProfileFragment : BaseFragment<FragmentOtherUserProfileBinding>(R.layout.fragment_other_user_profile) {
+class OtherUserProfileFragment :
+    BaseFragment<FragmentOtherUserProfileBinding>(R.layout.fragment_other_user_profile) {
     private val viewModel: OtherUserProfileViewModel by viewModels()
 
     private val navArgs: OtherUserProfileFragmentArgs by navArgs()
+
     @Inject
     lateinit var otherUserJoinedPostAdapter: OtherUserJoinedPostAdapter
+
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        viewModel.updateTargetUserId(navArgs.targetUserId)
+        viewModel.getOtherUserProfile(navArgs.targetUserId)
         initJoinedRunningPostRecyclerView()
         initWeeklyCalendarAdapter()
         setupUserData()
@@ -48,16 +51,9 @@ class OtherUserProfileFragment : BaseFragment<FragmentOtherUserProfileBinding>(R
     private fun setupUserData() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setupOtherUser()
                 setupWeeklyCalendar()
                 setupJoinedRunningPost()
             }
-        }
-    }
-
-    private fun CoroutineScope.setupOtherUser() = launch {
-        viewModel.otherUserProfileFlow.collect { _ ->
-
         }
     }
 
@@ -75,17 +71,40 @@ class OtherUserProfileFragment : BaseFragment<FragmentOtherUserProfileBinding>(R
 
     private fun initDisposables() {
         compositeDisposable.addAll(
-            getCalendarClickDisposable()
+            getBackBtnDisposable(),
+            getCalendarClickDisposable(),
+            getJoinedRunningClickDisposable()
         )
     }
+
+    private fun getBackBtnDisposable() = binding.btnBack.clicks()
+        .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+        .subscribe {
+            goBack()
+        }
+
+    private fun getJoinedRunningClickDisposable() = binding.constJoinedRunningPostTitle.clicks()
+        .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+        .subscribe {
+            val user = viewModel.userInfo.value
+            user?.let {
+                navigate(
+                    OtherUserProfileFragmentDirections.actionOtherUserProfileFragmentToOtherUserJoinedRunningFragment(
+                        it.userId,
+                        it.nickName
+                    )
+                )
+            }
+        }
 
     private fun getCalendarClickDisposable() = binding.ivCalendar.clicks()
         .throttleFirst(1000L, TimeUnit.MILLISECONDS)
         .subscribe {
-            viewModel.targetUserIdFlow.value?.let { userId ->
+            val user = viewModel.userInfo.value
+            user?.let {
                 navigate(
                     OtherUserProfileFragmentDirections.actionUserProfileFragmentToMonthlyCalendarFragment(
-                        userId,
+                        it.userId,
                         1
                     )
                 )
@@ -122,12 +141,11 @@ class OtherUserProfileFragment : BaseFragment<FragmentOtherUserProfileBinding>(R
         binding.rcvJoinedRunningPost.apply {
             adapter = otherUserJoinedPostAdapter
             otherUserJoinedPostAdapter.setOnPostClickListener { item ->
-                // TODO
-//                navigate(
-//                    OtherUserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(
-//                        item
-//                    )
-//                )
+                navigate(
+                    OtherUserProfileFragmentDirections.actionUserProfileFragmentToPostDetailFragment(
+                        item
+                    )
+                )
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))

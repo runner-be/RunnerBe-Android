@@ -14,9 +14,11 @@ import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.BottomSpaceItemDecoration
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,19 +38,32 @@ class OtherUserJoinedPostFragment : BaseFragment<FragmentOtherUserJoinedPostBind
         context?.let {
             binding.rcvJoinedPost.addItemDecoration(RecyclerViewItemDeco(it, 12))
         }
+        initListeners()
         initJoinedPostAdapter()
         setupJoinedPostFlow()
     }
 
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            getBackBtnDisposable()
+        )
+    }
+
+    private fun getBackBtnDisposable() = binding.btnBack.clicks()
+        .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+        .subscribe {
+            goBack()
+        }
+
     private fun updateWithNavArgs(args: OtherUserJoinedPostFragmentArgs) {
-        viewModel.updateTargetUserId(args.targetUserId)
+        viewModel.getJoinedPostList(args.targetUserId)
         viewModel.updateTargetNickname(args.nickname)
     }
 
     private fun setupJoinedPostFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.targetJoinedPostFlow.collectLatest { posts ->
+                viewModel.postList.collectLatest { posts ->
                     otherUserJoinedPostAdapter.submitList(posts)
                 }
             }
@@ -60,10 +75,9 @@ class OtherUserJoinedPostFragment : BaseFragment<FragmentOtherUserJoinedPostBind
             adapter = otherUserJoinedPostAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             otherUserJoinedPostAdapter.setOnPostClickListener { posting ->
-                // TODO
-//                navigate(
-//                    OtherUserJoinedPostFragmentDirections.actionJoinPostFragmentToPostDetailFragment(posting)
-//                )
+                navigate(
+                    OtherUserJoinedPostFragmentDirections.actionOtherUserJoinedRunningFragmentToPostDetailFragment(posting)
+                )
             }
             addItemDecoration(BottomSpaceItemDecoration(12.dpToPx(context)))
         }

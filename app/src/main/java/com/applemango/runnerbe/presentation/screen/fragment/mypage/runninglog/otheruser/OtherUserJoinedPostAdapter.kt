@@ -9,7 +9,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUserPosting
 
-class OtherUserJoinedPostAdapter : ListAdapter<OtherUserPosting, OtherUserJoinedPostViewHolder>(
+class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewHolder>(
     joinedPostDiffUtil
 ) {
     private lateinit var onPostClickListener: OtherUserJoinedPostClickListener
@@ -37,12 +37,12 @@ class OtherUserJoinedPostAdapter : ListAdapter<OtherUserPosting, OtherUserJoined
     }
 
     companion object {
-        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<OtherUserPosting>() {
-            override fun areItemsTheSame(oldItem: OtherUserPosting, newItem: OtherUserPosting): Boolean {
+        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
+            override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
                 return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: OtherUserPosting, newItem: OtherUserPosting): Boolean {
+            override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
                 return oldItem == newItem
             }
         }

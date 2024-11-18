@@ -78,6 +78,7 @@
                     android:fontFamily="@font/pretendard_regular"
                     android:text="@{myPageViewModel.userInfo.gender}"
                     android:textColor="@color/dark_g1"
+                    android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="@id/userNameView"
                     app:layout_constraintTop_toBottomOf="@id/userNameView"
                     tools:text="여성" />
@@ -102,6 +103,7 @@
                     android:fontFamily="@font/pretendard_regular"
                     android:text="@{myPageViewModel.userInfo.age}"
                     android:textColor="@color/dark_g1"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/userGenderView"
                     app:layout_constraintLeft_toRightOf="@id/userStatusDotView"
                     app:layout_constraintTop_toTopOf="@id/userGenderView"

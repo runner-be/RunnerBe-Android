@@ -16,11 +16,6 @@ class JoinedRunningPostViewHolder(
             clickListener = listener
             postFrom = from
 
-            val localDate = LocalDate.now()
-            val localDateTime = localDate.atStartOfDay()
-            val zoneId = ZoneId.systemDefault()
-            val zonedDateTime = localDateTime.atZone(zoneId)
-
             val firstButtonVisibility = (item.whetherEnd == "N") || (item.whetherEnd == "Y" && !item.isRunningCaptain())
             val secondButtonVisibility = item.whetherEnd == "Y" && item.isRunningCaptain()
             val thirdButtonVisibility = item.whetherEnd == "D"

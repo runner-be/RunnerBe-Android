@@ -11,6 +11,8 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.UserInfo
 
 class AttendanceSeeAdapter() : ListAdapter<UserInfo, AttendanceSeeViewHolder>(attendanceSeeDiffUtil) {
+    private var listener: AttendanceProfileClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AttendanceSeeViewHolder {
         return AttendanceSeeViewHolder(DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
@@ -22,7 +24,11 @@ class AttendanceSeeAdapter() : ListAdapter<UserInfo, AttendanceSeeViewHolder>(at
 
     override fun onBindViewHolder(holder: AttendanceSeeViewHolder, position: Int) {
         val item = currentList[position]
-        holder.bind(item)
+        holder.bind(item, listener ?: throw IllegalStateException("AttendanceProfileClickListener not initialized"))
+    }
+
+    fun initProfileClickListener(listener: AttendanceProfileClickListener) {
+        this.listener = listener
     }
 
     companion object {

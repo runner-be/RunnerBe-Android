@@ -11,6 +11,9 @@
         <variable
             name="userInfo"
             type="com.applemango.runnerbe.data.dto.UserInfo" />
+        <variable
+            name="listener"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceProfileClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,9 +30,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/profileImageView"
+                android:id="@+id/iv_profile"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:onClick="@{() -> listener.onProfileImageClicked(userInfo.userId)}"
                 profileImageFromUrl="@{String.valueOf(userInfo.profileImageUrl)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -45,8 +49,8 @@
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginLeft="12dp"
-                app:layout_constraintTop_toTopOf="@id/profileImageView"
-                app:layout_constraintLeft_toRightOf="@id/profileImageView"/>
+                app:layout_constraintTop_toTopOf="@id/iv_profile"
+                app:layout_constraintLeft_toRightOf="@id/iv_profile"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/user_status"
@@ -72,7 +76,7 @@
                 android:paddingEnd="6dp"
                 android:background="@drawable/bg_dark_4_5g_solid_radius_4"
                 app:layout_constraintTop_toBottomOf="@id/userNameView"
-                app:layout_constraintBottom_toBottomOf="@id/profileImageView"
+                app:layout_constraintBottom_toBottomOf="@id/iv_profile"
                 app:layout_constraintStart_toStartOf="@+id/userNameView">
 
                 <androidx.appcompat.widget.AppCompatImageView
