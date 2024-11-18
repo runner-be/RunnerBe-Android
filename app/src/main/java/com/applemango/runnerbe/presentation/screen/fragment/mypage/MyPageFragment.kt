@@ -23,7 +23,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemP
 import com.applemango.runnerbe.presentation.screen.fragment.base.ImageBaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarPagerAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom

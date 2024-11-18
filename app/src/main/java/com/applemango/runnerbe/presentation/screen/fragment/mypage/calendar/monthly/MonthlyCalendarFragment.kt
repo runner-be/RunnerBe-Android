@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly
 
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +18,8 @@ import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.DayOfWeekAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initYearMonthDays
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint

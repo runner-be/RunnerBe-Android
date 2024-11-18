@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly
 
 import androidx.lifecycle.ViewModel
 import com.applemango.runnerbe.RunnerBeApplication
