@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar
+package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

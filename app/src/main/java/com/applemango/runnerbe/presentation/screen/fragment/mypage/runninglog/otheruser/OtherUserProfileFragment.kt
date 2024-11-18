@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentOtherUserProfileBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.WeeklyCalendarAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx

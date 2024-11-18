@@ -349,7 +349,7 @@
     </fragment>
     <fragment
         android:id="@+id/monthlyCalendarFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.MonthlyCalendarFragment"
+        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly.MonthlyCalendarFragment"
         android:label="fragment_monthly_calendar"
         tools:layout="@layout/fragment_monthly_calendar" >
 
