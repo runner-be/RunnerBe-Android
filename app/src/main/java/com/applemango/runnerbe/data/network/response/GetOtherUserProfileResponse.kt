@@ -12,7 +12,7 @@ data class OtherUser(
     @SerializedName("userInfo") val userInfo: OtherUserInfo,
     @SerializedName("userLogInfo") val userLogInfo: List<RunningLog>,
     @SerializedName("postTotalCount") val postTotalCount: Int,
-    @SerializedName("userRunning") val userPosting: List<OtherUserPosting>,
+    @SerializedName("userRunning") val userPosting: List<Posting>,
 )
 
 data class OtherUserInfo(

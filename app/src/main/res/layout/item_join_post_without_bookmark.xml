@@ -10,7 +10,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.network.response.OtherUserPosting" />
+            type="com.applemango.runnerbe.data.dto.Posting" />
 
         <variable
             name="clickListener"
@@ -70,6 +70,7 @@
                     android:includeFontPadding="false"
                     android:textColor="@color/dark_g3"
                     android:textSize="12sp"
+                    bind:whetherEndCheckStatus="@{item}"
                     tools:text="모집 마감" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -80,6 +81,7 @@
                     android:includeFontPadding="false"
                     android:textColor="@color/dark_g3"
                     android:textSize="12sp"
+                    android:text="@{item.gender}"
                     tools:text="여성만" />
 
                 <androidx.appcompat.widget.AppCompatTextView

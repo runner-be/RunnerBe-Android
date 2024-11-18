@@ -65,8 +65,8 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_mainFragment_to_joinPostFragment"
-            app:destination="@id/joinPostFragment"
+            android:id="@+id/action_mainFragment_to_otherUserJoinedRunningFragment"
+            app:destination="@id/otherUserJoinedRunningFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
@@ -254,7 +254,11 @@
             app:argType="com.applemango.runnerbe.data.dto.Posting"/>
         <action
             android:id="@+id/action_postDetailFragment_to_runningTalkDetailFragment"
-            app:destination="@id/runningTalkDetailFragment" />
+            app:destination="@id/runningTalkDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_postDetailFragment_to_otherUserProfileFragment"
             app:destination="@id/otherUserProfileFragment"
@@ -430,13 +434,20 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherUserProfileFragment_to_otherUserJoinedRunningFragment"
+            app:destination="@id/otherUserJoinedRunningFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/joinPostFragment"
+        android:id="@+id/otherUserJoinedRunningFragment"
         android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment"
-        android:label="JoinPostFragment" >
+        android:label="OtherUserJoinedRunningFragment" >
 
         <argument
             android:name="targetUserId"
@@ -446,7 +457,7 @@
             android:name="nickname"
             app:argType="string" />
         <action
-            android:id="@+id/action_joinPostFragment_to_postDetailFragment"
+            android:id="@+id/action_otherUserJoinedRunningFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
