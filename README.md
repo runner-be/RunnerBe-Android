@@ -1,6 +1,8 @@
 # RunnerBe-Android
 
-<img src="https://github.com/user-attachments/assets/262fc1dd-ff16-4330-a128-96f1ca67e981" alt="Android _540 X 960_01" style="width: 100%; height: auto;" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/262fc1dd-ff16-4330-a128-96f1ca67e981" alt="Android _540 X 960_01" width="450" />
+</div>
 
 <table>
   <tr>
