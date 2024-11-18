@@ -13,7 +13,6 @@ interface RunningLogRepository {
     suspend fun deleteRunningLog(userId: Int, logId: Int): CommonResponse
 
     suspend fun getJoinedRunnerList(userId: Int, logId: Int): CommonResponse
-    suspend fun getStampList(userId: Int, year: Int, month: Int): CommonResponse
     suspend fun patchStampToJoinedRunner(userId: Int, logId: Int, stamp: PostStampRequest): CommonResponse
     suspend fun postStampToJoinedRunner(userId: Int, logId: Int, stamp: PostStampRequest): CommonResponse
 
