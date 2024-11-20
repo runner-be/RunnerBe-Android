@@ -14,7 +14,6 @@ import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.screen.fragment.image.CropRectRatio
@@ -22,8 +21,9 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.wr
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @BindingAdapter("imageDrawable")
 fun bindImageFromRes(view: ImageView, drawableId: Int) {
@@ -50,18 +50,21 @@ fun bindProfileImageFromUrl(view: ImageView, url: String?) {
 @BindingAdapter("date_string")
 fun bindDate(textView: TextView, dateString: ZonedDateTime?) {
     runCatching {
-        val time = dateString?.toInstant()?.toEpochMilli()
-        val format = SimpleDateFormat("M/d (E)-k-mm").format(time).split("-")
-        val hour = format[1]
-        textView.text = DateSelectData(
-            formatDate = format[0],
-            AMAndPM = if (hour.toInt() in 12..23) "PM" else "AM",
-            hour = if (hour.toInt() >= 24) "0" else if (hour.toInt() <= 12) hour else "${hour.toInt() - 12}",
-            minute = "${if (format[2].toInt() in 0..9) "0" else ""}${format[2].toInt()}"
-        ).getFullDisplayDate()
-    }.onFailure {
+        if (dateString == null) {
+            textView.text = ""
+            return
+        }
+
+        val dateFormatter = DateTimeFormatter.ofPattern("M/d (E)", Locale.KOREAN)
+        val timeFormatter = DateTimeFormatter.ofPattern("a h:mm", Locale.ENGLISH)
+
+        val formattedDate = dateString.format(dateFormatter)
+        val formattedTime = dateString.format(timeFormatter)
+
+        textView.text = "$formattedDate ${formattedTime.uppercase()}"
+    }.onFailure { e ->
         textView.text = ""
-        it.printStackTrace()
+        e.printStackTrace()
     }
 }
 
