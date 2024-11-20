@@ -143,16 +143,23 @@ class DateTimePickerDialog(context: Context) : Dialog(context, R.style.confirmDi
      * @sample (현재 시각이 3시라면) 4시 이후부터 선택 가능
      */
     private fun getIsSelectedItemInvalid(selectedItem: String): Boolean {
+        if (!getIsToday(selectedItem)) return false
+
         val calendar = Calendar.getInstance()
-        val currentAmPm = binding.wvAmPm.getCurrentItem<String>()
-        val ampmData = if (currentAmPm == "PM") 12 else 0
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val selectedHour = binding.wvHour.getCurrentItem<String>().toInt() + ampmData
-        return if (selectedHour == 24) {
-            true
-        } else {
-            getIsToday(selectedItem) && (currentHour >= selectedHour)
+
+        val selectedAmPm = binding.wvAmPm.getCurrentItem<String>()
+        val selectedHour = binding.wvHour.getCurrentItem<String>().toInt().let { hour ->
+            when {
+                selectedAmPm == "PM" && hour == 12 -> 12
+                selectedAmPm == "AM" && hour == 12 -> 0
+                selectedAmPm == "PM" -> hour + 12
+                else -> hour
+            }
         }
+        LogUtil.errorLog("CurrentHour $currentHour")
+        LogUtil.errorLog("SelectedHour $selectedHour")
+        return currentHour >= selectedHour
     }
 
 
