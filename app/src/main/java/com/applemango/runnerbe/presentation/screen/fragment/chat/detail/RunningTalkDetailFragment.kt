@@ -29,12 +29,13 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkDeta
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageSelectListener
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.toUri
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -70,9 +71,21 @@ class RunningTalkDetailFragment :
         })
 
         binding.topMessageLayout.setOnClickListener { hideKeyBoard() }
+        initListeners()
         setupTalkDetail()
         setupTalkAttachedImages()
         setupTalkUpdate()
+    }
+
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.ivSend.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val message = binding.etMessage.text.toString()
+                    viewModel.sendMessage(message)
+                }
+        )
     }
 
     private fun setupTalkUpdate() {
@@ -153,56 +166,61 @@ class RunningTalkDetailFragment :
     }
 
     private fun observeBind() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
-                viewModel.actions.collect(::handleAction)
-            }
-            launch {
-                viewModel.messageSendUiState.collect {
-                    context?.let { context ->
-                        if (it is UiState.Loading) showLoadingDialog(context)
-                        else dismissLoadingDialog()
-                    }
-                    when (it) {
-                        is UiState.Success -> refresh()
-                        else -> { Log.e(this.javaClass.name, "observeBind - when - else - UiState") }
-                    }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.actions.collect(::handleAction)
                 }
-            }
-            launch {
-                viewModel.roomInfo.collect {
-                    binding.paceView.setContent {
-                        PaceComponentMini(pace = Pace.getPaceByName(viewModel.roomInfo.value.pace)?:Pace.BEGINNER)
-                    }
-                }
-            }
-            launch {
-                viewModel.messageReportUiState.collect {
-                    context?.let { context ->
-                        if (it is UiState.Loading) showLoadingDialog(context)
-                        else dismissLoadingDialog()
-                    }
-                    when (it) {
-                        is UiState.Success -> {
-                            viewModel.isDeclaration.value = false
-                            Toast.makeText(
-                                context,
-                                resources.getString(R.string.report_complete),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                launch {
+                    viewModel.messageSendUiState.collect {
+                        context?.let { context ->
+                            if (it is UiState.Loading) showLoadingDialog(context)
+                            else dismissLoadingDialog()
                         }
-                        is UiState.Failed -> {
-                            context?.let { context ->
-                                MessageDialog.createShow(
-                                    context = context,
-                                    message = it.message,
-                                    buttonText = resources.getString(R.string.confirm)
-                                )
+                        when (it) {
+                            is UiState.Success -> {
+                                binding.etMessage.setText("")
+                                refresh()
                             }
+                            else -> { Log.e(this.javaClass.name, "observeBind - when - else - UiState") }
                         }
+                    }
+                }
+                launch {
+                    viewModel.roomInfo.collect {
+                        binding.paceView.setContent {
+                            PaceComponentMini(pace = Pace.getPaceByName(viewModel.roomInfo.value.pace)?:Pace.BEGINNER)
+                        }
+                    }
+                }
+                launch {
+                    viewModel.messageReportUiState.collect {
+                        context?.let { context ->
+                            if (it is UiState.Loading) showLoadingDialog(context)
+                            else dismissLoadingDialog()
+                        }
+                        when (it) {
+                            is UiState.Success -> {
+                                viewModel.isDeclaration.value = false
+                                Toast.makeText(
+                                    context,
+                                    resources.getString(R.string.report_complete),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            is UiState.Failed -> {
+                                context?.let { context ->
+                                    MessageDialog.createShow(
+                                        context = context,
+                                        message = it.message,
+                                        buttonText = resources.getString(R.string.confirm)
+                                    )
+                                }
+                            }
 
-                        else -> {
-                            Log.e(this.javaClass.name, "observeBind - when - else - UiState | $it")
+                            else -> {
+                                Log.e(this.javaClass.name, "observeBind - when - else - UiState | $it")
+                            }
                         }
                     }
                 }

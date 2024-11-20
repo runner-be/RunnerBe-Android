@@ -14,7 +14,9 @@ object RunningTalkDetailMapper {
 
     fun parseMessagesToRunningTalkUiState(messages: List<Messages>): List<RunningTalkUiState> {
         val groupedMessages = messages.groupBy {
-            Pair(dateStringToString(it.createAt, formatter), it.from.lowercase())
+            val parsedDateString = dateStringToString(it.createAt, formatter)
+            val messageFrom = it.from.lowercase()
+            Pair(parsedDateString, messageFrom) // ex) Pair("2024-11-18 14:00", "me")
         }
         return groupedMessages.mapNotNull { (key, groupedMessages) ->
             val targetFrom = key.second
