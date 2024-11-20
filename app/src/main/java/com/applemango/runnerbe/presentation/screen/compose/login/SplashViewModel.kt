@@ -87,7 +87,7 @@ class SplashViewModel @Inject constructor(
                 is CommonResponse.Success<*> -> {
                     if (it.body is UserDataResponse) {
                         val result = it.body.result
-                        RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo.pace?:"")
+                        RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo?.pace?:"")
                     }
                 }
 

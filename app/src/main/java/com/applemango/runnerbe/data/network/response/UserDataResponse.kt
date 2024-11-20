@@ -9,7 +9,7 @@ data class UserDataResponse(
 ) : BaseResponse()
 
 data class GetMyPageResult(
-    @SerializedName("myInfo") val userInfo: UserInfo,
+    @SerializedName("myInfo") val userInfo: UserInfo?,
     @SerializedName("myPosting") val myPosting: List<Posting>,
     @SerializedName("myRunning") val myRunning: List<Posting>
 )

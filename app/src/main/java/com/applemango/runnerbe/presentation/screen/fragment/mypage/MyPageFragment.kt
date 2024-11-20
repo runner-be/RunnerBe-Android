@@ -304,6 +304,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 })
             }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            itemAnimator = null
             addItemDecoration(RightSpaceItemDecoration(12.dpToPx(context)))
         }
     }
