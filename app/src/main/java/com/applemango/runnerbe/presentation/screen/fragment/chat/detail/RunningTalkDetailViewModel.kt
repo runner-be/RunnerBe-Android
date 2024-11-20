@@ -20,19 +20,21 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.R
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.LogUtil
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 @HiltViewModel
@@ -80,16 +82,27 @@ class RunningTalkDetailViewModel @Inject constructor(
     fun sendMessage(content: String) = viewModelScope.launch(Dispatchers.IO) {
         failedImageList.clear()
         successImageList.clear()
+
         roomId?.let {
-            message.value = ""
             _messageReportUiState.emit(UiState.Loading)
 
-            attachImageUrls.value.forEachIndexed { index, url -> uploadImg(it, url, index) }
-            //다 끝날때까지 대기
-            while (attachImageUrls.value.size != successImageList.size + failedImageList.size) {
+            val uploadImageResults =  attachImageUrls.value.mapIndexed { index, url ->
+                async {
+                    uploadImg(it, url, index)
+                }
+            }.awaitAll()
+
+            uploadImageResults.forEachIndexed{ index, isSuccess ->
+                val iImage = attachImageUrls.value[index]
+                if (isSuccess)
+                    successImageList.add(iImage)
+                else
+                    failedImageList.add(iImage)
             }
+
             val isImageSend = attachImageUrls.value.size == successImageList.size
             attachImageUrls.value = failedImageList
+
             if (content.isNotEmpty()) {
                 when (val response = messageSendUseCase(it, content, null)) {
                     is CommonResponse.Success<*> -> {
@@ -121,19 +134,31 @@ class RunningTalkDetailViewModel @Inject constructor(
         }
     }
 
-    //        firebase storage 에 이미지 업로드하는 method
-    private fun uploadImg(roomId: Int, uri: String, primaryKey: Int) {
-        var uploadTask: UploadTask? = null // 파일 업로드하는 객체
-        val name = RunnerBeApplication.mTokenPreference.getUserId()
-        val fileName = "$name${Calendar.getInstance().time}${primaryKey}_.png"
-        val reference: StorageReference = Firebase.storage.reference.child("item")
-            .child(fileName) // 이미지 파일 경로 지정 (/item/imageFileName)
-        uploadTask = uri.let { reference.putFile(Uri.fromFile(File(uri))) } // 업로드할 파일과 업로드할 위치 설정
-        uploadTask.addOnSuccessListener {
-            downloadUri(roomId, reference, uri) // 업로드 성공 시 업로드한 파일 Uri 다운받기
-        }.addOnFailureListener {
-            it.printStackTrace()
-            failedImageList.add(uri)
+    // firebase storage 에 이미지 업로드하는 method
+    private suspend fun uploadImg(roomId: Int, uri: String, primaryKey: Int): Boolean {
+        return try {
+            val name = RunnerBeApplication.mTokenPreference.getUserId()
+            val fileName = "$name${Calendar.getInstance().time}${primaryKey}_.png"
+            val reference: StorageReference = Firebase.storage.reference.child("item")
+                .child(fileName) // 이미지 파일 경로 지정 (/item/imageFileName)
+
+            val uploadTask = reference.putFile(Uri.fromFile(File(uri)))
+
+            suspendCoroutine<Boolean> { continuation ->
+                val isResumed = false
+                uploadTask.addOnSuccessListener {
+                    if (!isResumed) return@addOnSuccessListener
+                    downloadUri(roomId, reference, uri)
+                    continuation.resume(true)
+                }.addOnFailureListener {
+                    if (!isResumed) return@addOnFailureListener
+                    it.printStackTrace()
+                    continuation.resume(false)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
         }
     }
 

@@ -1,25 +1,11 @@
-# Gson
--keep class com.google.gson.** { *; }
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
--keep class * extends com.google.gson.TypeAdapter { *; }
-
-# Kakao login
--keep class com.kakao.sdk.**.model.* { <fields>; }
-
-# Naver login
--keep class com.navercorp.nid.oauth.** { *; }
--keep class com.navercorp.nid.profile.data.** { *; }
-
-# Coroutine
--keep class kotlinx.coroutines.** { *; }
-
-# Dagger Hilt
--keep class dagger.hilt.** { *; }
-
-# Parcelize
--keep @kotlinx.parcelize.Parcelize class * { *; }
+# Suppress warnings
+-dontwarn javax.annotation.**
+-dontwarn kotlin.Unit
+-dontwarn retrofit2.KotlinExtensions
+-dontwarn retrofit2.KotlinExtensions$*
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.*
+-dontwarn org.openjsse.**
 
 # Keep data class fields
 -keepclassmembers class * {
@@ -33,6 +19,9 @@
     <methods>;
     <fields>;
 }
+
+# RunnerBe data classes
+-keep class com.applemango.runnerbe.data.** { *; }
 
 # Retrofit
 -keepattributes Signature, InnerClasses, EnclosingMethod
@@ -59,14 +48,25 @@
 # OkHttp
 -keep class okhttp3.Callback { *; }
 
-# RunnerBe data classes
--keep class com.applemango.runnerbe.data.** { *; }
+# Gson
+-keep class com.google.gson.**Model { *; }
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keep class * extends com.google.gson.TypeAdapter { *; }
 
-# Suppress warnings
--dontwarn javax.annotation.**
--dontwarn kotlin.Unit
--dontwarn retrofit2.KotlinExtensions
--dontwarn retrofit2.KotlinExtensions$*
--dontwarn org.bouncycastle.jsse.**
--dontwarn org.conscrypt.*
--dontwarn org.openjsse.**
+# Parcelize
+-keep @kotlinx.parcelize.Parcelize class * { *; }
+
+# Kakao login
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+
+# Naver login
+-keep class com.navercorp.nid.oauth.** { *; }
+-keep class com.navercorp.nid.profile.data.** { *; }
+
+# Coroutine
+-keep class kotlinx.coroutines.** { *; }
+
+# Dagger Hilt
+-keep class dagger.hilt.** { *; }

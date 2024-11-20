@@ -48,7 +48,7 @@
                     android:id="@+id/top_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
+                    android:fontFamily="@font/pretendard_medium"
                     android:gravity="center_horizontal"
                     android:text="@string/running_talk"
                     android:textColor="@color/dark_g3_5"
@@ -189,7 +189,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     isEnabled="@{vm.message.length() > 0 || !vm.attachImageUrls.empty}"
-                    android:onClick="@{() -> vm.sendMessage(vm.message)}"
                     android:src="@drawable/selector_send"
                     android:layout_gravity="center"
                     android:padding="14dp"/>
