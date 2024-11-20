@@ -24,7 +24,7 @@ import javax.inject.Inject
 class JoinedRunningViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
-    private val selectedCategoryId: MutableStateFlow<JoinedRunningCategory> = MutableStateFlow(
+    val selectedCategoryId: MutableStateFlow<JoinedRunningCategory> = MutableStateFlow(
         JoinedRunningCategory.ALL
     )
     private val userPostings: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
