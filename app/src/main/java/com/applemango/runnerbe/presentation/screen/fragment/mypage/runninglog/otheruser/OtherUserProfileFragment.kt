@@ -64,6 +64,7 @@ class OtherUserProfileFragment :
             _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
+                true
             )
             adapter = weeklyCalendarPagerAdapter
         }
