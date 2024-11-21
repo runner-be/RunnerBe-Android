@@ -36,6 +36,9 @@ class WeeklyCalendarFragment() :
     private val position: Int by lazy {
         arguments?.getInt(ARG_POSITION) ?: POSITION_DEFAULT
     }
+    private val isOtherUserProfile: Boolean by lazy {
+        arguments?.getBoolean(ARG_IS_OTHER_USER) ?: false
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,27 +99,29 @@ class WeeklyCalendarFragment() :
     private fun initWeeklyCalendarAdapter() {
         binding.rcvCalendarWeekly.apply {
             adapter = weeklyCalendarAdapter
-            weeklyCalendarAdapter.setOnDateClickListener { item ->
-                viewModel.updateWeeklyViewPagerPosition(position)
-                val runningLog = item.runningLog
+            if (!isOtherUserProfile) {
+                weeklyCalendarAdapter.setOnDateClickListener { item ->
+                    viewModel.updateWeeklyViewPagerPosition(position)
+                    val runningLog = item.runningLog
 
-                if (runningLog != null) {
-                    val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                    navigate(
-                        MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
-                            userId,
-                            runningLog.logId
-                        )
-                    )
-                } else {
-                    item.date?.let { itemDate ->
+                    if (runningLog != null) {
+                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
                         navigate(
-                            MainFragmentDirections.actionMainFragmentToRunningLogFragment(
-                                itemDate.toString(),
-                                null,
-                                null
+                            MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
+                                userId,
+                                runningLog.logId
                             )
                         )
+                    } else {
+                        item.date?.let { itemDate ->
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToRunningLogFragment(
+                                    itemDate.toString(),
+                                    null,
+                                    null
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -128,13 +133,15 @@ class WeeklyCalendarFragment() :
     companion object {
         private const val ARG_DATE = "arg_date"
         private const val ARG_POSITION = "arg_position"
+        private const val ARG_IS_OTHER_USER = "arg_is_other_user"
         private const val POSITION_DEFAULT = 2
 
-        fun newInstance(date: LocalDate, position: Int): WeeklyCalendarFragment {
+        fun newInstance(date: LocalDate, position: Int, isOtherUser: Boolean): WeeklyCalendarFragment {
             val fragment = WeeklyCalendarFragment()
             val args = Bundle()
             args.putSerializable(ARG_DATE, date)
             args.putInt(ARG_POSITION, position)
+            args.putBoolean(ARG_IS_OTHER_USER, isOtherUser)
             fragment.arguments = args
             return fragment
         }
