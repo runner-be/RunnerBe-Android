@@ -30,7 +30,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -139,19 +138,18 @@ class RunningTalkDetailViewModel @Inject constructor(
         return try {
             val name = RunnerBeApplication.mTokenPreference.getUserId()
             val fileName = "$name${Calendar.getInstance().time}${primaryKey}_.png"
-            val reference: StorageReference = Firebase.storage.reference.child("item")
-                .child(fileName) // 이미지 파일 경로 지정 (/item/imageFileName)
+            val reference: StorageReference = Firebase.storage.reference.child("item").child(fileName)
 
-            val uploadTask = reference.putFile(Uri.fromFile(File(uri)))
+            val inputStream = RunnerBeApplication.instance.contentResolver.openInputStream(Uri.parse(uri))
+                ?: throw IllegalArgumentException("Cannot open InputStream for URI: $uri")
+
+            val uploadTask = reference.putStream(inputStream)
 
             suspendCoroutine<Boolean> { continuation ->
-                val isResumed = false
                 uploadTask.addOnSuccessListener {
-                    if (!isResumed) return@addOnSuccessListener
                     downloadUri(roomId, reference, uri)
                     continuation.resume(true)
                 }.addOnFailureListener {
-                    if (!isResumed) return@addOnFailureListener
                     it.printStackTrace()
                     continuation.resume(false)
                 }
@@ -237,36 +235,6 @@ class RunningTalkDetailViewModel @Inject constructor(
         val prevList = attachImageUrls.value.toMutableList()
         prevList.add(uri.toString())
         attachImageUrls.value = prevList
-    }
-
-    private fun getRealPath(uri: Uri): String? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return if (isMediaStoreUri(uri)) {
-                val proj = arrayOf(MediaStore.Images.Media.DATA)
-                val loader = CursorLoader(
-                    RunnerBeApplication.instance.applicationContext,
-                    uri,
-                    proj,
-                    null,
-                    null,
-                    null
-                )
-                loader.loadInBackground()?.let { cursor ->
-                    val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                    cursor.moveToFirst()
-                    val result = cursor.getString(columnIndex)
-                    cursor.close()
-                    result
-                }
-            } else uri.toString()
-        } else uri.path
-    }
-
-    private fun isMediaStoreUri(uri: Uri): Boolean {
-        return uri.scheme.equals(
-            "content",
-            ignoreCase = true
-        ) && MediaStore.AUTHORITY == uri.authority
     }
 }
 
