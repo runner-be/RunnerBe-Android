@@ -455,29 +455,36 @@
                     android:layout_marginHorizontal="16dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/moveToWaitingUserButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_waiting_user"
-                    android:onClick="@{() -> vm.waitingBtnClicked()}"
-                    android:visibility="@{vm.myPost ? View.VISIBLE : View.GONE}"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginRight="12dp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_red_dot_14"
-                    android:visibility="@{vm.isWaitingUserExist(vm.waitingInfo) ? View.VISIBLE : View.GONE}"
-                    android:layout_marginTop="1dp"
-                    app:layout_constraintRight_toRightOf="@+id/moveToWaitingUserButton"
-                    app:layout_constraintTop_toTopOf="@id/moveToWaitingUserButton"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/moveToWaitingUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_waiting_user"
+                android:onClick="@{() -> vm.waitingBtnClicked()}"
+                android:visibility="@{vm.myPost ? View.VISIBLE : View.GONE}"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_red_dot_14"
+                android:visibility="@{vm.isWaitingUserExist(vm.waitingInfo) ? View.VISIBLE : View.GONE}"
+                android:layout_marginTop="1dp"
+                app:layout_constraintRight_toRightOf="@+id/moveToWaitingUserButton"
+                app:layout_constraintTop_toTopOf="@id/moveToWaitingUserButton"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/bottomButtonLayout"

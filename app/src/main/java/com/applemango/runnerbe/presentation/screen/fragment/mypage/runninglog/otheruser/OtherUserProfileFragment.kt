@@ -10,18 +10,26 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.data.network.response.GatheringData
+import com.applemango.runnerbe.data.network.response.RunningLog
+import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentOtherUserProfileBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarFragment
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -38,35 +46,48 @@ class OtherUserProfileFragment :
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
 
+    private var _weeklyCalendarPagerAdapter: WeeklyCalendarPagerAdapter? = null
+    private val weeklyCalendarPagerAdapter get() = _weeklyCalendarPagerAdapter!!
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         viewModel.getOtherUserProfile(navArgs.targetUserId)
         initJoinedRunningPostRecyclerView()
-        initWeeklyCalendarAdapter()
-        setupUserData()
         initDisposables()
+        initWeeklyViewPagerAdapter()
+        setupWeeklyViewPagerPosition()
     }
 
-    private fun setupUserData() {
+    private fun initWeeklyViewPagerAdapter() {
+        binding.vpWeeklyCalendar.apply {
+            _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
+                childFragmentManager,
+                viewLifecycleOwner.lifecycle,
+            )
+            adapter = weeklyCalendarPagerAdapter
+        }
+        if (viewModel.currentWeeklyViewPagerPosition.value == null) {
+            viewModel.updateWeeklyViewPagerPosition(2)
+        }
+        initDotsIndicator()
+    }
+
+    private fun setupWeeklyViewPagerPosition() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setupWeeklyCalendar()
-                setupJoinedRunningPost()
+                viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
+                    position?.let {
+                        binding.vpWeeklyCalendar.setCurrentItem(position, false)
+                    }
+                }
             }
         }
     }
 
-    private fun CoroutineScope.setupWeeklyCalendar() = launch {
-        viewModel.userRunningLogs.collect { list ->
-            weeklyCalendarAdapter.submitList(initWeekDays(LocalDate.now(), list))
-        }
-    }
 
-    private fun CoroutineScope.setupJoinedRunningPost() = launch {
-        viewModel.userPostings.collect { list ->
-            otherUserJoinedPostAdapter.submitList(list)
-        }
+    private fun initDotsIndicator() {
+        binding.indicatorDots.attachTo(binding.vpWeeklyCalendar)
     }
 
     private fun initDisposables() {
@@ -110,32 +131,6 @@ class OtherUserProfileFragment :
                 )
             }
         }
-
-    private fun initWeeklyCalendarAdapter() {
-        binding.rcvCalendarWeekly.apply {
-            adapter = weeklyCalendarAdapter
-            weeklyCalendarAdapter.setIsOtherUser(true)
-            weeklyCalendarAdapter.setOnDateClickListener { item ->
-                if (item.runningLog == null) return@setOnDateClickListener
-
-                try {
-                    val targetUserId = requireNotNull(viewModel.userInfo.value?.userId)
-                    val logId = item.runningLog.logId
-
-                    navigate(
-                        OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
-                            targetUserId,
-                            logId
-                        )
-                    )
-                } catch (e: IllegalArgumentException) {
-                    ToastUtil.showShortToast(context, getString(R.string.error_failed))
-                    e.printStackTrace()
-                }
-            }
-            layoutManager = GridLayoutManager(context, 7)
-        }
-    }
 
     private fun initJoinedRunningPostRecyclerView() {
         binding.rcvJoinedRunningPost.apply {

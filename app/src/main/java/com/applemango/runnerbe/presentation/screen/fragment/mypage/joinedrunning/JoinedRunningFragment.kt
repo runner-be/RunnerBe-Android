@@ -38,6 +38,10 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
         initRunningRecyclerView()
         setupRunningLogsFlow()
         getUserPostings()
+        binding.rgCategory.check(
+            if (viewModel.selectedCategoryId.value == JoinedRunningCategory.ALL) R.id.rb_all
+            else R.id.rb_my
+        )
     }
 
     private fun getUserPostings() {
@@ -58,7 +62,6 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
     private fun initListeners() {
         compositeDisposable.addAll(
             binding.rgCategory.checkedChanges()
-                .throttleFirst(500L, TimeUnit.MILLISECONDS)
                 .subscribe { checkedId ->
                     when (checkedId) {
                         R.id.rb_all -> viewModel.updateSelectedCategory(JoinedRunningCategory.ALL)

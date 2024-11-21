@@ -62,7 +62,6 @@
             android:layout_marginTop="19dp"
             android:background="@drawable/bg_tab"
             android:orientation="horizontal"
-            android:checkedButton="@id/rb_all"
             app:layout_constraintTop_toBottomOf="@id/const_top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

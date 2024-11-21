@@ -6,6 +6,9 @@
 
     <data>
         <variable
+            name="pace"
+            type="com.applemango.runnerbe.domain.entity.Pace" />
+        <variable
             name="userInfo"
             type="com.applemango.runnerbe.data.dto.UserInfo" />
         <variable
@@ -58,15 +61,53 @@
             tools:text="여성 · 20대 후반" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/runnerStatus"
+            android:id="@+id/const_pace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:paddingVertical="2dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="8dp"
             android:background="@drawable/bg_radius_20_dark_g4_stroke"
             app:layout_constraintTop_toBottomOf="@id/userNameView"
             app:layout_constraintBottom_toBottomOf="@id/profileImageView"
             app:layout_constraintLeft_toRightOf="@id/profileImageView">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_pace"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                bind:paceImage16="@{userInfo.pace}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_pace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{pace.Companion.getPaceByName(userInfo.pace).time}"
+                android:textColor="@color/dark_g3"
+                android:layout_marginStart="2dp"
+                android:textSize="10sp"
+                app:layout_constraintStart_toEndOf="@id/iv_pace"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="700~900" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/runnerStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="6dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_radius_20_dark_g4_stroke"
+            app:layout_constraintTop_toTopOf="@id/const_pace"
+            app:layout_constraintBottom_toBottomOf="@id/const_pace"
+            app:layout_constraintLeft_toRightOf="@id/const_pace">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/status_img"

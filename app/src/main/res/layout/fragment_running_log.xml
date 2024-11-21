@@ -55,14 +55,14 @@
         <ScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/const_top">
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/const_top"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/const_stamp"
@@ -433,7 +433,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
-                    android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_my_page_yet_running_custom"
                     android:clickable="true"

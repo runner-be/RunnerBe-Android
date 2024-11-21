@@ -22,17 +22,17 @@ import javax.inject.Inject
 class OtherUserProfileViewModel @Inject constructor(
     private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
 ): ViewModel() {
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+
     private val date = LocalDate.now()
     val today: String = "${date.year}년 ${date.monthValue}월"
 
     private val _userInfo = MutableStateFlow<OtherUserInfo?>(null)
     val userInfo: StateFlow<OtherUserInfo?> = _userInfo.asStateFlow()
 
-    private val _userRunningLogs = MutableStateFlow<List<RunningLog>>(emptyList())
-    val userRunningLogs: StateFlow<List<RunningLog>> = _userRunningLogs.asStateFlow()
-
-    private val _userPostings = MutableStateFlow<List<Posting>>(emptyList())
-    val userPostings: StateFlow<List<Posting>> = _userPostings.asStateFlow()
+    private val _userProfileData = MutableStateFlow<OtherUser?>(null)
+    val userProfileData: StateFlow<OtherUser?> = _userProfileData.asStateFlow()
 
     fun getOtherUserProfile(userId: Int) {
         viewModelScope.launch {
@@ -41,12 +41,10 @@ class OtherUserProfileViewModel @Inject constructor(
                     when(response) {
                         is CommonResponse.Success<*> -> {
                             val result = response.body as? OtherUser
+                            _userProfileData.value = result
                             _userInfo.value = result?.userInfo
-                            _userRunningLogs.value = result?.userLogInfo ?: emptyList()
-                            _userPostings.value = result?.userPosting ?: emptyList()
 
                             LogUtil.errorLog("UserInfo $userInfo")
-                            LogUtil.errorLog("UserRunningLogs $userRunningLogs")
                         }
 
                         else -> {
@@ -55,5 +53,10 @@ class OtherUserProfileViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun updateWeeklyViewPagerPosition(position: Int) {
+        LogUtil.errorLog("Viewpager position $position")
+        _currentWeeklyViewPagerPosition.value = position
     }
 }

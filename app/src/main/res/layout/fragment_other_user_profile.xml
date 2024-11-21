@@ -97,10 +97,10 @@
                     android:layout_width="88dp"
                     android:layout_height="88dp"
                     android:scaleType="fitXY"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                     bind:glideProfileImageFromUrl="@{vm.userInfo.profileImageUrl}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -184,20 +184,20 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingVertical="4dp"
                         android:paddingStart="4dp"
-                        android:paddingEnd="8dp"
-                        android:paddingVertical="4dp">
+                        android:paddingEnd="8dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/iv_pace"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginEnd="6dp"
-                            bind:paceImage16="@{pace.Companion.getPaceByName(vm.userInfo.pace).key}"
                             app:layout_constraintBottom_toBottomOf="@id/tv_pace"
                             app:layout_constraintDimensionRatio="1:1"
                             app:layout_constraintEnd_toStartOf="@id/tv_pace"
-                            app:layout_constraintTop_toTopOf="@id/tv_pace" />
+                            app:layout_constraintTop_toTopOf="@id/tv_pace"
+                            bind:paceImage16="@{pace.Companion.getPaceByName(vm.userInfo.pace).key}" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tv_pace"
@@ -242,19 +242,19 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginEnd="6dp"
-                        bind:attendanceImage16="@{vm.userInfo.diligence}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_attendance"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintEnd_toStartOf="@id/tv_attendance"
-                        app:layout_constraintTop_toTopOf="@id/tv_attendance" />
+                        app:layout_constraintTop_toTopOf="@id/tv_attendance"
+                        bind:attendanceImage16="@{vm.userInfo.diligence}" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_attendance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginVertical="4dp"
                         android:fontFamily="@font/pretendard_regular"
                         android:includeFontPadding="false"
-                        android:layout_marginVertical="4dp"
                         android:text="@{vm.userInfo.diligence}"
                         android:textColor="@color/dark_g3"
                         android:textSize="14sp"
@@ -281,8 +281,8 @@
                     android:id="@+id/tv_week"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.today}"
                     android:fontFamily="@font/pretendard_regular"
+                    android:text="@{vm.today}"
                     android:textColor="@color/dark_g3_5"
                     android:textSize="17sp"
                     android:textStyle="bold"
@@ -301,16 +301,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_week" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcv_calendar_weekly"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:overScrollMode="never"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_week" />
-
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vp_weekly_calendar"
                     android:layout_width="0dp"
@@ -319,6 +309,20 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_week" />
+
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/indicator_dots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:dotsColor="@color/dark_g4_5"
+                    app:dotsSize="5dp"
+                    app:dotsSpacing="3dp"
+                    app:dotsWidthFactor="1.0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vp_weekly_calendar"
+                    app:selectedDotColor="@color/dark_g2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

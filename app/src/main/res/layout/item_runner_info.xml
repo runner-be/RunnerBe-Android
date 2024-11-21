@@ -78,7 +78,7 @@
                 android:id="@+id/iv_pace"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                bind:paceImage16="@{userInfo.diligence}"
+                bind:paceImage16="@{userInfo.pace}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
