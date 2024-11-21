@@ -11,7 +11,7 @@ enum class CreatorImageAndPosition {
     SHEAVE,
     JOY,
     CHANHO,
-    ROCKY;
+    LOKI;
 
 
     val creatorName get() = when(this) {
@@ -23,13 +23,13 @@ enum class CreatorImageAndPosition {
         SHEAVE -> R.string.sheave
         JOY -> R.string.joy
         CHANHO -> R.string.chanho
-        ROCKY -> R.string.rocky
+        LOKI -> R.string.rocky
     }
 
     val position get() = when(this) {
         EUNSEO -> "Plan"
         JEONG -> "Design"
-        DURU, NIAKA, JUDY, ROCKY -> "AOS"
+        DURU, NIAKA, JUDY, LOKI -> "AOS"
         SHEAVE, JOY -> "iOS"
         CHANHO -> "Server"
     }
@@ -43,6 +43,6 @@ enum class CreatorImageAndPosition {
         SHEAVE -> R.drawable.ic_sheave
         JOY -> R.drawable.ic_joy
         CHANHO -> R.drawable.ic_chanho
-        ROCKY -> R.drawable.ic_team_lock
+        LOKI -> R.drawable.ic_team_lock
     }
 }

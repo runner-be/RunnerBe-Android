@@ -72,11 +72,12 @@ class RunningLogViewModel @Inject constructor(
         userId: Int,
     ): Pair<Boolean, String?> {
         val runningLog = try {
+            val degree = logDegree.value?.replace("+","0")?.toInt()
             RunningLogRequest(
                 parseKoreanDateToLocalDate(logDate.value).toString(),
                 logStamp.value.code,
                 logDiary.value,
-                logDegree.value?.toInt() ?: throw IllegalArgumentException("기온을 입력해주세요"),
+                degree,
                 logWeather.value.code,
                 if (logVisibility.value) 1 else 0
             )
