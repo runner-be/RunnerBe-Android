@@ -108,9 +108,8 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
                         tvTeamStampEmpty.visibility = View.GONE
                         gotStampAdapter.submitList(memberStamps)
                     }
-                    val dateString = parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
-                    viewModel.updateRunningLogDate(dateString)
-                    tvDateTime.text = dateString
+                    viewModel.updateRunningLogDate(runningLogDetail.runnedDate.toLocalDate().toString())
+                    tvDateTime.text = parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
                     Glide.with(binding.root.context)
                         .load(stampItem.image)
                         .into(binding.ivStamp)
