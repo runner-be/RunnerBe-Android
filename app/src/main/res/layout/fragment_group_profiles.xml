@@ -75,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/tv_group_profile_count"
-                    style="@style/TextStyleHead18"
+                    style="@style/TextStyleBody16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"

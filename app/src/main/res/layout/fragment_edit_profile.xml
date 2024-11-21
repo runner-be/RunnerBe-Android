@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -66,7 +67,7 @@
             android:text="닉네임"
             android:textColor="@color/dark_g2_5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editprofile_top"/>
+            app:layout_constraintTop_toBottomOf="@id/editprofile_top" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/name_main"
@@ -77,11 +78,11 @@
             <EditText
                 android:id="@+id/user_name_edit"
                 style="@style/TextStyleBody14"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="114dp"
                 android:background="@drawable/bg_dark_5g_radius_8"
                 android:enabled="@{(vm.userInfo.nameChanged.equals(String.valueOf('N')))}"
                 android:hint="@string/hint_nickname_change"
@@ -89,25 +90,27 @@
                 android:text="@={vm.name}"
                 android:textColor="@color/dark_g3_5"
                 android:textColorHint="@color/dark_g3_5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/name_change_btn"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/name_change_btn"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name_change_btn"
-                style="@style/TextStyleBody16"
+                style="@style/TextStyleBody14"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/bg_edit_btn_unable"
                 android:enabled="@{vm.isNameChangeEnable(vm.name, vm.userInfo.nameChanged)}"
-                android:padding="16dp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
                 android:text="@{(vm.userInfo.nameChanged.equals(String.valueOf('N'))) ? @string/double_check : @string/finished_enrollment}"
                 android:textColor="@color/dark_g4_5"
                 app:layout_constraintBottom_toBottomOf="@id/user_name_edit"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/user_name_edit"/>
+                app:layout_constraintTop_toTopOf="@id/user_name_edit"
+                tools:text="중복확인" />
 
             <TextView
                 android:id="@+id/name_detail_txt"
@@ -120,7 +123,7 @@
                 android:text="@{(vm.userInfo.nameChanged.equals(String.valueOf('N'))) ? @string/msg_possible_nickname_change : @string/msg_impossible_nickname_change}"
                 android:textColor="@color/logo_yellow"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_name_edit"/>
+                app:layout_constraintTop_toBottomOf="@id/user_name_edit" />
 
             <TextView
                 android:id="@+id/name_fail_txt"
@@ -134,7 +137,7 @@
                 android:textSize="12dp"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name_detail_txt"/>
+                app:layout_constraintTop_toBottomOf="@id/name_detail_txt" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -144,8 +147,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="28dp"
             android:layout_marginRight="16dp"
-            android:background="@color/dark_g3_5"
-            app:layout_constraintTop_toBottomOf="@id/name_main"/>
+            android:background="@color/dark_g6"
+            app:layout_constraintTop_toBottomOf="@id/name_main" />
 
         <TextView
             android:id="@+id/job_txt"
@@ -157,7 +160,7 @@
             android:text="@string/my_job"
             android:textColor="@color/dark_g2_5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line"/>
+            app:layout_constraintTop_toBottomOf="@id/line" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/job_main"
@@ -201,7 +204,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/psv_and_icon"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/edu_btn"
@@ -220,7 +223,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="📚 교육"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/dev_btn"
@@ -239,7 +242,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🖥 개발"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -276,7 +279,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="📈  기획/전략/경영"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/des_btn"
@@ -295,7 +298,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🎨  디자인"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -332,7 +335,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="📊  마케팅/PR"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/ser_btn"
@@ -351,7 +354,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="⚙ 서비스"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/pro_btn"
@@ -370,7 +373,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🏭  생산"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -407,7 +410,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🔬  연구"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/saf_btn"
@@ -426,7 +429,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🤝 영업"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/med_btn"
@@ -445,7 +448,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🏥  의료"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -482,7 +485,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="👥  인사"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/acc_btn"
@@ -501,7 +504,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="💰  재무"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/cus_btn"
@@ -520,7 +523,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🗣  CS"
-                        android:textColor="@drawable/tc_job_radio"/>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -538,7 +541,7 @@
             android:text="@string/msg_job_change_info"
             android:textColor="@color/logo_yellow"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/job_main"/>
+            app:layout_constraintTop_toBottomOf="@id/job_main" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
