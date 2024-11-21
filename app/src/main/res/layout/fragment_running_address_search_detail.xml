@@ -37,13 +37,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:fontFamily="@font/pretendard_medium"
                 android:text="@string/running_location_search"
                 android:textColor="@color/dark_g3_5"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -53,50 +52,45 @@
 
         <TextView
             android:id="@+id/tv_address_main"
+            style="@style/TextStyleHead16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/pretendard_regular"
-            android:textStyle="bold"
-            android:text="여의도 공원"
+            tools:text="여의도 공원"
             android:textColor="@color/dark_g2"
-            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/running_search_detail_top" />
 
         <TextView
             android:id="@+id/tv_address_sub"
+            style="@style/TextStyleBody16"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginTop="6dp"
             android:paddingVertical="2dp"
-            android:fontFamily="@font/pretendard_regular"
             android:text="서울 영등포구 여의도동 2"
             android:textColor="@color/dark_g3_5"
-            android:textSize="16sp"
-            android:textStyle="normal"
             app:layout_constraintEnd_toStartOf="@id/tv_address_sub_edit"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_address_sub_edit" />
+            app:layout_constraintTop_toBottomOf="@id/tv_address_main"/>
 
         <TextView
             android:id="@+id/tv_address_sub_edit"
+            style="@style/TextStyleBody14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/bg_r_6_no_stroke_g5_clickable"
             android:paddingHorizontal="10dp"
             android:paddingVertical="6dp"
             android:clickable="true"
-            android:fontFamily="@font/pretendard_regular"
             android:text="@string/running_location_search_detail_edit"
             android:textColor="@color/dark_g2"
-            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_address_main" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_address_sub" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_search"
@@ -119,19 +113,19 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tie_address_detail"
+                style="@style/TextStyleBody16"
                 android:layout_width="match_parent"
                 android:hint="@string/running_location_search_detail_hint_2"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:inputType="text"
-                android:fontFamily="@font/pretendard_regular"
-                android:textCursorDrawable="@drawable/cursor_primary"
-                android:textSize="16sp" />
+                android:textCursorDrawable="@drawable/cursor_primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_register"
+            style="@style/TextStyleBody16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -139,12 +133,10 @@
             android:focusable="true"
             android:clickable="true"
             android:background="@drawable/bg_my_page_yet_running_custom"
-            android:fontFamily="@font/pretendard_medium"
             android:gravity="center"
             android:paddingVertical="14dp"
             android:text="@string/running_location_search_detail_confirm"
             android:textColor="@color/tc_enable_dark3_5g_black"
-            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

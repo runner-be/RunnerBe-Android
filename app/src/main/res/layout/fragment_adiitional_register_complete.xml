@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="fragment"
             type="com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.complete.RegisterCompleteFragment" />
@@ -17,54 +18,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/startButton"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/startButton">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_complete"/>
+                android:src="@drawable/ic_complete" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/sb_aggro_otf_light"
                 android:gravity="center"
                 android:text="@string/msg_additional_info_complete"
                 android:textColor="@color/primary"
-                android:textSize="20sp"
-                android:fontFamily="@font/sb_aggro_otf_light"/>
+                android:textSize="20sp" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="18dp"
+                android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:text="@string/msg_additional_info_complete_description"
-                android:textSize="14sp"
                 android:textColor="@color/dark_g2"
-                android:fontFamily="sans-serif-light"/>
+                android:textSize="14sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/startButton"
+            style="@style/TextStyleBody16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:onClick="@{() -> fragment.start()}"
-            android:text="START!"
-            android:textColor="@color/tc_enable_dark3_5g_black"
-            android:fontFamily="sans-serif-medium"
-            android:paddingTop="12dp"
-            android:paddingBottom="14dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/selector_main_primary_button"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:gravity="center"
+            android:onClick="@{() -> fragment.start()}"
+            android:paddingTop="12dp"
+            android:paddingBottom="14dp"
+            android:text="START!"
+            android:textColor="@color/tc_enable_dark3_5g_black"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

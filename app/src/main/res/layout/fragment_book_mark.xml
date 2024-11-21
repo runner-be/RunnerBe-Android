@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vm"
             type="com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkViewModel" />
@@ -16,16 +16,15 @@
 
         <TextView
             android:id="@+id/scrap_text_view"
+            style="@style/TextStyleHead18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/book_mark_list"
+            android:textColor="@color/dark_g3"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/book_mark_list"
-            android:textSize="16dp"
-            android:textColor="@color/dark_g3"
-            android:layout_margin="16dp">
-        </TextView>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <RadioGroup
             android:id="@+id/rg_tag"
@@ -33,86 +32,85 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="19dp"
-            android:orientation="horizontal"
             android:background="@drawable/bg_tab"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/scrap_text_view">
 
             <RadioButton
                 android:id="@+id/allTab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="4dp"
-                android:textSize="14sp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab"
+                android:button="@null"
                 android:checked="true"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="10dp"
-                android:button="@null"
-                android:textColor="@color/tc_select_tab"
                 android:text="@string/all_work"
-                android:background="@drawable/selector_tab"/>
+                android:textColor="@color/tc_select_tab"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/beforeTab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="4dp"
-                android:textSize="14sp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab"
+                android:button="@null"
                 android:checked="false"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="10dp"
-                android:button="@null"
-                android:textColor="@color/tc_select_tab"
                 android:text="@string/before_work"
-                android:background="@drawable/selector_tab"/>
+                android:textColor="@color/tc_select_tab"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/afterTab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="4dp"
-                android:textSize="14sp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab"
+                android:button="@null"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="10dp"
-                android:button="@null"
-                android:textColor="@color/tc_select_tab"
                 android:text="@string/after_work"
-                android:background="@drawable/selector_tab"/>
+                android:textColor="@color/tc_select_tab"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/holidayTab"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_tab"
+                android:button="@null"
                 android:gravity="center"
-                android:textSize="14sp"
                 android:paddingTop="8dp"
                 android:paddingBottom="10dp"
-                android:button="@null"
-                android:textColor="@color/tc_select_tab"
                 android:text="@string/holiday"
-                android:background="@drawable/selector_tab"/>
+                android:textColor="@color/tc_select_tab"
+                android:textSize="14sp" />
 
         </RadioGroup>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/countView"
+            style="@style/TextStyleBody16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/pretendard_regular"
-            android:textColor="@color/dark_g3_5"
-            android:textSize="17sp"
+            android:layout_marginTop="16dp"
             android:text="@{`총 ` + vm.bookmarkListSize + `건`}"
+            android:textColor="@color/dark_g3_5"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rg_tag"/>
+            app:layout_constraintTop_toBottomOf="@id/rg_tag" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bookmarkRecyclerView"
@@ -123,7 +121,7 @@
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/countView"/>
+            app:layout_constraintTop_toBottomOf="@id/countView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

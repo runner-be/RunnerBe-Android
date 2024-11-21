@@ -25,9 +25,7 @@
             android:id="@+id/running_write_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/back_btn"
@@ -41,12 +39,11 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/post_write"
                 android:textColor="@color/dark_g3_5"
-                android:fontFamily="@font/pretendard_semi_bold"
-                android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -54,13 +51,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/postButton"
+                style="@style/TextStyleBody16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/enrollment"
                 android:enabled="@{vm.isConfirmButtonEnabled}"
                 android:textColor="@color/ic_next_enable"
-                android:textSize="16sp"
-                android:layout_marginRight="16dp"
+                android:padding="16dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -79,14 +76,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/recruitmentGenderTextView"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recruitment_gender"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/pretendard_semi_bold"
                     android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
@@ -153,12 +149,11 @@
                     app:layout_constraintTop_toBottomOf="@id/genderIndicator">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/pace_level"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/pretendard_semi_bold"
                         android:includeFontPadding="false"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -189,15 +184,14 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/recruitmentAgeTextView"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recruitment_age"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/pretendard_semi_bold"
                     android:includeFontPadding="false"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/paceLevelIndicator"/>
 
@@ -213,13 +207,13 @@
                     app:layout_constraintTop_toTopOf="@id/recruitmentAgeTextView">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextStyleBody14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/all_age"
                         android:layout_gravity="center"
-                        android:textColor="@color/dark_g4"
-                        android:textSize="12sp"
-                        android:layout_marginRight="4dp"/>
+                        android:textColor="@color/dark_g3_5"
+                        android:layout_marginEnd="4dp"/>
 
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:layout_width="24dp"
@@ -285,14 +279,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/recruitmentCountTextView"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recruitment_count"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/pretendard_semi_bold"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/slideBarIndicator"/>
 
@@ -357,14 +350,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/afterPartyTitleTextView"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/after_party"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/pretendard_semi_bold"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/countIndicator"/>
 
@@ -421,23 +413,23 @@
                     app:layout_constraintTop_toBottomOf="@id/afterPartyIndicator">
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextStyleBody14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recruitment_content"
                         android:textColor="@color/dark_g3"
-                        android:textSize="14sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/limitContentLengthView"
+                        style="@style/TextStyleBody14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="0/500"
                         android:text="@{@string/limit_five_hundred(vm.content.length())}"
-                        android:textColor="@color/dark_g4"
-                        android:textSize="14sp"
+                        android:textColor="@color/dark_g3_5"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintRight_toRightOf="parent"/>
