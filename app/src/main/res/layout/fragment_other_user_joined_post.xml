@@ -77,12 +77,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_empty"
+            style="@style/TextStyleBody16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="140dp"
             android:text="@string/msg_empty_join_post"
             android:textColor="@color/dark_g4"
-            android:textSize="18dp"
             android:visibility="@{vm.postSize == 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

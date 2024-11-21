@@ -48,13 +48,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_date_time"
+                    style="@style/TextStyleHead18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="5dp"
-                    android:fontFamily="@font/pretendard_medium"
                     android:text="@{vm.userInfo.nickName + `님 프로필`}"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -80,14 +79,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_user_name"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="3dp"
-                    android:fontFamily="@font/pretendard_semi_bold"
                     android:text="@{vm.userInfo.nickName}"
                     android:textColor="@color/dark_g1"
-                    android:textSize="17sp"
                     app:layout_constraintBottom_toTopOf="@+id/gl_1"
                     app:layout_constraintStart_toEndOf="@id/iv_profile"
                     tools:text="닉네임" />
@@ -105,22 +103,22 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_user_gender"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="@{vm.userInfo.gender}"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@id/iv_profile"
                     app:layout_constraintTop_toBottomOf="@+id/gl_1"
                     tools:text="여성" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userStatusDotView"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:text="·"
                     android:textColor="@color/dark_g3"
                     app:layout_constraintBottom_toBottomOf="@id/tv_user_gender"
@@ -129,13 +127,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_user_age"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginStart="4dp"
                     android:text="@{vm.userInfo.age}"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_user_gender"
                     app:layout_constraintLeft_toRightOf="@id/userStatusDotView"
                     app:layout_constraintTop_toTopOf="@id/tv_user_gender"
@@ -143,16 +140,15 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_user_job"
+                    style="@style/TextStyleCaption11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_g5_radius_24"
-                    android:fontFamily="@font/pretendard_regular"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="3dp"
                     android:text="@{vm.userInfo.job}"
                     android:textColor="@color/dark_g3"
-                    android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_user_gender"
                     app:layout_constraintStart_toEndOf="@id/tv_user_age"
                     app:layout_constraintTop_toTopOf="@id/tv_user_gender"
@@ -342,13 +338,12 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        style="@style/TextStyleHead16"
                         android:id="@+id/tv_joined_running_post"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/pretendard_medium"
                         android:text="@string/title_attendance"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="17sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -368,10 +363,22 @@
                     android:id="@+id/rcv_joined_running_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/const_joined_running_post_title" />
+
+                <TextView
+                    android:id="@+id/tv_joined_running_empty"
+                    style="@style/TextStyleBody16"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    android:gravity="center"
+                    android:paddingVertical="30dp"
+                    android:text="@string/joined_running_empty"
+                    android:textColor="@color/dark_g3_5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/const_joined_running_post_title" />

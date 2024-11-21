@@ -60,25 +60,23 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userNameView"
+                    style="@style/TextStyleHead16"
                     nick_name_text="@{myPageViewModel.userInfo.nickName}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:fontFamily="@font/pretendard_semi_bold"
+                    android:layout_marginStart="20dp"
                     android:textColor="@color/dark_g1"
-                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@id/profileImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="닉네임" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userGenderView"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="@{myPageViewModel.userInfo.gender}"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="@id/userNameView"
                     app:layout_constraintTop_toBottomOf="@id/userNameView"
                     tools:text="여성" />
@@ -87,7 +85,7 @@
                     android:id="@+id/userStatusDotView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:text="·"
                     android:textColor="@color/dark_g3"
                     app:layout_constraintBottom_toBottomOf="@id/userGenderView"
@@ -97,13 +95,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userAgeView"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:fontFamily="@font/pretendard_regular"
+                    android:layout_marginStart="4dp"
                     android:text="@{myPageViewModel.userInfo.age}"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/userGenderView"
                     app:layout_constraintLeft_toRightOf="@id/userStatusDotView"
                     app:layout_constraintTop_toTopOf="@id/userGenderView"
@@ -111,16 +108,15 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userJobView"
+                    style="@style/TextStyleCaption11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/bg_dark_g5_radius_24"
-                    android:fontFamily="@font/pretendard_regular"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
                     android:text="@{myPageViewModel.userInfo.job}"
                     android:textColor="@color/dark_g3"
-                    android:textSize="10sp"
                     android:visibility="@{myPageViewModel.userInfo.job == null ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="@id/userGenderView"
                     app:layout_constraintLeft_toRightOf="@id/userAgeView"
@@ -129,14 +125,13 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_profile_edit"
+                    style="@style/TextStyleCaption11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/pretendard_regular"
                     android:text="@string/do_profile_edit"
                     android:textColor="@color/dark_g2"
-                    android:textSize="12sp"
                     app:layout_constraintLeft_toRightOf="@id/profileImageView"
                     app:layout_constraintTop_toBottomOf="@id/userGenderView" />
 
@@ -205,6 +200,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
+                    style="@style/TextStyleBody14"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="4dp"
@@ -307,14 +303,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_pace_edit"
+                style="@style/TextStyleBody12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:fontFamily="@font/pretendard_regular"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:text="@string/pace_edit"
                 android:textColor="@color/dark_g2"
-                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@id/paceAndDiligenceBackgroundLayout"
                 app:layout_constraintTop_toBottomOf="@id/paceAndDiligenceBackgroundLayout" />
 
@@ -384,12 +379,11 @@
                 app:layout_constraintTop_toBottomOf="@id/const_calendar_weekly">
 
                 <TextView
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_medium"
                     android:text="@string/title_attendance"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="17sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -420,14 +414,13 @@
 
             <TextView
                 android:id="@+id/tv_joined_running_empty"
+                style="@style/TextStyleBody16"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:gravity="center"
                 android:paddingVertical="30dp"
-                android:fontFamily="@font/pretendard_medium"
                 android:text="@string/joined_running_empty"
                 android:textColor="@color/dark_g3_5"
-                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/const_joined_running_post" />

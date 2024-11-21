@@ -46,13 +46,12 @@
 
                 <TextView
                     android:id="@+id/top_txt"
+                    style="@style/TextStyleHead18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/pretendard_medium"
                     android:gravity="center_horizontal"
                     android:text="@string/running_talk"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="18sp"
                     android:layout_marginHorizontal="10dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -107,16 +106,16 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/running_title_view"
+                    style="@style/TextStyleBody14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginEnd="20dp"
                     android:text="@{vm.roomInfo.talkTitle}"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:fontFamily="@font/pretendard_regular"
                     tools:text="불금에 달리기 하실 분!"
-                    android:textColor="@color/dark_g2_5"
-                    android:textSize="14sp"/>
+                    android:textColor="@color/dark_g2_5"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"

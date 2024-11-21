@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vm"
             type="com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.terms.AgreeToTermsViewModel" />
@@ -17,22 +18,22 @@
             android:id="@+id/termsTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/backButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_back"
                 android:onClick="@{() -> vm.backClicked()}"
-                app:layout_constraintTop_toTopOf="parent"
+                android:padding="10dp"
+                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:padding="10dp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -40,9 +41,9 @@
                 android:text="1"
                 android:textColor="@color/primary"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/top_txt"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/top_txt"
@@ -51,42 +52,42 @@
                 android:text="/4"
                 android:textColor="@color/dark_g4"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_x_out"
                 android:onClick="@{() -> vm.cancelClicked()}"
+                android:src="@drawable/ic_x_out"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/titleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary"
-            android:text="먼저 이용약관을 읽고 \n동의해주세요."
-            android:textSize="26sp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="7dp"
             android:fontFamily="@font/sb_aggro_otf_light"
+            android:text="먼저 이용약관을 읽고 \n동의해주세요."
+            android:textColor="@color/primary"
+            android:textSize="26sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/termsTopLayout"/>
+            app:layout_constraintTop_toBottomOf="@id/termsTopLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_dark_6g_solid_radius_10"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="60dp"
+            android:background="@drawable/bg_dark_6g_solid_radius_10"
             android:paddingTop="24dp"
             android:paddingBottom="28dp"
-            android:layout_marginHorizontal="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleView">
@@ -95,8 +96,8 @@
                 android:id="@+id/allTermsCheckLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="top"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
                 android:paddingRight="16dp"
                 app:layout_constraintTop_toTopOf="parent">
@@ -105,18 +106,18 @@
                     android:id="@+id/termsAllCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@null"
                     android:background="@drawable/selector_check_box"
+                    android:button="@null"
                     android:checked="false" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
                     android:layout_weight="1"
                     android:text="@string/msg_terms_all_check"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="12dp"/>
+                    android:textSize="14sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -124,43 +125,43 @@
                 android:id="@+id/termsIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dark_g7"
                 android:layout_marginTop="26dp"
-                app:layout_constraintTop_toBottomOf="@id/allTermsCheckLayout"/>
+                android:background="@color/dark_g7"
+                app:layout_constraintTop_toBottomOf="@id/allTermsCheckLayout" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/serviceAgreementLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
                 android:gravity="top"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
                 android:paddingRight="16dp"
-                android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/termsIndicator">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@null"
                     android:background="@drawable/selector_check_box"
+                    android:button="@null"
                     android:checked="@={vm.serviceTerms}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
                     android:layout_weight="1"
                     android:text="@string/terms_of_use_a_service_agreement"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="12dp"/>
+                    android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:onClick="@{() -> vm.serviceUseTermsClicked()}"
-                    android:src="@drawable/ic_right_arrow_16"/>
+                    android:src="@drawable/ic_right_arrow_16" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -168,35 +169,35 @@
                 android:id="@+id/privacyAgreementLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="18dp"
                 android:gravity="top"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
                 android:paddingRight="16dp"
-                android:layout_marginTop="18dp"
                 app:layout_constraintTop_toBottomOf="@id/serviceAgreementLayout">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@null"
                     android:background="@drawable/selector_check_box"
+                    android:button="@null"
                     android:checked="@={vm.privacyTerms}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
                     android:layout_weight="1"
                     android:text="@string/terms_of_use_a_privacy_agreement"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="12dp"/>
+                    android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:onClick="@{() -> vm.privacyTermsClicked()}"
-                    android:src="@drawable/ic_right_arrow_16"/>
+                    android:src="@drawable/ic_right_arrow_16" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -204,55 +205,55 @@
                 android:id="@+id/locationServiceAgreementLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="18dp"
                 android:gravity="top"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp"
                 android:paddingRight="16dp"
-                android:layout_marginTop="18dp"
                 app:layout_constraintTop_toBottomOf="@id/privacyAgreementLayout">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@null"
                     android:background="@drawable/selector_check_box"
+                    android:button="@null"
                     android:checked="@={vm.locationServiceTerms}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
                     android:layout_weight="1"
                     android:text="@string/terms_of_use_a_location_service_agreement"
                     android:textColor="@color/dark_g1"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="12dp"/>
+                    android:textSize="14sp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:onClick="@{() -> vm.locationServiceUseTermsClicked()}"
-                    android:src="@drawable/ic_right_arrow_16"/>
+                    android:src="@drawable/ic_right_arrow_16" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/TextStyleBody16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:enabled="@{vm.allCheck}"
-            android:onClick="@{() -> vm.nextClicked()}"
-            android:text="@string/next"
-            android:textColor="@color/tc_enable_dark3_5g_black"
-            android:fontFamily="sans-serif-medium"
-            android:paddingTop="12dp"
-            android:paddingBottom="14dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/selector_main_primary_button"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:enabled="@{vm.allCheck}"
+            android:gravity="center"
+            android:onClick="@{() -> vm.nextClicked()}"
+            android:paddingTop="12dp"
+            android:paddingBottom="14dp"
+            android:text="@string/next"
+            android:textColor="@color/tc_enable_dark3_5g_black"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

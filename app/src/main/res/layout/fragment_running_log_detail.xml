@@ -38,12 +38,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_date_time"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:textColor="@color/dark_g3_5"
-                android:fontFamily="@font/pretendard_medium"
-                android:textSize="18sp"
+                tools:text="2024년 11월 21일"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -99,13 +99,12 @@
 
                     <TextView
                         android:id="@+id/tv_stamp"
+                        style="@style/TextStyleBody16"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
-                        android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="17sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -126,16 +125,15 @@
 
                 <TextView
                     android:id="@+id/tv_running_diary_title"
+                    style="@style/TextStyleHead16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="30dp"
-                    android:fontFamily="@font/pretendard_regular"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:text="@string/running_log_5_line_diary_title"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_divider_1" />
 
@@ -198,42 +196,37 @@
 
                     <TextView
                         android:id="@+id/tv_weather_title"
+                        style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/pretendard_regular"
                         android:textStyle="bold"
                         android:gravity="center"
                         android:text="@string/running_log_weather_title"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_degree"
+                        style="@style/TextStyleBody16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:fontFamily="@font/pretendard_light"
                         android:gravity="center"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_weather_title" />
 
                     <TextView
                         android:id="@+id/tv_temperature_unit"
+                        style="@style/TextStyleBody16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginStart="4dp"
-                        android:fontFamily="@font/pretendard_light"
                         android:gravity="center"
                         android:text="@string/weather_temperature_unit"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@+id/tv_degree"
                         app:layout_constraintTop_toBottomOf="@id/tv_weather_title" />
 
@@ -274,6 +267,7 @@
 
                     <TextView
                         android:id="@+id/tv_team_title"
+                        style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/pretendard_regular"
@@ -281,21 +275,18 @@
                         android:gravity="center"
                         android:text="@string/running_log_team_title"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_team_detail"
+                        style="@style/TextStyleBody16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:fontFamily="@font/pretendard_light"
                         android:gravity="center"
                         android:text="@string/running_log_team_default"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_team_title" />
 
@@ -342,13 +333,12 @@
 
                     <TextView
                         android:id="@+id/tv_user_stamp"
+                        style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="{닉네임}님이 받은 스탬프"
-                        android:fontFamily="@font/pretendard_regular"
                         android:textStyle="bold"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -363,16 +353,15 @@
 
                     <TextView
                         android:id="@+id/tv_team_stamp_empty"
+                        style="@style/TextStyleBody16"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="20dp"
                         android:layout_marginTop="20dp"
                         android:paddingVertical="20dp"
-                        android:fontFamily="@font/pretendard_regular"
                         android:gravity="center"
                         android:text="@string/running_log_got_stamp_empty"
                         android:textColor="@color/dark_g3_5"
-                        android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_user_stamp" />
 

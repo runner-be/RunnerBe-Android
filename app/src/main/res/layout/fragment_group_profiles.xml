@@ -34,13 +34,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_date_time"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:fontFamily="@font/pretendard_medium"
                 android:text="@string/group_profile_title"
                 android:textColor="@color/dark_g3_5"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -62,31 +61,27 @@
 
                 <TextView
                     android:id="@+id/tv_group_profile_description"
+                    style="@style/TextStyleHead18"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="30dp"
-                    android:fontFamily="@font/pretendard_regular"
                     android:gravity="start"
                     android:text="@string/group_profile_description"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_group_profile_count"
+                    style="@style/TextStyleHead18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="25dp"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:textStyle="bold"
                     android:gravity="center"
                     android:textColor="@color/dark_g3_5"
-                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_group_profile_description" />
 

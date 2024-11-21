@@ -31,15 +31,13 @@
 
             <TextView
                 android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_medium"
                 android:gravity="center_horizontal"
                 android:paddingVertical="10dp"
                 android:text="address"
                 android:textColor="@color/dark_g3_5"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -164,11 +162,11 @@
                 android:src="@drawable/ic_refresh" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/TextStyleBody14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/refresh_this_location"
-                android:textColor="@color/dark_g3"
-                android:textSize="14sp" />
+                android:textColor="@color/dark_g3" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatImageView

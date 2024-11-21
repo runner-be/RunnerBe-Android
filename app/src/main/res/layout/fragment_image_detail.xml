@@ -32,11 +32,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_g3_5"
-                android:fontFamily="@font/pretendard_semi_bold"
-                android:textSize="18dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -87,35 +86,31 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_current_page"
+                style="@style/TextStyleCaption11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
                 tools:text="2"
                 android:textColor="@color/white"
-                android:fontFamily="@font/pretendard_semi_bold"
-                android:includeFontPadding="false"
-                android:textSize="12sp"/>
+                android:includeFontPadding="false"/>
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/TextStyleCaption11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="12sp"
                 android:includeFontPadding="false"
                 android:textColor="@color/dark_g3_5"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_max_page"
+                style="@style/TextStyleCaption11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(vm.imageList.size())}"
                 tools:text="3"
                 android:textColor="@color/dark_g3_5"
-                android:includeFontPadding="false"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="12sp"
-                />
+                android:includeFontPadding="false" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
