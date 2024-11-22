@@ -33,8 +33,8 @@ class MyPageViewModel @Inject constructor(
     private val patchUserImageUseCase: PatchUserImageUseCase,
     private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
 ) : ViewModel() {
-    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
-    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
+    val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
     val userInfo: MutableStateFlow<UserInfo?> = MutableStateFlow(null)
     val diligence: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -42,8 +42,6 @@ class MyPageViewModel @Inject constructor(
     val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
     val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
     val moveTab: MutableSharedFlow<Int> = MutableSharedFlow()
-
-    private val _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
 
     private var _updateUserImageState: MutableLiveData<UiState> = MutableLiveData()
     val updateUserImageState get() = _updateUserImageState

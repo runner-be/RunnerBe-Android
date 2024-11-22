@@ -73,11 +73,11 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             .supportFragmentManager
             .setFragmentResultListener("refresh", viewLifecycleOwner) { _, _ -> refresh() }
         initParticipatedRunningAdapter()
+        initYearMonthSpinner()
+        initListeners()
         setupJoinedRunningPosts()
         setupThisWeekRunningLogs()
-        initYearMonthSpinner()
         setupWeeklyViewPagerPosition()
-        initListeners()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.btnProfileEdit.setOnClickListener(this)
@@ -183,7 +183,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun uploadImg(uri: Uri) {
         showLoadingDialog(requireContext())
 //        firebase storage 에 이미지 업로드하는 method
-        var uploadTask: UploadTask? = null // 파일 업로드하는 객체
+        val uploadTask: UploadTask?  // 파일 업로드하는 객체
         val name = RunnerBeApplication.mTokenPreference.getUserId().toString() + "_.png"
         reference =
             storage.reference.child("item").child(name) // 이미지 파일 경로 지정 (/item/imageFileName)
@@ -217,7 +217,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
-                    position?.let {
+                    position.let {
                         binding.vpWeeklyCalendar.setCurrentItem(position, false)
                     }
                 }
@@ -234,9 +234,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 RunnerBeApplication.mTokenPreference.getUserId()
             )
             adapter = weeklyCalendarPagerAdapter
-        }
-        if (viewModel.currentWeeklyViewPagerPosition.value == null) {
-            viewModel.updateWeeklyViewPagerPosition(2)
+
+            setCurrentItem(viewModel.currentWeeklyViewPagerPosition.value, false)
         }
         initDotsIndicator()
     }
