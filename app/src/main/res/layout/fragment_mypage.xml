@@ -407,7 +407,6 @@
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:paddingHorizontal="16dp"
-                android:paddingTop="20dp"
                 android:visibility="@{myPageViewModel.joinPosts.size() > 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
