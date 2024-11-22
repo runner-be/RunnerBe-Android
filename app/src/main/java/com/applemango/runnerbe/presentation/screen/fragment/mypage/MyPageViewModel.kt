@@ -17,14 +17,10 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -37,51 +33,45 @@ class MyPageViewModel @Inject constructor(
     private val patchUserImageUseCase: PatchUserImageUseCase,
     private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
 ) : ViewModel() {
-    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
-    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
+    val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
     val userInfo: MutableStateFlow<UserInfo?> = MutableStateFlow(null)
     val diligence: MutableStateFlow<String?> = MutableStateFlow(null)
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
     val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
     val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
-    val moveTab : MutableSharedFlow<Int> = MutableSharedFlow()
+    val moveTab: MutableSharedFlow<Int> = MutableSharedFlow()
 
-    private val _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
-
-    private var _updateUserImageState : MutableLiveData<UiState> = MutableLiveData()
+    private var _updateUserImageState: MutableLiveData<UiState> = MutableLiveData()
     val updateUserImageState get() = _updateUserImageState
 
     private val _actions = MutableSharedFlow<MyPageAction>()
     val actions get() = _actions
 
-    private val todayDateFlow = MutableStateFlow<LocalDate>(LocalDate.now())
+    private val _myPageInfo = MutableStateFlow<RunningLogResult?>(null)
+    val myPageInfo: StateFlow<RunningLogResult?> get() = _myPageInfo
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val thisWeekRunningLogFlow: Flow<RunningLogResult> = todayDateFlow
-        .flatMapLatest { today ->
-            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            val (todayYear, todayMonth)  = Pair(today.year, today.monthValue)
+    fun fetchUserWeeklyRunningLog(
+        today: LocalDate,
+        userId: Int,
+    ) {
+        viewModelScope.launch {
+            val (todayYear, todayMonth) = Pair(today.year, today.monthValue)
             getMonthlyRunningLogListUseCase(userId, todayYear, todayMonth)
                 .map { response ->
                     when (response) {
-                        is CommonResponse.Success<*> -> {
-                            response.body as RunningLogResult
-                        }
-
-                        is CommonResponse.Failed -> {
-                            throw Exception(response.message)
-                        }
-
-                        else -> {
-                            throw Exception("MyPageViewModel-thisWeekRunningLogFlow-when-else")
-                        }
+                        is CommonResponse.Success<*> -> response.body as RunningLogResult
+                        is CommonResponse.Failed -> throw Exception(response.message)
+                        else -> throw Exception("Unexpected response")
                     }
                 }
-        }.catch { error ->
-            error.printStackTrace()
+                .flowOn(Dispatchers.IO)
+                .collect { result ->
+                    _myPageInfo.value = result
+                }
         }
-        .flowOn(Dispatchers.IO)
+    }
 
     fun getUserData(userId: Int) = viewModelScope.launch {
         if (userId > -1) {
@@ -97,7 +87,9 @@ class MyPageViewModel @Inject constructor(
                                 myPosts.addAll(postingList)
                             }
                             this@MyPageViewModel.userInfo.value = userInfo
-                            RunnerBeApplication.mTokenPreference.setMyRunningPace(userInfo?.pace ?: "")
+                            RunnerBeApplication.mTokenPreference.setMyRunningPace(
+                                userInfo?.pace ?: ""
+                            )
                             pace.emit(userInfo?.pace)
                             diligence.emit(result.userInfo?.diligence ?: "초보 출석")
                         }
@@ -127,15 +119,16 @@ class MyPageViewModel @Inject constructor(
     }
 
 
-    fun userProfileImageChange(imageUrl : String?) = viewModelScope.launch {
+    fun userProfileImageChange(imageUrl: String?) = viewModelScope.launch {
         patchUserImageUseCase(imageUrl).collect {
             _updateUserImageState.postValue(
-                when(it) {
+                when (it) {
                     is CommonResponse.Success<*> -> UiState.Success(it.code)
                     is CommonResponse.Failed -> {
                         if (it.code <= 999) UiState.NetworkError
                         else UiState.Failed(it.message)
                     }
+
                     is CommonResponse.Loading -> UiState.Loading
                     else -> UiState.Empty
                 }
@@ -143,7 +136,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun setTab(index : Int) = viewModelScope.launch { moveTab.emit(index) }
+    fun setTab(index: Int) = viewModelScope.launch { moveTab.emit(index) }
 
     fun paceRegistrationClicked() = viewModelScope.launch {
         _actions.emit(MyPageAction.MoveToPaceRegistration)

@@ -7,29 +7,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.network.response.GatheringData
-import com.applemango.runnerbe.data.network.response.RunningLog
-import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentOtherUserProfileBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
-import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.temporal.TemporalAdjusters
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,9 +31,6 @@ class OtherUserProfileFragment :
     @Inject
     lateinit var otherUserJoinedPostAdapter: OtherUserJoinedPostAdapter
 
-    @Inject
-    lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
-
     private var _weeklyCalendarPagerAdapter: WeeklyCalendarPagerAdapter? = null
     private val weeklyCalendarPagerAdapter get() = _weeklyCalendarPagerAdapter!!
 
@@ -57,6 +42,7 @@ class OtherUserProfileFragment :
         initDisposables()
         initWeeklyViewPagerAdapter()
         setupWeeklyViewPagerPosition()
+        setupJoinedPostings()
     }
 
     private fun initWeeklyViewPagerAdapter() {
@@ -64,7 +50,8 @@ class OtherUserProfileFragment :
             _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
-                true
+                true,
+                navArgs.targetUserId
             )
             adapter = weeklyCalendarPagerAdapter
         }
@@ -72,6 +59,21 @@ class OtherUserProfileFragment :
             viewModel.updateWeeklyViewPagerPosition(2)
         }
         initDotsIndicator()
+    }
+
+    private fun setupJoinedPostings() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userJoinedPosting.collectLatest {
+                    if (it.isNotEmpty()) {
+                        otherUserJoinedPostAdapter.submitList(it)
+                        binding.tvJoinedRunningEmpty.visibility = View.GONE
+                    } else {
+                        binding.tvJoinedRunningEmpty.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
     private fun setupWeeklyViewPagerPosition() {
