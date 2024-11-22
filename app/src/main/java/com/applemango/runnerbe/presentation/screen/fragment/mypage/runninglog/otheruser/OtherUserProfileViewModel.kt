@@ -31,9 +31,6 @@ class OtherUserProfileViewModel @Inject constructor(
     private val _userInfo = MutableStateFlow<OtherUserInfo?>(null)
     val userInfo: StateFlow<OtherUserInfo?> = _userInfo.asStateFlow()
 
-    private val _userProfileData = MutableStateFlow<OtherUser?>(null)
-    val userProfileData: StateFlow<OtherUser?> = _userProfileData.asStateFlow()
-
     private val _userJoinedPosting = MutableStateFlow<List<Posting>>(emptyList())
     val userJoinedPosting: StateFlow<List<Posting>> = _userJoinedPosting.asStateFlow()
 
@@ -44,11 +41,8 @@ class OtherUserProfileViewModel @Inject constructor(
                     when(response) {
                         is CommonResponse.Success<*> -> {
                             val result = response.body as? OtherUser
-                            _userProfileData.value = result
                             _userJoinedPosting.value = result?.userPosting ?: emptyList()
                             _userInfo.value = result?.userInfo
-
-                            LogUtil.errorLog("UserInfo $userInfo")
                         }
 
                         else -> {
@@ -60,7 +54,6 @@ class OtherUserProfileViewModel @Inject constructor(
     }
 
     fun updateWeeklyViewPagerPosition(position: Int) {
-        LogUtil.errorLog("Viewpager position $position")
         _currentWeeklyViewPagerPosition.value = position
     }
 }

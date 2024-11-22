@@ -13,10 +13,12 @@ import com.applemango.runnerbe.data.network.response.GatheringData
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
+import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initWeekDays
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -109,29 +111,45 @@ class WeeklyCalendarFragment() :
     private fun initWeeklyCalendarAdapter() {
         binding.rcvCalendarWeekly.apply {
             adapter = weeklyCalendarAdapter
-            if (!isOtherUserProfile) {
-                weeklyCalendarAdapter.setOnDateClickListener { item ->
-                    viewModel.updateWeeklyViewPagerPosition(position)
-                    val runningLog = item.runningLog
-
-                    if (runningLog != null) {
-                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+            weeklyCalendarAdapter.setIsOtherUser(isOtherUserProfile)
+            weeklyCalendarAdapter.setOnDateClickListener { item ->
+                val itemStampCode = item.runningLog?.stampCode
+                if (isOtherUserProfile) {
+                    if (itemStampCode == null
+                        || itemStampCode == StampItem.unavailableStampItem.code
+                        || itemStampCode == StampItem.availableStampItem.code) {
+                        return@setOnDateClickListener
+                    } else {
                         navigate(
-                            MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
-                                userId,
-                                runningLog.logId
+                            OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
+                                targetUserId,
+                                item.runningLog.logId
                             )
                         )
-                    } else {
-                        item.date?.let { itemDate ->
-                            navigate(
-                                MainFragmentDirections.actionMainFragmentToRunningLogFragment(
-                                    itemDate.toString(),
-                                    null,
-                                    null
-                                )
+                        return@setOnDateClickListener
+                    }
+                }
+
+                viewModel.updateWeeklyViewPagerPosition(position)
+                val runningLog = item.runningLog
+
+                if (runningLog != null) {
+                    val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                    navigate(
+                        MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
+                            userId,
+                            runningLog.logId
+                        )
+                    )
+                } else {
+                    item.date?.let { itemDate ->
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToRunningLogFragment(
+                                itemDate.toString(),
+                                null,
+                                null
                             )
-                        }
+                        )
                     }
                 }
             }
