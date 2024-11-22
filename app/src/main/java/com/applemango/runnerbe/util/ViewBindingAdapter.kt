@@ -235,7 +235,7 @@ fun ImageView.getPaceImage16(pace: String?) {
             Pace.BEGINNER.key -> R.drawable.ic_beginner_pace //입문
             Pace.AVERAGE.key -> R.drawable.ic_general_pace //평균
             Pace.HIGH.key -> R.drawable.ic_master_pace//고수
-            else -> R.drawable.ic_master_pace //초고수
+            else -> R.drawable.ic_grand_matser_pace //초고수
         }
     )
 }
