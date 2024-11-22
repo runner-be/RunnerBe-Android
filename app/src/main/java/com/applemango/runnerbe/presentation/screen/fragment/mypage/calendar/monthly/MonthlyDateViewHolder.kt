@@ -44,14 +44,7 @@ class MonthlyOtherUserDateViewHolder (
             item.runningLog?.let { log ->
                 ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
                 llDate.setOnClickListener {
-                    when (log.gatheringId) {
-                        null -> {
-                            onDateClickListener.onDateClicked(item)
-                        }
-                        else -> {
-
-                        }
-                    }
+                    onDateClickListener.onDateClicked(item)
                 }
             } ?: ivStamp.setImageResource(StampItem.otherUserUnavailableStampItem.image)
         }

@@ -58,7 +58,7 @@ class MonthlyCalendarFragment :
 
     private fun parseNavArgs(navArgs: MonthlyCalendarFragmentArgs) {
         val targetUserId = navArgs.userId
-        isOtherUserProfile = navArgs.isOtherUser == 1
+        isOtherUserProfile = (navArgs.isOtherUser == 1)
         viewModel.updateTargetUserId(targetUserId)
     }
 
@@ -109,26 +109,28 @@ class MonthlyCalendarFragment :
                         is CommonResponse.Success<*> -> {
                             val monthlyRunningLog = response.body as? RunningLogResult
                             val monthlyStatistic = monthlyRunningLog?.totalCount
-                            val monthlyGatheringData = monthlyRunningLog?.gatheringDays
-                            val monthlyLogList = monthlyRunningLog?.runningLog ?: emptyList()
+                            val monthlyGatheringData = monthlyRunningLog?.gatheringDays.orEmpty()
+                            val monthlyLogList = monthlyRunningLog?.runningLog.orEmpty()
+
+                            val filteredMonthlyLog = monthlyLogList.filter { !isOtherUserProfile || it.isOpened == 1 }
+
                             val parsedRunningLogs = combineGatheringDataToRunningLogs(
-                                monthlyGatheringData ?: emptyList(),
-                                monthlyLogList
+                                monthlyGatheringData,
+                                filteredMonthlyLog
                             )
 
-                            if (monthlyStatistic != null) {
-                                binding.tvStampMonthly.text = getString(R.string.calendar_monthly_statistic,
+                            binding.tvStampMonthly.text = if (monthlyStatistic != null) {
+                                getString(
+                                    R.string.calendar_monthly_statistic,
                                     monthlyStatistic.groupRunningCount,
-                                    monthlyStatistic.personalRunningCount)
+                                    monthlyStatistic.personalRunningCount
+                                )
                             } else {
-                                binding.tvStampMonthly.text = getString(R.string.calendar_monthly_statistic_empty)
+                                getString(R.string.calendar_monthly_statistic_empty)
                             }
 
-                            val newCalendarData = initYearMonthDays(
-                                viewModel.selectedYearMonth.value.first,
-                                viewModel.selectedYearMonth.value.second,
-                                parsedRunningLogs
-                            )
+                            val (selectedYear, selectedMonth) = viewModel.selectedYearMonth.value
+                            val newCalendarData = initYearMonthDays(selectedYear, selectedMonth, parsedRunningLogs)
                             monthlyCalendarAdapter.submitList(newCalendarData)
                         }
 
