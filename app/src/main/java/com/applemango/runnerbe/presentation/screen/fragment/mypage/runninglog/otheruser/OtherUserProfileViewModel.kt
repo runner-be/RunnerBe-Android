@@ -34,6 +34,9 @@ class OtherUserProfileViewModel @Inject constructor(
     private val _userProfileData = MutableStateFlow<OtherUser?>(null)
     val userProfileData: StateFlow<OtherUser?> = _userProfileData.asStateFlow()
 
+    private val _userJoinedPosting = MutableStateFlow<List<Posting>>(emptyList())
+    val userJoinedPosting: StateFlow<List<Posting>> = _userJoinedPosting.asStateFlow()
+
     fun getOtherUserProfile(userId: Int) {
         viewModelScope.launch {
             getOtherUserProfileUseCase(userId)
@@ -42,6 +45,7 @@ class OtherUserProfileViewModel @Inject constructor(
                         is CommonResponse.Success<*> -> {
                             val result = response.body as? OtherUser
                             _userProfileData.value = result
+                            _userJoinedPosting.value = result?.userPosting ?: emptyList()
                             _userInfo.value = result?.userInfo
 
                             LogUtil.errorLog("UserInfo $userInfo")

@@ -39,23 +39,33 @@ class WeeklyCalendarFragment() :
     private val isOtherUserProfile: Boolean by lazy {
         arguments?.getBoolean(ARG_IS_OTHER_USER) ?: false
     }
+    private val targetUserId: Int by lazy {
+        arguments?.getInt(ARG_USER_ID) ?: -1
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initWeeklyCalendarAdapter()
         setupWeeklyRunningLogs()
+        viewModel.fetchUserWeeklyRunningLog(LocalDate.now(), targetUserId)
     }
 
     private fun setupWeeklyRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.thisWeekRunningLogFlow.collectLatest { result ->
+                viewModel.myPageInfo.collectLatest { result ->
+                    if (result == null) return@collectLatest
+
                     val thisWeekMonday =
                         LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
                             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                     val parsedRunningLogs = combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
                     val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                     val (groupCount, personalCount) = result.totalCount ?: TotalCount(0, 0)
+
+                    val openedLogs = if (isOtherUserProfile) thisWeekLogs.filter {
+                        it.isOpened == 1
+                    } else thisWeekLogs
 
                     binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
                         getString(R.string.lets_add_stamp)
@@ -65,7 +75,7 @@ class WeeklyCalendarFragment() :
                             groupCount, personalCount
                         )
                     }
-                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
+                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, openedLogs))
                 }
             }
         }
@@ -134,14 +144,16 @@ class WeeklyCalendarFragment() :
         private const val ARG_DATE = "arg_date"
         private const val ARG_POSITION = "arg_position"
         private const val ARG_IS_OTHER_USER = "arg_is_other_user"
+        private const val ARG_USER_ID = "arg_user_id"
         private const val POSITION_DEFAULT = 2
 
-        fun newInstance(date: LocalDate, position: Int, isOtherUser: Boolean): WeeklyCalendarFragment {
+        fun newInstance(date: LocalDate, position: Int, isOtherUser: Boolean, userId: Int): WeeklyCalendarFragment {
             val fragment = WeeklyCalendarFragment()
             val args = Bundle()
             args.putSerializable(ARG_DATE, date)
             args.putInt(ARG_POSITION, position)
             args.putBoolean(ARG_IS_OTHER_USER, isOtherUser)
+            args.putInt(ARG_USER_ID, userId)
             fragment.arguments = args
             return fragment
         }

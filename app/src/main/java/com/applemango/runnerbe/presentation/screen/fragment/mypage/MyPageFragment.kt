@@ -230,7 +230,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
-                false
+                false,
+                RunnerBeApplication.mTokenPreference.getUserId()
             )
             adapter = weeklyCalendarPagerAdapter
         }
@@ -243,7 +244,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun setupThisWeekRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.thisWeekRunningLogFlow.collectLatest { result ->
+                viewModel.myPageInfo.collectLatest {
                     initWeeklyViewPagerAdapter()
                 }
             }

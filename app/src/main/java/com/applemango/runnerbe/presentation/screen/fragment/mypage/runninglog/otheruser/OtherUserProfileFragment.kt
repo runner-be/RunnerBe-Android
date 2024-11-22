@@ -57,6 +57,7 @@ class OtherUserProfileFragment :
         initDisposables()
         initWeeklyViewPagerAdapter()
         setupWeeklyViewPagerPosition()
+        setupJoinedPostings()
     }
 
     private fun initWeeklyViewPagerAdapter() {
@@ -64,7 +65,8 @@ class OtherUserProfileFragment :
             _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
-                true
+                true,
+                navArgs.targetUserId
             )
             adapter = weeklyCalendarPagerAdapter
         }
@@ -72,6 +74,21 @@ class OtherUserProfileFragment :
             viewModel.updateWeeklyViewPagerPosition(2)
         }
         initDotsIndicator()
+    }
+
+    private fun setupJoinedPostings() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userJoinedPosting.collectLatest {
+                    if (it.isNotEmpty()) {
+                        otherUserJoinedPostAdapter.submitList(it)
+                        binding.tvJoinedRunningEmpty.visibility = View.GONE
+                    } else {
+                        binding.tvJoinedRunningEmpty.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
     private fun setupWeeklyViewPagerPosition() {
