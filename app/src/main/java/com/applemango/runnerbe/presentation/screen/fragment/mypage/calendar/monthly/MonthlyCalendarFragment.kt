@@ -191,14 +191,17 @@ class MonthlyCalendarFragment :
                     val runningLog = item.runningLog
 
                     if (runningLog?.logId != null) {
-                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                        val targetUserId = viewModel.targetUserId.value ?: RunnerBeApplication.mTokenPreference.getUserId()
                         navigate(
                             MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogDetailFragment(
-                                userId,
-                                runningLog.logId
+                                targetUserId,
+                                runningLog.logId,
+                                navArgs.isOtherUser
                             )
                         )
                     } else {
+                        if (isOtherUserProfile) return@setOnDateClickListener
+
                         val date = item.date!!
                         navigate(
                             MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogFragment(
