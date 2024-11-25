@@ -136,7 +136,8 @@ class WeeklyCalendarFragment() :
                             OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
                                 targetUserId,
                                 item.runningLog.logId
-                                    ?: throw IllegalArgumentException("RunningLogId is NULL")
+                                    ?: throw IllegalArgumentException("RunningLogId is NULL"),
+                                if (isOtherUserProfile) 1 else 0
                             )
                         )
                         return@setOnDateClickListener
@@ -151,7 +152,8 @@ class WeeklyCalendarFragment() :
                     navigate(
                         MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
                             userId,
-                            runningLog.logId
+                            runningLog.logId,
+                            0
                         )
                     )
                 } else {

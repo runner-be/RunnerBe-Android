@@ -68,7 +68,7 @@ class StampBottomSheetDialog(
         layoutManager: LinearLayoutManager,
         stamp: StampItem
     ) {
-        val stampList = initStampItems()
+        val stampList = getStampItems()
         smoothScroller.targetPosition = stampList.indexOf(stamp)
         layoutManager.startSmoothScroll(smoothScroller)
     }
@@ -79,7 +79,7 @@ class StampBottomSheetDialog(
                 setIsPersonalLog(isPersonalLog)
             }
             adapter = stampAdapter.apply {
-                submitList(initStampItems())
+                submitList(getStampItems())
                 setSelectedStamp(selectedStamp)
                 setOnStampClickListener { stamp ->
                     selectedStamp = stamp

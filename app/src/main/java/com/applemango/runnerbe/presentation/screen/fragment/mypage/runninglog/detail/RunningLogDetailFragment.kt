@@ -22,9 +22,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R.layout.fragment_running_log_detail) {
+class RunningLogDetailFragment :
+    BaseFragment<FragmentRunningLogDetailBinding>(R.layout.fragment_running_log_detail) {
     private val viewModel: RunningLogDetailViewModel by viewModels()
     private val args: RunningLogDetailFragmentArgs by navArgs()
+
+    private val isOtherUser: Boolean by lazy {
+        args.isOtherUser == 1
+    }
 
     @Inject
     lateinit var gotStampAdapter: GotStampAdapter
@@ -32,9 +37,10 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMemberStampRecyclerView()
-        setupRunningLogDetail()
         initMenuClickListeners()
+        initIsOtherUserLog(this.isOtherUser)
         initClickListeners()
+        setupRunningLogDetail()
         setupDeleteRunningLogResult()
         viewModel.updateRunningLogArgs(Pair(args.userId, args.logId))
     }
@@ -54,7 +60,14 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
         }
     }
 
+    private fun initIsOtherUserLog(isOtherUser: Boolean) {
+        val visibility = if (isOtherUser) View.GONE else View.VISIBLE
+        binding.ivMenu.visibility = visibility
+        binding.constVisibility.visibility = visibility
+    }
+
     private fun initMenuClickListeners() {
+
         binding.ivMenu.setOnClickListener {
             context?.let {
                 val stringDate = viewModel.runningLogDate.value
@@ -84,10 +97,19 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
     private fun setupDeleteRunningLogResult() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.deleteRunningLogResultFlow.collect { response ->
-                when(response) {
+                when (response) {
                     is CommonResponse.Success<*> -> goBack()
-                    is CommonResponse.Failed -> Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT).show()
-                    else -> Toast.makeText(context, getString(R.string.error_failed), Toast.LENGTH_SHORT).show()
+                    is CommonResponse.Failed -> Toast.makeText(
+                        context,
+                        getString(R.string.error_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    else -> Toast.makeText(
+                        context,
+                        getString(R.string.error_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -108,8 +130,11 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
                         tvTeamStampEmpty.visibility = View.GONE
                         gotStampAdapter.submitList(memberStamps)
                     }
-                    viewModel.updateRunningLogDate(runningLogDetail.runnedDate.toLocalDate().toString())
-                    tvDateTime.text = parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
+                    viewModel.updateRunningLogDate(
+                        runningLogDetail.runnedDate.toLocalDate().toString()
+                    )
+                    tvDateTime.text =
+                        parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
                     Glide.with(binding.root.context)
                         .load(stampItem.image)
                         .into(binding.ivStamp)
@@ -132,7 +157,8 @@ class RunningLogDetailFragment : BaseFragment<FragmentRunningLogDetailBinding>(R
                         viewModel.updateRunningLogGatheringId(runningLogDetail.gatheringId)
                         ivTeam.setImageResource(R.drawable.ic_team_default)
                     }
-                    tvUserStamp.text = getString(R.string.running_log_got_stamp, runningLogDetail.nickname)
+                    tvUserStamp.text =
+                        getString(R.string.running_log_got_stamp, runningLogDetail.nickname)
                     tvTeamDetail.text = getString(R.string.group_profile_count_2, it.gatheringCount)
                     switchVisibility.apply {
                         isChecked = it.runningLog.isOpened == 1

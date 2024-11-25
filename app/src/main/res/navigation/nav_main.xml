@@ -388,6 +388,9 @@
         <argument
             android:name="logId"
             app:argType="integer" />
+        <argument
+            android:name="isOtherUser"
+            app:argType="integer" />
         <action
             android:id="@+id/action_runningLogDetailFragment_to_runningLogFragment"
             app:destination="@id/runningLogFragment"

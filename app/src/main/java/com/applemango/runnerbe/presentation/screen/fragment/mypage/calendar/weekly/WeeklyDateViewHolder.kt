@@ -42,10 +42,18 @@ class WeeklyOtherUserDateViewHolder (
                     }
                 }
             }
-            item.runningLog?.let {
-                ivStamp.setImageResource(getStampItemByCode(it.stampCode).image)
+            item.runningLog?.let { log ->
+                // 다른 사람 로그 목록에서는 그룹 로그 작성이 가능해도 변경 불가능 이미지로 표기
+                val stampImage = if (log.stampCode == null || log.stampCode == StampItem.availableStampItem.code) {
+                    StampItem.otherUserUnavailableStampItem.image
+                } else {
+                    getStampItemByCode(log.stampCode).image
+                }
+                ivStamp.setImageResource(stampImage)
                 llDate.setOnClickListener {
-                    listener?.onDateClicked(item)
+                    if (item.runningLog.isOpened == 1) {
+                        listener?.onDateClicked(item)
+                    }
                 }
             } ?: ivStamp.setImageResource(StampItem.otherUserUnavailableStampItem.image)
         }

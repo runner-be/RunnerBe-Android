@@ -44,11 +44,11 @@ data class StampItem(
 fun getStampItemByCode(code: String?) : StampItem {
     if (code == null) return unavailableStampItem
 
-    val stampList = initStampItems()
+    val stampList = getStampItems()
     return stampList.firstOrNull { it.code == code } ?: unavailableStampItem
 }
 
-fun initStampItems(): List<StampItem> {
+fun getStampItems(): List<StampItem> {
     val context = RunnerBeApplication.ApplicationContext()
     return listOf(
         StampItem(

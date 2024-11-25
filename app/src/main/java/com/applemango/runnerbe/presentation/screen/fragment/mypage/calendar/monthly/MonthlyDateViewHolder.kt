@@ -42,9 +42,17 @@ class MonthlyOtherUserDateViewHolder (
                 }
             }
             item.runningLog?.let { log ->
-                ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
+                // 다른 사람 로그 목록에서는 그룹 로그 작성이 가능해도 변경 불가능 이미지로 표기
+                val stampImage = if (log.stampCode == null || log.stampCode == StampItem.availableStampItem.code) {
+                    StampItem.otherUserUnavailableStampItem.image
+                } else {
+                    getStampItemByCode(log.stampCode).image
+                }
+                ivStamp.setImageResource(stampImage)
                 llDate.setOnClickListener {
-                    onDateClickListener.onDateClicked(item)
+                    if (item.runningLog.isOpened == 1) {
+                        onDateClickListener.onDateClicked(item)
+                    }
                 }
             } ?: ivStamp.setImageResource(StampItem.otherUserUnavailableStampItem.image)
         }
