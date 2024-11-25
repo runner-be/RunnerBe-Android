@@ -97,7 +97,7 @@ class MonthlyCalendarFragment :
             { it.date },
             { gatheringData ->
                 RunningLog(
-                    0,
+                    null,
                     gatheringId = gatheringData.gatheringId,
                     runnedDate = gatheringData.date,
                     null,
@@ -204,7 +204,7 @@ class MonthlyCalendarFragment :
                             MonthlyCalendarFragmentDirections.actionMonthlyCalendarFragmentToRunningLogFragment(
                                 date.toString(),
                                 null,
-                                null
+                                item.runningLog?.gatheringId.toString()
                             )
                         )
                     }
