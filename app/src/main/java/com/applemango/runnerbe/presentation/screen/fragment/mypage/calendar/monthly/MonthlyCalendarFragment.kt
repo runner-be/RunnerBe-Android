@@ -121,11 +121,9 @@ class MonthlyCalendarFragment :
                             val monthlyGatheringData = monthlyRunningLog?.gatheringDays.orEmpty()
                             val monthlyLogList = monthlyRunningLog?.runningLog.orEmpty()
 
-                            val filteredMonthlyLog = monthlyLogList.filter { !isOtherUserProfile || it.isOpened == 1 }
-
                             val parsedRunningLogs = combineGatheringDataToRunningLogs(
                                 monthlyGatheringData,
-                                filteredMonthlyLog
+                                monthlyLogList
                             )
 
                             binding.tvStampMonthly.text = if (monthlyStatistic != null) {
