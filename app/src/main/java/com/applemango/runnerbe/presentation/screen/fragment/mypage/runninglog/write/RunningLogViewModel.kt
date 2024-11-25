@@ -46,6 +46,7 @@ class RunningLogViewModel @Inject constructor(
     )
     private val logTeam = MutableStateFlow<String?>(null)
     val logVisibility = MutableStateFlow(true)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val postedRunningLogFlow = logId
         .filterNotNull()
@@ -76,6 +77,7 @@ class RunningLogViewModel @Inject constructor(
             RunningLogRequest(
                 parseKoreanDateToLocalDate(logDate.value).toString(),
                 logStamp.value.code,
+                gatheringId.value,
                 logDiary.value,
                 degree,
                 logWeather.value.code,

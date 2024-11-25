@@ -25,7 +25,7 @@ data class TotalCount(
 )
 
 data class RunningLog(
-    @SerializedName("logId") val logId: Int,
+    @SerializedName("logId") val logId: Int?,
     @SerializedName("gatheringId") var gatheringId: Int?,
     @SerializedName("runnedDate") val runnedDate: ZonedDateTime,
     @SerializedName("stampCode") val stampCode: String?,

@@ -14,6 +14,7 @@ import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
+import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
@@ -61,7 +62,8 @@ class WeeklyCalendarFragment() :
                     val thisWeekMonday =
                         LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
                             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                    val parsedRunningLogs = combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
+                    val parsedRunningLogs =
+                        combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
                     val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                     val (groupCount, personalCount) = result.totalCount ?: TotalCount(0, 0)
 
@@ -87,19 +89,21 @@ class WeeklyCalendarFragment() :
         gatheringDataList: List<GatheringData>,
         runningLogList: List<RunningLog>
     ): List<RunningLog> {
-        val runningLogsMap = runningLogList.associateBy { it.runnedDate }
-        val gatheredMap = gatheringDataList.associateBy(
-            { it.date },
-            { gatheringData ->
-                RunningLog(
-                    0,
-                    gatheringId = gatheringData.gatheringId,
-                    runnedDate = gatheringData.date,
-                    null,
-                    1
-                )
-            }
-        )
+        val runningLogsMap = runningLogList.associateBy { it.runnedDate.toLocalDate() }
+        val logsDateSet = runningLogsMap.keys
+        val gatheredMap = gatheringDataList
+            .filter { it.date.toLocalDate() !in logsDateSet }
+            .associateBy({ it.date },
+                { gatheringData ->
+                    RunningLog(
+                        null,
+                        gatheringId = gatheringData.gatheringId,
+                        runnedDate = gatheringData.date,
+                        null,
+                        1
+                    )
+                }
+            )
         val combinedMap = gatheredMap + runningLogsMap
         return combinedMap.values.toList()
     }
@@ -124,13 +128,15 @@ class WeeklyCalendarFragment() :
                 if (isOtherUserProfile) {
                     if (itemStampCode == null
                         || itemStampCode == StampItem.unavailableStampItem.code
-                        || itemStampCode == StampItem.availableStampItem.code) {
+                        || itemStampCode == StampItem.availableStampItem.code
+                    ) {
                         return@setOnDateClickListener
                     } else {
                         navigate(
                             OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
                                 targetUserId,
                                 item.runningLog.logId
+                                    ?: throw IllegalArgumentException("RunningLogId is NULL")
                             )
                         )
                         return@setOnDateClickListener
@@ -140,7 +146,7 @@ class WeeklyCalendarFragment() :
                 viewModel.updateWeeklyViewPagerPosition(position)
                 val runningLog = item.runningLog
 
-                if (runningLog != null) {
+                if (runningLog?.logId != null) {
                     val userId = RunnerBeApplication.mTokenPreference.getUserId()
                     navigate(
                         MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
@@ -154,7 +160,7 @@ class WeeklyCalendarFragment() :
                             MainFragmentDirections.actionMainFragmentToRunningLogFragment(
                                 itemDate.toString(),
                                 null,
-                                null
+                                item.runningLog?.gatheringId.toString()
                             )
                         )
                     }
@@ -172,7 +178,12 @@ class WeeklyCalendarFragment() :
         private const val ARG_USER_ID = "arg_user_id"
         private const val POSITION_DEFAULT = 2
 
-        fun newInstance(date: LocalDate, position: Int, isOtherUser: Boolean, userId: Int): WeeklyCalendarFragment {
+        fun newInstance(
+            date: LocalDate,
+            position: Int,
+            isOtherUser: Boolean,
+            userId: Int
+        ): WeeklyCalendarFragment {
             val fragment = WeeklyCalendarFragment()
             val args = Bundle()
             args.putSerializable(ARG_DATE, date)

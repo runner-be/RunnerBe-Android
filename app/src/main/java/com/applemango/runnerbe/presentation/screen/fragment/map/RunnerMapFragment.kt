@@ -26,7 +26,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.setHeight
 import com.jakewharton.rxbinding4.view.clicks

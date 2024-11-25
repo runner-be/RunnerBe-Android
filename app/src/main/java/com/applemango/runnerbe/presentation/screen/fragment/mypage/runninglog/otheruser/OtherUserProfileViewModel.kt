@@ -8,7 +8,6 @@ import com.applemango.runnerbe.data.network.response.OtherUserInfo
 import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
