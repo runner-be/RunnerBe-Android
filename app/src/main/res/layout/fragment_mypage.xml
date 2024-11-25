@@ -199,11 +199,11 @@
                     android:src="@drawable/ic_add_primary_24" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
                     style="@style/TextStyleBody14"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:includeFontPadding="false"
                     android:text="@string/pace_regist_with_emoji"

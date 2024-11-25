@@ -67,10 +67,6 @@ class WeeklyCalendarFragment() :
                     val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                     val (groupCount, personalCount) = result.totalCount ?: TotalCount(0, 0)
 
-                    val openedLogs = if (isOtherUserProfile) thisWeekLogs.filter {
-                        it.isOpened == 1
-                    } else thisWeekLogs
-
                     binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
                         getString(R.string.lets_add_stamp)
                     } else {
@@ -79,7 +75,7 @@ class WeeklyCalendarFragment() :
                             groupCount, personalCount
                         )
                     }
-                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, openedLogs))
+                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                 }
             }
         }

@@ -68,6 +68,7 @@
             app:umanoDragView="@id/bottomDrawerTabLayout"
             app:umanoFadeColor="@android:color/transparent"
             app:umanoInitialState="anchored"
+            app:umanoAnchorPoint="0.5"
             app:umanoOverlay="true"
             app:umanoPanelHeight="74dp"
             app:umanoShadowHeight="0dp">
@@ -89,7 +90,7 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/bottomDrawerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/bg_top_rounded"
                 android:orientation="vertical">
 

@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
-        android:paddingHorizontal="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -21,6 +20,7 @@
             android:id="@+id/talk_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:src="@drawable/ic_filter"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,8 +30,8 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/create_date_view"
-        android:layout_width="24dp"
-        android:layout_height="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fontFamily="@font/pretendard_regular"
         android:textSize="11sp"

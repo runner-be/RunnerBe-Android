@@ -50,6 +50,19 @@ class JoinedRunningViewModel @Inject constructor(
         }
     }
 
+    fun updatePostBookmark(post: Posting) {
+        val postList: MutableList<Posting> = userPostings.value.toMutableList()
+        val parsedPostList = postList.map { item ->
+            if (item.postId == post.postId) {
+                val prevBookmark = if (post.bookMark == 1) 0 else 1
+                item.copy(bookMark = prevBookmark)
+            } else {
+                item
+            }
+        }
+        this.userPostings.value = parsedPostList
+    }
+
     fun getUserRunningPostings(userId: Int) {
         viewModelScope.launch {
             getUserDataUseCase(userId)

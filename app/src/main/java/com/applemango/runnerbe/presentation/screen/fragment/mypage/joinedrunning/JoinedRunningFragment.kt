@@ -2,6 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentJoinedRunningBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
+import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.BottomSpaceItemDecoration
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layout.fragment_joined_running) {
 
     private val viewModel: JoinedRunningViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     @Inject
     internal lateinit var joinedRunningPostAdapter: JoinedRunningPostAdapter
@@ -125,7 +128,8 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                     }
 
                     override fun bookMarkClick(post: Posting) {
-
+                        mainViewModel.bookmarkStatusChange(post)
+                        viewModel.updatePostBookmark(post)
                     }
 
                     override fun postClick(post: Posting) {
@@ -139,6 +143,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                 })
             }
             addItemDecoration(BottomSpaceItemDecoration(12.dpToPx(context)))
+            itemAnimator = null
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
