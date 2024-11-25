@@ -87,14 +87,21 @@ class WeeklyCalendarFragment() :
         gatheringDataList: List<GatheringData>,
         runningLogList: List<RunningLog>
     ): List<RunningLog> {
-        val groupLogData = gatheringDataList.associateBy { it.date }
-        val runningLogs = runningLogList.toMutableList()
-        runningLogs.forEach { runningLog ->
-            groupLogData[runningLog.runnedDate]?.let { gatheringData ->
-                runningLog.gatheringId = gatheringData.gatheringId
+        val runningLogsMap = runningLogList.associateBy { it.runnedDate }
+        val gatheredMap = gatheringDataList.associateBy(
+            { it.date },
+            { gatheringData ->
+                RunningLog(
+                    0,
+                    gatheringId = gatheringData.gatheringId,
+                    runnedDate = gatheringData.date,
+                    null,
+                    1
+                )
             }
-        }
-        return runningLogs
+        )
+        val combinedMap = gatheredMap + runningLogsMap
+        return combinedMap.values.toList()
     }
 
     private fun parseRunningLogs(
