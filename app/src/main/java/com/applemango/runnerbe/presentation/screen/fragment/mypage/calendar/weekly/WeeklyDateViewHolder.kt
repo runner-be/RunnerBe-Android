@@ -68,8 +68,12 @@ class WeeklyDateViewHolder (
                     }
                 }
             }
-            item.runningLog?.let {
-                ivStamp.setImageResource(getStampItemByCode(it.stampCode).image)
+            item.runningLog?.let { log ->
+                if (log.stampCode == null && log.gatheringId != null) {
+                    ivStamp.setImageResource(StampItem.availableStampItem.image)
+                } else {
+                    ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
+                }
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {
                 listener?.onDateClicked(item)

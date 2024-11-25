@@ -28,6 +28,6 @@ data class RunningLog(
     @SerializedName("logId") val logId: Int,
     @SerializedName("gatheringId") var gatheringId: Int?,
     @SerializedName("runnedDate") val runnedDate: ZonedDateTime,
-    @SerializedName("stampCode") val stampCode: String,
+    @SerializedName("stampCode") val stampCode: String?,
     @SerializedName("isOpened") val isOpened: Int,
 )

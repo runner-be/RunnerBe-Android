@@ -21,12 +21,14 @@ import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.DayOfWeekAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initYearMonthDays
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.google.gson.annotations.SerializedName
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -90,14 +92,21 @@ class MonthlyCalendarFragment :
         gatheringDataList: List<GatheringData>,
         runningLogList: List<RunningLog>
     ): List<RunningLog> {
-        val groupLogData = gatheringDataList.associateBy { it.date }
-        val runningLogs = runningLogList.toMutableList()
-        runningLogs.forEach { runningLog ->
-            groupLogData[runningLog.runnedDate]?.let { gatheringData ->
-                runningLog.gatheringId = gatheringData.gatheringId
+        val runningLogsMap = runningLogList.associateBy { it.runnedDate }
+        val gatheredMap = gatheringDataList.associateBy(
+            { it.date },
+            { gatheringData ->
+                RunningLog(
+                    0,
+                    gatheringId = gatheringData.gatheringId,
+                    runnedDate = gatheringData.date,
+                    null,
+                    1
+                )
             }
-        }
-        return runningLogs
+        )
+        val combinedMap = gatheredMap + runningLogsMap
+        return combinedMap.values.toList()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

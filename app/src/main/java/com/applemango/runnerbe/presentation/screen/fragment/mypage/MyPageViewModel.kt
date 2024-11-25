@@ -82,7 +82,7 @@ class MyPageViewModel @Inject constructor(
                             val result = it.body.result
                             val userInfo: UserInfo? = result.userInfo
                             myPosts.clear()
-                            joinPosts.value = result.myRunning
+                            joinPosts.value = result.myRunning.sortedBy { running -> running.gatheringTime }
                             result.myPosting?.let { postingList ->
                                 myPosts.addAll(postingList)
                             }

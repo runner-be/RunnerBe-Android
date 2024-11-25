@@ -67,7 +67,11 @@ class MonthlyDateViewHolder (
                 }
             }
             item.runningLog?.let { log ->
-                ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
+                if (log.stampCode == null && log.gatheringId != null) {
+                    ivStamp.setImageResource(StampItem.availableStampItem.image)
+                } else {
+                    ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
+                }
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {
                 when (item.runningLog?.gatheringId) {
