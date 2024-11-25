@@ -378,46 +378,55 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/const_team_stamp" />
 
-                <TextView
-                    android:id="@+id/tv_visibility_title"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/const_visibility"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="@font/pretendard_regular"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:text="@string/running_visibility_title"
-                    android:textColor="@color/dark_g3_5"
-                    android:textSize="16sp"
+                    android:layout_marginHorizontal="24dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_divider_3" />
+                    app:layout_constraintTop_toBottomOf="@+id/view_divider_3">
 
-                <TextView
-                    android:id="@+id/tv_visibility_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/pretendard_light"
-                    android:gravity="center"
-                    android:text="@string/running_visibility_detail"
-                    android:textColor="@color/dark_g3_5"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
-                    app:layout_constraintStart_toEndOf="@id/tv_visibility_title" />
+                    <TextView
+                        android:id="@+id/tv_visibility_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:text="@string/running_visibility_title"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switch_visibility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:thumb="@drawable/ic_switch_thumb"
-                    android:enabled="false"
-                    app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:track="@drawable/ic_switch_track_selector" />
+                    <TextView
+                        android:id="@+id/tv_visibility_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/pretendard_light"
+                        android:gravity="center"
+                        android:text="@string/running_visibility_detail"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
+                        app:layout_constraintStart_toEndOf="@id/tv_visibility_title" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_visibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumb="@drawable/ic_switch_thumb"
+                        android:enabled="false"
+                        app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:track="@drawable/ic_switch_track_selector" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
