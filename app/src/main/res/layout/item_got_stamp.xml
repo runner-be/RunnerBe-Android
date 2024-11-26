@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.MemberStampData" />
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_circle_shape_dark_3_5_stroke">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_photo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:scaleType="centerCrop"
             android:layout_margin="1dp"
             tools:src="@drawable/ic_niaka"
+            bind:image_from_url_rounded="@{item.profileImageUrl}"
+            android:background="@drawable/bg_circle_shape_dark_3_5_stroke"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/fl_stamp"
@@ -41,6 +50,20 @@
                 android:scaleType="fitXY" />
 
         </FrameLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="가나다라"
+            android:text="@{item.nickname}"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxEms="4"
+            android:gravity="center"
+            android:lines="1"
+            app:layout_constraintTop_toBottomOf="@+id/iv_photo"
+            app:layout_constraintStart_toStartOf="@+id/iv_photo"
+            app:layout_constraintEnd_toEndOf="@+id/iv_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

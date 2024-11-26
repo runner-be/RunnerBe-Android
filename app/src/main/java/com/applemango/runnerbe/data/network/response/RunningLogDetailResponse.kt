@@ -31,6 +31,6 @@ data class MemberStamp (
     @SerializedName("userId") val userId: Int,
     @SerializedName("logId") val logId: Int?,
     @SerializedName("nickname") val nickname: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
+    @SerializedName("profileImageUrl") val profileImageUrl: String?,
     @SerializedName("stampCode") val stampCode: String,
 )

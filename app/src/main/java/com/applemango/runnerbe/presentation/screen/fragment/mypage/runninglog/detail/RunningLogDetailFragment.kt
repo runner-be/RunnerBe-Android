@@ -15,6 +15,8 @@ import com.applemango.runnerbe.databinding.FragmentRunningLogDetailBinding
 import com.applemango.runnerbe.presentation.screen.dialog.menu.MenuDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.dpToPx
+import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,6 +58,7 @@ class RunningLogDetailFragment :
         binding.rcvTeamStamp.apply {
             adapter = gotStampAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(RightSpaceItemDecoration(10.dpToPx(requireContext())))
         }
     }
 

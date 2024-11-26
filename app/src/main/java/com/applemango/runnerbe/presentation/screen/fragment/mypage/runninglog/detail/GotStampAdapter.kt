@@ -18,11 +18,8 @@ class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampVie
         private val binding: ItemGotStampBinding
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MemberStampData) {
+            binding.item = item
             with(binding) {
-                Glide.with(itemView.context)
-                    .load(item.profileImageUrl)
-                    .error(R.drawable.ic_user_default)
-                    .into(ivPhoto)
                 Glide.with(itemView.context)
                     .load(getStampItemByCode(item.stampCode))
                     .error(R.drawable.ic_user_default)
