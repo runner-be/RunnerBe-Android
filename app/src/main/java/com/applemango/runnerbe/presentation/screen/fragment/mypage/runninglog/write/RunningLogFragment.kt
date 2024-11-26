@@ -106,8 +106,11 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                 viewModel.postedRunningLogFlow.collect { response ->
                     response?.let {
                         val log = response.result.runningLog
+                        val stamp = getStampItemByCode(log.stampCode)
                         viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
-                        viewModel.updateStamp(getStampItemByCode(log.stampCode))
+                        stamp?.let {
+                            viewModel.updateStamp(it)
+                        }
                         viewModel.updateLogDiary(log.contents)
                         viewModel.updateDegreeAndWeather(
                             log.weatherDegree.toString(),
