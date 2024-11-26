@@ -9,16 +9,17 @@ import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogBottomSheetStampBinding
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.LeftSpaceItemDecoration
 
 class StampBottomSheetDialog(
-    selectedStamp: StampItem
+    selectedStamp: StampItem?
 ): CustomBottomSheetDialog<DialogBottomSheetStampBinding>(R.layout.dialog_bottom_sheet_stamp) {
     private var _stampAdapter: StampAdapter? = null
     private val stampAdapter get() = _stampAdapter!!
 
-    private var selectedStamp: StampItem
+    private var selectedStamp: StampItem?
     private var isPersonalLog: Boolean = true
     private var onStampConfirmListener: OnStampConfirmListener? = null
 
@@ -49,6 +50,13 @@ class StampBottomSheetDialog(
     }
 
     private fun initStampInfo() {
+        val selectedStamp = selectedStamp ?: StampItem(
+            "RUN001",
+            R.drawable.ic_stamp_1_personal,
+            requireContext().getString(R.string.stamp_1_name),
+            requireContext().getString(R.string.stamp_1_description),
+            true
+        )
         with(binding) {
             tvStampName.text = selectedStamp.name
             tvStampDetail.text = selectedStamp.description
@@ -58,19 +66,23 @@ class StampBottomSheetDialog(
     private fun initClickListeners() {
         with(binding) {
             btnRegister.setOnClickListener {
-                onStampConfirmListener?.onConfirmClicked(selectedStamp)
-                dismiss()
+                selectedStamp?.let {
+                    onStampConfirmListener?.onConfirmClicked(it)
+                    dismiss()
+                } ?: ToastUtil.showShortToast(requireContext(), "스탬프를 선택해주세요")
             }
         }
     }
 
     private fun scrollToSelectedStamp(
         layoutManager: LinearLayoutManager,
-        stamp: StampItem
+        stamp: StampItem?
     ) {
-        val stampList = getStampItems()
-        smoothScroller.targetPosition = stampList.indexOf(stamp)
-        layoutManager.startSmoothScroll(smoothScroller)
+        if (stamp != null) {
+            val stampList = getStampItems()
+            smoothScroller.targetPosition = stampList.indexOf(stamp)
+            layoutManager.startSmoothScroll(smoothScroller)
+        }
     }
 
     private fun initStampRecyclerView() {
@@ -96,7 +108,7 @@ class StampBottomSheetDialog(
     companion object {
         fun createAndShow(
             fragmentManager: FragmentManager,
-            selectedStamp: StampItem,
+            selectedStamp: StampItem?,
             isPersonalLog: Boolean,
             onStampConfirmListener: OnStampConfirmListener
         ) {
