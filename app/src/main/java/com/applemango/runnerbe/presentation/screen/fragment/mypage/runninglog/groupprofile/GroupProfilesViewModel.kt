@@ -64,7 +64,7 @@ class GroupProfilesViewModel @Inject constructor(
         }
         .flowOn(Dispatchers.IO)
 
-    fun postStampToJoinedRunner(userId: Int, stampCode: String) {
+    fun postStampToJoinedRunner(userId: Int, gatheringId: Int, stampCode: String) {
         viewModelScope.launch {
             try {
                 val targetUserId = requireNotNull(lastSelectedUserId.value) {
@@ -74,7 +74,7 @@ class GroupProfilesViewModel @Inject constructor(
                     targetUserId,
                     stampCode
                 )
-                postStampToJoinedRunnerUseCase(userId, targetUserId, stampRequest)
+                postStampToJoinedRunnerUseCase(userId, gatheringId, stampRequest)
                     .onStart {
                         _stampResult.value = CommonResponse.Loading
                     }

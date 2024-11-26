@@ -94,18 +94,12 @@ class GroupProfilesFragment :
                         viewModel.updateLastSelectedUserId(targetUserId)
                         StampBottomSheetDialog.createAndShow(
                             childFragmentManager,
-                            stamp ?: StampItem(
-                                "default",
-                                R.drawable.ic_stamp_1_personal,
-                                context.getString(R.string.stamp_1_name),
-                                context.getString(R.string.stamp_1_description),
-                                true
-                            ),
+                            null,
                             false
                         ) { stampItem ->
                             val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             profileAdapter.updateProfileStampByPosition(position, stampItem.code)
-                            viewModel.postStampToJoinedRunner(userId, stampItem.code)
+                            viewModel.postStampToJoinedRunner(userId, navArgs.gatheringId, stampItem.code)
                         }
                     }
                 })

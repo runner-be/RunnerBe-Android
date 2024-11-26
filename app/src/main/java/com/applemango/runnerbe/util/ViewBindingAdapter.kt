@@ -15,7 +15,9 @@ import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
+import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
+import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.image.CropRectRatio
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogType
 import com.bumptech.glide.Glide
@@ -355,5 +357,77 @@ fun TextView.setPostWriteAttendanceGuide(size: Int) {
         2 -> context.getString(R.string.msg_recruitment_count_minimum)
         8 -> context.getString(R.string.msg_recruitment_count_maximum)
         else -> ""
+    }
+}
+
+// 러닝 로그
+@BindingAdapter("bind:logDateText")
+fun TextView.setLogDateText(date: ZonedDateTime?) {
+    if (date == null) return
+    this.text = parseLocalDateToKorean(date.toLocalDate())
+}
+
+@BindingAdapter("bind:logStampSrc")
+fun ImageView.setLogStampSrc(stampCode: String?) {
+    if (stampCode == null) return
+    val stamp = getStampItemByCode(stampCode)
+    stamp?.image?.let {
+        this.setImageResource(it)
+    }
+}
+
+@BindingAdapter("bind:logStampText")
+fun TextView.setLogStampText(stampCode: String?) {
+    if (stampCode == null) return
+    val stamp = getStampItemByCode(stampCode)
+    this.text = stamp?.description ?: ""
+}
+
+@BindingAdapter("bind:logContentImageSrc")
+fun ImageView.setLogContentImageSrc(url: String?) {
+    if (url == null) {
+        this.visibility = View.GONE
+        return
+    } else {
+        this.visibility = View.VISIBLE
+        Glide.with(this.context)
+            .load(url)
+            .into(this)
+    }
+}
+
+@BindingAdapter("bind:logWeatherImageSrc")
+fun ImageView.setLogWeatherImageSrc(weatherCode: String?) {
+    if (weatherCode == null) return
+    val weatherItem = getWeatherItemByCode(weatherCode)
+    Glide.with(this.context)
+        .load(weatherItem.image)
+        .into(this)
+}
+
+@BindingAdapter("bind:logTeamSizeText")
+fun TextView.setLogStampText(size: Int?) {
+    if (size == null) this.text = "0 명"
+    else this.text = context.getString(R.string.running_log_team_size, size)
+}
+
+@BindingAdapter("bind:logReceivedStampTitleText")
+fun TextView.setLogReceivedStampTitleText(nickname: String?) {
+    if (nickname == null) return
+    else this.text = context.getString(R.string.running_log_got_stamp, nickname)
+}
+
+@BindingAdapter("bind:logIsVisible")
+fun SwitchCompat.setLogIsVisible(isOpened: Int?) {
+    if (isOpened == null) return
+    val visibility = isOpened == 1
+    this.isChecked = visibility
+}
+
+@BindingAdapter("bind:logTeamImageSrc")
+fun ImageView.setLogTeamImage(gatheringId: Int?) {
+    when (gatheringId == null) {
+        true -> setImageResource(R.drawable.ic_team_lock)
+        false -> setImageResource(R.drawable.ic_team_default)
     }
 }

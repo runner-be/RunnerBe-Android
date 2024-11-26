@@ -92,19 +92,21 @@ class MonthlyCalendarFragment :
         gatheringDataList: List<GatheringData>,
         runningLogList: List<RunningLog>
     ): List<RunningLog> {
-        val runningLogsMap = runningLogList.associateBy { it.runnedDate }
-        val gatheredMap = gatheringDataList.associateBy(
-            { it.date },
-            { gatheringData ->
-                RunningLog(
-                    null,
-                    gatheringId = gatheringData.gatheringId,
-                    runnedDate = gatheringData.date,
-                    null,
-                    1
-                )
-            }
-        )
+        val runningLogsMap = runningLogList.associateBy { it.runnedDate.toLocalDate() }
+        val logsDateSet = runningLogsMap.keys
+        val gatheredMap = gatheringDataList
+            .filter { it.date.toLocalDate() !in logsDateSet }
+            .associateBy({ it.date },
+                { gatheringData ->
+                    RunningLog(
+                        null,
+                        gatheringId = gatheringData.gatheringId,
+                        runnedDate = gatheringData.date,
+                        null,
+                        1
+                    )
+                }
+            )
         val combinedMap = gatheredMap + runningLogsMap
         return combinedMap.values.toList()
     }

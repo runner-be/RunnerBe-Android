@@ -9,6 +9,7 @@ import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.DateItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.OnDateClickListener
+import com.applemango.runnerbe.util.ToastUtil
 import java.time.LocalDate
 
 class MonthlyEmptyViewHolder (
@@ -46,12 +47,14 @@ class MonthlyOtherUserDateViewHolder (
                 val stampImage = if (log.stampCode == null || log.stampCode == StampItem.availableStampItem.code) {
                     StampItem.otherUserUnavailableStampItem.image
                 } else {
-                    getStampItemByCode(log.stampCode).image
+                    getStampItemByCode(log.stampCode)?.image!!
                 }
                 ivStamp.setImageResource(stampImage)
                 llDate.setOnClickListener {
                     if (item.runningLog.isOpened == 1) {
                         onDateClickListener.onDateClicked(item)
+                    } else {
+                        ToastUtil.showShortToast(itemView.context, "열람할 수 없는 로그입니다")
                     }
                 }
             } ?: ivStamp.setImageResource(StampItem.otherUserUnavailableStampItem.image)
@@ -78,7 +81,7 @@ class MonthlyDateViewHolder (
                 if (log.stampCode == null && log.gatheringId != null) {
                     ivStamp.setImageResource(StampItem.availableStampItem.image)
                 } else {
-                    ivStamp.setImageResource(getStampItemByCode(log.stampCode).image)
+                    ivStamp.setImageResource(getStampItemByCode(log.stampCode)!!.image)
                 }
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {

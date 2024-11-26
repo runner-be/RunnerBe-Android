@@ -41,11 +41,9 @@ data class StampItem(
     }
 }
 
-fun getStampItemByCode(code: String?) : StampItem {
-    if (code == null) return unavailableStampItem
-
+fun getStampItemByCode(code: String?): StampItem? {
     val stampList = getStampItems()
-    return stampList.firstOrNull { it.code == code } ?: unavailableStampItem
+    return stampList.firstOrNull { it.code == code }
 }
 
 fun getStampItems(): List<StampItem> {

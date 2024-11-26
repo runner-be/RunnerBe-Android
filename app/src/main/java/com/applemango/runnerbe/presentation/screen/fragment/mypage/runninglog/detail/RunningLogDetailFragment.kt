@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningLogDetailBinding
 import com.applemango.runnerbe.presentation.screen.dialog.menu.MenuDialog
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
-import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.parseLocalDateToKorean
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +25,9 @@ class RunningLogDetailFragment :
     private val viewModel: RunningLogDetailViewModel by viewModels()
     private val args: RunningLogDetailFragmentArgs by navArgs()
 
+    private val logId: Int by lazy {
+        args.logId
+    }
     private val isOtherUser: Boolean by lazy {
         args.isOtherUser == 1
     }
@@ -36,13 +37,19 @@ class RunningLogDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            vm = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         initMemberStampRecyclerView()
-        initMenuClickListeners()
         initIsOtherUserLog(this.isOtherUser)
         initClickListeners()
-        setupRunningLogDetail()
+        if (!isOtherUser) {
+            initMenuClickListeners()
+        }
         setupDeleteRunningLogResult()
-        viewModel.updateRunningLogArgs(Pair(args.userId, args.logId))
+        setupRunningLogDetail()
+        viewModel.getLogDetail(args.userId, logId)
     }
 
     private fun initMemberStampRecyclerView() {
@@ -67,13 +74,12 @@ class RunningLogDetailFragment :
     }
 
     private fun initMenuClickListeners() {
-
         binding.ivMenu.setOnClickListener {
             context?.let {
-                val stringDate = viewModel.runningLogDate.value
+                val runningLog = viewModel.runningLogDetail.value?.runningLog!!
+                val stringDate = runningLog.runnedDate.toLocalDate().toString()
                 val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                val logId = viewModel.runningLogArgsFlow.value.second
-                val gatheringId = viewModel.runningLogGatheringId.value
+                val gatheringId = runningLog.gatheringId
                 MenuDialog.createAndShow(
                     it,
                     userId,
@@ -117,52 +123,18 @@ class RunningLogDetailFragment :
 
     private fun setupRunningLogDetail() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.runningLogDetailFlow.collect {
-                with(binding) {
-                    val runningLogDetail = it.runningLog
-                    val stampItem = getStampItemByCode(runningLogDetail.stampCode)
-                    val weatherItem = getWeatherItemByCode(runningLogDetail.weatherCode)
-                    val memberStamps = it.gotStamp
-
-                    if (memberStamps.isEmpty()) {
-                        tvTeamStampEmpty.visibility = View.VISIBLE
-                    } else {
-                        tvTeamStampEmpty.visibility = View.GONE
-                        gotStampAdapter.submitList(memberStamps)
-                    }
-                    viewModel.updateRunningLogDate(
-                        runningLogDetail.runnedDate.toLocalDate().toString()
-                    )
-                    tvDateTime.text =
-                        parseLocalDateToKorean(runningLogDetail.runnedDate.toLocalDate())
-                    Glide.with(binding.root.context)
-                        .load(stampItem.image)
-                        .into(binding.ivStamp)
-                    tvStamp.text = stampItem.description
-                    tvDiary.text = runningLogDetail.contents
-                    runningLogDetail.imageUrl?.let {
-                        Glide.with(binding.root.context)
-                            .load(runningLogDetail.imageUrl)
-                            .into(binding.ivPhoto)
-                    } ?: run {
-                        binding.ivPhoto.visibility = View.GONE
-                    }
-                    tvDegree.text = runningLogDetail.weatherDegree.toString()
-                    Glide.with(binding.root.context)
-                        .load(weatherItem.image)
-                        .into(binding.ivWeather)
-                    if (runningLogDetail.gatheringId == null) {
-                        ivTeam.setImageResource(R.drawable.ic_team_lock)
-                    } else {
-                        viewModel.updateRunningLogGatheringId(runningLogDetail.gatheringId)
-                        ivTeam.setImageResource(R.drawable.ic_team_default)
-                    }
-                    tvUserStamp.text =
-                        getString(R.string.running_log_got_stamp, runningLogDetail.nickname)
-                    tvTeamDetail.text = getString(R.string.group_profile_count_2, it.gatheringCount)
-                    switchVisibility.apply {
-                        isChecked = it.runningLog.isOpened == 1
-                        isEnabled = false
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.runningLogDetail.collect {
+                    val gotStampList = it?.gotStamp
+                    gotStampList?.let {
+                        with(binding) {
+                            if (it.isEmpty()) {
+                                tvTeamStampEmpty.visibility = View.VISIBLE
+                            } else {
+                                tvTeamStampEmpty.visibility = View.GONE
+                                gotStampAdapter.submitList(it)
+                            }
+                        }
                     }
                 }
             }
