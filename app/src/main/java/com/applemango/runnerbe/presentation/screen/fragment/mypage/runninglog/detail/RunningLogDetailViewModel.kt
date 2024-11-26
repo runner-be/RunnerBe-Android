@@ -6,16 +6,15 @@ import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import com.applemango.runnerbe.domain.usecase.runninglog.DeleteRunningLogUseCase
 import com.applemango.runnerbe.domain.usecase.runninglog.GetRunningLogDetailUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,25 +23,25 @@ class RunningLogDetailViewModel @Inject constructor(
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase,
     private val deleteRunningLogUseCase: DeleteRunningLogUseCase
 ) : ViewModel() {
-    val runningLogArgsFlow = MutableStateFlow(Pair(0, 0))
-    val runningLogDate = MutableStateFlow("")
-    val runningLogGatheringId = MutableStateFlow(0)
-
     private val _deleteRunningLogResultFlow = MutableSharedFlow<CommonResponse>()
     val deleteRunningLogResultFlow: SharedFlow<CommonResponse> = _deleteRunningLogResultFlow.asSharedFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val runningLogDetailFlow: Flow<RunningLogDetail> = runningLogArgsFlow
-        .filterNotNull()
-        .flatMapLatest { logData ->
-            getRunningLogDetailUseCase(logData.first, logData.second)
-                .map { response ->
+    private val _runningLogDetail = MutableStateFlow<RunningLogDetail?>(null)
+    val runningLogDetail: StateFlow<RunningLogDetail?> get() = _runningLogDetail.asStateFlow()
+
+    fun getLogDetail(
+        userId: Int, logId: Int
+    ) {
+        viewModelScope.launch {
+            getRunningLogDetailUseCase(userId, logId)
+                .collectLatest { response ->
                     when (response) {
                         is CommonResponse.Success<*> -> {
                             val runningLogDetail = response.body as? DetailRunningLogResponse
-                            runningLogDetail?.let {
+                            LogUtil.errorLog("runningLogDetail $runningLogDetail")
+                            _runningLogDetail.value = runningLogDetail?.let {
                                 parseRunningLogDetailToPresentation(it)
-                            } ?: throw IllegalStateException("Invalid running log data")
+                            }
                         }
 
                         is CommonResponse.Failed -> {
@@ -55,6 +54,7 @@ class RunningLogDetailViewModel @Inject constructor(
                     }
                 }
         }
+    }
 
     fun deleteRunningLog(userId: Int, logId: Int) {
         viewModelScope.launch {
@@ -62,17 +62,5 @@ class RunningLogDetailViewModel @Inject constructor(
                 _deleteRunningLogResultFlow.emit(it)
             }
         }
-    }
-
-    fun updateRunningLogGatheringId(gatheringId: Int) {
-        runningLogGatheringId.value = gatheringId
-    }
-
-    fun updateRunningLogDate(dateString: String) {
-        runningLogDate.value = dateString
-    }
-
-    fun updateRunningLogArgs(args: Pair<Int, Int>) {
-        runningLogArgsFlow.value = args
     }
 }

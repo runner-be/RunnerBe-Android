@@ -326,6 +326,7 @@
 
     <string name="running_log_team_title">함께한 러너</string>
     <string name="running_log_team_default">0 명</string>
+    <string name="running_log_team_size">%1$d 명</string>
 
     <string name="running_visibility_title">공개 설정</string>
     <string name="running_visibility_detail">이 글을 모두가 볼 수 있습니다.</string>

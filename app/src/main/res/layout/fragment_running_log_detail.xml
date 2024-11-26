@@ -44,6 +44,7 @@
                 android:layout_marginVertical="5dp"
                 android:textColor="@color/dark_g3_5"
                 tools:text="2024년 11월 21일"
+                bind:logDateText="@{vm.runningLogDetail.runningLog.runnedDate}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -93,6 +94,7 @@
                         android:layout_height="80dp"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="15dp"
+                        bind:logStampSrc="@{vm.runningLogDetail.runningLog.stampCode}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -106,6 +108,7 @@
                         android:gravity="center"
                         android:textColor="@color/dark_g3_5"
                         android:textStyle="bold"
+                        bind:logStampText="@{vm.runningLogDetail.runningLog.stampCode}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/iv_stamp" />
@@ -159,6 +162,7 @@
                         android:fontFamily="@font/pretendard_regular"
                         android:textColor="@color/dark_g3_5"
                         android:textSize="16sp"
+                        android:text="@{vm.runningLogDetail.runningLog.contents}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -170,6 +174,7 @@
                         android:layout_marginTop="32dp"
                         android:padding="1dp"
                         android:scaleType="fitXY"
+                        bind:logContentImageSrc="@{vm.runningLogDetail.runningLog.imageUrl}"
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -214,6 +219,7 @@
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:textColor="@color/dark_g3_5"
+                        android:text="@{String.valueOf(vm.runningLogDetail.runningLog.weatherDegree)}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_weather_title" />
 
@@ -244,7 +250,8 @@
                             android:id="@+id/iv_weather"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:scaleType="fitXY" />
+                            android:scaleType="fitXY"
+                            bind:logWeatherImageSrc="@{vm.runningLogDetail.runningLog.weatherCode}"/>
 
                     </FrameLayout>
 
@@ -285,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="@string/running_log_team_default"
+                        bind:logTeamSizeText="@{vm.runningLogDetail.gotStamp.size()}"
                         android:textColor="@color/dark_g3_5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_team_title" />
@@ -304,6 +311,7 @@
                             android:id="@+id/iv_team"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            bind:logTeamImageSrc="@{vm.runningLogDetail.runningLog.gatheringId}"
                             android:scaleType="fitXY" />
 
                     </FrameLayout>
@@ -336,7 +344,7 @@
                         style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="{닉네임}님이 받은 스탬프"
+                        bind:logReceivedStampTitleText="@{vm.runningLogDetail.runningLog.nickname}"
                         android:textStyle="bold"
                         android:textColor="@color/dark_g3_5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -420,6 +428,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:thumb="@drawable/ic_switch_thumb"
+                        bind:logIsVisible="@{vm.runningLogDetail.runningLog.isOpened}"
                         android:enabled="false"
                         app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
