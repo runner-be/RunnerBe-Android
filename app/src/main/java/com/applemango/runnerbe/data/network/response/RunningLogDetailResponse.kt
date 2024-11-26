@@ -22,8 +22,8 @@ data class DetailRunningLog (
     @SerializedName("stampCode") val stampCode: String,
     @SerializedName("contents") val contents: String,
     @SerializedName("imageUrl") val imageUrl: String?,
-    @SerializedName("weatherDegree") val weatherDegree: Int,
-    @SerializedName("weatherIcon") val weatherCode: String,
+    @SerializedName("weatherDegree") val weatherDegree: Int?,
+    @SerializedName("weatherIcon") val weatherCode: String?,
     @SerializedName("isOpened") val isOpened: Int,
 )
 

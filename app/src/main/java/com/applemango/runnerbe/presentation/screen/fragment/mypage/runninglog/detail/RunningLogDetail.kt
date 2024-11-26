@@ -22,8 +22,8 @@ data class RunningLogData (
     val stampCode: String,
     val contents: String,
     val imageUrl: String?,
-    val weatherDegree: Int,
-    val weatherCode: String,
+    val weatherDegree: Int?,
+    val weatherCode: String?,
     val isOpened: Int,
 ) : Parcelable
 
