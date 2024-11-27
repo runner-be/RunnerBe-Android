@@ -387,7 +387,6 @@ fun TextView.setLogStampText(stampCode: String?) {
 fun ImageView.setLogContentImageSrc(url: String?) {
     if (url == null) {
         this.visibility = View.GONE
-        return
     } else {
         this.visibility = View.VISIBLE
         Glide.with(this.context)

@@ -22,8 +22,8 @@ data class RunningLogData (
     val stampCode: String,
     val contents: String,
     val imageUrl: String?,
-    val weatherDegree: Int,
-    val weatherCode: String,
+    val weatherDegree: Int?,
+    val weatherCode: String?,
     val isOpened: Int,
 ) : Parcelable
 
@@ -32,7 +32,7 @@ data class MemberStampData (
     val userId: Int,
     val logId: Int?,
     val nickname: String,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     val stampCode: String,
 ) : Parcelable
 

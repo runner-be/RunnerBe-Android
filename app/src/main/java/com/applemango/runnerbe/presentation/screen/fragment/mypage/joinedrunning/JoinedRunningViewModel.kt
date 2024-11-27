@@ -43,7 +43,7 @@ class JoinedRunningViewModel @Inject constructor(
                     it.postUserId == userId
                 }
             }
-        }.sortedBy {
+        }.sortedByDescending {
             it.gatheringTime
         }.also {
             userPostingSize.value = it.size
