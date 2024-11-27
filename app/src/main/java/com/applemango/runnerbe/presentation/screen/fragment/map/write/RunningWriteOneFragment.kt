@@ -28,7 +28,9 @@ import com.jakewharton.rxbinding4.view.clicks
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -48,11 +50,12 @@ class RunningWriteOneFragment :
         locationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
         binding.scrollView.requestDisallowInterceptTouchEvent(true)
         initListeners()
-        addressLauncher = this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                processUserLocation(result)
+        addressLauncher =
+            this.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    processUserLocation(result)
+                }
             }
-        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -85,7 +88,7 @@ class RunningWriteOneFragment :
                     R.id.holidayTab -> RunningTag.Holiday
                     else -> RunningTag.Before
                 }
-                viewModel.runningDisplayDate.emit(DateSelectData.runningTagDefault(tag))
+//                viewModel.runningDisplayDate.emit(DateSelectData.runningTagDefault(tag))
             }
         }
     }
@@ -133,10 +136,18 @@ class RunningWriteOneFragment :
                     },
                 nextButton.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
-                    .subscribe ({
+                    .subscribe({
                         if (isSelectedTimeExpired()) {
                             context?.let {
                                 ToastUtil.showShortToast(it, "선택된 시간이 올바르지 않아요")
+                            }
+                            return@subscribe
+                        }
+
+                        val addressData = viewModel.runningPlaceInfo.value
+                        if (addressData == null) {
+                            context?.let {
+                                ToastUtil.showShortToast(it, "주소를 선택해주세요")
                             }
                             return@subscribe
                         }
@@ -154,11 +165,11 @@ class RunningWriteOneFragment :
                                         R.id.holidayTab -> RunningTag.Holiday
                                         else -> RunningTag.Before
                                     },
-                                    placeData = viewModel.runningPlaceInfo.value
+                                    placeData = addressData
                                 )
                             )
                         )
-                    },{
+                    }, {
                         it.printStackTrace()
                     }),
             )
@@ -166,33 +177,41 @@ class RunningWriteOneFragment :
     }
 
     private fun isSelectedTimeExpired(): Boolean {
-        val calendar = Calendar.getInstance()
-        val currentDateTime = calendar.time
-
-        val displayedData = viewModel.runningDisplayDate.value
-        val date = displayedData.formatDate
-        val hour: String = displayedData.hour
-        val amPm: String = displayedData.AMAndPM
-
-        val displayedCalendar = Calendar.getInstance().apply {
-            val dateFormat = SimpleDateFormat("M/d (E)", Locale.getDefault())
-            time = dateFormat.parse(date) ?: return false
-
-            if (amPm == "PM" && hour.toInt() != 12) {
-                set(Calendar.HOUR_OF_DAY, hour.toInt() + 12)
-            } else if (amPm == "AM" && hour.toInt() == 12) {
-                set(Calendar.HOUR_OF_DAY, 0)
-            } else {
-                set(Calendar.HOUR_OF_DAY, hour.toInt())
-            }
-
-            set(Calendar.YEAR, calendar.get(Calendar.YEAR))
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+        val currentCalendar = Calendar.getInstance()
+        val currentTotalMinutes: Int = currentCalendar.run {
+            get(Calendar.HOUR_OF_DAY) * 60 + get(Calendar.MINUTE)
         }
 
-        return displayedCalendar.time.before(currentDateTime)
+        val displayedData = viewModel.runningDisplayDate.value
+        val selectedDate = displayedData.formatDate
+        val selectedCalendar = Calendar.getInstance().apply {
+            time = SimpleDateFormat("M/d", Locale.getDefault()).parse(selectedDate) ?: return false
+        }
+
+        if (selectedCalendar.before(currentCalendar.apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            })) {
+            return false
+        }
+
+        val selectedTotalMinutes: Int = with(displayedData) {
+            val selectedAmPm = AMAndPM
+            val selectedHour = hour.toInt().let { hour ->
+                when {
+                    selectedAmPm == "PM" && hour == 12 -> 12
+                    selectedAmPm == "AM" && hour == 12 -> 0
+                    selectedAmPm == "PM" -> hour + 12
+                    else -> hour
+                }
+            }
+            val selectedMinute = minute.toInt()
+            selectedHour * 60 + selectedMinute
+        }
+
+        return currentTotalMinutes < selectedTotalMinutes
     }
 
     companion object {

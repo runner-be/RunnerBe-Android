@@ -20,10 +20,12 @@ class RunningWriteOneViewModel : ViewModel() {
     var runningDate : Date = Calendar.getInstance().time
     val runningDisplayDate : MutableStateFlow<DateSelectData> = MutableStateFlow(DateSelectData.defaultNowDisplayDate())
     val runningDisplayTime : MutableStateFlow<TimeSelectData> = MutableStateFlow(TimeSelectData.getDefaultTimeData())
-    val runningPlaceInfo : MutableStateFlow<PlaceData> = MutableStateFlow(PlaceData.defaultPlaceData)
+    val runningPlaceInfo : MutableStateFlow<PlaceData?> = MutableStateFlow(null)
 
-    val onNext = combine(runningTitle, runningDisplayTime) { title, time ->
-        title.replace("\\s".toRegex(), "").isNotEmpty() && (time.hour.toInt() + time.minute.toInt()) > 0
+    val onNext = combine(runningTitle, runningDisplayTime, runningPlaceInfo) { title, time, address ->
+        title.replace("\\s".toRegex(), "").isNotEmpty()
+                && (time.hour.toInt() + time.minute.toInt()) > 0
+                && address != null
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1000L),
