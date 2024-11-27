@@ -21,9 +21,9 @@ class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampVie
             binding.item = item
             with(binding) {
                 Glide.with(itemView.context)
-                    .load(getStampItemByCode(item.stampCode))
+                    .load(getStampItemByCode(item.stampCode)?.image)
                     .error(R.drawable.ic_user_default)
-                    .into(ivPhoto)
+                    .into(ivStamp)
             }
         }
     }
