@@ -39,7 +39,7 @@ class RunningWriteTwoViewModel @Inject constructor(
             runningDisplayTime = TimeSelectData.getDefaultTimeData(),
             runningTag = RunningTag.All,
             coordinate = LatLng(0.0, 0.0),
-            placeData = PlaceData.defaultPlaceData
+            placeData = null
         )
     )
 
@@ -105,9 +105,9 @@ class RunningWriteTwoViewModel @Inject constructor(
             maxAge = if (isAllAgeChecked.value) 100 else recruitmentEndAge.value,
             latitude = oneData.value.coordinate.latitude,
             longitude = oneData.value.coordinate.longitude,
-            placeName = placedata.placeName,
-            placeAddress = placedata.placeAddress,
-            placeExplain = placedata.placeExplain,
+            placeName = checkNotNull(placedata?.placeName),
+            placeAddress = checkNotNull(placedata?.placeAddress),
+            placeExplain = checkNotNull(placedata?.placeExplain),
             contents = content.value.ifEmpty { null },
             paceGrade = paceList.value.firstOrNull{ it.isSelected }?.pace?.key?:"",
             isAfterParty = when(afterPartyRadioChecked.value) {

@@ -430,3 +430,9 @@ fun ImageView.setLogTeamImage(gatheringId: Int?) {
         false -> setImageResource(R.drawable.ic_team_default)
     }
 }
+
+// 게시글
+@BindingAdapter("bind:postAddressText")
+fun TextView.setPostAddressText(address: String?) {
+    this.text = address ?: "주소 추가 필요"
+}
