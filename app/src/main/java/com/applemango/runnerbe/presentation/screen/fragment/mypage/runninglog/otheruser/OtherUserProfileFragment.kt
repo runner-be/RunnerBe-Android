@@ -54,9 +54,7 @@ class OtherUserProfileFragment :
                 navArgs.targetUserId
             )
             adapter = weeklyCalendarPagerAdapter
-        }
-        if (viewModel.currentWeeklyViewPagerPosition.value == null) {
-            viewModel.updateWeeklyViewPagerPosition(2)
+            setCurrentItem(viewModel.currentWeeklyViewPagerPosition.value, false)
         }
         initDotsIndicator()
     }
@@ -80,9 +78,7 @@ class OtherUserProfileFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
-                    position?.let {
-                        binding.vpWeeklyCalendar.setCurrentItem(position, false)
-                    }
+                    binding.vpWeeklyCalendar.setCurrentItem(position, false)
                 }
             }
         }

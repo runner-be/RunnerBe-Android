@@ -35,7 +35,9 @@ class OtherUserJoinedPostViewModel @Inject constructor(
                 when (response) {
                     is CommonResponse.Success<*> -> {
                         val result = response.body as? OtherUser
-                        _postList.value = result?.userPosting ?: emptyList()
+                        _postList.value = result?.userPosting?.sortedByDescending {
+                            it.gatheringTime
+                        } ?: emptyList()
                         postSize.value = _postList.value.size
                     }
 

@@ -20,8 +20,8 @@ import javax.inject.Inject
 class OtherUserProfileViewModel @Inject constructor(
     private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
 ) : ViewModel() {
-    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
-    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
+    val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
     private val date = LocalDate.now()
     val today: String = "${date.year}년 ${date.monthValue}월"
