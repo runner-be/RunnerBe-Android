@@ -15,10 +15,13 @@ import com.applemango.runnerbe.databinding.FragmentRunningLogDetailBinding
 import com.applemango.runnerbe.presentation.screen.dialog.menu.MenuDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
+import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,7 +48,7 @@ class RunningLogDetailFragment :
         }
         initMemberStampRecyclerView()
         initIsOtherUserLog(this.isOtherUser)
-        initClickListeners()
+        initListeners()
         if (!isOtherUser) {
             initMenuClickListeners()
         }
@@ -62,12 +65,31 @@ class RunningLogDetailFragment :
         }
     }
 
-    private fun initClickListeners() {
-        with(binding) {
-            btnBack.setOnClickListener {
-                goBack()
-            }
-        }
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.btnBack.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    goBack()
+                },
+            binding.constTeam.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    val gatheringId = viewModel.runningLogDetail.value?.runningLog?.gatheringId
+
+                    if (gatheringId == null) {
+                        context?.let {
+                            ToastUtil.showShortToast(it, "같이 뛰면 사용할 수 있어요!")
+                        }
+                    } else {
+                        navigate(
+                            RunningLogDetailFragmentDirections.actionRunningLogDetailFragmentToGroupProfilesFragment(
+                                gatheringId
+                            )
+                        )
+                    }
+                },
+        )
     }
 
     private fun initIsOtherUserLog(isOtherUser: Boolean) {
