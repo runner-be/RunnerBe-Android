@@ -155,8 +155,8 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                 constStamp.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        val prevStampData = viewModel.logStamp.value
-                        val prevStamp = if (prevStampData == StampItem.unavailableStampItem) {
+                        val prevStampData = viewModel.logStamp.value ?: StampItem.unavailableStampItem
+                        val prevStamp = if (prevStampData  == StampItem.unavailableStampItem) {
                             StampItem(
                                 "RUN001",
                                 R.drawable.ic_stamp_1_personal,

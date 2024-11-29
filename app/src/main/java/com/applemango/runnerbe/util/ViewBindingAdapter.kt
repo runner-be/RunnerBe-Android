@@ -304,12 +304,25 @@ fun ImageView.setLogTeamSrc(type: RunningLogType?) {
     }
 }
 
-@BindingAdapter("bind:stampSrc")
-fun ImageView.setStampImageSrc(stampItem: StampItem?) {
+@BindingAdapter("bind:stampSrc", "bind:isTeamLog")
+fun ImageView.setStampImageSrc(stampItem: StampItem?, gatheringId: Int?) {
     if (stampItem == null) {
-        setImageResource(R.drawable.ic_stamp_unavailable)
+        if (gatheringId == null) {
+            setImageResource(R.drawable.ic_stamp_unavailable)
+        } else {
+            setImageResource(R.drawable.ic_stamp_available)
+        }
     } else {
         setImageResource(stampItem.image)
+    }
+}
+
+@BindingAdapter("bind:stampText")
+fun TextView.setStampText(stampItem: StampItem?) {
+    if (stampItem == null) {
+        this.text = context.getString(R.string.running_log_add_stamp)
+    } else {
+        this.text = stampItem.description
     }
 }
 

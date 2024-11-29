@@ -35,8 +35,8 @@ class AddressSearchPagingSource @Inject constructor(
                     AddressResult(
                         document.placeName,
                         document.roadAddressName,
-                        document.x,
-                        document.y,
+                        document.latitude,
+                        document.longitude,
                         currPage
                     )
                 }
