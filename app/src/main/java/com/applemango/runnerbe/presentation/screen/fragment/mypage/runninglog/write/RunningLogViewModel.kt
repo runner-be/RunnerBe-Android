@@ -15,11 +15,13 @@ import com.applemango.runnerbe.domain.usecase.runninglog.PostRunningLogUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.parseKoreanDateToLocalDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -41,7 +43,7 @@ class RunningLogViewModel @Inject constructor(
     val logType = MutableStateFlow(RunningLogType.ALONE)
     val logDiary = MutableStateFlow("")
     val logImage = MutableStateFlow<Uri?>(null)
-    val logStamp = MutableStateFlow(StampItem.unavailableStampItem)
+    val logStamp: MutableStateFlow<StampItem?> = MutableStateFlow(null)
     val logDegree = MutableStateFlow<String?>("-")
     val logWeather = MutableStateFlow(
         WeatherItem(
@@ -82,7 +84,7 @@ class RunningLogViewModel @Inject constructor(
             val degree = logDegree.value?.replace("+", "0")?.toInt()
             RunningLogRequest(
                 parseKoreanDateToLocalDate(logDate.value).toString(),
-                logStamp.value.code,
+                requireNotNull(logStamp.value?.code),
                 gatheringId.value,
                 logDiary.value,
                 degree,
@@ -131,7 +133,9 @@ class RunningLogViewModel @Inject constructor(
             this.gatheringId.value = gId
             viewModelScope.launch(Dispatchers.IO) {
                 val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                getJoinedRunnerListUseCase(userId, gId).collectLatest { response ->
+                getJoinedRunnerListUseCase(userId, gId).catch {
+                    it.printStackTrace()
+                }.collectLatest { response ->
                     when (response) {
                         is CommonResponse.Success<*> -> {
                             val joinedRunnerList = response.body as? JoinedRunnerResponse
@@ -139,7 +143,7 @@ class RunningLogViewModel @Inject constructor(
                         }
 
                         is CommonResponse.Failed -> {
-                            throw Exception(response.message)
+                            LogUtil.errorLog(response.message)
                         }
 
                         else -> {
