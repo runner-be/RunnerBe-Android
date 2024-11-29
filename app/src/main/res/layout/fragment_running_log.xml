@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -41,13 +41,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:textColor="@color/dark_g3_5"
                 android:text="@{vm.logDate}"
-                tools:text="2024년 11월 21일"
+                android:textColor="@color/dark_g3_5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2024년 11월 21일" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -55,8 +55,8 @@
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/const_top"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/const_top">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -67,8 +67,8 @@
                     android:id="@+id/const_stamp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/bg_r_6_no_stroke_g7_clickable"
                     android:clickable="true"
                     android:paddingHorizontal="16dp"
@@ -81,14 +81,15 @@
                         android:id="@+id/iv_stamp"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
+                        android:duplicateParentState="true"
                         android:focusable="false"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="15dp"
-                        bind:stampSrc="@{vm.logStamp}"
-                        android:duplicateParentState="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        bind:stampSrc="@{vm.logStamp}"
+                        bind:isTeamLog="@{vm.gatheringId}" />
 
                     <TextView
                         android:id="@+id/tv_stamp"
@@ -139,8 +140,8 @@
                     android:gravity="center"
                     android:text="0/500"
                     android:textColor="@color/dark_g3_5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_running_diary_title" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_running_diary_title"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/const_diary"
@@ -163,11 +164,11 @@
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
                         android:fontFamily="@font/pretendard_regular"
-                        android:text="@{vm.logDiary}"
                         android:hint="@string/running_log_5_line_diary_hint"
-                        android:textColorHint="@color/dark_g3_5"
-                        android:textColor="@color/dark_g3_5"
                         android:maxLength="500"
+                        android:text="@{vm.logDiary}"
+                        android:textColor="@color/dark_g3_5"
+                        android:textColorHint="@color/dark_g3_5"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -178,21 +179,21 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginTop="32dp"
-                        bind:glideImageFromUri="@{vm.logImage}"
                         android:padding="1dp"
                         android:scaleType="fitXY"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/et_diary"
-                        app:shapeAppearanceOverlay="@style/photo_round_shape_14" />
+                        app:shapeAppearanceOverlay="@style/photo_round_shape_14"
+                        bind:glideImageFromUri="@{vm.logImage}" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/const_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_dark_5_5g_solid_radius_17"
+                        android:clickable="true"
                         android:paddingHorizontal="17dp"
                         android:paddingVertical="8dp"
-                        android:clickable="true"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_photo"
                         app:layout_constraintEnd_toEndOf="parent">
 
@@ -211,9 +212,9 @@
                             style="@style/TextStyleBody14"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
                             android:text="@string/running_log_5_line_diary_add_photo"
                             android:textColor="@color/dark_g2"
+                            android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -243,10 +244,10 @@
                         style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:gravity="center"
                         android:text="@string/running_log_weather_title"
                         android:textColor="@color/dark_g3_5"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -257,10 +258,10 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/pretendard_light"
                         android:gravity="center"
+                        android:text="@{vm.logDegree}"
                         android:textColor="@color/dark_g3_5"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:text="@{vm.logDegree}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_weather_title" />
 
@@ -269,8 +270,8 @@
                         style="@style/TextStyleBody16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
                         android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:text="@string/weather_temperature_unit"
                         android:textColor="@color/dark_g3_5"
@@ -282,10 +283,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:padding="8dp"
-                        android:focusable="true"
-                        android:duplicateParentState="true"
                         android:background="@drawable/bg_g5_circle_shape_no_stroke"
+                        android:duplicateParentState="true"
+                        android:focusable="true"
+                        android:padding="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_degree">
 
@@ -294,8 +295,8 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:duplicateParentState="true"
-                            bind:weatherSrc="@{vm.logWeather}"
-                            android:scaleType="fitXY" />
+                            android:scaleType="fitXY"
+                            bind:weatherSrc="@{vm.logWeather}" />
 
                     </FrameLayout>
 
@@ -322,10 +323,10 @@
                         style="@style/TextStyleHead16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:gravity="center"
                         android:text="@string/running_log_team_title"
                         android:textColor="@color/dark_g3_5"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -336,19 +337,19 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        bind:logTeamSizeText="@{vm.joinedRunnerSize}"
                         android:textColor="@color/dark_g3_5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_team_title" />
+                        app:layout_constraintTop_toBottomOf="@id/tv_team_title"
+                        bind:logTeamSizeText="@{vm.joinedRunnerSize}" />
 
                     <FrameLayout
                         android:id="@+id/fl_team"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:padding="8dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_g5_circle_shape_no_stroke"
+                        android:clickable="true"
+                        android:padding="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_team_detail">
 
@@ -356,8 +357,8 @@
                             android:id="@+id/iv_team"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            bind:logTeamSrc="@{vm.logType}"
-                            android:scaleType="fitXY" />
+                            android:scaleType="fitXY"
+                            bind:logTeamSrc="@{vm.logType}" />
 
                     </FrameLayout>
 
@@ -381,10 +382,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="20dp"
-                    android:textStyle="bold"
                     android:gravity="center"
                     android:text="@string/running_visibility_title"
                     android:textColor="@color/dark_g3_5"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_divider_2" />
 
@@ -397,9 +398,9 @@
                     android:gravity="center"
                     android:text="@string/running_visibility_detail"
                     android:textColor="@color/dark_g3_5"
-                    app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
-                    app:layout_constraintStart_toEndOf="@id/tv_visibility_title" />
+                    app:layout_constraintStart_toEndOf="@id/tv_visibility_title"
+                    app:layout_constraintTop_toTopOf="@+id/tv_visibility_title" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_visibility"
@@ -407,11 +408,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
                     android:thumb="@drawable/ic_switch_thumb"
-                    bind:logVisibility="@{vm.logVisibility}"
-                    app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_visibility_title"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:track="@drawable/ic_switch_track_selector" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_visibility_title"
+                    app:track="@drawable/ic_switch_track_selector"
+                    bind:logVisibility="@{vm.logVisibility}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/btn_save"
@@ -427,7 +428,7 @@
                     android:paddingVertical="14dp"
                     android:text="@string/save"
                     android:textColor="@color/tc_enable_dark3_5g_black"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_visibility_title"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tv_visibility_title" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

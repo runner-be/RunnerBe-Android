@@ -93,7 +93,7 @@
                 android:id="@+id/iv_stamp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                bind:stampSrc="@{stamp}"
+                bind:logStampSrc="@{stamp.code}"
                 android:scaleType="fitXY" />
 
         </FrameLayout>

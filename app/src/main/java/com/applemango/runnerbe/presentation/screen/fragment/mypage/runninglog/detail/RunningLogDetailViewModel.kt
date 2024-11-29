@@ -6,7 +6,6 @@ import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import com.applemango.runnerbe.domain.usecase.runninglog.DeleteRunningLogUseCase
 import com.applemango.runnerbe.domain.usecase.runninglog.GetRunningLogDetailUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,6 @@ class RunningLogDetailViewModel @Inject constructor(
                     when (response) {
                         is CommonResponse.Success<*> -> {
                             val runningLogDetail = response.body as? DetailRunningLogResponse
-                            LogUtil.errorLog("runningLogDetail $runningLogDetail")
                             _runningLogDetail.value = runningLogDetail?.let {
                                 parseRunningLogDetailToPresentation(it)
                             }

@@ -25,8 +25,7 @@ object AddressUtil {
                     }
                 }
             } else {
-                val addressList: List<Address> =
-                geoCoder.getFromLocation(lat, lng, 2) as List<Address>
+                val addressList: List<Address> = geoCoder.getFromLocation(lat, lng, 2) as List<Address>
                 if (addressList.isNotEmpty()) {
                     val currentLocationAddress =
                         "${if (addressList[0].locality == null) addressList[0].subLocality
