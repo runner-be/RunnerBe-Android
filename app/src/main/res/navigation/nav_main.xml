@@ -398,6 +398,9 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_groupProfilesFragment"
+            app:destination="@id/groupProfilesFragment" />
 
     </fragment>
 
