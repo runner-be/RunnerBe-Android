@@ -3,7 +3,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.ItemJoinPostWithBookmarkBinding
-import java.lang.IllegalArgumentException
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class JoinedRunningPostViewHolder(
@@ -34,7 +34,8 @@ class JoinedRunningPostViewHolder(
             }
 
             val firstButtonVisibility = !isRunningEnd
-            val secondButtonVisibility = isRunningEnd && item.isRunningCaptain() && !isThreeHourAfterRunningEnd
+            val secondButtonVisibility =
+                isRunningEnd && !isThreeHourAfterRunningEnd && item.isRunningCaptain()
             val thirdButtonVisibility = isRunningEnd && isThreeHourAfterRunningEnd
 
             runningEndTextViewVisibility = firstButtonVisibility
@@ -49,9 +50,14 @@ class JoinedRunningPostViewHolder(
     ): Boolean {
         val runningTimeParts = runningTime.split(":").map { it.toInt() }
         val runningDurationMinutes = runningTimeParts[0] * 60 + runningTimeParts[1]
+
         val runningEndTime = gatheringTime.plusMinutes(runningDurationMinutes.toLong())
-        val currentTime = ZonedDateTime.now()
-         return currentTime.isAfter(runningEndTime.plusMinutes(180))
+
+        val threeHoursAfterRunningEnd = runningEndTime.plusHours(3)
+        val currentTimeKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+        val currentTimeUTC = formatToUTC(currentTimeKST).plusHours(9)
+
+        return currentTimeUTC.isAfter(threeHoursAfterRunningEnd)
     }
 
     private fun isRunningEnd(
@@ -60,8 +66,19 @@ class JoinedRunningPostViewHolder(
     ): Boolean {
         val runningTimeParts = runningTime.split(":").map { it.toInt() }
         val runningDurationMinutes = runningTimeParts[0] * 60 + runningTimeParts[1]
+
         val runningEndTime = gatheringTime.plusMinutes(runningDurationMinutes.toLong())
-        val currentTime = ZonedDateTime.now()
-        return currentTime.isAfter(runningEndTime)
+
+        val currentTimeKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+        val currentTimeUTC = formatToUTC(currentTimeKST).plusHours(9)
+
+        return currentTimeUTC.isAfter(runningEndTime)
+    }
+
+    private fun formatToUTC(zonedDateTime: ZonedDateTime): ZonedDateTime {
+        return zonedDateTime
+            .withZoneSameInstant(java.time.ZoneOffset.UTC)
+            .withSecond(0)
+            .withNano(0)
     }
 }
