@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.util
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
@@ -448,4 +449,10 @@ fun ImageView.setLogTeamImage(gatheringId: Int?) {
 @BindingAdapter("bind:postAddressText")
 fun TextView.setPostAddressText(address: String?) {
     this.text = address ?: "주소 추가 필요"
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("bind:postPlaceAddressText")
+fun TextView.setPostAddressText(posting: Posting?) {
+    this.text = "${posting?.placeAddress} ${posting?.placeExplain}"
 }
