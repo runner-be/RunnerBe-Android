@@ -24,8 +24,8 @@ if (!versionProps.containsKey('LAST_BUILD_DATE') || versionProps['LAST_BUILD_DAT
     versionProps['BUILD_COUNT'] = "0"
 }
 
-def buildCount = versionProps['BUILD_COUNT'].toInteger() + 1
-versionProps['BUILD_COUNT'] = buildCount.toString()
+def buildCount = String.format('%02d', versionProps['BUILD_COUNT'].toInteger() + 1)
+versionProps['BUILD_COUNT'] = buildCount
 
 def buildVersionCode = "${currentDate}${buildCount}".toInteger()
 

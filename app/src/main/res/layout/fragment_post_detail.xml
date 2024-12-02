@@ -379,7 +379,7 @@
                             android:layout_marginHorizontal="15dp"
                             android:layout_marginTop="2dp"
                             android:maxLength="35"
-                            android:text="@{vm.post.placeExplain}"
+                            bind:postPlaceAddressText="@{vm.post}"
                             android:textColor="@color/dark_g3_5"
                             app:layout_constraintEnd_toStartOf="@id/tv_text_copy"
                             app:layout_constraintStart_toStartOf="parent"
