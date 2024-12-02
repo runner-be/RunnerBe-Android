@@ -18,18 +18,20 @@ object AddressUtil {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 geoCoder.getFromLocation(lat, lng, 2) { addressList ->
                     if (addressList.size > 0) {
-                        val currentLocationAddress =
-                            "${if (addressList[0].locality == null) addressList[0].subLocality
-                            else addressList[0].locality?:""} ${addressList[0].thoroughfare?:""}"
+                        val currentLocationAddress = listOfNotNull(
+                            addressList[0].locality ?: addressList[0].subLocality,
+                            addressList[0].thoroughfare,
+                        ).joinToString(" ")
                         addressResult = currentLocationAddress
                     }
                 }
             } else {
                 val addressList: List<Address> = geoCoder.getFromLocation(lat, lng, 2) as List<Address>
                 if (addressList.isNotEmpty()) {
-                    val currentLocationAddress =
-                        "${if (addressList[0].locality == null) addressList[0].subLocality
-                        else addressList[0].locality?:""} ${addressList[0].thoroughfare?:""}"
+                    val currentLocationAddress = listOfNotNull(
+                        addressList[0].locality ?: addressList[0].subLocality,
+                        addressList[0].thoroughfare,
+                    ).joinToString(" ")
                     addressResult = currentLocationAddress
                 }
             }
