@@ -75,6 +75,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         initParticipatedRunningAdapter()
         initYearMonthSpinner()
         initListeners()
+        initWeeklyViewPagerAdapter()
         setupJoinedRunningPosts()
         setupThisWeekRunningLogs()
         setupWeeklyViewPagerPosition()
@@ -240,8 +241,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     private fun setupThisWeekRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.myPageInfo.collectLatest {
-                    initWeeklyViewPagerAdapter()
+                viewModel.runningLogResult.collectLatest {
+
                 }
             }
         }

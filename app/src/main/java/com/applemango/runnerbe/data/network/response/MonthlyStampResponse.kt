@@ -3,7 +3,6 @@ package com.applemango.runnerbe.data.network.response
 import com.google.gson.annotations.SerializedName
 import java.time.ZonedDateTime
 
-// TODO
 data class MonthlyStampResponse(
     val result: RunningLogResult
 ) : BaseResponse()

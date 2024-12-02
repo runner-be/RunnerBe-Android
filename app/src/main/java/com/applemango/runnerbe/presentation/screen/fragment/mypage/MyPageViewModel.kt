@@ -17,11 +17,13 @@ import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -33,6 +35,9 @@ class MyPageViewModel @Inject constructor(
     private val patchUserImageUseCase: PatchUserImageUseCase,
     private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
 ) : ViewModel() {
+    private val _currentMondayYearMonth: MutableStateFlow<String> = MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
+    val currentMondayYearMonth: StateFlow<String> get() = _currentMondayYearMonth.asStateFlow()
+
     private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
     val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
@@ -52,24 +57,68 @@ class MyPageViewModel @Inject constructor(
     private val _myPageInfo = MutableStateFlow<RunningLogResult?>(null)
     val myPageInfo: StateFlow<RunningLogResult?> get() = _myPageInfo
 
-    fun fetchUserWeeklyRunningLog(
+    private val _runningLogResult = MutableStateFlow<Map<Int, RunningLogResult>>(emptyMap())
+    val runningLogResult: StateFlow<Map<Int, RunningLogResult>> get() = _runningLogResult.asStateFlow()
+
+    /**
+     * >> 총 21개의 데이터가 보여야하므로 <<
+     * 이전 달의 데이터가 필요한 경우 -> 오늘 날짜가 21일 미만이라면
+     * 이번 달의 데이터만 필요한 경우 -> 오늘 날짜가 21일 이상이라면
+     */
+    fun fetchUserRunningLog(
         today: LocalDate,
         userId: Int,
     ) {
-        viewModelScope.launch {
-            val (todayYear, todayMonth) = Pair(today.year, today.monthValue)
-            getMonthlyRunningLogListUseCase(userId, todayYear, todayMonth)
-                .map { response ->
-                    when (response) {
-                        is CommonResponse.Success<*> -> response.body as RunningLogResult
-                        is CommonResponse.Failed -> throw Exception(response.message)
-                        else -> throw Exception("Unexpected response")
+        viewModelScope.launch(Dispatchers.IO
+        ) {
+            val todayDate = today.dayOfMonth
+            val thisYear = today.year
+            val prevMonth = if (today.monthValue == 1) 12 else today.monthValue - 1
+            val thisMonth = today.monthValue
+
+            if (todayDate < 21) {
+                val deferredPrevMonthResult = async {
+                    getMonthlyRunningLogListUseCase(userId, thisYear, prevMonth)
+                }
+                val deferredThisMonthResult = async {
+                    getMonthlyRunningLogListUseCase(userId, thisYear, thisMonth)
+                }
+
+                try {
+                    val prevMonthResult = deferredPrevMonthResult.await().map {
+                        it.processRunningLogResult()
                     }
+                    val thisMonthResult = deferredThisMonthResult.await().map {
+                        it.processRunningLogResult()
+                    }
+                    combine(prevMonthResult, thisMonthResult) { prevMonthData, thisMonthData ->
+                        mapOf(
+                            Pair(prevMonth, prevMonthData),
+                            Pair(thisMonth, thisMonthData)
+                        )
+                    }.collectLatest { runningLogResults ->
+                        _runningLogResult.value = runningLogResults
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-                .flowOn(Dispatchers.IO)
-                .collect { result ->
-                    _myPageInfo.value = result
-                }
+            } else {
+                getMonthlyRunningLogListUseCase(userId, thisYear, thisMonth)
+                    .map { response ->
+                        response.processRunningLogResult()
+                    }
+                    .collectLatest { result ->
+                        _runningLogResult.value = mapOf(Pair(thisMonth, result))
+                    }
+            }
+        }
+    }
+
+    private fun CommonResponse.processRunningLogResult() : RunningLogResult {
+        return when(this) {
+            is CommonResponse.Success<*> -> this.body as RunningLogResult
+            is CommonResponse.Failed -> throw Exception(this.message)
+            else -> throw Exception("unexpected response")
         }
     }
 
@@ -144,6 +193,10 @@ class MyPageViewModel @Inject constructor(
 
     fun updateWeeklyViewPagerPosition(position: Int) {
         _currentWeeklyViewPagerPosition.value = position
+    }
+
+    fun updateCurrentMondayMonth(year: Int, month: Int) {
+        _currentMondayYearMonth.value = "${year}년 ${month}월"
     }
 }
 

@@ -10,7 +10,7 @@ import javax.inject.Inject
 class GetMonthlyRunningLogListUseCase @Inject constructor(
     private val runningLogRepository: RunningLogRepository
 ) {
-    operator fun invoke(userId: Int, year: Int, month: Int): Flow<CommonResponse> = flow {
+    suspend operator fun invoke(userId: Int, year: Int, month: Int): Flow<CommonResponse> = flow {
         kotlin.runCatching {
             runningLogRepository.getMonthlyRunningLogList(userId, year, month)
         }.onSuccess {

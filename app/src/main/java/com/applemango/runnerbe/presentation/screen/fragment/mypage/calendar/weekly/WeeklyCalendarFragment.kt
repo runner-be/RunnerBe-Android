@@ -14,7 +14,6 @@ import com.applemango.runnerbe.data.network.response.RunningLog
 import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.MyPageViewModel
@@ -50,32 +49,91 @@ class WeeklyCalendarFragment() :
         super.onViewCreated(view, savedInstanceState)
         initWeeklyCalendarAdapter()
         setupWeeklyRunningLogs()
-        viewModel.fetchUserWeeklyRunningLog(LocalDate.now(), targetUserId)
+        viewModel.fetchUserRunningLog(LocalDate.now(), targetUserId)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateCurrentMondayMonth()
+    }
+
+    /**
+     * 1) 이번주 월요일이 11월 30일이라면
+     * 2024년 11월이라고 표기되어야 함
+     * 2) 이번주 월요일이 12월 2일이라면
+     * 2024년 12월이라고 표기되어야 함
+     */
+    private fun updateCurrentMondayMonth() {
+        val thisWeekMonday: LocalDate =
+            LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+        val thisWeekMondayYear = thisWeekMonday.year
+        val thisWeekMondayMonth = thisWeekMonday.monthValue
+        viewModel.updateCurrentMondayMonth(thisWeekMondayYear, thisWeekMondayMonth)
     }
 
     private fun setupWeeklyRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.myPageInfo.collectLatest { result ->
-                    if (result == null) return@collectLatest
-
-                    val thisWeekMonday =
+                viewModel.runningLogResult.collectLatest { runningResultMap ->
+                    val thisWeekMonday: LocalDate =
                         LocalDate.now().minusWeeks(POSITION_DEFAULT - position.toLong())
                             .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                    val parsedRunningLogs =
-                        combineGatheringDataToRunningLogs(result.gatheringDays, result.runningLog)
-                    val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
-                    val (groupCount, personalCount) = result.totalCount ?: TotalCount(0, 0)
 
-                    binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
-                        getString(R.string.lets_add_stamp)
-                    } else {
-                        getString(
-                            R.string.calendar_monthly_statistic,
-                            groupCount, personalCount
-                        )
+                    val thisWeekMondayMonth = thisWeekMonday.monthValue
+                    val thisMonth = LocalDate.now().monthValue
+                    when (thisWeekMondayMonth != thisMonth) {
+                        true -> {
+                            /**
+                             * 이번주 월요일이 이전 달인 경우
+                             * ex) 오늘은 2024년 11월 1일 (금요일)이지만,
+                             *     이번주 월요일은 2024년 11월 28일(월요일)인 경우
+                             */
+                            val prevMonthGatheringDataList = runningResultMap[thisWeekMondayMonth]?.gatheringDays ?: emptyList()
+                            val thisMonthGatheringDataList = runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
+
+                            val prevMonthRunningLogList = runningResultMap[thisWeekMondayMonth]?.runningLog ?: emptyList()
+                            val thisMonthRunningLogList = runningResultMap[thisMonth]?.runningLog ?: emptyList()
+
+                            val parsedRunningLogs = combineGatheringDataToRunningLogs(
+                                prevMonthGatheringDataList + thisMonthGatheringDataList,
+                                prevMonthRunningLogList + thisMonthRunningLogList
+                            )
+                            val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
+                            val (groupCount, personalCount) = runningResultMap[thisWeekMondayMonth]?.totalCount ?: TotalCount(0, 0)
+
+                            binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
+                                getString(R.string.lets_add_stamp)
+                            } else {
+                                getString(
+                                    R.string.calendar_monthly_statistic,
+                                    groupCount, personalCount
+                                )
+                            }
+                            weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
+                        }
+
+                        false -> {
+                            val thisMonthGatheringDataList = runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
+                            val thisMonthRunningLogList = runningResultMap[thisMonth]?.runningLog ?: emptyList()
+
+                            val parsedRunningLogs =
+                                combineGatheringDataToRunningLogs(thisMonthGatheringDataList, thisMonthRunningLogList)
+                            val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
+                            val (groupCount, personalCount) = runningResultMap[thisMonth]?.totalCount ?: TotalCount(0, 0)
+
+                            binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
+                                getString(R.string.lets_add_stamp)
+                            } else {
+                                getString(
+                                    R.string.calendar_monthly_statistic,
+                                    groupCount, personalCount
+                                )
+                            }
+                            weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
+                        }
                     }
-                    weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                 }
             }
         }
@@ -86,7 +144,7 @@ class WeeklyCalendarFragment() :
         runningLogList: List<RunningLog>
     ): List<RunningLog> {
         val runningLogsMap = runningLogList.associateBy { it.runnedDate.toLocalDate() }
-        val logsDateSet = runningLogsMap.keys
+        val logsDateSet = runningLogsMap.keys // 이미 러닝로그가 작성된 날짜들
         val gatheredMap = gatheringDataList
             .filter { it.date.toLocalDate() !in logsDateSet }
             .associateBy({ it.date },

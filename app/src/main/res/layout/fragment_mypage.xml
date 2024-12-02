@@ -327,6 +327,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pretendard_regular"
+                    android:text="@{myPageViewModel.currentMondayYearMonth}"
                     android:textColor="@color/dark_g3_5"
                     android:textSize="17sp"
                     android:textStyle="bold"
