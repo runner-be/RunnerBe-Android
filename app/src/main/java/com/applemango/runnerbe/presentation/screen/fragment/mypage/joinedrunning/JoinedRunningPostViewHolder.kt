@@ -33,10 +33,10 @@ class JoinedRunningPostViewHolder(
                 false
             }
 
-            val firstButtonVisibility = !isRunningEnd
             val secondButtonVisibility =
                 isRunningEnd && !isThreeHourAfterRunningEnd && item.isRunningCaptain()
             val thirdButtonVisibility = isRunningEnd && isThreeHourAfterRunningEnd
+            val firstButtonVisibility = !(secondButtonVisibility || thirdButtonVisibility)
 
             runningEndTextViewVisibility = firstButtonVisibility
             attendanceCheckButtonVisibility = secondButtonVisibility
