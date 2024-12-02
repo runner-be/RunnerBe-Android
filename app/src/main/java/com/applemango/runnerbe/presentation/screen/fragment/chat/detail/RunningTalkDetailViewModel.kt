@@ -25,10 +25,12 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -62,16 +64,24 @@ class RunningTalkDetailViewModel @Inject constructor(
     private val successImageList = ArrayList<String>()
     private val maxImageCount = 3
 
-    fun getDetailData(isRefresh: Boolean) {
-        viewModelScope.launch {
-            roomId?.let { roomId ->
-                runningTalkDetailUseCase(roomId).collect {
-                    if (it is CommonResponse.Success<*> && it.body is RunningTalkDetailResponse) {
-                        if (isRefresh) messageList.clear()
-                        roomInfo.emit(it.body.result.roomInfo[0])
-                        messageList.addAll(it.body.result.messages)
-                        talkList.value =
-                            RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
+    fun getDetailData(isRefresh: Boolean): Job = viewModelScope.launch {
+        roomId?.let { roomId ->
+            runningTalkDetailUseCase(roomId).collectLatest {
+                when (it) {
+                    is CommonResponse.Success<*> -> {
+                        if (it.body is RunningTalkDetailResponse) {
+                            if (isRefresh) messageList.clear()
+                            roomInfo.emit(it.body.result.roomInfo[0])
+                            messageList.addAll(it.body.result.messages)
+                            talkList.value =
+                                RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
+                        }
+                    }
+
+                    is CommonResponse.Failed -> {}
+
+                    else -> {
+
                     }
                 }
             }
@@ -82,40 +92,49 @@ class RunningTalkDetailViewModel @Inject constructor(
         failedImageList.clear()
         successImageList.clear()
 
-        roomId?.let {
+        roomId?.let { roomId ->
             _messageReportUiState.emit(UiState.Loading)
 
-            val uploadImageResults =  attachImageUrls.value.mapIndexed { index, url ->
-                async {
-                    uploadImg(it, url, index)
-                }
+            val imageResults = attachImageUrls.value.mapIndexed { index, url ->
+                async { url to (uploadImg(roomId, url, index) != null) }
             }.awaitAll()
+            val textResult = if (content.isNotEmpty()) {
+                messageSendUseCase(roomId, content, null)
+            } else null
 
-            uploadImageResults.forEachIndexed{ index, isSuccess ->
-                val iImage = attachImageUrls.value[index]
-                if (isSuccess)
-                    successImageList.add(iImage)
-                else
-                    failedImageList.add(iImage)
+            handleResults(textResult, imageResults, content)
+        }
+    }
+
+    private suspend fun handleResults(
+        textResult: CommonResponse?,
+        imageResults: List<Pair<String, Boolean>>,
+        content: String
+    ) {
+        imageResults.forEach { (url, isSuccess) ->
+            if (isSuccess)
+                successImageList.add(url)
+            else
+                failedImageList.add(url)
+        }
+        attachImageUrls.value = failedImageList
+
+        when (textResult) {
+            is CommonResponse.Success<*> -> {
+                _messageSendUiState.emit(UiState.Success(textResult.code))
             }
-
-            val isImageSend = attachImageUrls.value.size == successImageList.size
-            attachImageUrls.value = failedImageList
-
-            if (content.isNotEmpty()) {
-                when (val response = messageSendUseCase(it, content, null)) {
-                    is CommonResponse.Success<*> -> {
-                        _messageSendUiState.emit(UiState.Success(response.code))
-                    }
-
-                    is CommonResponse.Failed -> {
-                        message.value = content
-                        _messageSendUiState.emit(UiState.Failed(response.message))
-                    }
-
-                    is CommonResponse.Loading, is CommonResponse.Empty -> {}
+            is CommonResponse.Failed -> {
+                message.value = content
+                _messageSendUiState.emit(UiState.Failed(textResult.message))
+            }
+            null -> {
+                if (successImageList.isNotEmpty()) {
+                    _messageSendUiState.emit(UiState.Success(200))
+                } else {
+                    _messageSendUiState.emit(UiState.Empty)
                 }
-            } else _messageSendUiState.emit(if (isImageSend) UiState.Success(200) else UiState.Empty)
+            }
+            else -> {}
         }
     }
 
@@ -134,7 +153,7 @@ class RunningTalkDetailViewModel @Inject constructor(
     }
 
     // firebase storage 에 이미지 업로드하는 method
-    private suspend fun uploadImg(roomId: Int, uri: String, primaryKey: Int): Boolean {
+    private suspend fun uploadImg(roomId: Int, uri: String, primaryKey: Int): String? {
         return try {
             val name = RunnerBeApplication.mTokenPreference.getUserId()
             val fileName = "$name${Calendar.getInstance().time}${primaryKey}_.png"
@@ -144,43 +163,58 @@ class RunningTalkDetailViewModel @Inject constructor(
                 ?: throw IllegalArgumentException("Cannot open InputStream for URI: $uri")
 
             val uploadTask = reference.putStream(inputStream)
-
-            suspendCoroutine<Boolean> { continuation ->
+            val uploadSuccess = suspendCoroutine<Boolean> { continuation ->
                 uploadTask.addOnSuccessListener {
-                    downloadUri(roomId, reference, uri)
                     continuation.resume(true)
-                }.addOnFailureListener {
-                    it.printStackTrace()
+                }.addOnFailureListener { exception ->
+                    exception.printStackTrace()
                     continuation.resume(false)
                 }
             }
+
+            if (uploadSuccess) {
+                val downloadSuccess = downloadUri(roomId, reference, uri)
+                downloadSuccess
+            } else {
+                null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            false
+            null
         }
     }
 
-    private fun downloadUri(roomId: Int, reference: StorageReference, originUrl: String) {
-//        지정한 경로(reference)에 대한 uri 을 다운로드하는 method
-        reference.downloadUrl.addOnSuccessListener {
-            viewModelScope.launch(Dispatchers.IO) {
-                it?.let { path ->
-                    when (messageSendUseCase(roomId, null, path.toString())) {
-                        is CommonResponse.Success<*> -> {
-                            successImageList.add(path.toString())
-                        }
-
-                        is CommonResponse.Failed -> {
-                            failedImageList.add(path.toString())
-                        }
-
-                        is CommonResponse.Empty, is CommonResponse.Loading -> {}
-                    }
-                } ?: run { failedImageList.add(originUrl) }
+    private suspend fun downloadUri(roomId: Int, reference: StorageReference, originUrl: String): String? {
+        return try {
+            val downloadUrl = suspendCoroutine<String?> { continuation ->
+                reference.downloadUrl.addOnSuccessListener { uri ->
+                    continuation.resume(uri.toString())
+                }.addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                    continuation.resume(null)
+                }
             }
-        }.addOnFailureListener {
-            it.printStackTrace()
+
+            downloadUrl?.let { path ->
+                when (messageSendUseCase(roomId, null, path)) {
+                    is CommonResponse.Success<*> -> {
+                        successImageList.add(path)
+                        path
+                    }
+                    is CommonResponse.Failed -> {
+                        failedImageList.add(path)
+                        null
+                    }
+                    else -> null
+                }
+            } ?: run {
+                failedImageList.add(originUrl)
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
             failedImageList.add(originUrl)
+            null
         }
     }
 
