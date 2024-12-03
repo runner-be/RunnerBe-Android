@@ -258,6 +258,13 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     private fun initListeners() {
         compositeDisposable.addAll(
+            binding.ivNotification.clicks()
+                .subscribe {
+                    navigate(
+                        MainFragmentDirections
+                            .actionMainFragmentToAlarmFragment()
+                    )
+                },
             binding.ivCurrentLocation.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
@@ -418,7 +425,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                     val bottomTabLayoutHeight = binding.bottomDrawerTabLayout.height
                     val mapHeight = binding.mapLayout.height
 
-                    val adjustmentRatio = ((bottomLayoutHeight - bottomTabLayoutHeight).toFloat() / 2) / mapHeight
+                    val adjustmentRatio =
+                        ((bottomLayoutHeight - bottomTabLayoutHeight).toFloat() / 2) / mapHeight
 
                     val screenPosition = mNaverMap.projection.toScreenLocation(currentLatLng)
                     screenPosition.y -= (mapHeight * adjustmentRatio).toInt()
