@@ -238,4 +238,9 @@ object NetworkModule {
     @Singleton
     fun provideGetOtherUserProfile(retrofit: Retrofit): GetOtherUserProfileApi =
         retrofit.create(GetOtherUserProfileApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetNotifications(retrofit: Retrofit): GetAlarmsApi =
+        retrofit.create(GetAlarmsApi::class.java)
 }

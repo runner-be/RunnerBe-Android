@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.domain.repository
 
 import com.applemango.runnerbe.data.network.request.JoinUserRequest
+import com.applemango.runnerbe.data.network.response.GetNotificationsResponse
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.data.network.response.UserDataResponse
 import retrofit2.Response
@@ -16,4 +17,5 @@ interface UserRepository {
     suspend fun patchUserImage(imageUrl : String?) : CommonResponse
     suspend fun bookMarkStatusChange(userId: Int, postId : Int, whetherAdd : String) : CommonResponse
     suspend fun patchUserPaceRegist(userId: Int, pace:String): CommonResponse
+    suspend fun getNotifications(): CommonResponse
 }

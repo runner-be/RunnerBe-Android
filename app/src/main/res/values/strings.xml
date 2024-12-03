@@ -364,4 +364,8 @@
     <!-- 게시글 상세 -->
     <string name="text_copy_success">주소 복사 완료</string>
 
+    <!-- 알림 -->
+    <string name="notification_title">알림</string>
+    <string name="notification_empty">알림이 없습니다</string>
+
 </resources>
