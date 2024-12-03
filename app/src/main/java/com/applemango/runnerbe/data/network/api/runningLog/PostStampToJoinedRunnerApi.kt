@@ -9,10 +9,10 @@ import retrofit2.http.Path
 
 interface PostStampToJoinedRunnerApi {
 
-    @POST("runningLogs/{userId}/partners/{logId}")
+    @POST("runningLogs/{userId}/partners/{gatheringId}")
     suspend fun postStampToJoinedRunner(
         @Path("userId") userId: Int,
-        @Path("logId") logId: Int,
+        @Path("gatheringId") gatheringId: Int,
         @Body stamp: PostStampRequest
     ): Response<BaseResponse>
 }

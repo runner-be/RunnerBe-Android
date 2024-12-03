@@ -9,6 +9,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.chat.RunningTalkAdap
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailListAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailViewPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.preview.RunningTalkDetailImageAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.main.alarm.AlarmAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.RunnerInfoAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.PostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressAdapter
@@ -131,5 +132,11 @@ class AdapterModule {
     @FragmentScoped
     fun provideAttendanceAccessionAdapter(): AttendanceAccessionAdapter {
         return AttendanceAccessionAdapter()
+    }
+
+    @Provides
+    @FragmentScoped
+    fun provideNotificationAdapter(): AlarmAdapter {
+        return AlarmAdapter()
     }
 }

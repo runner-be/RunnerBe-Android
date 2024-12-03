@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="createdTime"
+            type="String" />
+
+        <variable
+            name="item"
+            type="com.applemango.runnerbe.data.network.response.Alarm" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        bind:alarmBackground="@{item.whetherRead}"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="12dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_notification_title"
+            style="@style/TextStyleHead14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/dark_g1"
+            android:text="@{item.title}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="모임 신청 승인" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_notification_content"
+            style="@style/TextStyleBody14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/dark_g2"
+            android:layout_marginTop="2dp"
+            android:text="@{item.content}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notification_title"
+            tools:text="[달리자] 참여가 승인되었어요. 신나게 달릴 준비를 해볼까요?" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_notification_created"
+            style="@style/TextStyleCaption11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/dark_g2"
+            android:text="@{createdTime}"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notification_content"
+            tools:text="2분전" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

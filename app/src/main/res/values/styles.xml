@@ -21,6 +21,13 @@
         <item name="android:fontWeight">600</item>
     </style>
 
+    <style name="TextStyleHead14" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/pretendard_semi_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+
     <style name="TextStyleBody16" parent="TextAppearance.AppCompat">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">16sp</item>

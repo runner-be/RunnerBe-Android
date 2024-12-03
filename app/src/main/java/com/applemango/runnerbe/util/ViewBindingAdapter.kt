@@ -456,3 +456,13 @@ fun TextView.setPostAddressText(address: String?) {
 fun TextView.setPostAddressText(posting: Posting?) {
     this.text = "${posting?.placeAddress} ${posting?.placeExplain}"
 }
+
+// 알림
+@BindingAdapter("bind:alarmBackground")
+fun View.setAlarmBackground(whetherRead: String) {
+    if (whetherRead != "Y") {
+        this.setBackgroundColor(context.getColor(R.color.dark_g7))
+    } else {
+        this.setBackgroundColor(context.getColor(R.color.primary_glow))
+    }
+}

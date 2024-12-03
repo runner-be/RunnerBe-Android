@@ -6,7 +6,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListAp
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.request.PostStampRequest
@@ -21,7 +20,6 @@ class RunningLogRepositoryImpl @Inject constructor(
     private val getMonthlyRunningLogListApi: GetMonthlyRunningLogListApi,
     private val getRunningLogDetailApi: GetRunningLogDetailApi,
     private val patchRunningLogApi: PatchRunningLogApi,
-    private val patchStampToJoinedRunnerApi: PatchStampToJoinedRunnerApi,
     private val postRunningLogApi: PostRunningLogApi,
     private val postStampToJoinedRunnerApi: PostStampToJoinedRunnerApi,
     private val getOtherUserProfileApi: GetOtherUserProfileApi
@@ -145,31 +143,6 @@ class RunningLogRepositoryImpl @Inject constructor(
             if (response.isSuccessful
                 && response.body() != null
                 && response.body()!!.result.isNotEmpty()
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun patchStampToJoinedRunner(
-        userId: Int,
-        logId: Int,
-        stamp: PostStampRequest
-    ): CommonResponse {
-        return try {
-            val response =
-                patchStampToJoinedRunnerApi.patchStampToJoinedRunner(userId, logId, stamp)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
             ) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {

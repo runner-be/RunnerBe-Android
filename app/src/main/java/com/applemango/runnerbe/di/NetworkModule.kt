@@ -10,7 +10,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListAp
 import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
 import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PatchStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
 import com.google.gson.GsonBuilder
@@ -227,11 +226,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePatchStampToJoinedRunner(retrofit: Retrofit): PatchStampToJoinedRunnerApi =
-        retrofit.create(PatchStampToJoinedRunnerApi::class.java)
-
-    @Provides
-    @Singleton
     fun providePostRunningLog(retrofit: Retrofit): PostRunningLogApi =
         retrofit.create(PostRunningLogApi::class.java)
 
@@ -244,4 +238,9 @@ object NetworkModule {
     @Singleton
     fun provideGetOtherUserProfile(retrofit: Retrofit): GetOtherUserProfileApi =
         retrofit.create(GetOtherUserProfileApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGetNotifications(retrofit: Retrofit): GetAlarmsApi =
+        retrofit.create(GetAlarmsApi::class.java)
 }
