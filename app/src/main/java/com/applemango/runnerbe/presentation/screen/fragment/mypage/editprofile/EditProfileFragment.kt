@@ -7,7 +7,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
@@ -17,11 +16,14 @@ import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.state.UiState
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class EditProfileFragment :
-    BaseFragment<FragmentEditProfileBinding>(R.layout.fragment_edit_profile), View.OnClickListener {
+    BaseFragment<FragmentEditProfileBinding>(R.layout.fragment_edit_profile) {
 
     private var currentRadioButton: Int? = null
     private val viewModel: EditProfileViewModel by viewModels()
@@ -34,12 +36,7 @@ class EditProfileFragment :
         binding.buttonClick = jobButtonClick()
         viewModel.userInfo.value = args.userData
         observeBind()
-        binding.nameChangeBtn.setOnClickListener(this)
-        binding.userNameEdit.addTextChangedListener {
-            binding.nameFailTxt.isVisible =
-                (it.toString() == viewModel.userInfo.value?.nickName) &&
-                        viewModel.userInfo.value?.nameChanged != "Y"
-        }
+        initListeners()
     }
 
     private fun observeBind() {
@@ -147,27 +144,34 @@ class EditProfileFragment :
         }
     }
 
-    override fun onClick(v: View?) {
-        when (v) {
-            binding.nameChangeBtn -> {
-                context?.let {
-                    TwoButtonDialog.createShow(
-                        context = it,
-                        title = resources.getString(R.string.question_nickname_change),
-                        firstButtonText = resources.getString(R.string.consider_more),
-                        secondButtonText = resources.getString(R.string.yes),
-                        firstEvent = {},
-                        secondEvent = {
-                            val name = binding.userNameEdit.text.toString()
-                            if (name != viewModel.userInfo.value?.nickName) {
-                                viewModel.nicknameChange(name)
+    private fun initListeners() {
+        compositeDisposable.addAll(
+            binding.etNickname.textChanges()
+                .filter { it.length <= 8 }
+                .subscribe {
+                    binding.nameFailTxt.isVisible =
+                        (it.toString() == viewModel.userInfo.value?.nickName) &&
+                                viewModel.userInfo.value?.nameChanged != "Y"
+                },
+            binding.nameChangeBtn.clicks()
+                .throttleFirst(1000L, TimeUnit.MILLISECONDS)
+                .subscribe {
+                    context?.let {
+                        TwoButtonDialog.createShow(
+                            context = it,
+                            title = resources.getString(R.string.question_nickname_change),
+                            firstButtonText = resources.getString(R.string.consider_more),
+                            secondButtonText = resources.getString(R.string.yes),
+                            firstEvent = {},
+                            secondEvent = {
+                                val name = binding.etNickname.text.toString()
+                                if (name != viewModel.userInfo.value?.nickName) {
+                                    viewModel.nicknameChange(name)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
-
-            }
-        }
+        )
     }
-
 }
