@@ -82,7 +82,7 @@ class RunningTalkDetailFragment :
             binding.ivSend.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    val message = binding.etMessage.text.toString()
+                    val message = binding.tieMessage.text.toString()
                     viewModel.sendMessage(message)
                 }
         )
@@ -179,7 +179,7 @@ class RunningTalkDetailFragment :
                         }
                         when (it) {
                             is UiState.Success -> {
-                                binding.etMessage.setText("")
+                                binding.tieMessage.setText("")
                                 refresh()
                             }
                             else -> { Log.e(this.javaClass.name, "observeBind - when - else - UiState") }

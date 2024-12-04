@@ -142,21 +142,45 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/titleEditText"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_title"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="@={vm.runningTitle}"
-                    android:maxLength="30"
-                    android:hint="@string/hint_running_title"
+                    android:paddingHorizontal="0dp"
+                    android:paddingVertical="0dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    app:counterEnabled="false"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@null"
+                    app:endIconDrawable="@drawable/ic_search_clear"
+                    app:hintEnabled="false"
                     android:background="@drawable/bg_dark_5_5g_radius_6"
-                    android:padding="16dp"
-                    android:textColor="@color/dark_g1"
-                    android:textColorHint="@color/dark_g3_5"
-                    android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/titleTextView"/>
+                    app:layout_constraintStart_toStartOf="@id/titleTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleTextView">
+
+                    <EditText
+                        android:id="@+id/tie_title"
+                        style="@style/TextStyleBody16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:gravity="center_vertical"
+                        android:text="@={vm.runningTitle}"
+                        android:hint="@string/hint_running_title"
+                        android:includeFontPadding="false"
+                        android:maxLength="30"
+                        android:textColor="@color/dark_g1"
+                        android:textColorHint="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        android:inputType="numberSigned"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="16dp"
+                        android:textCursorDrawable="@drawable/cursor_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/dateTextView"
@@ -167,7 +191,7 @@
                     android:layout_marginLeft="16dp"
                     android:text="@string/date"
                     android:textColor="@color/dark_g3"
-                    app:layout_constraintTop_toBottomOf="@id/titleEditText"
+                    app:layout_constraintTop_toBottomOf="@id/til_title"
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
                 <androidx.appcompat.widget.LinearLayoutCompat

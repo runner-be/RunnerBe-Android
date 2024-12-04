@@ -146,7 +146,7 @@ class EditProfileFragment :
 
     private fun initListeners() {
         compositeDisposable.addAll(
-            binding.etNickname.textChanges()
+            binding.tieNickname.textChanges()
                 .filter { it.length <= 8 }
                 .subscribe {
                     binding.nameFailTxt.isVisible =
@@ -164,7 +164,7 @@ class EditProfileFragment :
                             secondButtonText = resources.getString(R.string.yes),
                             firstEvent = {},
                             secondEvent = {
-                                val name = binding.etNickname.text.toString()
+                                val name = binding.tieNickname.text.toString()
                                 if (name != viewModel.userInfo.value?.nickName) {
                                     viewModel.nicknameChange(name)
                                 }

@@ -49,7 +49,7 @@ class WeatherBottomSheetDialog(
         initClickListeners()
         scrollToSelectedStamp(weatherLayoutManager, selectedWeather)
 
-        binding.etTemperature.setText(currentTemperature.replace("+", ""))
+        binding.tieDegree.setText(currentTemperature.replace("+", ""))
     }
 
     override fun onDestroyView() {
@@ -67,9 +67,9 @@ class WeatherBottomSheetDialog(
                             R.drawable.ic_weather_1_sunny,
                             requireContext().getString(R.string.weather_1_sunny)
                         ),
-                        etTemperature.text.toString())
+                        tieDegree.text.toString())
                 } else {
-                    onWeatherConfirmListener?.onConfirmClicked(selectedWeather, etTemperature.text.toString())
+                    onWeatherConfirmListener?.onConfirmClicked(selectedWeather, tieDegree.text.toString())
                 }
 
                 dismiss()
