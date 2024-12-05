@@ -64,23 +64,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rcv_weather" />
 
-        <EditText
-            android:id="@+id/et_temperature"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_degree"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="12dp"
-            android:padding="14dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
             android:fontFamily="@font/pretendard_regular"
-            android:hint="@string/weather_temperature_hint"
-            android:textSize="16sp"
-            android:textColorHint="@color/dark_g3_5"
-            android:inputType="numberSigned"
+            app:counterEnabled="false"
+            app:endIconMode="clear_text"
+            app:endIconTint="@null"
+            app:endIconDrawable="@drawable/ic_search_clear"
+            app:hintEnabled="false"
             android:background="@drawable/bg_dark_5g_radius_8"
             app:layout_constraintTop_toBottomOf="@+id/tv_temperature_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_temperature_unit" />
+            app:layout_constraintEnd_toStartOf="@+id/tv_temperature_unit">
+
+            <EditText
+                android:id="@+id/tie_degree"
+                style="@style/TextStyleBody16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/weather_temperature_hint"
+                android:includeFontPadding="false"
+                android:textSize="16sp"
+                android:textColorHint="@color/dark_g3_5"
+                android:inputType="numberSigned"
+                android:paddingHorizontal="12dp"
+                android:textCursorDrawable="@drawable/cursor_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/tv_temperature_unit"
@@ -92,8 +111,8 @@
             android:text="@string/weather_temperature_unit"
             android:textColor="@color/dark_g2"
             android:textSize="17sp"
-            app:layout_constraintTop_toTopOf="@id/et_temperature"
-            app:layout_constraintBottom_toBottomOf="@id/et_temperature"
+            app:layout_constraintTop_toTopOf="@id/til_degree"
+            app:layout_constraintBottom_toBottomOf="@id/til_degree"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -111,7 +130,7 @@
             android:text="@string/stamp_apply"
             android:textColor="@color/tc_enable_dark3_5g_black"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/et_temperature" />
+            app:layout_constraintTop_toBottomOf="@+id/til_degree" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

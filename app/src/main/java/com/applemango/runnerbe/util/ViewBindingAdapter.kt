@@ -323,7 +323,7 @@ fun TextView.setStampText(stampItem: StampItem?) {
     if (stampItem == null) {
         this.text = context.getString(R.string.running_log_add_stamp)
     } else {
-        this.text = stampItem.description
+        this.text = stampItem.name
     }
 }
 
@@ -394,7 +394,7 @@ fun ImageView.setLogStampSrc(stampCode: String?) {
 fun TextView.setLogStampText(stampCode: String?) {
     if (stampCode == null) return
     val stamp = getStampItemByCode(stampCode)
-    this.text = stamp?.description ?: ""
+    this.text = stamp?.name ?: ""
 }
 
 @BindingAdapter("bind:logContentImageSrc")

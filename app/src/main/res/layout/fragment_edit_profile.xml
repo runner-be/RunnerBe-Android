@@ -75,24 +75,44 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/name_txt">
 
-            <EditText
-                android:id="@+id/user_name_edit"
-                style="@style/TextStyleBody14"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_nickname"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                app:hintEnabled="false"
+                app:counterMaxLength="8"
                 android:background="@drawable/bg_dark_5g_radius_8"
                 android:enabled="@{(vm.userInfo.nameChanged.equals(String.valueOf('N')))}"
                 android:hint="@string/hint_nickname_change"
-                android:padding="16dp"
-                android:text="@={vm.name}"
-                android:textColor="@color/dark_g3_5"
-                android:textColorHint="@color/dark_g3_5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/name_change_btn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tie_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/hint_nickname_change"
+                    android:includeFontPadding="false"
+                    android:inputType="text"
+                    android:text="@={vm.name}"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:textColor="@color/dark_g3_5"
+                    android:textColorHint="@color/dark_g3_5"
+                    android:textCursorDrawable="@drawable/cursor_primary"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:maxLength="8"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="16dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/name_change_btn"
@@ -107,9 +127,9 @@
                 android:paddingHorizontal="16dp"
                 android:text="@{(vm.userInfo.nameChanged.equals(String.valueOf('N'))) ? @string/double_check : @string/finished_enrollment}"
                 android:textColor="@color/dark_g4_5"
-                app:layout_constraintBottom_toBottomOf="@id/user_name_edit"
+                app:layout_constraintBottom_toBottomOf="@id/til_nickname"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/user_name_edit"
+                app:layout_constraintTop_toTopOf="@id/til_nickname"
                 tools:text="중복확인" />
 
             <TextView
@@ -123,7 +143,7 @@
                 android:text="@{(vm.userInfo.nameChanged.equals(String.valueOf('N'))) ? @string/msg_possible_nickname_change : @string/msg_impossible_nickname_change}"
                 android:textColor="@color/logo_yellow"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_name_edit" />
+                app:layout_constraintTop_toBottomOf="@id/til_nickname" />
 
             <TextView
                 android:id="@+id/name_fail_txt"

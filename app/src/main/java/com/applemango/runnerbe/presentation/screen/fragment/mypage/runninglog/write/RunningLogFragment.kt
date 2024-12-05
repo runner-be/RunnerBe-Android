@@ -197,17 +197,17 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                 constDiary.touches()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        etDiary.requestFocus()
+                        tieDiary.requestFocus()
                         val imm =
                             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.showSoftInput(etDiary, InputMethodManager.SHOW_IMPLICIT)
+                        imm.showSoftInput(tieDiary, InputMethodManager.SHOW_IMPLICIT)
                     },
                 constImage.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
                         photoManager.showCameraDialog()
                     },
-                etDiary.textChanges()
+                tieDiary.textChanges()
                     .doOnNext { diary ->
                         if (diary.length == 500) {
                             context?.let {
@@ -221,7 +221,7 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                         tvRunningDiaryCharCount.text =
                             getString(R.string.running_log_diary_length, diary.length)
                         scrollView.post {
-                            scrollView.smoothScrollTo(0, etDiary.bottom)
+                            scrollView.smoothScrollTo(0, tieDiary.bottom)
                         }
                     },
                 constTeam.clicks()
@@ -250,7 +250,7 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                 btnSave.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                     .subscribe {
-                        if (binding.etDiary.text.length >= 500) {
+                        if (binding.tieDiary.text.length >= 500) {
                             MessageDialog.createShow(
                                 context = requireContext(),
                                 message = getString(R.string.running_log_diary_max_length_alert),

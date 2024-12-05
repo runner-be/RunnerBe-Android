@@ -153,26 +153,45 @@
                     android:clickable="true"
                     android:minHeight="120dp"
                     android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp"
+                    android:paddingBottom="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_running_diary_title">
 
-                    <EditText
-                        android:id="@+id/et_diary"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_diary"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:fontFamily="@font/pretendard_regular"
-                        android:hint="@string/running_log_5_line_diary_hint"
-                        android:maxLength="500"
-                        android:text="@{vm.logDiary}"
-                        android:textColor="@color/dark_g3_5"
-                        android:textColorHint="@color/dark_g3_5"
-                        android:textSize="16sp"
+                        android:layout_marginStart="4dp"
+                        android:paddingHorizontal="0dp"
+                        android:paddingVertical="0dp"
+                        app:counterEnabled="false"
+                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/tie_diary"
+                            style="@style/TextStyleBody16"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/transparent"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/pretendard_regular"
+                            android:hint="@string/running_log_5_line_diary_hint"
+                            android:includeFontPadding="false"
+                            android:textColor="@color/dark_g3_5"
+                            android:textCursorDrawable="@drawable/cursor_primary"
+                            android:textSize="16sp"
+                            android:inputType="text"
+                            android:maxLength="500"
+                            android:text="@{vm.logDiary}"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            android:textColorHint="@color/dark_g3_5" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_photo"
@@ -182,7 +201,7 @@
                         android:padding="1dp"
                         android:scaleType="fitXY"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/et_diary"
+                        app:layout_constraintTop_toBottomOf="@+id/til_diary"
                         app:shapeAppearanceOverlay="@style/photo_round_shape_14"
                         bind:glideImageFromUri="@{vm.logImage}" />
 
