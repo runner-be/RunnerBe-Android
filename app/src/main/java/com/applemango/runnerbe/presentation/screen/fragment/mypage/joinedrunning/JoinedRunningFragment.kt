@@ -85,17 +85,25 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                 setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object: JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
-                        try {
+                        val userId = post.userId
+                        val logId = post.logId
+
+                        if (userId != null && logId != null) {
+                            navigate(
+                                JoinedRunningFragmentDirections.actionJoinedRunningFragmentToRunningLogDetailFragment(
+                                    userId,
+                                    logId,
+                                    0
+                                )
+                            )
+                        } else {
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToRunningLogFragment(
                                     post.gatheringTime?.toLocalDate().toString(),
                                     null,
-                                    null
+                                    post.gatheringId.toString()
                                 )
                             )
-                        } catch (e: IllegalArgumentException) {
-                            e.printStackTrace()
-                            ToastUtil.showShortToast(context, "러닝 로그가 존재하지 않습니다.")
                         }
                     }
 

@@ -42,6 +42,8 @@ data class Posting(
     @SerializedName("peopleNum") val peopleNum: Int,
     @SerializedName("contents") val contents: String?,
     @SerializedName("userId") val userId: Int?,
+    @SerializedName("logId") val logId: Int?,
+    @SerializedName("gatheringId") val gatheringId: Int?,
     // 0이면 찜X, 1이면 찜O
     @SerializedName("bookMark") var bookMark: Int?,
     @SerializedName("attendance") val attendance: Int?,
