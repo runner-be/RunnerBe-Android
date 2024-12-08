@@ -25,6 +25,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDir
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
@@ -269,7 +270,26 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object : JoinedRunningClickListener {
                     override fun logWriteClick(post: Posting) {
-                        // TODO logId를 어떻게 가져올 것인가?
+                        val userId = post.userId
+                        val logId = post.logId
+
+                        if (userId != null && logId != null) {
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
+                                    userId,
+                                    logId,
+                                    0
+                                )
+                            )
+                        } else {
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToRunningLogFragment(
+                                    post.gatheringTime?.toLocalDate().toString(),
+                                    null,
+                                    post.gatheringId.toString()
+                                )
+                            )
+                        }
                     }
 
                     override fun attendanceSeeClick(post: Posting) {

@@ -176,7 +176,6 @@
                         android:textColor="@color/dark_g1"
                         android:textColorHint="@color/dark_g3_5"
                         android:textSize="14sp"
-                        android:inputType="numberSigned"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="16dp"
                         android:textCursorDrawable="@drawable/cursor_primary" />
