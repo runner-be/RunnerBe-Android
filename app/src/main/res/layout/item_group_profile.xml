@@ -29,7 +29,7 @@
         android:onClick="@{clickListener}"
         android:background="@color/dark_g7"
         android:paddingHorizontal="22dp"
-        android:paddingVertical="12dp">
+        android:paddingVertical="8dp">
 
         <FrameLayout
             android:id="@+id/fl_profile"

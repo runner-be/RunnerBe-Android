@@ -466,3 +466,12 @@ fun View.setAlarmBackground(whetherRead: String) {
         this.setBackgroundColor(context.getColor(R.color.primary_glow))
     }
 }
+
+// 참여한 러닝
+@BindingAdapter("bind:logWriteOrSeeText")
+fun TextView.setLogWriteOrSeeText(posting: Posting) {
+    val logId = posting.logId
+    this.text =if (logId == null) {
+         "로그 쓰기"
+    } else "로그 보기"
+}
