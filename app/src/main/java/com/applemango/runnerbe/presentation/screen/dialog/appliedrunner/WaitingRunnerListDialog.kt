@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.UserInfo
@@ -18,6 +19,7 @@ import com.applemango.runnerbe.presentation.model.listener.PostDialogListener
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
+import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailViewModel
 import com.applemango.runnerbe.presentation.state.UiState
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -102,12 +104,12 @@ class WaitingRunnerListDialog(
             adapter = waitingRunnerInfoAdapter.apply {
                 setProfileClickListener(object : WaitingRunnerClickListener {
                     override fun onProfileClicked(userInfo: UserInfo) {
-//                        findNavController().navigate(
-//                            WaitingRunnerListDialogDirections
-//                                .actionWaitingRunnerListDialogToOtherUserProfileFragment(
-//                                    userInfo.userId
-//                                )
-//                        )
+                        requireParentFragment().findNavController().navigate(
+                            PostDetailFragmentDirections
+                                .actionPostDetailFragmentToOtherUserProfileFragment(
+                                    userInfo.userId
+                                )
+                        )
                     }
 
                     override fun onRefuseClicked(userInfo: UserInfo) {
