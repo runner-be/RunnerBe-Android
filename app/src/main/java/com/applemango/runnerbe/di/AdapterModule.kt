@@ -20,6 +20,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.At
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.GotStampAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile.ProfileAdapter
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.creator.CreatorAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -139,4 +140,8 @@ class AdapterModule {
     fun provideNotificationAdapter(): AlarmAdapter {
         return AlarmAdapter()
     }
+
+    @Provides
+    @FragmentScoped
+    fun provideCreatorAdapter(): CreatorAdapter = CreatorAdapter()
 }

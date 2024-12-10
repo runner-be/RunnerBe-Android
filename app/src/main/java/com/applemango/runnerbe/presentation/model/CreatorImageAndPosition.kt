@@ -33,11 +33,11 @@ enum class CreatorImageAndPosition {
 
     val imageResource get() = when(this) {
         EUNSEO -> R.drawable.ic_eunseo
-        SEUNGWAN -> R.drawable.ic_wan
+        SEUNGWAN -> R.drawable.ic_wanni
         JEONG -> R.drawable.ic_jeong
         JUHEE -> R.drawable.ic_juhee
         NIAKA -> R.drawable.ic_niaka
-        LOKI -> R.drawable.ic_team_lock
+        LOKI -> R.drawable.ic_loki
         JOY -> R.drawable.ic_joy
         CHANGGYU -> R.drawable.ic_gogochang
     }

@@ -48,12 +48,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/creatorRecyclerView"
-            android:layout_width="0dp"
+            android:id="@+id/rcv_creator"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            creatorAdapter="@{viewModel.creatorList}"
-            android:layout_marginVertical="31dp"
-            android:paddingHorizontal="72dp"
+            android:layout_marginVertical="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/creatorTop"
