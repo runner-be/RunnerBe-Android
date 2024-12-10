@@ -3,12 +3,13 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.crea
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.presentation.model.CreatorImageAndPosition
 
-class CreatorAdapter(private val dataList: List<CreatorImageAndPosition>) :
-    RecyclerView.Adapter<CreatorViewHolder>() {
+class CreatorAdapter : ListAdapter<CreatorImageAndPosition, CreatorViewHolder>(creatorDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreatorViewHolder {
         return CreatorViewHolder(
             DataBindingUtil.inflate(
@@ -21,8 +22,19 @@ class CreatorAdapter(private val dataList: List<CreatorImageAndPosition>) :
     }
 
     override fun onBindViewHolder(holder: CreatorViewHolder, position: Int) {
-        holder.bind(dataList[position])
+        val item = getItem(position)
+        holder.bind(item)
     }
 
-    override fun getItemCount(): Int = dataList.size
+    companion object {
+        private val creatorDiffUtil = object: DiffUtil.ItemCallback<CreatorImageAndPosition>() {
+            override fun areItemsTheSame(oldItem: CreatorImageAndPosition, newItem: CreatorImageAndPosition): Boolean {
+                return oldItem.creatorName == newItem.creatorName
+            }
+
+            override fun areContentsTheSame(oldItem: CreatorImageAndPosition, newItem: CreatorImageAndPosition): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }

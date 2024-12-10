@@ -4,45 +4,41 @@ import com.applemango.runnerbe.R
 
 enum class CreatorImageAndPosition {
     EUNSEO,
+    SEUNGWAN,
     JEONG,
-    DURU,
+    JUHEE,
     NIAKA,
-    JUDY,
-    SHEAVE,
+    LOKI,
     JOY,
-    CHANHO,
-    LOKI;
-
+    CHANGGYU;
 
     val creatorName get() = when(this) {
         EUNSEO -> R.string.eunseo
+        SEUNGWAN -> R.string.seungwan
         JEONG -> R.string.jeong
-        DURU -> R.string.duru
+        JUHEE -> R.string.juhee
         NIAKA -> R.string.niaka
-        JUDY -> R.string.judy
-        SHEAVE -> R.string.sheave
+        LOKI -> R.string.loki
         JOY -> R.string.joy
-        CHANHO -> R.string.chanho
-        LOKI -> R.string.rocky
+        CHANGGYU -> R.string.changgyu
     }
 
     val position get() = when(this) {
-        EUNSEO -> "Plan"
-        JEONG -> "Design"
-        DURU, NIAKA, JUDY, LOKI -> "AOS"
-        SHEAVE, JOY -> "iOS"
-        CHANHO -> "Server"
+        EUNSEO -> R.string.position_plan
+        SEUNGWAN -> R.string.position_server
+        JEONG, JUHEE -> R.string.position_design
+        NIAKA, LOKI -> R.string.position_android
+        JOY, CHANGGYU -> R.string.position_apple
     }
 
     val imageResource get() = when(this) {
         EUNSEO -> R.drawable.ic_eunseo
+        SEUNGWAN -> R.drawable.ic_wanni
         JEONG -> R.drawable.ic_jeong
-        DURU -> R.drawable.ic_duru
+        JUHEE -> R.drawable.ic_juhee
         NIAKA -> R.drawable.ic_niaka
-        JUDY -> R.drawable.ic_judy
-        SHEAVE -> R.drawable.ic_sheave
+        LOKI -> R.drawable.ic_loki
         JOY -> R.drawable.ic_joy
-        CHANHO -> R.drawable.ic_chanho
-        LOKI -> R.drawable.ic_team_lock
+        CHANGGYU -> R.drawable.ic_gogochang
     }
 }
