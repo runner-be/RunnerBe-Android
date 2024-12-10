@@ -22,7 +22,7 @@ class RunningTalkViewModel @Inject constructor(
         viewModelScope.launch {
             runningTalkUseCase().collect {
                 if(it is CommonResponse.Success<*> && it.body is RunningTalksResponse) {
-                    roomList.value = it.body.result
+                    roomList.value = it.body.result.sortedByDescending { room -> room.roomId }
                 }
             }
         }
