@@ -237,15 +237,20 @@
     <string name="error_re_start">다시 시도해주세요.</string>
 
     <!--  만든 사람들  -->
+    <string name="position_plan">Plan</string>
+    <string name="position_server">Server</string>
+    <string name="position_design">Design</string>
+    <string name="position_android">AOS</string>
+    <string name="position_apple">IOS</string>
+
     <string name="eunseo">은서</string>
+    <string name="seungwan">승완</string>
     <string name="jeong">정</string>
-    <string name="duru">두루</string>
+    <string name="juhee">쥬쥬</string>
     <string name="niaka">나이아카</string>
-    <string name="judy">주디</string>
-    <string name="sheave">시브</string>
+    <string name="loki">로키</string>
     <string name="joy">조이</string>
-    <string name="chanho">찬호</string>
-    <string name="rocky">로키</string>
+    <string name="changgyu">창규</string>
 
     <!-- 포스트 -->
     <string name="before_running_management_button_text">모임 후 출석/로그를 관리할 수 있어요</string>
