@@ -28,6 +28,7 @@ class PaceInfoRegistFragment :
     BaseFragment<FragmentRegistPaceInfoBinding>(R.layout.fragment_regist_pace_info) {
 
     private val viewModel: PaceInfoViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
