@@ -64,7 +64,8 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
 
             binding.item = item
             binding.stamp = getStampItemByCode(item.stampCode)
-            binding.clickListener = listener
+            binding.listener = listener
+            binding.clickListener = otherUserProfileClickListener
         }
     }
 

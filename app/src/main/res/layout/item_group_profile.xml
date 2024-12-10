@@ -16,8 +16,12 @@
             type="com.applemango.runnerbe.data.network.response.JoinedRunnerResult" />
 
         <variable
-            name="clickListener"
+            name="listener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="clickListener"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener" />
 
     </data>
 
@@ -26,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:onClick="@{clickListener}"
+        android:onClick="@{listener}"
         android:background="@color/dark_g7"
         android:paddingHorizontal="22dp"
         android:paddingVertical="8dp">
@@ -54,12 +58,12 @@
             android:id="@+id/tv_profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:text="@{item.nickname}"
             android:textColor="@color/dark_g1"
             android:textSize="17sp"
             android:ellipsize="end"
-            android:maxLength="10"
+            android:maxLength="8"
             android:maxLines="1"
             app:layout_constraintStart_toEndOf="@id/fl_profile"
             app:layout_constraintTop_toTopOf="parent"
@@ -81,11 +85,12 @@
             android:id="@+id/fl_stamp"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
             android:padding="6dp"
             android:visibility="@{item.stampCode == null ? View.GONE : View.VISIBLE}"
             android:duplicateParentState="true"
             android:background="@drawable/bg_g5_circle_shape_no_stroke"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_log_check"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -97,6 +102,26 @@
                 android:scaleType="fitXY" />
 
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_log_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:textColor="@color/dark_g1"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLength="10"
+            tools:text="로그 보기"
+            android:maxLines="1"
+            bind:groupLogSeeCtrl="@{item}"
+            android:onClick="@{() -> clickListener.onProfileLogClicked(item.userId, item.logId)}"
+            android:background="@drawable/bg_dark_5_5g_solid_radius_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

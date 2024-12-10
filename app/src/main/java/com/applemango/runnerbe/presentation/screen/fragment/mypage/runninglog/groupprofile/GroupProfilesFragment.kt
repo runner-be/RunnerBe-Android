@@ -102,6 +102,19 @@ class GroupProfilesFragment :
                             viewModel.postStampToJoinedRunner(userId, navArgs.gatheringId, stampItem.code)
                         }
                     }
+
+                    override fun onProfileLogClicked(userId: Int, logId: String?) {
+                        try {
+                            val parsedLogId = requireNotNull(logId).toInt()
+                            navigate(
+                                GroupProfilesFragmentDirections.actionGroupProfilesFragmentToRunningLogDetailFragment(
+                                    userId, parsedLogId, 1
+                                )
+                            )
+                        } catch (e: IllegalArgumentException) {
+                            e.printStackTrace()
+                        }
+                    }
                 })
             }
             layoutManager = linearLayoutManager

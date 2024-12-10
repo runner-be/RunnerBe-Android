@@ -37,7 +37,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/select_btn">
@@ -45,6 +46,7 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/pace_img"
                     bind:imageResource="@{data.paceImageResource}"
+                    tools:src="@drawable/ic_beginner_pace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -53,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginLeft="4dp"
-                    tools:text="입문 러너"
+                    tools:text="700 ~ 900"
                     android:text="@{data.paceName}"
                     android:textSize="15sp"
                     android:fontFamily="@font/pretendard_semi_bold"/>
