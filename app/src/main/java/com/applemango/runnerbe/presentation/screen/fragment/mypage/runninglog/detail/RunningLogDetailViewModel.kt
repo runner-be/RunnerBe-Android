@@ -2,17 +2,23 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.d
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
+import com.applemango.runnerbe.data.network.response.JoinedRunnerResponse
 import com.applemango.runnerbe.domain.usecase.runninglog.DeleteRunningLogUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnerListUseCase
 import com.applemango.runnerbe.domain.usecase.runninglog.GetRunningLogDetailUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,13 +26,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RunningLogDetailViewModel @Inject constructor(
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase,
-    private val deleteRunningLogUseCase: DeleteRunningLogUseCase
+    private val deleteRunningLogUseCase: DeleteRunningLogUseCase,
 ) : ViewModel() {
     private val _deleteRunningLogResultFlow = MutableSharedFlow<CommonResponse>()
     val deleteRunningLogResultFlow: SharedFlow<CommonResponse> = _deleteRunningLogResultFlow.asSharedFlow()
 
     private val _runningLogDetail = MutableStateFlow<RunningLogDetail?>(null)
-    val runningLogDetail: StateFlow<RunningLogDetail?> get() = _runningLogDetail.asStateFlow()
+    val runningLogDetail: StateFlow<RunningLogDetail?> get() = _runningLogDetail
 
     fun getLogDetail(
         userId: Int, logId: Int

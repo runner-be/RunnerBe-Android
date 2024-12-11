@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.model.RunnerDiligence
@@ -474,4 +475,27 @@ fun TextView.setLogWriteOrSeeText(posting: Posting) {
     this.text =if (logId == null) {
          "로그 쓰기"
     } else "로그 보기"
+}
+
+// 함께한 러너
+@BindingAdapter("bind:groupLogSeeCtrl")
+fun TextView.setGroupLogSee(joinedRunnerResult: JoinedRunnerResult) {
+    if (joinedRunnerResult.logId != null) {
+        this.visibility = View.VISIBLE
+        if (joinedRunnerResult.isOpened == 1) {
+            with(this) {
+                setBackgroundResource(R.drawable.bg_dark_5_5g_solid_radius_8)
+                isEnabled = true
+                text = "로그 보기"
+            }
+        } else {
+            with(this) {
+                setBackgroundResource(R.drawable.bg_dark_6g_solid_radius_8)
+                isEnabled = false
+                text = "비공개"
+            }
+        }
+    } else {
+        this.visibility = View.GONE
+    }
 }

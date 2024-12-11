@@ -259,7 +259,8 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             return@subscribe
                         }
 
-                        if (viewModel.logStamp.value == StampItem.unavailableStampItem) {
+                        if (viewModel.logStamp.value == StampItem.unavailableStampItem
+                            || viewModel.logStamp.value == null) {
                             context?.let {
                                 ToastUtil.showShortToast(it, getString(R.string.toast_stamp_missing))
                             }
