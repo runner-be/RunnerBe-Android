@@ -157,14 +157,16 @@ class SinglePhotoManager @Inject constructor(
     private fun processSelectedPhoto(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
             if (selectedPhoto != Uri.EMPTY) {
-                startCropActivity(selectedPhoto)
+                imageCropListener.onImageCropped(selectedPhoto)
+//                startCropActivity(selectedPhoto)
             } else {
                 // 앨범에서 선택한 경우
                 result.data?.let { photo ->
                     val uri = photo.data
                     if (uri != null) {
                         selectedPhoto = uri
-                        startCropActivity(selectedPhoto)
+                        imageCropListener.onImageCropped(selectedPhoto)
+//                        startCropActivity(selectedPhoto)
                     }
                 }
             }
