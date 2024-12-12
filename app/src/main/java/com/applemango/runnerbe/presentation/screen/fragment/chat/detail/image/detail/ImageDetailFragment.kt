@@ -60,6 +60,7 @@ class ImageDetailFragment: BaseFragment<FragmentImageDetailBinding>(R.layout.fra
         with(binding) {
             topTxt.text = navArgs.title
             val imageList = navArgs.images.map { Uri.parse(it) }
+            tvCurrentPage.text = navArgs.pageNumber.toString()
             viewModel.updateImageList(imageList)
         }
     }

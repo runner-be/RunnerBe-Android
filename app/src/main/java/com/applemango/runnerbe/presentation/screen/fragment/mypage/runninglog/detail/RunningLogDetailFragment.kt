@@ -89,6 +89,20 @@ class RunningLogDetailFragment :
                         )
                     }
                 },
+            binding.ivPhoto.clicks()
+                .subscribe {
+                    val imageUrl = viewModel.runningLogDetail.value?.runningLog?.imageUrl
+
+                    if (imageUrl != null) {
+                        navigate(
+                            RunningLogDetailFragmentDirections.actionRunningLogDetailFragmentToImageDetailFragment(
+                                "",
+                                arrayOf(imageUrl),
+                                1
+                            )
+                        )
+                    }
+                }
         )
     }
 
