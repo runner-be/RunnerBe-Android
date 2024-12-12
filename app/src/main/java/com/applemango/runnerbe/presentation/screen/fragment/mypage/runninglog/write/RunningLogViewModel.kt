@@ -17,6 +17,8 @@ import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.parseKoreanDateToLocalDate
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +30,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import com.google.firebase.storage.StorageReference as StorageReference
 
 @HiltViewModel
 class RunningLogViewModel @Inject constructor(
@@ -80,6 +86,12 @@ class RunningLogViewModel @Inject constructor(
     suspend fun postRunningLog(
         userId: Int,
     ): Pair<Boolean, String?> {
+        val imageUrl = if (logImage.value != null) {
+            uploadImg(logImage.value.toString())
+        } else {
+            null
+        }
+
         val runningLog = try {
             val degree = logDegree.value?.replace("+", "0")?.toInt()
             RunningLogRequest(
@@ -87,6 +99,7 @@ class RunningLogViewModel @Inject constructor(
                 requireNotNull(logStamp.value?.code),
                 gatheringId.value,
                 logDiary.value,
+                imageUrl,
                 degree,
                 logWeather.value.code,
                 if (logVisibility.value) 1 else 0
@@ -122,6 +135,53 @@ class RunningLogViewModel @Inject constructor(
         }
 
         return Pair(success, null)
+    }
+
+    private suspend fun uploadImg(uri: String): String? {
+        return try {
+            val name = RunnerBeApplication.mTokenPreference.getUserId()
+            val fileName = "${name}_running_log_${Calendar.getInstance().time}png"
+            val reference: StorageReference = Firebase.storage.reference.child("item").child(fileName)
+
+            val inputStream = RunnerBeApplication.instance.contentResolver.openInputStream(Uri.parse(uri))
+                ?: throw IllegalArgumentException("Cannot open InputStream for URI: $uri")
+
+            val uploadTask = reference.putStream(inputStream)
+            val uploadSuccess = suspendCoroutine<Boolean> { continuation ->
+                uploadTask.addOnSuccessListener {
+                    continuation.resume(true)
+                }.addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                    continuation.resume(false)
+                }
+            }
+
+            if (uploadSuccess) {
+                val downloadSuccess = downloadUri(reference)
+                downloadSuccess
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private suspend fun downloadUri(reference: StorageReference): String? {
+        return try {
+            suspendCoroutine { continuation ->
+                reference.downloadUrl.addOnSuccessListener { uri ->
+                    continuation.resume(uri.toString())
+                }.addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                    continuation.resume(null)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     fun updateLogId(logId: Int?) {
