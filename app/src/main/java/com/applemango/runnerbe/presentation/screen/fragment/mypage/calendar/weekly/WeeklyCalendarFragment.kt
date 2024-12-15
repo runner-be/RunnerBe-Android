@@ -34,6 +34,8 @@ class WeeklyCalendarFragment() :
     @Inject
     lateinit var weeklyCalendarAdapter: WeeklyCalendarAdapter
 
+    private var positionChangeListener: VpPositionChangeListener? = null
+
     private val viewModel: MyPageViewModel by activityViewModels()
     private val position: Int by lazy {
         arguments?.getInt(ARG_POSITION) ?: POSITION_DEFAULT
@@ -44,6 +46,7 @@ class WeeklyCalendarFragment() :
     private val targetUserId: Int by lazy {
         arguments?.getInt(ARG_USER_ID) ?: -1
     }
+    private var counts: Pair<Int,Int> = Pair(0,0)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +57,7 @@ class WeeklyCalendarFragment() :
 
     override fun onResume() {
         super.onResume()
+        positionChangeListener?.onPositionChanged(counts.first, counts.second)
         updateCurrentMondayMonth()
     }
 
@@ -103,14 +107,8 @@ class WeeklyCalendarFragment() :
                             val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                             val (groupCount, personalCount) = runningResultMap[thisWeekMondayMonth]?.totalCount ?: TotalCount(0, 0)
 
-                            binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
-                                getString(R.string.lets_add_stamp)
-                            } else {
-                                getString(
-                                    R.string.calendar_monthly_statistic,
-                                    groupCount, personalCount
-                                )
-                            }
+                            counts = Pair(groupCount, personalCount)
+                            positionChangeListener?.onPositionChanged(counts.first, counts.second)
                             weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                         }
 
@@ -123,14 +121,8 @@ class WeeklyCalendarFragment() :
                             val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                             val (groupCount, personalCount) = runningResultMap[thisMonth]?.totalCount ?: TotalCount(0, 0)
 
-                            binding.tvStampWeekly.text = if (personalCount == 0 && groupCount == 0) {
-                                getString(R.string.lets_add_stamp)
-                            } else {
-                                getString(
-                                    R.string.calendar_monthly_statistic,
-                                    groupCount, personalCount
-                                )
-                            }
+                            counts = Pair(groupCount, personalCount)
+                            positionChangeListener?.onPositionChanged(counts.first, counts.second)
                             weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
                         }
                     }
@@ -198,7 +190,7 @@ class WeeklyCalendarFragment() :
                     }
                 }
 
-                viewModel.updateWeeklyViewPagerPosition(position)
+//                viewModel.updateWeeklyViewPagerPosition(position)
                 val runningLog = item.runningLog
 
                 if (runningLog?.logId != null) {
@@ -238,7 +230,8 @@ class WeeklyCalendarFragment() :
             date: LocalDate,
             position: Int,
             isOtherUser: Boolean,
-            userId: Int
+            userId: Int,
+            positionChangeListener: VpPositionChangeListener
         ): WeeklyCalendarFragment {
             val fragment = WeeklyCalendarFragment()
             val args = Bundle()
@@ -247,6 +240,7 @@ class WeeklyCalendarFragment() :
             args.putBoolean(ARG_IS_OTHER_USER, isOtherUser)
             args.putInt(ARG_USER_ID, userId)
             fragment.arguments = args
+            fragment.positionChangeListener = positionChangeListener
             return fragment
         }
     }

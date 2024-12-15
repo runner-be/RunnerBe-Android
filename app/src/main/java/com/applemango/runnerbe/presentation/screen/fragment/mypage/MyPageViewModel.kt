@@ -18,12 +18,14 @@ import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -38,8 +40,13 @@ class MyPageViewModel @Inject constructor(
     private val _currentMondayYearMonth: MutableStateFlow<String> = MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
     val currentMondayYearMonth: StateFlow<String> get() = _currentMondayYearMonth.asStateFlow()
 
-    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
-    val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+    private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
+
+    private val _viewpagerRunningCount: MutableStateFlow<Pair<Int, Int>> = MutableStateFlow(
+        Pair(0,0)
+    )
+    val viewpagerRunningCount: StateFlow<Pair<Int, Int>> get() = _viewpagerRunningCount
 
     val userInfo: MutableStateFlow<UserInfo?> = MutableStateFlow(null)
     val diligence: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -193,6 +200,10 @@ class MyPageViewModel @Inject constructor(
 
     fun updateWeeklyViewPagerPosition(position: Int) {
         _currentWeeklyViewPagerPosition.value = position
+    }
+
+    fun addViewPagerCounts(groupCount: Int, personalCount: Int) {
+        _viewpagerRunningCount.value = Pair(groupCount, personalCount)
     }
 
     fun updateCurrentMondayMonth(year: Int, month: Int) {

@@ -355,18 +355,33 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_week" />
 
+                <TextView
+                    android:id="@+id/tv_stamp_weekly"
+                    style="@style/TextStyleBody14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_dark_6g_solid_radius_6"
+                    android:gravity="center"
+                    android:paddingVertical="10dp"
+                    android:text="@string/lets_add_stamp"
+                    android:textColor="@color/dark_g3_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vp_weekly_calendar" />
+
                 <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                     android:id="@+id/indicator_dots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     app:dotsColor="@color/dark_g4_5"
                     app:dotsSize="5dp"
                     app:dotsSpacing="3dp"
                     app:dotsWidthFactor="1.0"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/vp_weekly_calendar"
+                    app:layout_constraintTop_toBottomOf="@id/tv_stamp_weekly"
                     app:selectedDotColor="@color/dark_g2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

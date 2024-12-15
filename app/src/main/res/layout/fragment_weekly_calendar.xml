@@ -15,18 +15,6 @@
             android:layout_height="wrap_content"
             android:overScrollMode="never" />
 
-        <TextView
-            android:id="@+id/tv_stamp_weekly"
-            style="@style/TextStyleBody14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/bg_dark_6g_solid_radius_6"
-            android:gravity="center"
-            android:paddingVertical="10dp"
-            android:text="@string/lets_add_stamp"
-            android:textColor="@color/dark_g3_5" />
-
     </LinearLayout>
 
 </layout>

@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
@@ -25,7 +26,6 @@ import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDir
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
@@ -78,8 +78,8 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         initListeners()
         initWeeklyViewPagerAdapter()
         setupJoinedRunningPosts()
-        setupThisWeekRunningLogs()
         setupWeeklyViewPagerPosition()
+        setupWeeklyRunningCount()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.btnProfileEdit.setOnClickListener(this)
@@ -219,7 +219,25 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.currentWeeklyViewPagerPosition.collectLatest { position ->
-                    binding.vpWeeklyCalendar.setCurrentItem(position, false)
+                    if (position != null) {
+                        binding.vpWeeklyCalendar.setCurrentItem(position, false)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupWeeklyRunningCount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewpagerRunningCount.collectLatest { (groupCount, personalCount) ->
+                    binding.tvStampWeekly.text = if (groupCount == 0 && personalCount == 0) {
+                        getString(R.string.calendar_monthly_statistic_empty)
+                    } else {
+                        getString(R.string.calendar_monthly_statistic,
+                            groupCount,
+                            personalCount)
+                    }
                 }
             }
         }
@@ -232,21 +250,21 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 viewLifecycleOwner.lifecycle,
                 false,
                 RunnerBeApplication.mTokenPreference.getUserId()
-            )
+            ) { groupCount, personalCount ->
+                viewModel.addViewPagerCounts(groupCount, personalCount)
+            }
             adapter = weeklyCalendarPagerAdapter
-            setCurrentItem(viewModel.currentWeeklyViewPagerPosition.value, false)
+
+            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewModel.updateWeeklyViewPagerPosition(position)
+                }
+            })
+
+            setCurrentItem(viewModel.currentWeeklyViewPagerPosition.value ?: 2, false)
         }
         initDotsIndicator()
-    }
-
-    private fun setupThisWeekRunningLogs() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.runningLogResult.collectLatest {
-
-                }
-            }
-        }
     }
 
     private fun setupJoinedRunningPosts() {

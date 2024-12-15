@@ -43,6 +43,7 @@ class OtherUserProfileFragment :
         initWeeklyViewPagerAdapter()
         setupWeeklyViewPagerPosition()
         setupJoinedPostings()
+        setupWeeklyRunningCount()
     }
 
     private fun initWeeklyViewPagerAdapter() {
@@ -52,11 +53,37 @@ class OtherUserProfileFragment :
                 viewLifecycleOwner.lifecycle,
                 true,
                 navArgs.targetUserId
-            )
+            ) { groupCount, personalCount ->
+                viewModel.addViewPagerCounts(groupCount, personalCount)
+                binding.tvStampWeekly.text = if (groupCount == 0 && personalCount == 0) {
+                    getString(R.string.calendar_monthly_statistic_empty)
+                } else {
+                    getString(
+                        R.string.calendar_monthly_statistic,
+                        groupCount, personalCount
+                    )
+                }
+            }
             adapter = weeklyCalendarPagerAdapter
             setCurrentItem(viewModel.currentWeeklyViewPagerPosition.value, false)
         }
         initDotsIndicator()
+    }
+
+    private fun setupWeeklyRunningCount() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.viewpagerRunningCount.collectLatest { (groupCount, personalCount) ->
+                    binding.tvStampWeekly.text = if (groupCount == 0 && personalCount == 0) {
+                        getString(R.string.calendar_monthly_statistic_empty)
+                    } else {
+                        getString(R.string.calendar_monthly_statistic,
+                            groupCount,
+                            personalCount)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupJoinedPostings() {

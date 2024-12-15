@@ -10,7 +10,8 @@ class WeeklyCalendarPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     private val isOtherUser: Boolean,
-    private val userId: Int
+    private val userId: Int,
+    private val positionChangeListener: VpPositionChangeListener
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
     private var startDate: LocalDate = LocalDate.now()
 
@@ -20,7 +21,7 @@ class WeeklyCalendarPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         val thisWeekStartDate = startDate.minusWeeks(POSITION_PAGE_MAX - position.toLong())
-        return WeeklyCalendarFragment.newInstance(thisWeekStartDate, position, isOtherUser, userId)
+        return WeeklyCalendarFragment.newInstance(thisWeekStartDate, position, isOtherUser, userId, positionChangeListener)
     }
 
     companion object {
