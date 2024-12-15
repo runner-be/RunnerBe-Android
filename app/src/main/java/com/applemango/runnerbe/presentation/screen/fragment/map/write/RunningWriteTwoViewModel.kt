@@ -6,7 +6,6 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.WriteRunningRequest
 import com.applemango.runnerbe.data.network.response.BaseResponse
-import com.applemango.runnerbe.data.vo.PlaceData
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
 import com.applemango.runnerbe.domain.usecase.post.WriteRunningUseCase
 import com.applemango.runnerbe.presentation.model.GenderTag
@@ -93,7 +92,7 @@ class RunningWriteTwoViewModel @Inject constructor(
         writeUseCase(userId, WriteRunningRequest(
             runningTitle = oneData.value.runningTitle,
             runningTag = oneData.value.runningTag.tag,
-            gatheringTime = SimpleDateFormat("yyyy-MM-dd kk:mm:ss").format(oneData.value.runningDate),
+            gatheringTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(oneData.value.runningDate),
             runningTime = oneData.value.runningDisplayTime.getTransferType(),
             numberOfRunner = joinRunnerCount.value,
             gender = when (genderRadioChecked.value) {

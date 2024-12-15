@@ -49,6 +49,7 @@ data class Posting(
     @SerializedName("attendance") val attendance: Int?,
     // 출석처리 여부 Y: 반장이 출석체크, N: 반장이 출석체크X
     @SerializedName("whetherCheck") val whetherCheck: String?,
+    @SerializedName("whetherAccept") val whetherAccept: String?,
     @SerializedName("profileUrlList") val profileUrlList: List<ProfileUrlList>?,
     @SerializedName("runnerList") val runnerList: List<UserInfo>?,
     @SerializedName("whetherPostUser") val whetherPostUser: String?,
