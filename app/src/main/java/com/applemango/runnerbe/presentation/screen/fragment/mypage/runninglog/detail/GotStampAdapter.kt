@@ -13,12 +13,14 @@ import com.bumptech.glide.Glide
 class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampViewHolder>(
     GOT_STAMP_DIFF_UTIL
 ) {
+    private var listener : GotStampClickListener? = null
 
     class GotStampViewHolder(
         private val binding: ItemGotStampBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MemberStampData) {
+        fun bind(item: MemberStampData, listener : GotStampClickListener?) {
             binding.item = item
+            binding.listener = listener
             with(binding) {
                 Glide.with(itemView.context)
                     .load(getStampItemByCode(item.stampCode)?.image)
@@ -36,8 +38,12 @@ class GotStampAdapter : ListAdapter<MemberStampData, GotStampAdapter.GotStampVie
     override fun onBindViewHolder(holder: GotStampViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(item)
+            holder.bind(item, listener)
         }
+    }
+
+    fun initGotStampClickListener(listener : GotStampClickListener?) {
+        this.listener = listener
     }
 
     companion object {
