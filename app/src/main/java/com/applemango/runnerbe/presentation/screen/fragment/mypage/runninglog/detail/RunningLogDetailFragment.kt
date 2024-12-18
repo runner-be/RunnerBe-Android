@@ -59,7 +59,15 @@ class RunningLogDetailFragment :
 
     private fun initMemberStampRecyclerView() {
         binding.rcvTeamStamp.apply {
-            adapter = gotStampAdapter
+            adapter = gotStampAdapter.apply {
+                initGotStampClickListener {
+                    navigate(
+                        RunningLogDetailFragmentDirections.actionRunningLogDetailFragmentToOtherUserProfileFragment(
+                            args.userId
+                        )
+                    )
+                }
+            }
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(RightSpaceItemDecoration(10.dpToPx(requireContext())))
         }

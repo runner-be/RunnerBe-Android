@@ -9,12 +9,17 @@
             name="item"
             type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.MemberStampData" />
 
+        <variable
+            name="listener"
+            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.GotStampClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> listener.onGotStampClicked(item)}">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_photo"
@@ -35,7 +40,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:clickable="true"
             android:padding="2dp"
             android:background="@drawable/bg_g5_circle_shape_no_stroke"
             app:layout_constraintEnd_toEndOf="@id/iv_photo"
