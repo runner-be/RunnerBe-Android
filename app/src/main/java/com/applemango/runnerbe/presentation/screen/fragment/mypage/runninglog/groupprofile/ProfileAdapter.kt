@@ -11,11 +11,12 @@ import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.databinding.ItemGroupProfileBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
+import java.lang.ref.WeakReference
 
 class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileViewHolder>(
     profileDiffUtil
 ) {
-    private lateinit var otherUserProfileClickListener: OtherUserProfileClickListener
+    private var otherUserProfileClickListener: WeakReference<OtherUserProfileClickListener>? = null
     private var selectedPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -26,7 +27,7 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
         val item = getItem(position)
         if (item != null) {
-            holder.bind(item, otherUserProfileClickListener)
+            holder.bind(item, otherUserProfileClickListener?.get())
         }
     }
 
@@ -39,20 +40,22 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
     }
 
     fun setOnProfileClickListener(listener: OtherUserProfileClickListener) {
-        this.otherUserProfileClickListener = listener
+        this.otherUserProfileClickListener = WeakReference(listener)
     }
 
     fun updateProfileStampByPosition(position: Int, newStampCode: String) {
-        currentList[position].stampCode = newStampCode
-        notifyItemChanged(position)
+        val updatedList = currentList.toMutableList().apply {
+            this[position] = this[position].copy(stampCode = newStampCode)
+        }
+        submitList(updatedList)
     }
 
     inner class ProfileViewHolder(
         private val binding: ItemGroupProfileBinding
     ) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: JoinedRunnerResult, otherUserProfileClickListener: OtherUserProfileClickListener) {
+        fun bind(item: JoinedRunnerResult, otherUserProfileClickListener: OtherUserProfileClickListener?) {
             val listener = View.OnClickListener {
-                otherUserProfileClickListener.onProfileClicked(bindingAdapterPosition, item.userId, getStampItemByCode(item.stampCode))
+                otherUserProfileClickListener?.onProfileClicked(bindingAdapterPosition, item.userId, getStampItemByCode(item.stampCode))
                 updateSelectedPosition(bindingAdapterPosition)
             }
 
@@ -75,7 +78,7 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileAdapter.ProfileView
                 oldItem: JoinedRunnerResult,
                 newItem: JoinedRunnerResult
             ): Boolean {
-                return oldItem.nickname == newItem.nickname
+                return oldItem.userId == newItem.userId
             }
 
             override fun areContentsTheSame(
