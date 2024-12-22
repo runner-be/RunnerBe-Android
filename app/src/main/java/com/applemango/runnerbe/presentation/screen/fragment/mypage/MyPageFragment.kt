@@ -87,6 +87,11 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         binding.ivCalendar.setOnClickListener(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        refresh()
+    }
+
     override fun onResume() {
         super.onResume()
         if (viewModel.userInfo.value == null) refresh()
