@@ -61,9 +61,6 @@ class MyPageViewModel @Inject constructor(
     private val _actions = MutableSharedFlow<MyPageAction>()
     val actions get() = _actions
 
-    private val _myPageInfo = MutableStateFlow<RunningLogResult?>(null)
-    val myPageInfo: StateFlow<RunningLogResult?> get() = _myPageInfo
-
     private val _runningLogResult = MutableStateFlow<Map<Int, RunningLogResult>>(emptyMap())
     val runningLogResult: StateFlow<Map<Int, RunningLogResult>> get() = _runningLogResult.asStateFlow()
 

@@ -79,11 +79,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         observeBind()
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
         setOnPostListUpdateListener()
-//        binding.postListLayout.bodyLayout.setOnScrollChangeListener { v, _, _, _, _ ->
-//            if(!v.canScrollVertically(1) && !viewModel.isEndPage) {
-//                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
-//            }
-//        }
 
         binding.slideLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
@@ -177,6 +172,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     override fun onStart() {
         super.onStart()
         binding.mapView.onStart()
+        viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
     }
 
     override fun onResume() {
