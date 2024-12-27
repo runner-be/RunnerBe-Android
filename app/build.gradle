@@ -178,6 +178,7 @@ dependencies {
     // https://github.com/square/moshi
     implementation 'com.squareup.moshi:moshi:1.15.0'  // 최신 버전 확인
     implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'  // Kotlin 확장 라이브러리
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
     // https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
