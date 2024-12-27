@@ -52,7 +52,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode buildVersionCode
-        versionName "0.0.7"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -175,9 +175,9 @@ dependencies {
     // https://github.com/square/okhttp
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
-    // https://github.com/square/retrofit/tree/master/retrofit-converters/gson
-    implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // https://github.com/square/moshi
+    implementation 'com.squareup.moshi:moshi:1.15.0'  // 최신 버전 확인
+    implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'  // Kotlin 확장 라이브러리
 
     // https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
