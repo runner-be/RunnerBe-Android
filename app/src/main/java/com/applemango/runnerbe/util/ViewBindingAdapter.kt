@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -224,6 +225,16 @@ fun ImageView.filterVisibility(filterData: MapFilterData) {
 fun View.backgroundTop(panelTop: Int?) {
     val resource = if (panelTop == 0) R.drawable.bg_top_rectangle else R.drawable.bg_top_rounded
     this.setBackgroundResource(resource)
+}
+
+@BindingAdapter("bind:locationBtnVisibility")
+fun ImageView.setLocationBtnVisibility(panelTop: Int?) {
+    this.visibility = if ((panelTop ?: 0) < 150) View.GONE else View.VISIBLE
+}
+
+@BindingAdapter("bind:mapRefreshBtnVisibility")
+fun LinearLayoutCompat.setMapRefreshBtnVisibility(panelTop: Int?) {
+    this.visibility = if ((panelTop ?: 0) < 150) View.GONE else View.VISIBLE
 }
 
 @BindingAdapter("bind:paceText")
