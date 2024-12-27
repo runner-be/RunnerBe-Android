@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -80,19 +79,10 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.slideLayout.setScrollableViewHelper(NestedScrollableViewHelper(binding.postListLayout.bodyLayout))
         setOnPostListUpdateListener()
 
-        binding.slideLayout.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                updatePanelViewsPosition(binding.slideLayout.panelState, 0.5f)
-                binding.slideLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
-
         initPostRecyclerView()
         initSlideLayoutListener()
         initListeners()
         setupPostFlow()
-        setupIsPanelTopZero()
     }
 
     private fun setOnPostListUpdateListener() {
@@ -195,43 +185,10 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.mapView.onLowMemory()
     }
 
-    private fun updatePanelViewsPosition(panelState: PanelState, slideOffset: Float) {
-        val bottomDrawerTop = when (panelState) {
-            PanelState.EXPANDED -> binding.bottomDrawerLayout.top
-            PanelState.ANCHORED -> (binding.bottomDrawerLayout.top * slideOffset).toInt()
-            PanelState.COLLAPSED -> binding.slideLayout.panelHeight
-            else -> binding.bottomDrawerLayout.top
-        }
-        val locationOffsetY = (bottomDrawerTop - binding.ivCurrentLocation.height).toFloat()
-
-        binding.llMapRefresh.translationY = locationOffsetY
-        binding.ivCurrentLocation.translationY = locationOffsetY
-    }
-
-    private fun setupIsPanelTopZero() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.panelTop.collectLatest { panelTop ->
-                if (panelTop == null || panelTop < 150) {
-                    binding.llMapRefresh.visibility = View.GONE
-                    binding.ivCurrentLocation.visibility = View.GONE
-                    return@collectLatest
-                } else {
-                    binding.llMapRefresh.visibility = View.VISIBLE
-                    binding.ivCurrentLocation.visibility = View.VISIBLE
-                }
-
-                binding.llMapRefresh.translationY = (binding.mapLayout.height - panelTop).toFloat()
-                binding.ivCurrentLocation.translationY =
-                    (binding.mapLayout.height - panelTop).toFloat()
-            }
-        }
-    }
-
     private fun initSlideLayoutListener() {
         binding.slideLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View?, slideOffset: Float) {
                 viewModel.panelTop.value = panel?.top ?: 0
-                updatePanelViewsPosition(binding.slideLayout.panelState, slideOffset)
             }
 
             override fun onPanelStateChanged(
