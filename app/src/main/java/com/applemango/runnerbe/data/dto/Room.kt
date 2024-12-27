@@ -1,11 +1,11 @@
 package com.applemango.runnerbe.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class Room(
-    @SerializedName("roomId") val roomId: Int,
-    @SerializedName("title") val title: String,
-    @SerializedName("repUserName") val repUserName: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String,
-    @SerializedName("recentMessage") val recentMessage: String
+    @Json(name = "roomId") val roomId: Int,
+    @Json(name = "title") val title: String,
+    @Json(name = "repUserName") val repUserName: String,
+    @Json(name = "profileImageUrl") val profileImageUrl: String,
+    @Json(name = "recentMessage") val recentMessage: String
 )

@@ -1,22 +1,22 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class WriteRunningRequest(
-    @SerializedName("title") val runningTitle: String,
-    @SerializedName("gatheringTime") val gatheringTime : String,
-    @SerializedName("runningTime") val runningTime: String,
-    @SerializedName("gatherLatitude") val latitude: Double,
-    @SerializedName("gatherLongitude") val longitude : Double,
-    @SerializedName("placeName") val placeName : String,
-    @SerializedName("placeAddress") val placeAddress : String,
-    @SerializedName("placeExplain") val placeExplain : String,
-    @SerializedName("runningTag") val runningTag : String,
-    @SerializedName("ageMin") val minAge : Int,
-    @SerializedName("ageMax") val maxAge : Int,
-    @SerializedName("peopleNum") val numberOfRunner : Int,
-    @SerializedName("contents") val contents : String?,
-    @SerializedName("runnerGender") val gender : String,
-    @SerializedName("paceGrade") val paceGrade: String,
-    @SerializedName("afterParty") val isAfterParty: Int
+    @Json(name = "title") val runningTitle: String,
+    @Json(name = "gatheringTime") val gatheringTime : String,
+    @Json(name = "runningTime") val runningTime: String,
+    @Json(name = "gatherLatitude") val latitude: Double,
+    @Json(name = "gatherLongitude") val longitude : Double,
+    @Json(name = "placeName") val placeName : String,
+    @Json(name = "placeAddress") val placeAddress : String,
+    @Json(name = "placeExplain") val placeExplain : String,
+    @Json(name = "runningTag") val runningTag : String,
+    @Json(name = "ageMin") val minAge : Int,
+    @Json(name = "ageMax") val maxAge : Int,
+    @Json(name = "peopleNum") val numberOfRunner : Int,
+    @Json(name = "contents") val contents : String?,
+    @Json(name = "runnerGender") val gender : String,
+    @Json(name = "paceGrade") val paceGrade: String,
+    @Json(name = "afterParty") val isAfterParty: Int
 )

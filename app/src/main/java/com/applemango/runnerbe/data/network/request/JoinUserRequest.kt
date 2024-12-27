@@ -1,12 +1,12 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class JoinUserRequest(
-    @SerializedName("uuid") val uuid : String,
-    @SerializedName("nickName") val nickName : String? = null,
-    @SerializedName("birthday") val birthday: Int,
-    @SerializedName("gender") val genderTag : String,
-    @SerializedName("job") val jobTag : String,
-    @SerializedName("deviceToken") val deviceToken : String
+    @Json(name = "uuid") val uuid : String,
+    @Json(name = "nickName") val nickName : String? = null,
+    @Json(name = "birthday") val birthday: Int,
+    @Json(name = "gender") val genderTag : String,
+    @Json(name = "job") val jobTag : String,
+    @Json(name = "deviceToken") val deviceToken : String
 )

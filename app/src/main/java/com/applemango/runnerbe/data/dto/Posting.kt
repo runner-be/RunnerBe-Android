@@ -5,7 +5,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.util.dateStringToLongTime
 import com.applemango.runnerbe.util.timeStringToLongTime
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 import java.util.Calendar
@@ -14,49 +14,49 @@ import java.util.Calendar
 // 게시글 상세(postingInfo)
 @Parcelize
 data class Posting(
-    @SerializedName("postId") val postId: Int,
-    @SerializedName("postingTime") val postingTime: String?,
-    @SerializedName("postUserId") val postUserId: Int,
-    @SerializedName("nickName") val nickName: String?,
-    @SerializedName("profileImageUrl") val profileImageUrl: String?,
-    @SerializedName("title") val title: String,
-    @SerializedName("runningTime") val runningTime: String?,
-    @SerializedName("gatheringTime") val gatheringTime: ZonedDateTime?,
-    @SerializedName("gatherLongitude") val gatherLongitude: String?,
-    @SerializedName("gatherLatitude") val gatherLatitude: String?,
+    @Json(name = "postId") val postId: Int,
+    @Json(name = "postingTime") val postingTime: String?,
+    @Json(name = "postUserId") val postUserId: Int,
+    @Json(name = "nickName") val nickName: String?,
+    @Json(name = "profileImageUrl") val profileImageUrl: String?,
+    @Json(name = "title") val title: String,
+    @Json(name = "runningTime") val runningTime: String?,
+    @Json(name = "gatheringTime") val gatheringTime: ZonedDateTime?,
+    @Json(name = "gatherLongitude") val gatherLongitude: String?,
+    @Json(name = "gatherLatitude") val gatherLatitude: String?,
     /**
      * placeName : 장소 이름
      * placeAddress : 장소 주소
      * planeExplain : 장소 설명
      */
-    @SerializedName("placeName") val placeName: String?,
-    @SerializedName("placeAddress") val placeAddress: String?,
-    @SerializedName("placeExplain") val placeExplain: String?,
-    @SerializedName("runningTag") val runningTag: String?,
-    @SerializedName("age") val age: String,
-    @SerializedName("DISTANCE") val DISTANCE: String?,
-    @SerializedName("gender") val gender: String?,
+    @Json(name = "placeName") val placeName: String?,
+    @Json(name = "placeAddress") val placeAddress: String?,
+    @Json(name = "placeExplain") val placeExplain: String?,
+    @Json(name = "runningTag") val runningTag: String?,
+    @Json(name = "age") val age: String,
+    @Json(name = "DISTANCE") val DISTANCE: String?,
+    @Json(name = "gender") val gender: String?,
     // N: 마감X, Y: 마감O, D: 비노출(시간이 지나서 DB 상에서 삭제됨)
-    @SerializedName("whetherEnd") val whetherEnd: String?,
-    @SerializedName("job") val job: String?,
-    @SerializedName("peopleNum") val peopleNum: Int,
-    @SerializedName("contents") val contents: String?,
-    @SerializedName("userId") val userId: Int?,
-    @SerializedName("logId") val logId: Int?,
-    @SerializedName("gatheringId") val gatheringId: Int?,
+    @Json(name = "whetherEnd") val whetherEnd: String?,
+    @Json(name = "job") val job: String?,
+    @Json(name = "peopleNum") val peopleNum: Int,
+    @Json(name = "contents") val contents: String?,
+    @Json(name = "userId") val userId: Int?,
+    @Json(name = "logId") val logId: Int?,
+    @Json(name = "gatheringId") val gatheringId: Int?,
     // 0이면 찜X, 1이면 찜O
-    @SerializedName("bookMark") var bookMark: Int?,
-    @SerializedName("attendance") val attendance: Int?,
+    @Json(name = "bookMark") var bookMark: Int?,
+    @Json(name = "attendance") val attendance: Int?,
     // 출석처리 여부 Y: 반장이 출석체크, N: 반장이 출석체크X
-    @SerializedName("whetherCheck") val whetherCheck: String?,
-    @SerializedName("whetherAccept") val whetherAccept: String?,
-    @SerializedName("profileUrlList") val profileUrlList: List<ProfileUrlList>?,
-    @SerializedName("runnerList") val runnerList: List<UserInfo>?,
-    @SerializedName("whetherPostUser") val whetherPostUser: String?,
-    @SerializedName("pace") val pace: String?,
-    @SerializedName("afterParty") val afterParty: Int?,
+    @Json(name = "whetherCheck") val whetherCheck: String?,
+    @Json(name = "whetherAccept") val whetherAccept: String?,
+    @Json(name = "profileUrlList") val profileUrlList: List<ProfileUrlList>?,
+    @Json(name = "runnerList") val runnerList: List<UserInfo>?,
+    @Json(name = "whetherPostUser") val whetherPostUser: String?,
+    @Json(name = "pace") val pace: String?,
+    @Json(name = "afterParty") val afterParty: Int?,
     // 모임 종료(러닝 끝난 후)부터 3시간 지났는지 여부
-    @SerializedName("attendTimeOver") val attendTimeOver: String?
+    @Json(name = "attendTimeOver") val attendTimeOver: String?
 ) : Parcelable {
 
     private fun getMyUserId(): Int = RunnerBeApplication.mTokenPreference.getUserId()

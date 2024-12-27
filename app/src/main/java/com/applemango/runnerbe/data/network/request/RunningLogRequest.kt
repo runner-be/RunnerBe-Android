@@ -1,15 +1,14 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
+import com.squareup.moshi.Json
 
 data class RunningLogRequest(
-    @SerializedName("runningDate") val runningDate: String,
-    @SerializedName("stampCode") val stampCode: String,
-    @SerializedName("gatheringId") val gatheringId: Int?,
-    @SerializedName("contents") val contents: String,
-    @SerializedName("imageUrl") val imageUrl: String?,
-    @SerializedName("weatherDegree") val weatherDegree: Int?,
-    @SerializedName("weatherIcon") val weatherIcon: String?,
-    @SerializedName("isOpened") val isOpened: Int
+    @Json(name = "runningDate") val runningDate: String,
+    @Json(name = "stampCode") val stampCode: String,
+    @Json(name = "gatheringId") val gatheringId: Int?,
+    @Json(name = "contents") val contents: String,
+    @Json(name = "imageUrl") val imageUrl: String?,
+    @Json(name = "weatherDegree") val weatherDegree: Int?,
+    @Json(name = "weatherIcon") val weatherIcon: String?,
+    @Json(name = "isOpened") val isOpened: Int
 )

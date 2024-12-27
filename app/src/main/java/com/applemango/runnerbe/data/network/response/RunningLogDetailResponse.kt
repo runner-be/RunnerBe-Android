@@ -1,36 +1,39 @@
 package com.applemango.runnerbe.data.network.response
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import java.time.ZonedDateTime
 
 data class DetailRunningLogResponse(
-    val result: DetailRunningLogResult
-) : BaseResponse()
+    @Json(name = "isSuccess") val isSuccess: Boolean = false,
+    @Json(name = "code") val code: Int = 0,
+    @Json(name = "message") val message: String? = null,
+    @Json(name = "result") val result: DetailRunningLogResult
+)
 
 data class DetailRunningLogResult(
-    @SerializedName("detailRunningLog") val runningLog: DetailRunningLog,
-    @SerializedName("gatheringCount") val gatheringCount: Int,
-    @SerializedName("gotStamp") val gotStamp: List<MemberStamp>
+    @Json(name = "detailRunningLog") val runningLog: DetailRunningLog,
+    @Json(name = "gatheringCount") val gatheringCount: Int,
+    @Json(name = "gotStamp") val gotStamp: List<MemberStamp>
 )
 
 data class DetailRunningLog (
-    @SerializedName("status") val status: String,
-    @SerializedName("runnedDate") val runnedDate: ZonedDateTime,
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("nickname") val nickname: String,
-    @SerializedName("gatheringId") val gatheringId: Int?,
-    @SerializedName("stampCode") val stampCode: String,
-    @SerializedName("contents") val contents: String,
-    @SerializedName("imageUrl") val imageUrl: String?,
-    @SerializedName("weatherDegree") val weatherDegree: Int?,
-    @SerializedName("weatherIcon") val weatherCode: String?,
-    @SerializedName("isOpened") val isOpened: Int,
+    @Json(name = "status") val status: String,
+    @Json(name = "runnedDate") val runnedDate: ZonedDateTime,
+    @Json(name = "userId") val userId: Int,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "gatheringId") val gatheringId: Int?,
+    @Json(name = "stampCode") val stampCode: String,
+    @Json(name = "contents") val contents: String,
+    @Json(name = "imageUrl") val imageUrl: String?,
+    @Json(name = "weatherDegree") val weatherDegree: Int?,
+    @Json(name = "weatherIcon") val weatherCode: String?,
+    @Json(name = "isOpened") val isOpened: Int,
 )
 
 data class MemberStamp (
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("logId") val logId: Int?,
-    @SerializedName("nickname") val nickname: String,
-    @SerializedName("profileImageUrl") val profileImageUrl: String?,
-    @SerializedName("stampCode") val stampCode: String,
+    @Json(name = "userId") val userId: Int,
+    @Json(name = "logId") val logId: Int?,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "profileImageUrl") val profileImageUrl: String?,
+    @Json(name = "stampCode") val stampCode: String,
 )

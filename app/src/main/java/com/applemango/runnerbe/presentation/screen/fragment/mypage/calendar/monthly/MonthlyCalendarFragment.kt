@@ -21,14 +21,12 @@ import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.DayOfWeekAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initYearMonthDays
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.google.gson.annotations.SerializedName
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint

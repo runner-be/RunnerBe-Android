@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class PostStampRequest(
-    @SerializedName("targetId") val targetUserId: Int,
-    @SerializedName("stampCode") val stampCode: String,
+    @Json(name = "targetId") val targetUserId: Int,
+    @Json(name = "stampCode") val stampCode: String,
 )

@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class SocialLoginRequest(
-    @SerializedName("accessToken") val accessToken: String
+    @Json(name = "accessToken") val accessToken: String
 )
