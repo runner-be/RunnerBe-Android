@@ -3,7 +3,7 @@ package com.applemango.runnerbe.di
 import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.data.network.BearerInterceptor
 import com.applemango.runnerbe.data.network.XAccessTokenInterceptor
-import com.applemango.runnerbe.data.network.ZonedDateTimeConverter
+import com.applemango.runnerbe.data.network.ZonedDateTimeAdapter
 import com.applemango.runnerbe.data.network.api.*
 import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
@@ -12,7 +12,6 @@ import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailAp
 import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
 import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
-import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,9 +21,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -56,8 +53,17 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideMoshi(): Moshi = Moshi.Builder()
+    fun provideZonedDateTimeAdapter(): ZonedDateTimeAdapter {
+        return ZonedDateTimeAdapter()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMoshi(
+        zonedDateTimeAdapter: ZonedDateTimeAdapter
+    ): Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
+        .add(zonedDateTimeAdapter)
         .build()
 
     @Singleton
