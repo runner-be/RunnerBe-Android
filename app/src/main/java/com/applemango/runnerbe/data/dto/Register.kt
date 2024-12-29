@@ -1,9 +1,9 @@
 package com.applemango.runnerbe.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 // 회원가입
 data class Register(
-    @SerializedName("insertedUserId") val insertedUserId: Int,
-    @SerializedName("token") val token: String
+    @Json(name = "insertedUserId") val insertedUserId: Int,
+    @Json(name = "token") val token: String
 )

@@ -1,21 +1,27 @@
 package com.applemango.runnerbe.data.network.response
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.time.ZonedDateTime
 
+@JsonClass(generateAdapter = true)
 data class GetNotificationsResponse(
-    val alarms: List<Alarm>
-): BaseResponse()
+    @Json(name = "isSuccess") val isSuccess: Boolean = false,
+    @Json(name = "code") val code: Int = 0,
+    @Json(name = "message") val message: String? = null,
+    @Json(name = "result") val alarms: List<Alarm>
+)
 
 /**
  * @param createdAt 알림이 생성된 시간
  * @param whetherRead Y / N 으로 나뉘며, 읽은 알림은 N
  */
+@JsonClass(generateAdapter = true)
 data class Alarm(
-    @SerializedName("alarmId") val alarmId: Int,
-    @SerializedName("userId") val userId: Int,
-    @SerializedName("createdAt") val createdAt: ZonedDateTime,
-    @SerializedName("title") val title: String,
-    @SerializedName("content") val content: String,
-    @SerializedName("whetherRead") val whetherRead: String,
+    @Json(name = "alarmId") val alarmId: Int,
+    @Json(name = "userId") val userId: Int,
+    @Json(name = "createdAt") val createdAt: ZonedDateTime,
+    @Json(name = "title") val title: String,
+    @Json(name = "content") val content: String,
+    @Json(name = "whetherRead") val whetherRead: String,
 )

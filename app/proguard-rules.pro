@@ -48,12 +48,9 @@
 # OkHttp
 -keep class okhttp3.Callback { *; }
 
-# Gson
--keep class com.google.gson.**Model { *; }
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
--keep class * extends com.google.gson.TypeAdapter { *; }
+# Moshi
+-keep class com.squareup.moshi.** { *; }
+-keep @com.squareup.moshi.JsonClass class * { *; }
 
 # Parcelize
 -keep @kotlinx.parcelize.Parcelize class * { *; }

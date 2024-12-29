@@ -1,5 +1,7 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
-data class PatchUserPaceRegisterRequest(@SerializedName("pace") val pace: String)
+data class PatchUserPaceRegisterRequest(
+    @Json(name = "pace") val pace: String
+)

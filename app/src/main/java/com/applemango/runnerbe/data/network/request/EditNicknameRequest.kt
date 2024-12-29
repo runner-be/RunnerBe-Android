@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class EditNicknameRequest(
-    @SerializedName("nickName") val nickName: String
+    @Json(name = "nickName") val nickName: String
 )
