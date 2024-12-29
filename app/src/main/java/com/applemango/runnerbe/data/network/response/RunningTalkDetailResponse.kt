@@ -1,8 +1,11 @@
 package com.applemango.runnerbe.data.network.response
 
 import com.applemango.runnerbe.data.dto.RoomDetail
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class RunningTalkDetailResponse(
-    @SerializedName("result") val result : RoomDetail //테스트 필요, array 인지 그냥인지
-) : BaseResponse()
+    @Json(name = "isSuccess") val isSuccess: Boolean = false,
+    @Json(name = "code") val code: Int = 0,
+    @Json(name = "message") val message: String? = null,
+    @Json(name = "result") val result : RoomDetail //테스트 필요, array 인지 그냥인지
+)

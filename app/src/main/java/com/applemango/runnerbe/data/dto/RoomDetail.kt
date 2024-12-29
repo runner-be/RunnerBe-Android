@@ -1,26 +1,26 @@
 package com.applemango.runnerbe.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class RoomDetail(
-    @SerializedName("roomInfo") val roomInfo : ArrayList<RoomInfo>,
-    @SerializedName("messageList") val messages : ArrayList<Messages>
+    @Json(name = "roomInfo") val roomInfo : ArrayList<RoomInfo>,
+    @Json(name = "messageList") val messages : ArrayList<Messages>
 )
 
 data class RoomInfo(
-    @SerializedName("title") val talkTitle : String,
-    @SerializedName("pace") val pace: String
+    @Json(name = "title") val talkTitle : String,
+    @Json(name = "pace") val pace: String
 )
 
 data class Messages(
-    @SerializedName("messageId") val messageId :Int,
-    @SerializedName("content") val content : String?,
-    @SerializedName("imageUrl") val imageUrl: String?,
-    @SerializedName("createdAt") val createAt : String,
-    @SerializedName("userId") val userId : Int,
-    @SerializedName("nickName") val nickName : String,
-    @SerializedName("profileImageUrl") val profileImageUrl : String?,
-    @SerializedName("messageFrom") val from: String, // Me or Others
-    @SerializedName("whetherPostUser") val whetherPostUser : String, // Y or N
+    @Json(name = "messageId") val messageId :Int,
+    @Json(name = "content") val content : String?,
+    @Json(name = "imageUrl") val imageUrl: String?,
+    @Json(name = "createdAt") val createAt : String,
+    @Json(name = "userId") val userId : Int,
+    @Json(name = "nickName") val nickName : String,
+    @Json(name = "profileImageUrl") val profileImageUrl : String?,
+    @Json(name = "messageFrom") val from: String, // Me or Others
+    @Json(name = "whetherPostUser") val whetherPostUser : String, // Y or N
     var isChecked: Boolean = false
 )

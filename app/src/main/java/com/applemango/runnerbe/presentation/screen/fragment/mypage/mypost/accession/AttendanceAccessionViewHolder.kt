@@ -46,6 +46,6 @@ class AttendanceAccessionViewHolder(
             accessionClickListener.onAcceptClick(item)
 
         }
-        attendanceState = if(item.whetherCheck != "Y") -1 else item.attendance
+        attendanceState = if(item.whetherCheck != "Y") -1 else item.attendance ?: -1
     }
 }

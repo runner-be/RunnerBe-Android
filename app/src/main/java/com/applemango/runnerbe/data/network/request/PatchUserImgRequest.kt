@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class PatchUserImgRequest(
-    @SerializedName("profileImageUrl") val profileImageUrl: String?
+    @Json(name = "profileImageUrl") val profileImageUrl: String?
 )

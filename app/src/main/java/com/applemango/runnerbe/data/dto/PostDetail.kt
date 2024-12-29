@@ -1,10 +1,10 @@
 package com.applemango.runnerbe.data.dto
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class PostDetail(
-    @SerializedName("postingInfo") val postList : List<Posting>,
-    @SerializedName("runnerInfo") val runnerInfo : List<UserInfo>?,
-    @SerializedName("waitingRunnerInfo") val waitingRunnerInfo : List<UserInfo>?,
-    @SerializedName("roomId") val roomId: Int
+    @Json(name = "postingInfo") val postList : List<Posting>,
+    @Json(name = "runnerInfo") val runnerInfo : List<UserInfo>?,
+    @Json(name = "waitingRunnerInfo") val waitingRunnerInfo : List<UserInfo>?,
+    @Json(name = "roomId") val roomId: Int
 )

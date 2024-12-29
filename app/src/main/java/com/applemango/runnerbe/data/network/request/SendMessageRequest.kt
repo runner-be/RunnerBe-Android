@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.data.network.request
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class SendMessageRequest(
-    @SerializedName("content") val content : String?,
-    @SerializedName("imageUrl") val imageUrl: String?
+    @Json(name = "content") val content : String?,
+    @Json(name = "imageUrl") val imageUrl: String?
 )
