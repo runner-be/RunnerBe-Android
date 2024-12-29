@@ -1,8 +1,10 @@
 package com.applemango.runnerbe.data.network.response
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import java.time.ZonedDateTime
 
+@JsonClass(generateAdapter = true)
 data class GetNotificationsResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
@@ -14,6 +16,7 @@ data class GetNotificationsResponse(
  * @param createdAt 알림이 생성된 시간
  * @param whetherRead Y / N 으로 나뉘며, 읽은 알림은 N
  */
+@JsonClass(generateAdapter = true)
 data class Alarm(
     @Json(name = "alarmId") val alarmId: Int,
     @Json(name = "userId") val userId: Int,

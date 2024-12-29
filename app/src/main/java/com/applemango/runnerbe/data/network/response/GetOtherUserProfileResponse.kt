@@ -2,7 +2,9 @@ package com.applemango.runnerbe.data.network.response
 
 import com.applemango.runnerbe.data.dto.Posting
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class GetOtherUserResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
@@ -10,6 +12,7 @@ data class GetOtherUserResponse(
     @Json(name = "result") val result: OtherUser
 )
 
+@JsonClass(generateAdapter = true)
 data class OtherUser(
     @Json(name = "userInfo") val userInfo: OtherUserInfo,
     @Json(name = "userLogInfo") val userLogInfo: List<RunningLog>,
@@ -17,6 +20,7 @@ data class OtherUser(
     @Json(name = "userRunning") val userPosting: List<Posting>,
 )
 
+@JsonClass(generateAdapter = true)
 data class OtherUserInfo(
     @Json(name = "userId") val userId: Int,
     @Json(name = "nickName") val nickName: String,

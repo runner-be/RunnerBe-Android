@@ -2,7 +2,9 @@ package com.applemango.runnerbe.data.network.response
 
 import com.applemango.runnerbe.data.dto.Login
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class SocialLoginResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,

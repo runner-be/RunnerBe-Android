@@ -3,7 +3,9 @@ package com.applemango.runnerbe.data.network.response
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class UserDataResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
@@ -11,6 +13,7 @@ data class UserDataResponse(
     @Json(name = "result") val result : GetMyPageResult
 )
 
+@JsonClass(generateAdapter = true)
 data class GetMyPageResult(
     @Json(name = "myInfo") val userInfo: UserInfo?,
     @Json(name = "myPosting") val myPosting: List<Posting>,

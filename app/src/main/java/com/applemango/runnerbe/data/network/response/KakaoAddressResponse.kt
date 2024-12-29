@@ -1,12 +1,15 @@
 package com.applemango.runnerbe.data.network.response
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class KakaoLocalResponse(
     val meta: KakaoAddressMeta,
     val documents: List<KakaoAddressDocument>
 ) : BaseResponse()
 
+@JsonClass(generateAdapter = true)
 data class KakaoAddressMeta (
     @Json(name = "total_count") val totalCount : Int,
     @Json(name = "pageable_count") val pageableCount: Int,
@@ -14,6 +17,7 @@ data class KakaoAddressMeta (
     @Json(name = "same_name") val sameName: SameName
 )
 
+@JsonClass(generateAdapter = true)
 data class KakaoAddressDocument (
     @Json(name = "id")val id: String,
     @Json(name = "place_name")val placeName: String,
@@ -29,6 +33,7 @@ data class KakaoAddressDocument (
     @Json(name = "distance")val distance: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class SameName (
     @Json(name = "region") val region: List<String>,
     @Json(name = "keyword") val keyword: String,

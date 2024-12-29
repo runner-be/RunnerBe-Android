@@ -1,7 +1,9 @@
 package com.applemango.runnerbe.data.network.response
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class JoinedRunnerResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
@@ -9,6 +11,7 @@ data class JoinedRunnerResponse(
     @Json(name = "result") val result: List<JoinedRunnerResult>
 )
 
+@JsonClass(generateAdapter = true)
 data class JoinedRunnerResult (
     @Json(name = "userId")val userId: Int,
     @Json(name = "nickname")val nickname: String,
