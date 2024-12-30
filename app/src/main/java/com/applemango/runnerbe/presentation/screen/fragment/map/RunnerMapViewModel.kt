@@ -132,11 +132,9 @@ class RunnerMapViewModel @Inject constructor(
         getRunningListUseCase(filterRunningTag.value, request).collect {
             if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
                 if (it.body.isSuccess) {
-                    if (isRefresh) postList.value = emptyList()
                     isEndPage = it.body.runningList.size < pageSize
-                    val prevList = postList.value
                     val newList = it.body.runningList
-                    postList.value = prevList + newList
+                    postList.value = newList
                 }
             }
             _listUpdateUiState.emit(
