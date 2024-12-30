@@ -8,5 +8,8 @@ import retrofit2.http.Path
 interface GetPostDetailApi {
 
     @GET("/postings/v2/{postId}/{userId}")
-    suspend fun getPostDetail(@Path("postId") postId : Int, @Path("userId") userId: Int): Response<GetPostDetailResponse>
+    suspend fun getPostDetail(
+        @Path("postId") postId : Int,
+        @Path("userId") userId: Int
+    ): Response<GetPostDetailResponse>
 }

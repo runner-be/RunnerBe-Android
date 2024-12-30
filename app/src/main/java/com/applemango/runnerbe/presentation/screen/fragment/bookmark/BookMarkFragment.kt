@@ -40,6 +40,10 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
         context?.let {
             binding.bookmarkRecyclerView.addItemDecoration(RecyclerViewItemDeco(it, 12))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
         viewModel.getBookmarkList()
     }
 

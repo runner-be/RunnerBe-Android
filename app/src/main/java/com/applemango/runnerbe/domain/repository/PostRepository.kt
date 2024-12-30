@@ -3,7 +3,6 @@ package com.applemango.runnerbe.domain.repository
 import com.applemango.runnerbe.data.network.request.AttendanceAccessionRequest
 import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.data.network.request.WriteRunningRequest
-import com.applemango.runnerbe.data.network.response.KakaoLocalResponse
 import com.applemango.runnerbe.presentation.state.CommonResponse
 
 interface PostRepository {

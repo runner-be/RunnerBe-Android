@@ -12,12 +12,12 @@ data class JoinedRunnerResponse(
 )
 
 @JsonClass(generateAdapter = true)
-data class JoinedRunnerResult (
-    @Json(name = "userId")val userId: Int,
-    @Json(name = "nickname")val nickname: String,
-    @Json(name = "profileImageUrl")val profileImageUrl: String?,
-    @Json(name = "logId")val logId: String?,
-    @Json(name = "isOpened")val isOpened: Int?,
-    @Json(name = "stampCode")var stampCode: String?,
-    @Json(name = "isCaptain")val isCaptain: Int,
+data class JoinedRunnerResult(
+    @Json(name = "userId") val userId: Int,
+    @Json(name = "nickname") val nickname: String,
+    @Json(name = "profileImageUrl") val profileImageUrl: String?,
+    @Json(name = "logId") val logId: String?,
+    @Json(name = "isOpened") val isOpened: Int?,
+    @Json(name = "stampCode") var stampCode: String?,
+    @Json(name = "isCaptain") val isCaptain: Int,
 )

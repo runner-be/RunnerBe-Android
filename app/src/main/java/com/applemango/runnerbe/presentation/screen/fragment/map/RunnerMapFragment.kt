@@ -100,11 +100,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     private fun observeBind() {
         viewLifecycleOwner.lifecycleScope.launch {
             launch {
-                mainViewModel.bookmarkPost.collect { posting ->
-                    postAdapter.updatePostBookmark(posting)
-                }
-            }
-            launch {
                 mainViewModel.clickedPost.collect {
                     runCatching {
                         val index = viewModel.postList.value.indexOf(it)

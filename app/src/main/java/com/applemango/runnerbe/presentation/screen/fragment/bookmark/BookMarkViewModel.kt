@@ -3,7 +3,6 @@ package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
@@ -11,6 +10,7 @@ import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
 import com.applemango.runnerbe.domain.usecase.bookmark.*
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,9 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BookMarkViewModel @Inject constructor(
     private val getAllDayBookmarkListUseCase: GetAllDayBookmarkListUseCase,
-    private val getBeforeBookmarkListUseCase: GetBeforeBookmarkListUseCase,
-    private val getAfterBookmarkListUseCase: GetAfterBookmarkListUseCase,
-    private val getHolidayBookmarkListUseCase: GetHolidayBookmarkListUseCase,
     private val bookMarkStatusChangeUseCase: BookMarkStatusChangeUseCase
 ): ViewModel() {
 
@@ -71,37 +68,19 @@ class BookMarkViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             getAllDayBookmarkListUseCase(userId = userId).collect {
-                if(it is CommonResponse.Success<*> && it.body is GetBookmarkResponse && it.body.result.bookMarkList != null) {
-                    bookmarkList.value = it.body.result.bookMarkList!!
+                when (it) {
+                    is CommonResponse.Success<*> -> {
+                        val response = it.body as GetBookmarkResponse
+                        bookmarkList.value = response.result.bookMarkList ?: emptyList()
+                    }
+
+                    is CommonResponse.Failed -> LogUtil.errorLog("getBookmarkList Failed")
+
+                    else -> LogUtil.errorLog("getBookmarkList else")
                 }
             }
         }
     }
-
-//    fun getBookmarkList(runningTag : String) {
-//        viewModelScope.launch {
-//            val tag = RunningTag.getByTag(runningTag)
-//            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-//            when(tag) {
-//                RunningTag.Before -> {
-//                    getBeforeBookmarkListUseCase(userId = userId)
-//                }
-//                RunningTag.After -> {
-//                    getAfterBookmarkListUseCase(userId = userId)
-//                }
-//                RunningTag.Holiday -> {
-//                    getHolidayBookmarkListUseCase(userId = userId)
-//                }
-//                else -> { //혹시 모를 다른 것들은 다 출근 전으로...
-//                    getAllDayBookmarkListUseCase(userId = userId)
-//                }
-//            }.collect {
-//                if(it is CommonResponse.Success<*> && it.body is GetBookmarkResponse && it.body.result.bookMarkList != null) {
-//                    bookmarkList.value = it.body.result.bookMarkList!!
-//                }
-//            }
-//        }
-//    }
 
     fun bookmarkStatusChange(post: Posting) {
         viewModelScope.launch {

@@ -40,11 +40,11 @@ class BookMarkAdapter : ListAdapter<Posting, BookMarkViewHolder>(bookmarkDiffUti
     companion object {
         private val bookmarkDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
             override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
-                return oldItem == newItem
+                return oldItem.postId == newItem.postId
             }
 
             override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
-                return oldItem.postId == newItem.postId
+                return oldItem.bookMark == newItem.bookMark
             }
 
         }
