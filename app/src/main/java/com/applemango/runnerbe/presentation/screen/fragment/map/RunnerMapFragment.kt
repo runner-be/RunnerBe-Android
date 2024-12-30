@@ -49,8 +49,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragment_runner_map),
     OnMapReadyCallback {
-    var userId = RunnerBeApplication.mTokenPreference.getUserId()
-    private val PERMISSION_REQUEST_CODE = 100
+    private val userId
+        get() = RunnerBeApplication.mTokenPreference.getUserId()
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
 
@@ -62,6 +62,10 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     @Inject
     lateinit var postAdapter: PostAdapter
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
