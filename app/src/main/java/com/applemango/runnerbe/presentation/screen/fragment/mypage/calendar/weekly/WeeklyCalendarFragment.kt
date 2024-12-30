@@ -46,7 +46,7 @@ class WeeklyCalendarFragment() :
     private val targetUserId: Int by lazy {
         arguments?.getInt(ARG_USER_ID) ?: -1
     }
-    private var counts: Pair<Int,Int> = Pair(0,0)
+    private var counts: Pair<Int, Int> = Pair(0, 0)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,6 +77,10 @@ class WeeklyCalendarFragment() :
         viewModel.updateCurrentMondayMonth(thisWeekMondayYear, thisWeekMondayMonth)
     }
 
+    /**
+     * 서버 API 변경 예정
+     * 현재는 이전달 + 이번달 데이터 조회 -> 변환 -> 병합 과정을 거쳐야 해서 로직이 복잡함
+     */
     private fun setupWeeklyRunningLogs() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -94,36 +98,57 @@ class WeeklyCalendarFragment() :
                              * ex) 오늘은 2024년 11월 1일 (금요일)이지만,
                              *     이번주 월요일은 2024년 11월 28일(월요일)인 경우
                              */
-                            val prevMonthGatheringDataList = runningResultMap[thisWeekMondayMonth]?.gatheringDays ?: emptyList()
-                            val thisMonthGatheringDataList = runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
+                            val prevMonthGatheringDataList =
+                                runningResultMap[thisWeekMondayMonth]?.gatheringDays ?: emptyList()
+                            val thisMonthGatheringDataList =
+                                runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
 
-                            val prevMonthRunningLogList = runningResultMap[thisWeekMondayMonth]?.runningLog ?: emptyList()
-                            val thisMonthRunningLogList = runningResultMap[thisMonth]?.runningLog ?: emptyList()
+                            val prevMonthRunningLogList =
+                                runningResultMap[thisWeekMondayMonth]?.runningLog ?: emptyList()
+                            val thisMonthRunningLogList =
+                                runningResultMap[thisMonth]?.runningLog ?: emptyList()
 
                             val parsedRunningLogs = combineGatheringDataToRunningLogs(
                                 prevMonthGatheringDataList + thisMonthGatheringDataList,
                                 prevMonthRunningLogList + thisMonthRunningLogList
                             )
                             val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
-                            val (groupCount, personalCount) = runningResultMap[thisWeekMondayMonth]?.totalCount ?: TotalCount(0, 0)
+                            val (groupCount, personalCount) = runningResultMap[thisWeekMondayMonth]?.totalCount
+                                ?: TotalCount(0, 0)
 
                             counts = Pair(groupCount, personalCount)
                             positionChangeListener?.onPositionChanged(counts.first, counts.second)
-                            weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
+                            weeklyCalendarAdapter.submitList(
+                                initWeekDays(
+                                    thisWeekMonday,
+                                    thisWeekLogs
+                                )
+                            )
                         }
 
                         false -> {
-                            val thisMonthGatheringDataList = runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
-                            val thisMonthRunningLogList = runningResultMap[thisMonth]?.runningLog ?: emptyList()
+                            val thisMonthGatheringDataList =
+                                runningResultMap[thisMonth]?.gatheringDays ?: emptyList()
+                            val thisMonthRunningLogList =
+                                runningResultMap[thisMonth]?.runningLog ?: emptyList()
 
                             val parsedRunningLogs =
-                                combineGatheringDataToRunningLogs(thisMonthGatheringDataList, thisMonthRunningLogList)
+                                combineGatheringDataToRunningLogs(
+                                    thisMonthGatheringDataList,
+                                    thisMonthRunningLogList
+                                )
                             val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
-                            val (groupCount, personalCount) = runningResultMap[thisMonth]?.totalCount ?: TotalCount(0, 0)
+                            val (groupCount, personalCount) = runningResultMap[thisMonth]?.totalCount
+                                ?: TotalCount(0, 0)
 
                             counts = Pair(groupCount, personalCount)
                             positionChangeListener?.onPositionChanged(counts.first, counts.second)
-                            weeklyCalendarAdapter.submitList(initWeekDays(thisWeekMonday, thisWeekLogs))
+                            weeklyCalendarAdapter.submitList(
+                                initWeekDays(
+                                    thisWeekMonday,
+                                    thisWeekLogs
+                                )
+                            )
                         }
                     }
                 }
@@ -234,12 +259,12 @@ class WeeklyCalendarFragment() :
             positionChangeListener: VpPositionChangeListener
         ): WeeklyCalendarFragment {
             val fragment = WeeklyCalendarFragment()
-            val args = Bundle()
-            args.putSerializable(ARG_DATE, date)
-            args.putInt(ARG_POSITION, position)
-            args.putBoolean(ARG_IS_OTHER_USER, isOtherUser)
-            args.putInt(ARG_USER_ID, userId)
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply {
+                putSerializable(ARG_DATE, date)
+                putInt(ARG_POSITION, position)
+                putBoolean(ARG_IS_OTHER_USER, isOtherUser)
+                putInt(ARG_USER_ID, userId)
+            }
             fragment.positionChangeListener = positionChangeListener
             return fragment
         }
