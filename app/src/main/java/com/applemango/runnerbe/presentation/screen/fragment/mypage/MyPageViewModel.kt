@@ -72,8 +72,7 @@ class MyPageViewModel @Inject constructor(
         today: LocalDate,
         userId: Int,
     ) {
-        viewModelScope.launch(Dispatchers.IO
-        ) {
+        viewModelScope.launch(Dispatchers.IO) {
             val todayDate = today.dayOfMonth
             val thisYear = today.year
             val prevMonth = if (today.monthValue == 1) 12 else today.monthValue - 1

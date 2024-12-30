@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface GetAlarmsApi {
 
-    @GET("https://www.runnerbe.shop/users/alarms")
+    @GET("/users/alarms")
     suspend fun getNotifications(
 
     ): Response<GetNotificationsResponse>
