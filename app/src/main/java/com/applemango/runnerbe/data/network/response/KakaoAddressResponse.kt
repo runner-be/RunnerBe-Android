@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class KakaoLocalResponse(
     val meta: KakaoAddressMeta,
     val documents: List<KakaoAddressDocument>
-) : BaseResponse()
+)
 
 @JsonClass(generateAdapter = true)
 data class KakaoAddressMeta (

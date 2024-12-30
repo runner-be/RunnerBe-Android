@@ -40,14 +40,6 @@ class PostAdapter : ListAdapter<Posting, PostViewHolder>(postDiffUtil) {
         this.postFrom = from
     }
 
-    fun updatePostBookmark(posting: Posting) {
-        val item = currentList.first { it.postId == posting.postId }
-        val itemIndex = currentList.indexOf(item)
-        val bookmarkStatus = if (posting.bookmarkCheck()) 0 else 1
-        currentList[itemIndex].bookMark = bookmarkStatus
-        notifyItemChanged(itemIndex)
-    }
-
     companion object {
         private val postDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
             override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
