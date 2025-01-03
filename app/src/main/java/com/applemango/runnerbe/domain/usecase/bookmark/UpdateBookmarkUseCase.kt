@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class BookMarkStatusChangeUseCase @Inject constructor(
+/**
+ * 특정 게시글 북마크 상태 변경
+ */
+class UpdateBookmarkUseCase @Inject constructor(
     private val repo : UserRepository
 ) {
     operator fun invoke(userId : Int, postId : Int, whetherAdd: String) : Flow<CommonResponse> = flow {

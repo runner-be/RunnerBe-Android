@@ -1,19 +1,21 @@
-package com.applemango.runnerbe.domain.usecase
+package com.applemango.runnerbe.domain.usecase.post
 
-import com.applemango.runnerbe.domain.repository.UserRepository
+import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetAlarmsUseCase @Inject constructor(
-    private val userRepository: UserRepository
+/**
+ * 게시글에 참여신청
+ */
+class ApplyPostUseCase @Inject constructor(
+    private val repo: PostRepository
 ) {
-
-    suspend operator fun invoke(): Flow<CommonResponse> = flow {
+    operator fun invoke(postId: Int, userId : Int) : Flow<CommonResponse> = flow {
         runCatching {
             emit(CommonResponse.Loading)
-            userRepository.getNotifications()
+            repo.postApply(postId, userId)
         }.onSuccess {
             emit(it)
         }.onFailure {

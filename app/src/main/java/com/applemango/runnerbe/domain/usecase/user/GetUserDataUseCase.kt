@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.domain.usecase
+package com.applemango.runnerbe.domain.usecase.user
 
 import com.applemango.runnerbe.domain.repository.UserRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse

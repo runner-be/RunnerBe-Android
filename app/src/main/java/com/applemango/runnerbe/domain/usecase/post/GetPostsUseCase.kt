@@ -1,16 +1,21 @@
 package com.applemango.runnerbe.domain.usecase.post
 
+import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.domain.repository.PostRepository
+import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class DropPostUseCase @Inject constructor(private val repo: PostRepository) {
-    operator fun invoke(postId: Int, userId: Int) :Flow<CommonResponse> = flow {
+/**
+ * 게시글 목록 조회
+ */
+class GetPostsUseCase @Inject constructor(private val repo: PostRepository) {
+    operator fun invoke(runningTag: RunningTag, request : GetRunningListRequest) : Flow<CommonResponse> = flow{
         runCatching {
             emit(CommonResponse.Loading)
-            repo.dropPost(postId, userId)
+            repo.getRunningList(runningTag = runningTag.tag, request = request)
         }.onSuccess {
             emit(it)
         }.onFailure {

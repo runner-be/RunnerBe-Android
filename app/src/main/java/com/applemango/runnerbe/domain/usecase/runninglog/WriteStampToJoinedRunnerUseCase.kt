@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class PostStampToJoinedRunnerUseCase @Inject constructor(
+class WriteStampToJoinedRunnerUseCase @Inject constructor(
     private val runningLogRepository: RunningLogRepository
 ) {
     suspend operator fun invoke(

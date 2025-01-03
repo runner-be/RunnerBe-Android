@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.domain.usecase
+package com.applemango.runnerbe.domain.usecase.alarm
 
 import com.applemango.runnerbe.domain.repository.UserRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class PatchAlarmUseCase @Inject constructor(private val repo: UserRepository) {
+/**
+ * 알림 상태 변경
+ */
+class UpdateAlarmUseCase @Inject constructor(private val repo: UserRepository) {
 
     operator fun invoke(userId: Int, pushOn : Boolean) : Flow<CommonResponse> = flow {
         runCatching {

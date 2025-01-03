@@ -1,16 +1,16 @@
-package com.applemango.runnerbe.domain.usecase.bookmark
+package com.applemango.runnerbe.domain.usecase.runningtalk
 
-import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetAllDayBookmarkListUseCase @Inject constructor(private val repo: PostRepository) {
-    operator fun invoke(userId: Int): Flow<CommonResponse> = flow {
+class GetRunningTalkRoomsUseCase @Inject constructor(private val repo : RunningTalkRepository) {
+    operator fun invoke() : Flow<CommonResponse> = flow {
         runCatching {
             emit(CommonResponse.Loading)
-            repo.getBookmarkList(userId)
+            repo.getRunningTalks()
         }.onSuccess {
             emit(it)
         }.onFailure {

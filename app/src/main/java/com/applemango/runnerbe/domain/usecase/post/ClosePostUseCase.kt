@@ -1,16 +1,21 @@
-package com.applemango.runnerbe.domain.usecase
+package com.applemango.runnerbe.domain.usecase.post
 
+import com.applemango.runnerbe.domain.repository.PostRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetRunningTalkUseCase @Inject constructor(private val repo : RunningTalkRepository) {
-    operator fun invoke() : Flow<CommonResponse> = flow {
+/**
+ * 게시글 참여 신청 마감
+ */
+class ClosePostUseCase @Inject constructor(
+    private val repo: PostRepository
+) {
+    operator fun invoke(postId: Int) : Flow<CommonResponse> = flow {
         runCatching {
             emit(CommonResponse.Loading)
-            repo.getRunningTalks()
+            repo.postClosing(postId)
         }.onSuccess {
             emit(it)
         }.onFailure {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetRunningTalkDetailUseCase @Inject constructor(private val repo : RunningTalkRepository) {
+class GetRunningTalkMessagesUseCase @Inject constructor(private val repo : RunningTalkRepository) {
     operator fun invoke(roomId: Int) :Flow<CommonResponse> = flow {
         runCatching {
             emit(CommonResponse.Loading)

@@ -2,22 +2,20 @@ package com.applemango.runnerbe.domain.usecase.runningtalk
 
 import com.applemango.runnerbe.domain.repository.RunningTalkRepository
 import com.applemango.runnerbe.presentation.state.CommonResponse
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class MessageReportUseCase @Inject constructor(
+class SendMessageUseCase @Inject constructor(
     private val repo: RunningTalkRepository
 ) {
-    operator fun invoke(messageIdList : List<Int>) : Flow<CommonResponse> = flow {
+    suspend operator fun invoke(roomId: Int, content: String?, url: String?): CommonResponse {
         runCatching {
-            emit(CommonResponse.Loading)
-            repo.reportMessage(messageIdList)
+            repo.sendMessage(roomId, content, url)
         }.onSuccess {
-            emit(it)
+            return it
         }.onFailure {
             it.printStackTrace()
-            emit(CommonResponse.Failed(999, it.message?:"error"))
+            return CommonResponse.Failed(999, it.message?:"error")
         }
+        return CommonResponse.Failed(999, "error")
     }
 }

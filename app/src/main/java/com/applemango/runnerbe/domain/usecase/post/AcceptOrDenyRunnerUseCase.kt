@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class PostWhetherAcceptUseCase @Inject constructor(
+/**
+ * 참여 신청한 러너의 참여를 승인/거부
+ */
+class AcceptOrDenyRunnerUseCase @Inject constructor(
     private val repo: PostRepository
 ) {
 
