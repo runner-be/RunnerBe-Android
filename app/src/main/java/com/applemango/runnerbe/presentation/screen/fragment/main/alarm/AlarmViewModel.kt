@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.network.response.GetNotificationsResponse
 import com.applemango.runnerbe.data.network.response.Alarm
-import com.applemango.runnerbe.domain.usecase.GetAlarmsUseCase
+import com.applemango.runnerbe.domain.usecase.alarm.GetAlarmsUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel

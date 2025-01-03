@@ -8,10 +8,10 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
 import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResponse
-import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnerListUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnersUseCase
 import com.applemango.runnerbe.domain.usecase.runninglog.GetRunningLogDetailUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.PatchRunningLogUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.PostRunningLogUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.UpdateRunningLogUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.WriteRunningLogUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -38,9 +38,9 @@ import com.google.firebase.storage.StorageReference as StorageReference
 
 @HiltViewModel
 class RunningLogViewModel @Inject constructor(
-    private val postRunningLogUseCase: PostRunningLogUseCase,
-    private val patchRunningLogUseCase: PatchRunningLogUseCase,
-    private val getJoinedRunnerListUseCase: GetJoinedRunnerListUseCase,
+    private val writeRunningLogUseCase: WriteRunningLogUseCase,
+    private val updateRunningLogUseCase: UpdateRunningLogUseCase,
+    private val getJoinedRunnersUseCase: GetJoinedRunnersUseCase,
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase
 ) : ViewModel() {
     private val logId = MutableStateFlow<Int?>(null)
@@ -114,7 +114,7 @@ class RunningLogViewModel @Inject constructor(
         val logId = logId.value
 
         if (logId == null) {
-            postRunningLogUseCase(
+            writeRunningLogUseCase(
                 userId,
                 date.year,
                 date.monthValue,
@@ -124,7 +124,7 @@ class RunningLogViewModel @Inject constructor(
                 // TODO() 러닝 통계 조회 및 표시
             }
         } else {
-            patchRunningLogUseCase(
+            updateRunningLogUseCase(
                 userId,
                 logId,
                 runningLog
@@ -193,7 +193,7 @@ class RunningLogViewModel @Inject constructor(
             this.gatheringId.value = gId
             viewModelScope.launch(Dispatchers.IO) {
                 val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                getJoinedRunnerListUseCase(userId, gId).catch {
+                getJoinedRunnersUseCase(userId, gId).catch {
                     it.printStackTrace()
                 }.collectLatest { response ->
                     when (response) {

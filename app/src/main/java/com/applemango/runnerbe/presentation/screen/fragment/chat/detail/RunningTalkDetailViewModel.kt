@@ -1,21 +1,18 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail
 
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.loader.content.CursorLoader
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Messages
 import com.applemango.runnerbe.data.dto.RoomInfo
 import com.applemango.runnerbe.data.network.response.RunningTalkDetailResponse
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.runningtalk.GetRunningTalkDetailUseCase
-import com.applemango.runnerbe.domain.usecase.runningtalk.MessageReportUseCase
-import com.applemango.runnerbe.domain.usecase.runningtalk.MessageSendUseCase
+import com.applemango.runnerbe.domain.usecase.runningtalk.GetRunningTalkMessagesUseCase
+import com.applemango.runnerbe.domain.usecase.runningtalk.ReportMessageUseCase
+import com.applemango.runnerbe.domain.usecase.runningtalk.SendMessageUseCase
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.RunningTalkDetailMapper
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.state.CommonResponse
@@ -40,9 +37,9 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class RunningTalkDetailViewModel @Inject constructor(
-    private val runningTalkDetailUseCase: GetRunningTalkDetailUseCase,
-    private val messageSendUseCase: MessageSendUseCase,
-    private val messageReportUseCase: MessageReportUseCase
+    private val runningTalkDetailUseCase: GetRunningTalkMessagesUseCase,
+    private val sendMessageUseCase: SendMessageUseCase,
+    private val reportMessageUseCase: ReportMessageUseCase
 ) : ViewModel() {
 
     val actions: MutableSharedFlow<RunningTalkDetailAction> = MutableSharedFlow()
@@ -99,7 +96,7 @@ class RunningTalkDetailViewModel @Inject constructor(
                 async { url to (uploadImg(roomId, url, index) != null) }
             }.awaitAll()
             val textResult = if (content.isNotEmpty()) {
-                messageSendUseCase(roomId, content, null)
+                sendMessageUseCase(roomId, content, null)
             } else null
 
             handleResults(textResult, imageResults, content)
@@ -196,7 +193,7 @@ class RunningTalkDetailViewModel @Inject constructor(
             }
 
             downloadUrl?.let { path ->
-                when (messageSendUseCase(roomId, null, path)) {
+                when (sendMessageUseCase(roomId, null, path)) {
                     is CommonResponse.Success<*> -> {
                         successImageList.add(path)
                         path
@@ -232,7 +229,7 @@ class RunningTalkDetailViewModel @Inject constructor(
             }
         }
         if (messageIdList.isNotEmpty()) {
-            messageReportUseCase(messageIdList).collect {
+            reportMessageUseCase(messageIdList).collect {
                 when (it) {
                     is CommonResponse.Success<*> -> {
                         _messageReportUiState.emit(UiState.Success(it.code))

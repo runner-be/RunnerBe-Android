@@ -7,7 +7,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.WriteRunningRequest
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
-import com.applemango.runnerbe.domain.usecase.post.WriteRunningUseCase
+import com.applemango.runnerbe.domain.usecase.post.WritePostUseCase
 import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.RunningTag
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningWriteTwoViewModel @Inject constructor(
-    private val writeUseCase: WriteRunningUseCase
+    private val writeUseCase: WritePostUseCase
 ) : ViewModel() {
     val paceList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(initPaceInfoList())
     val oneData: MutableStateFlow<RunningWriteTransferData> = MutableStateFlow(

@@ -6,7 +6,7 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.GetMyPageResult
 import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

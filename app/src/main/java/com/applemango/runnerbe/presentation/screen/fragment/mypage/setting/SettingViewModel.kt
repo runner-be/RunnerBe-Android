@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.domain.usecase.PatchAlarmUseCase
-import com.applemango.runnerbe.domain.usecase.WithdrawalUserUseCase
+import com.applemango.runnerbe.domain.usecase.alarm.UpdateAlarmUseCase
+import com.applemango.runnerbe.domain.usecase.user.WithdrawalUserUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val withdrawalUserUseCase: WithdrawalUserUseCase,
-    private val patchAlarmUseCase: PatchAlarmUseCase
+    private val updateAlarmUseCase: UpdateAlarmUseCase
 ) : ViewModel() {
 
     private val _logoutState: MutableLiveData<Boolean> = MutableLiveData()
@@ -64,7 +64,7 @@ class SettingViewModel @Inject constructor(
 
     suspend fun patchAlarm(userId : Int, pushOn : Boolean) {
         runCatching {
-            if(beforeAlarmCheck != pushOn) patchAlarmUseCase(userId, pushOn).collectLatest {  }
+            if(beforeAlarmCheck != pushOn) updateAlarmUseCase(userId, pushOn).collectLatest {  }
         }.onFailure { it.printStackTrace() }
     }
 }

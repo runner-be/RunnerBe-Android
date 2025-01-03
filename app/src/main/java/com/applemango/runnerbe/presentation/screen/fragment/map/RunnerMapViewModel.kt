@@ -8,7 +8,7 @@ import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.data.network.response.GetRunningListResponse
 import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.post.GetRunningListUseCase
+import com.applemango.runnerbe.domain.usecase.post.GetPostsUseCase
 import com.applemango.runnerbe.presentation.model.AfterPartyTag
 import com.applemango.runnerbe.presentation.model.PriorityFilterTag
 import com.applemango.runnerbe.presentation.model.RunningTag
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunnerMapViewModel @Inject constructor(
-    private val getRunningListUseCase: GetRunningListUseCase
+    private val getPostsUseCase: GetPostsUseCase
 ) : ViewModel() {
 
     val postList: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
@@ -129,7 +129,7 @@ class RunnerMapViewModel @Inject constructor(
             pageSize = pageSize,
             page = if (isRefresh) 1 else postList.value.size / pageSize + 1
         )
-        getRunningListUseCase(filterRunningTag.value, request).collect {
+        getPostsUseCase(filterRunningTag.value, request).collect {
             if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
                 if (it.body.isSuccess) {
                     isEndPage = it.body.runningList.size < pageSize

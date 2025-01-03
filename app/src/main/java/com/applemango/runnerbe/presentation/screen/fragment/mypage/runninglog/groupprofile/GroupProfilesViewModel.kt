@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResponse
 import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
-import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnerListUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.PostStampToJoinedRunnerUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnersUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.WriteStampToJoinedRunnerUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupProfilesViewModel @Inject constructor(
-    private val getJoinedRunnerListUseCase: GetJoinedRunnerListUseCase,
-    private val postStampToJoinedRunnerUseCase: PostStampToJoinedRunnerUseCase
+    private val getJoinedRunnersUseCase: GetJoinedRunnersUseCase,
+    private val writeStampToJoinedRunnerUseCase: WriteStampToJoinedRunnerUseCase
 ): ViewModel() {
     private val runnerInfo = MutableStateFlow<Pair<Int, Int>?>(null)
     private val lastSelectedUserId = MutableStateFlow<Int?>(null)
@@ -41,7 +41,7 @@ class GroupProfilesViewModel @Inject constructor(
     val joinedRunnerListFlow: Flow<List<JoinedRunnerResult>> = runnerInfo
         .filterNotNull()
         .flatMapLatest { (first, second) ->
-            getJoinedRunnerListUseCase(first, second)
+            getJoinedRunnersUseCase(first, second)
         }
         .map { response ->
             when (response) {
@@ -74,7 +74,7 @@ class GroupProfilesViewModel @Inject constructor(
                     targetUserId,
                     stampCode
                 )
-                postStampToJoinedRunnerUseCase(userId, gatheringId, stampRequest)
+                writeStampToJoinedRunnerUseCase(userId, gatheringId, stampRequest)
                     .onStart {
                         _stampResult.value = CommonResponse.Loading
                     }

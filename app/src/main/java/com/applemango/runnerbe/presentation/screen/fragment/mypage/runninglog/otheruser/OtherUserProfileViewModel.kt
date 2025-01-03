@@ -5,22 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUser
 import com.applemango.runnerbe.data.network.response.OtherUserInfo
-import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetOtherUserDataUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class OtherUserProfileViewModel @Inject constructor(
-    private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
+    private val getOtherUserDataUseCase: GetOtherUserDataUseCase
 ) : ViewModel() {
     private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
     val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
@@ -41,7 +39,7 @@ class OtherUserProfileViewModel @Inject constructor(
 
     fun getOtherUserProfile(userId: Int) {
         viewModelScope.launch {
-            getOtherUserProfileUseCase(userId)
+            getOtherUserDataUseCase(userId)
                 .collectLatest { response ->
                     when (response) {
                         is CommonResponse.Success<*> -> {

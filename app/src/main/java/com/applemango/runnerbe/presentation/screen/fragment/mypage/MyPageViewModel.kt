@@ -10,9 +10,9 @@ import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
-import com.applemango.runnerbe.domain.usecase.PatchUserImageUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogListUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
+import com.applemango.runnerbe.domain.usecase.user.UpdateUserImageUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogsUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.LogUtil
@@ -33,8 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val patchUserImageUseCase: PatchUserImageUseCase,
-    private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
+    private val updateUserImageUseCase: UpdateUserImageUseCase,
+    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase
 ) : ViewModel() {
     private val _currentMondayYearMonth: MutableStateFlow<String> = MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
     val currentMondayYearMonth: StateFlow<String> get() = _currentMondayYearMonth.asStateFlow()
@@ -80,10 +80,10 @@ class MyPageViewModel @Inject constructor(
 
             if (todayDate < 21) {
                 val deferredPrevMonthResult = async {
-                    getMonthlyRunningLogListUseCase(userId, thisYear, prevMonth)
+                    getMonthlyRunningLogsUseCase(userId, thisYear, prevMonth)
                 }
                 val deferredThisMonthResult = async {
-                    getMonthlyRunningLogListUseCase(userId, thisYear, thisMonth)
+                    getMonthlyRunningLogsUseCase(userId, thisYear, thisMonth)
                 }
 
                 try {
@@ -105,7 +105,7 @@ class MyPageViewModel @Inject constructor(
                     e.printStackTrace()
                 }
             } else {
-                getMonthlyRunningLogListUseCase(userId, thisYear, thisMonth)
+                getMonthlyRunningLogsUseCase(userId, thisYear, thisMonth)
                     .map { response ->
                         response.processRunningLogResult()
                     }
@@ -174,7 +174,7 @@ class MyPageViewModel @Inject constructor(
 
 
     fun userProfileImageChange(imageUrl: String?) = viewModelScope.launch {
-        patchUserImageUseCase(imageUrl).collect {
+        updateUserImageUseCase(imageUrl).collect {
             _updateUserImageState.postValue(
                 when (it) {
                     is CommonResponse.Success<*> -> UiState.Success(it.code)

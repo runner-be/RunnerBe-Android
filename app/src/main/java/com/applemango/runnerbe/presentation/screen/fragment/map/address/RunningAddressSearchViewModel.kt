@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.applemango.runnerbe.domain.usecase.post.GetAddressListUseCase
+import com.applemango.runnerbe.domain.usecase.post.SearchAddressByKeywordUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningAddressSearchViewModel @Inject constructor(
-    private val getAddressListUseCase: GetAddressListUseCase
+    private val searchAddressByKeywordUseCase: SearchAddressByKeywordUseCase
 ) : ViewModel() {
     private val _addressResultFlow = MutableStateFlow<PagingData<AddressResult>>(PagingData.empty())
     val addressResultFlow : Flow<PagingData<AddressResult>> = _addressResultFlow
@@ -26,7 +26,7 @@ class RunningAddressSearchViewModel @Inject constructor(
 
     fun getAddressSearchResultList(keyword: String) {
         viewModelScope.launch {
-            getAddressListUseCase(keyword)
+            searchAddressByKeywordUseCase(keyword)
                 .collectLatest { addressResult ->
                     if (addressResult is CommonResponse.Success<*> && addressResult.body is PagingData<*>) {
                         Log.e("Address search", " : addressResult is CommonResponse.Success")

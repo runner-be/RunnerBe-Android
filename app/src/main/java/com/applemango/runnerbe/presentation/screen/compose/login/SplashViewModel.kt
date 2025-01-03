@@ -10,7 +10,7 @@ import com.applemango.runnerbe.data.network.request.SocialLoginRequest
 import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.repository.KakaoLoginRepository
 import com.applemango.runnerbe.domain.repository.NaverLoginRepository
-import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
 import com.applemango.runnerbe.presentation.model.LoginType
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
