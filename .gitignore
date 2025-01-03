@@ -154,3 +154,5 @@ lint/tmp/
 
 # Firebase configuration file
 app/google-services.json
+
+/build-counter.properties
