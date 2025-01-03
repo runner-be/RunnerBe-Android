@@ -2,8 +2,8 @@ package com.applemango.runnerbe.data.repositoryimpl
 
 import com.applemango.runnerbe.data.network.api.GetRunningTalkDetailApi
 import com.applemango.runnerbe.data.network.api.GetRunningTalkMessagesApi
-import com.applemango.runnerbe.data.network.api.MessageReportApi
-import com.applemango.runnerbe.data.network.api.MessageSendApi
+import com.applemango.runnerbe.data.network.api.PostMessageReportApi
+import com.applemango.runnerbe.data.network.api.PostMessageApi
 import com.applemango.runnerbe.data.network.request.MessageReportRequest
 import com.applemango.runnerbe.data.network.request.SendMessageRequest
 import com.applemango.runnerbe.domain.repository.RunningTalkRepository
@@ -13,8 +13,8 @@ import javax.inject.Inject
 class RunningTalkRepositoryImpl @Inject constructor(
     private val getRunningTalkMessagesApi: GetRunningTalkMessagesApi,
     private val getRunningTalkDetailApi: GetRunningTalkDetailApi,
-    private val sendMessagesApi: MessageSendApi,
-    private val messageReportApi: MessageReportApi
+    private val sendMessagesApi: PostMessageApi,
+    private val postMessageReportApi: PostMessageReportApi
 ) : RunningTalkRepository {
     override suspend fun getRunningTalks(): CommonResponse {
         return try {
@@ -74,7 +74,7 @@ class RunningTalkRepositoryImpl @Inject constructor(
                 request.append(i.toString())
                 if (index < messageIdList.size) request.append(",")
             }
-            val response = messageReportApi.messageReport(MessageReportRequest(request.toString()))
+            val response = postMessageReportApi.messageReport(MessageReportRequest(request.toString()))
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
