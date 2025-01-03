@@ -5,7 +5,7 @@ import com.applemango.runnerbe.data.network.response.SocialLoginResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface KakaoLoginAPI {
-    @POST("/users/kakao-login")
-    suspend fun kakaoLogin(@Body body: SocialLoginRequest) : SocialLoginResponse
+interface PostNaverLoginAPI {
+    @POST("/users/naver-login")
+    suspend fun naverLogin(@Body body: SocialLoginRequest) : SocialLoginResponse
 }

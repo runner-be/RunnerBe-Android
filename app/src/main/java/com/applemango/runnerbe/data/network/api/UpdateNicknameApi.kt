@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-interface NicknameChangeApi {
+interface UpdateNicknameApi {
     @PATCH("/users/{userId}/name")
     suspend fun editNickname(@Path("userId") userId: Int, @Body body: EditNicknameRequest) : Response<BaseResponse>
 }

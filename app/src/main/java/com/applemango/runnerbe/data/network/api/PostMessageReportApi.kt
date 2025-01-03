@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface MessageReportApi {
+interface PostMessageReportApi {
 
     @POST("/messages/report")
     suspend fun messageReport(@Body request : MessageReportRequest) : Response<BaseResponse>

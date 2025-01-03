@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-interface WhetherAcceptHandlingApi {
+interface PatchAppliedRunnerApi {
 
     @PATCH("runnings/request/{postId}/handling/{applicantId}/{whetherAccept}")
     suspend fun whetherAccept(

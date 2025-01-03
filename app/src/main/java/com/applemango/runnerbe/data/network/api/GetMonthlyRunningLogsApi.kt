@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.data.network.api.runningLog
+package com.applemango.runnerbe.data.network.api
 
 import com.applemango.runnerbe.data.network.response.MonthlyStampResponse
 import retrofit2.Response
@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface GetMonthlyRunningLogListApi {
+interface GetMonthlyRunningLogsApi {
 
     @GET("/runningLogs/{userId}")
     suspend fun getMonthlyRunningLog(

@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-interface EditJobApi {
+interface UpdateJobApi {
     @PATCH("/users/{userId}/job")
     suspend fun editJob(@Path("userId") userId: Int, @Body body: EditJobRequest) : Response<BaseResponse>
 }

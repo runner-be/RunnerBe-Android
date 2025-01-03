@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-interface AttendanceAccessionApi {
+interface PatchJoinedRunnerAttendanceApi {
 
     @PATCH("runnings/{postId}/attend")
     suspend fun attendanceAccession(

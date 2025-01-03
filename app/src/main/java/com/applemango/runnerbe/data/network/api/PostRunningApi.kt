@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface WriteRunningApi {
+interface PostRunningApi {
     @POST("postings/{userId}")
     suspend fun writingRunning(@Path("userId") userId: Int, @Body body: WriteRunningRequest) : Response<BaseResponse>
 }

@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.data.network.api.runningLog
+package com.applemango.runnerbe.data.network.api
 
 import com.applemango.runnerbe.data.network.response.BaseResponse
 import retrofit2.Response

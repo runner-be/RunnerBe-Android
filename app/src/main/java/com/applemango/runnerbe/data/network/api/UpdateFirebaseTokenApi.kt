@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-interface FirebaseTokenUpdateApi {
+interface UpdateFirebaseTokenApi {
 
     @PATCH("/users/{userId}/deviceToken")
     suspend fun firebaseTokenUpdate(
