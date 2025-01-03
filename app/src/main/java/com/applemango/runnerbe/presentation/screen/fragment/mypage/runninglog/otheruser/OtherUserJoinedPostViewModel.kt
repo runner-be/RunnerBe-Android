@@ -4,24 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.OtherUser
-import com.applemango.runnerbe.domain.usecase.runninglog.GetOtherUserProfileUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetOtherUserDataUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class OtherUserJoinedPostViewModel @Inject constructor(
-    private val getOtherUserProfileUseCase: GetOtherUserProfileUseCase
+    private val getOtherUserDataUseCase: GetOtherUserDataUseCase
 ) : ViewModel() {
     val targetNickname = MutableStateFlow<String?>(null)
     val postSize = MutableStateFlow<Int>(0)
@@ -31,7 +26,7 @@ class OtherUserJoinedPostViewModel @Inject constructor(
 
     fun getJoinedPostList(userId: Int) {
         viewModelScope.launch {
-            getOtherUserProfileUseCase(userId).collectLatest { response ->
+            getOtherUserDataUseCase(userId).collectLatest { response ->
                 when (response) {
                     is CommonResponse.Success<*> -> {
                         val result = response.body as? OtherUser

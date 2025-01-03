@@ -11,14 +11,14 @@ import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
     private val getBookmarkApi: GetBookmarkApi,
-    private val writeRunningApi: WriteRunningApi,
+    private val postRunningApi: PostRunningApi,
     private val getRunningListApi: GetRunningListApi,
-    private val attendanceAccessionApi: AttendanceAccessionApi,
+    private val patchJoinedRunnerAttendanceApi: PatchJoinedRunnerAttendanceApi,
     private val getPostDetailApi: GetPostDetailApi,
     private val postClosingApi: PostClosingApi,
-    private val postApplyApi: PostApplyApi,
-    private val postWhetherAcceptHandlingApi: WhetherAcceptHandlingApi,
-    private val dropPostApi: DropPostApi,
+    private val postApplyToPostApi: PostApplyToPostApi,
+    private val postPatchAppliedRunnerApi: PatchAppliedRunnerApi,
+    private val deletePostApi: DeletePostApi,
     private val reportPostApi: PostReportPostingApi,
     private val getAddressResultListApi: GetAddressResultListApi
 ) : PostRepository {
@@ -41,7 +41,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun writeRunning(userId: Int, request: WriteRunningRequest): CommonResponse {
         return try {
-            val response = writeRunningApi.writingRunning(userId, request)
+            val response = postRunningApi.writingRunning(userId, request)
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -98,7 +98,7 @@ class PostRepositoryImpl @Inject constructor(
         request: AttendanceAccessionRequest
     ): CommonResponse {
         return try {
-            val response = attendanceAccessionApi.attendanceAccession(postId, request)
+            val response = patchJoinedRunnerAttendanceApi.attendanceAccession(postId, request)
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -149,7 +149,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun postApply(postId: Int, userId: Int): CommonResponse {
         return try {
-            val response = postApplyApi.postApply(postId, userId)
+            val response = postApplyToPostApi.postApply(postId, userId)
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -170,7 +170,7 @@ class PostRepositoryImpl @Inject constructor(
         whetherAccept: String
     ): CommonResponse {
         return try {
-            val response = postWhetherAcceptHandlingApi.whetherAccept(postId, applicantId, whetherAccept)
+            val response = postPatchAppliedRunnerApi.whetherAccept(postId, applicantId, whetherAccept)
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -205,7 +205,7 @@ class PostRepositoryImpl @Inject constructor(
     }
     override suspend fun dropPost(postId: Int, userId: Int): CommonResponse {
         return try {
-            val response = dropPostApi.dropPost(postId, userId)
+            val response = deletePostApi.dropPost(postId, userId)
             if(response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {

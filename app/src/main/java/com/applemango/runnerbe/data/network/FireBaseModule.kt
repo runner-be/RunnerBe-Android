@@ -2,15 +2,14 @@ package com.applemango.runnerbe.data.network
 
 import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.api.FirebaseTokenUpdateApi
-import com.google.gson.GsonBuilder
+import com.applemango.runnerbe.data.network.api.UpdateFirebaseTokenApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object FireBaseModule {
 
-    val api : FirebaseTokenUpdateApi by lazy { apiInit() }
+    val api : UpdateFirebaseTokenApi by lazy { apiInit() }
     private var firebaseRetrofit : Retrofit? = null
 
     private val httpClientBuilder = OkHttpClient().newBuilder().apply {
@@ -26,7 +25,7 @@ object FireBaseModule {
         }
     }
 
-    private fun apiInit() : FirebaseTokenUpdateApi {
+    private fun apiInit() : UpdateFirebaseTokenApi {
         val testRetrofit = firebaseRetrofit
         val retrofit = testRetrofit ?: run {
             Retrofit.Builder()
@@ -36,6 +35,6 @@ object FireBaseModule {
                 .build()
                 .also { firebaseRetrofit = it }
         }
-        return retrofit.create(FirebaseTokenUpdateApi::class.java)
+        return retrofit.create(UpdateFirebaseTokenApi::class.java)
     }
 }

@@ -7,7 +7,7 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.JoinUserRequest
 import com.applemango.runnerbe.data.network.response.JoinUserResponse
-import com.applemango.runnerbe.domain.usecase.RegisterUserUseCase
+import com.applemango.runnerbe.domain.usecase.user.RegisterUserUseCase
 import com.applemango.runnerbe.presentation.model.GenderTag
 import com.applemango.runnerbe.presentation.model.JobButtonId
 import com.applemango.runnerbe.presentation.state.CommonResponse

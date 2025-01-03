@@ -1,13 +1,11 @@
 package com.applemango.runnerbe.presentation.screen.dialog.appliedrunner
 
-import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.domain.usecase.post.PostClosingUseCase
-import com.applemango.runnerbe.domain.usecase.post.PostWhetherAcceptUseCase
-import com.applemango.runnerbe.presentation.model.listener.PostAcceptListener
+import com.applemango.runnerbe.domain.usecase.post.ClosePostUseCase
+import com.applemango.runnerbe.domain.usecase.post.AcceptOrDenyRunnerUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaitingRunnerViewModel @Inject constructor(
-    private val postWhetherAcceptUseCase: PostWhetherAcceptUseCase,
-    private val postClosingUseCase: PostClosingUseCase
+    private val acceptOrDenyRunnerUseCase: AcceptOrDenyRunnerUseCase,
+    private val closePostUseCase: ClosePostUseCase
 ) : ViewModel() {
     var post: Posting? = null
     var roomId : Int? = null
@@ -44,7 +42,7 @@ class WaitingRunnerViewModel @Inject constructor(
     fun postClose() = viewModelScope.launch {
         val postId = post?.postId
         if (postId != null) {
-            postClosingUseCase(postId).collect {
+            closePostUseCase(postId).collect {
                 _acceptUiState.emit(
                     when (it) {
                         is CommonResponse.Success<*> -> {
@@ -64,7 +62,7 @@ class WaitingRunnerViewModel @Inject constructor(
 
     private fun postWhetherAccept(postId: Int, userInfo: UserInfo, whetherAccept: String) =
         viewModelScope.launch {
-            postWhetherAcceptUseCase(postId, userInfo.userId, whetherAccept).collect {
+            acceptOrDenyRunnerUseCase(postId, userInfo.userId, whetherAccept).collect {
                 _acceptUiState.emit(
                     when (it) {
                         is CommonResponse.Success<*> -> {

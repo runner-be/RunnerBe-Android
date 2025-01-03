@@ -10,20 +10,20 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val registerUserApi: RegisterUserApi,
+    private val postNewUserApi: PostNewUserApi,
     private val getUserDataApi: GetUserDataApi,
-    private val withdrawalApi: WithdrawalApi,
+    private val deleteUserApi: DeleteUserApi,
     private val patchAlarmApi: PatchAlarmApi,
-    private val nicknameChangeApi: NicknameChangeApi,
-    private val jobChangeApi: EditJobApi,
+    private val updateNicknameApi: UpdateNicknameApi,
+    private val jobChangeApi: UpdateJobApi,
     private val patchUserImageApi: PatchUserImageApi,
-    private val bookMarkStatusChangeApi: BookMarkStatusChangeApi,
+    private val postBookmarkedPostApi: PostBookmarkedPostApi,
     private val patchUserPaceApi: PatchUserPaceRegistApi,
     private val getAlarmsApi: GetAlarmsApi
 ) : UserRepository {
     override suspend fun joinUser(request: JoinUserRequest): CommonResponse {
         return try {
-            val response = registerUserApi.register(request)
+            val response = postNewUserApi.register(request)
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -45,7 +45,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun withdrawalUser(userId: Int, secretKey: String): CommonResponse {
         return try {
             val response =
-                withdrawalApi.withdrawalUser(userId, WithdrawalUserRequest(secretKey = secretKey))
+                deleteUserApi.withdrawalUser(userId, WithdrawalUserRequest(secretKey = secretKey))
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -80,7 +80,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun nicknameChange(userId: Int, nickname: String): CommonResponse {
         return try {
-            val response = nicknameChangeApi.editNickname(userId, EditNicknameRequest(nickname))
+            val response = updateNicknameApi.editNickname(userId, EditNicknameRequest(nickname))
             if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
                 CommonResponse.Success(response.body()!!.code, response.body()!!)
             } else {
@@ -138,7 +138,7 @@ class UserRepositoryImpl @Inject constructor(
         whetherAdd: String
     ): CommonResponse {
         return try {
-            val response = bookMarkStatusChangeApi.bookMarkStatusChange(
+            val response = postBookmarkedPostApi.bookMarkStatusChange(
                 userId = userId,
                 postId = postId,
                 whetherAdd = whetherAdd

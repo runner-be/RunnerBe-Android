@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.network.response.BaseResponse
-import com.applemango.runnerbe.domain.usecase.bookmark.BookMarkStatusChangeUseCase
+import com.applemango.runnerbe.domain.usecase.bookmark.UpdateBookmarkUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val bookMarkStatusChangeUseCase: BookMarkStatusChangeUseCase
+    private val updateBookmarkUseCase: UpdateBookmarkUseCase
 ) : ViewModel() {
 
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
     fun bookmarkStatusChange(post: Posting) = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
-            bookMarkStatusChangeUseCase(
+            updateBookmarkUseCase(
                 userId,
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"

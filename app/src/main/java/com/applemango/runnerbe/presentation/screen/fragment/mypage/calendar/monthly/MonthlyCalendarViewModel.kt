@@ -1,8 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly
 
 import androidx.lifecycle.ViewModel
-import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogListUseCase
+import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogsUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -20,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MonthlyCalendarViewModel @Inject constructor(
-    private val getMonthlyRunningLogListUseCase: GetMonthlyRunningLogListUseCase
+    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase
 ): ViewModel() {
     val stampStatistic = MutableStateFlow(mapOf(Pair("크루", 4), Pair("개인", 6)))
 
@@ -39,7 +37,7 @@ class MonthlyCalendarViewModel @Inject constructor(
         .flatMapLatest { yearMonthPair ->
             try {
                 val userId = requireNotNull(_targetUserId.value)
-                getMonthlyRunningLogListUseCase(userId, yearMonthPair.first, yearMonthPair.second)
+                getMonthlyRunningLogsUseCase(userId, yearMonthPair.first, yearMonthPair.second)
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
                 emptyFlow()

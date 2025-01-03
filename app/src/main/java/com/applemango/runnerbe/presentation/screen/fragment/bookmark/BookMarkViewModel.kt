@@ -20,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookMarkViewModel @Inject constructor(
-    private val getAllDayBookmarkListUseCase: GetAllDayBookmarkListUseCase,
-    private val bookMarkStatusChangeUseCase: BookMarkStatusChangeUseCase
+    private val getBookmarkedPostsUseCase: GetBookmarkedPostsUseCase,
+    private val updateBookmarkUseCase: UpdateBookmarkUseCase
 ): ViewModel() {
 
     private val selectedTag : MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
@@ -67,7 +67,7 @@ class BookMarkViewModel @Inject constructor(
     fun getBookmarkList() {
         viewModelScope.launch {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            getAllDayBookmarkListUseCase(userId = userId).collect {
+            getBookmarkedPostsUseCase(userId = userId).collect {
                 when (it) {
                     is CommonResponse.Success<*> -> {
                         val response = it.body as GetBookmarkResponse
@@ -84,7 +84,7 @@ class BookMarkViewModel @Inject constructor(
 
     fun bookmarkStatusChange(post: Posting) {
         viewModelScope.launch {
-            bookMarkStatusChangeUseCase(
+            updateBookmarkUseCase(
                 RunnerBeApplication.mTokenPreference.getUserId(),
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"

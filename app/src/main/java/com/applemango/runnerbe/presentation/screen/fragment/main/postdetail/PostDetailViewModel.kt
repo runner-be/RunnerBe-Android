@@ -8,18 +8,15 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.data.network.api.GetUserDataApi
-import com.applemango.runnerbe.data.network.response.GetMyPageResult
-import com.applemango.runnerbe.data.network.response.GetOtherUserResponse
 import com.applemango.runnerbe.data.network.response.UserDataResponse
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.GetUserDataUseCase
-import com.applemango.runnerbe.domain.usecase.post.DropPostUseCase
+import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
+import com.applemango.runnerbe.domain.usecase.post.DeletePostUseCase
 import com.applemango.runnerbe.domain.usecase.post.GetPostDetailUseCase
-import com.applemango.runnerbe.domain.usecase.post.PostApplyUseCase
-import com.applemango.runnerbe.domain.usecase.post.PostClosingUseCase
+import com.applemango.runnerbe.domain.usecase.post.ApplyPostUseCase
+import com.applemango.runnerbe.domain.usecase.post.ClosePostUseCase
 import com.applemango.runnerbe.domain.usecase.post.PostDetailManufacture
-import com.applemango.runnerbe.domain.usecase.post.PostReportUseCase
+import com.applemango.runnerbe.domain.usecase.post.ReportPostUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
@@ -36,10 +33,10 @@ import javax.inject.Inject
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
     private val getPostDetailUseCase: GetPostDetailUseCase,
-    private val postClosingUseCase: PostClosingUseCase,
-    private val postApplyUseCase: PostApplyUseCase,
-    private val dropPostUseCase: DropPostUseCase,
-    private val postReportUseCase: PostReportUseCase,
+    private val closePostUseCase: ClosePostUseCase,
+    private val applyPostUseCase: ApplyPostUseCase,
+    private val deletePostUseCase: DeletePostUseCase,
+    private val reportPostUseCase: ReportPostUseCase,
     private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
 
@@ -84,8 +81,8 @@ class PostDetailViewModel @Inject constructor(
         if (postId != null) {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             if (userId > 0) {
-                val response = if (isMyPost()) postClosingUseCase(postId)
-                else postApplyUseCase(postId, userId)
+                val response = if (isMyPost()) closePostUseCase(postId)
+                else applyPostUseCase(postId, userId)
                 response.collect {
                     _processUiState.emit(
                         when (it) {
@@ -206,7 +203,7 @@ class PostDetailViewModel @Inject constructor(
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
-                dropPostUseCase(postId, userId).collect {
+                deletePostUseCase(postId, userId).collect {
                     _dropUiState.emit(
                         when (it) {
                             is CommonResponse.Success<*> -> UiState.Success(it.code)
@@ -230,7 +227,7 @@ class PostDetailViewModel @Inject constructor(
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
-                postReportUseCase(postId, userId).collect {
+                reportPostUseCase(postId, userId).collect {
                     _reportUiState.emit(
                         when (it) {
                             is CommonResponse.Success<*> -> UiState.Success(it.code)

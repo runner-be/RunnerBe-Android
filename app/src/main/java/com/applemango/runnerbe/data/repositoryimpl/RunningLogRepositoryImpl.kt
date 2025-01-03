@@ -1,13 +1,13 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
 import com.applemango.runnerbe.data.network.api.GetOtherUserProfileApi
-import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
-import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
+import com.applemango.runnerbe.data.network.api.DeleteRunningLogApi
+import com.applemango.runnerbe.data.network.api.GetJoinedRunnersApi
+import com.applemango.runnerbe.data.network.api.GetMonthlyRunningLogsApi
+import com.applemango.runnerbe.data.network.api.GetRunningLogDetailApi
+import com.applemango.runnerbe.data.network.api.PatchRunningLogApi
+import com.applemango.runnerbe.data.network.api.PostRunningLogApi
+import com.applemango.runnerbe.data.network.api.PostStampToJoinedRunnerApi
 import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
 import com.applemango.runnerbe.domain.repository.RunningLogRepository
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 class RunningLogRepositoryImpl @Inject constructor(
     private val deleteRunningLogApi: DeleteRunningLogApi,
-    private val getJoinedRunnerListApi: GetJoinedRunnerListApi,
-    private val getMonthlyRunningLogListApi: GetMonthlyRunningLogListApi,
+    private val getJoinedRunnersApi: GetJoinedRunnersApi,
+    private val getMonthlyRunningLogsApi: GetMonthlyRunningLogsApi,
     private val getRunningLogDetailApi: GetRunningLogDetailApi,
     private val patchRunningLogApi: PatchRunningLogApi,
     private val postRunningLogApi: PostRunningLogApi,
@@ -30,7 +30,7 @@ class RunningLogRepositoryImpl @Inject constructor(
         month: Int
     ): CommonResponse {
         return try {
-            val response = getMonthlyRunningLogListApi.getMonthlyRunningLog(userId, year, month)
+            val response = getMonthlyRunningLogsApi.getMonthlyRunningLog(userId, year, month)
             if (response.isSuccessful
                 && response.body() != null
                 && response.body()!!.isSuccess
@@ -139,7 +139,7 @@ class RunningLogRepositoryImpl @Inject constructor(
 
     override suspend fun getJoinedRunnerList(userId: Int, logId: Int): CommonResponse {
         return try {
-            val response = getJoinedRunnerListApi.getJoinedRunnerList(userId, logId)
+            val response = getJoinedRunnersApi.getJoinedRunnerList(userId, logId)
             if (response.isSuccessful
                 && response.body() != null
                 && response.body()!!.result.isNotEmpty()

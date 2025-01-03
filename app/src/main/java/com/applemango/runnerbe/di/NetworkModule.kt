@@ -5,13 +5,13 @@ import com.applemango.runnerbe.data.network.BearerInterceptor
 import com.applemango.runnerbe.data.network.XAccessTokenInterceptor
 import com.applemango.runnerbe.data.network.ZonedDateTimeAdapter
 import com.applemango.runnerbe.data.network.api.*
-import com.applemango.runnerbe.data.network.api.runningLog.DeleteRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetJoinedRunnerListApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetMonthlyRunningLogListApi
-import com.applemango.runnerbe.data.network.api.runningLog.GetRunningLogDetailApi
-import com.applemango.runnerbe.data.network.api.runningLog.PatchRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PostRunningLogApi
-import com.applemango.runnerbe.data.network.api.runningLog.PostStampToJoinedRunnerApi
+import com.applemango.runnerbe.data.network.api.DeleteRunningLogApi
+import com.applemango.runnerbe.data.network.api.GetJoinedRunnersApi
+import com.applemango.runnerbe.data.network.api.GetMonthlyRunningLogsApi
+import com.applemango.runnerbe.data.network.api.GetRunningLogDetailApi
+import com.applemango.runnerbe.data.network.api.PatchRunningLogApi
+import com.applemango.runnerbe.data.network.api.PostRunningLogApi
+import com.applemango.runnerbe.data.network.api.PostStampToJoinedRunnerApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -79,13 +79,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoLoginApi(retrofit: Retrofit): KakaoLoginAPI =
-        retrofit.create(KakaoLoginAPI::class.java)
+    fun provideKakaoLoginApi(retrofit: Retrofit): PostKakaoLoginAPI =
+        retrofit.create(PostKakaoLoginAPI::class.java)
 
     @Provides
     @Singleton
-    fun provideNaverLoginApi(retrofit: Retrofit): NaverLoginAPI =
-        retrofit.create(NaverLoginAPI::class.java)
+    fun provideNaverLoginApi(retrofit: Retrofit): PostNaverLoginAPI =
+        retrofit.create(PostNaverLoginAPI::class.java)
 
     @Provides
     @Singleton
@@ -99,8 +99,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideWithdrawalApi(retrofit: Retrofit) : WithdrawalApi =
-        retrofit.create(WithdrawalApi::class.java)
+    fun provideWithdrawalApi(retrofit: Retrofit) : DeleteUserApi =
+        retrofit.create(DeleteUserApi::class.java)
 
     @Provides
     @Singleton
@@ -109,13 +109,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNicknameChangeApi(retrofit: Retrofit) : NicknameChangeApi =
-        retrofit.create(NicknameChangeApi::class.java)
+    fun provideNicknameChangeApi(retrofit: Retrofit) : UpdateNicknameApi =
+        retrofit.create(UpdateNicknameApi::class.java)
 
     @Provides
     @Singleton
-    fun provideJobChangeApi(retrofit: Retrofit) : EditJobApi =
-        retrofit.create(EditJobApi::class.java)
+    fun provideJobChangeApi(retrofit: Retrofit) : UpdateJobApi =
+        retrofit.create(UpdateJobApi::class.java)
 
     @Provides
     @Singleton
@@ -129,8 +129,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideWriteRunningApi(retrofit: Retrofit) : WriteRunningApi =
-        retrofit.create(WriteRunningApi::class.java)
+    fun provideWriteRunningApi(retrofit: Retrofit) : PostRunningApi =
+        retrofit.create(PostRunningApi::class.java)
 
     @Provides
     @Singleton
@@ -139,13 +139,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAttendanceAccessionApi(retrofit: Retrofit) : AttendanceAccessionApi =
-        retrofit.create(AttendanceAccessionApi::class.java)
+    fun provideAttendanceAccessionApi(retrofit: Retrofit) : PatchJoinedRunnerAttendanceApi =
+        retrofit.create(PatchJoinedRunnerAttendanceApi::class.java)
 
     @Provides
     @Singleton
-    fun provideRegisterUserApi(retrofit: Retrofit) : RegisterUserApi =
-        retrofit.create(RegisterUserApi::class.java)
+    fun provideRegisterUserApi(retrofit: Retrofit) : PostNewUserApi =
+        retrofit.create(PostNewUserApi::class.java)
 
     @Provides
     @Singleton
@@ -159,18 +159,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePostApply(retrofit: Retrofit) : PostApplyApi =
-        retrofit.create(PostApplyApi::class.java)
+    fun providePostApply(retrofit: Retrofit) : PostApplyToPostApi =
+        retrofit.create(PostApplyToPostApi::class.java)
 
     @Provides
     @Singleton
-    fun provideWaitingRunnerAccept(retrofit: Retrofit) : WhetherAcceptHandlingApi =
-        retrofit.create(WhetherAcceptHandlingApi::class.java)
+    fun provideWaitingRunnerAccept(retrofit: Retrofit) : PatchAppliedRunnerApi =
+        retrofit.create(PatchAppliedRunnerApi::class.java)
 
     @Provides
     @Singleton
-    fun provideBookmarkStatusChange(retrofit: Retrofit) : BookMarkStatusChangeApi =
-        retrofit.create(BookMarkStatusChangeApi::class.java)
+    fun provideBookmarkStatusChange(retrofit: Retrofit) : PostBookmarkedPostApi =
+        retrofit.create(PostBookmarkedPostApi::class.java)
 
     @Provides
     @Singleton
@@ -179,18 +179,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMessageSend(retrofit: Retrofit) : MessageSendApi =
-        retrofit.create(MessageSendApi::class.java)
+    fun provideMessageSend(retrofit: Retrofit) : PostMessageApi =
+        retrofit.create(PostMessageApi::class.java)
 
     @Provides
     @Singleton
-    fun provideMessageReport(retrofit: Retrofit): MessageReportApi =
-        retrofit.create(MessageReportApi::class.java)
+    fun provideMessageReport(retrofit: Retrofit): PostMessageReportApi =
+        retrofit.create(PostMessageReportApi::class.java)
 
     @Provides
     @Singleton
-    fun provideDropPost(retrofit: Retrofit): DropPostApi =
-        retrofit.create(DropPostApi::class.java)
+    fun provideDropPost(retrofit: Retrofit): DeletePostApi =
+        retrofit.create(DeletePostApi::class.java)
 
     @Provides
     @Singleton
@@ -199,8 +199,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseTokenUpdate(retrofit: Retrofit): FirebaseTokenUpdateApi =
-        retrofit.create(FirebaseTokenUpdateApi::class.java)
+    fun provideFirebaseTokenUpdate(retrofit: Retrofit): UpdateFirebaseTokenApi =
+        retrofit.create(UpdateFirebaseTokenApi::class.java)
 
     @Provides
     @Singleton
@@ -219,13 +219,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGetJoinedRunnerList(retrofit: Retrofit): GetJoinedRunnerListApi =
-        retrofit.create(GetJoinedRunnerListApi::class.java)
+    fun provideGetJoinedRunnerList(retrofit: Retrofit): GetJoinedRunnersApi =
+        retrofit.create(GetJoinedRunnersApi::class.java)
 
     @Provides
     @Singleton
-    fun provideGetMonthlyRunningLogList(retrofit: Retrofit): GetMonthlyRunningLogListApi =
-        retrofit.create(GetMonthlyRunningLogListApi::class.java)
+    fun provideGetMonthlyRunningLogList(retrofit: Retrofit): GetMonthlyRunningLogsApi =
+        retrofit.create(GetMonthlyRunningLogsApi::class.java)
 
     @Provides
     @Singleton

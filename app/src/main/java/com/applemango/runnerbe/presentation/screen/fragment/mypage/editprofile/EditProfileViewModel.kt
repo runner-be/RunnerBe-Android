@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.domain.usecase.JobChangeUseCase
-import com.applemango.runnerbe.domain.usecase.myinfo.NicknameChangeUseCase
+import com.applemango.runnerbe.domain.usecase.user.UpdateJobUseCase
+import com.applemango.runnerbe.domain.usecase.user.UpdateNicknameUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    private val nicknameChangeUseCase: NicknameChangeUseCase,
-    private val jobChangeUseCase: JobChangeUseCase
+    private val updateNicknameUseCase: UpdateNicknameUseCase,
+    private val updateJobUseCase: UpdateJobUseCase
 ): ViewModel() {
 
     val userInfo : MutableLiveData<UserInfo> = MutableLiveData()
@@ -31,7 +31,7 @@ class EditProfileViewModel @Inject constructor(
     val jobChangeState get() = _jobChangeState
 
     fun nicknameChange(changedNickname : String) = viewModelScope.launch {
-        nicknameChangeUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedNickname).collect {
+        updateNicknameUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedNickname).collect {
             _nicknameChangeState.postValue(
                 when(it) {
                 is CommonResponse.Success<*> -> UiState.Success(it.code)
@@ -46,7 +46,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun jobChange(changedJob: String) = viewModelScope.launch {
-        jobChangeUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedJob).collect {
+        updateJobUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedJob).collect {
             _jobChangeState.postValue(
                 when(it) {
                     is CommonResponse.Success<*> -> UiState.Success(it.code)

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.myinfo.PatchUserPaceUseCase
+import com.applemango.runnerbe.domain.usecase.user.UpdateUserPaceUseCase
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PaceInfoViewModel @Inject constructor(
-    val patchUserPaceUseCase: PatchUserPaceUseCase,
+    val updateUserPaceUseCase: UpdateUserPaceUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val paceInfoList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(initPaceInfoList())
@@ -63,7 +63,7 @@ class PaceInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             val selectedPace = paceInfoList.value.firstOrNull { it.isSelected } ?: return@launch
-            patchUserPaceUseCase(userId, selectedPace.pace).collect {
+            updateUserPaceUseCase(userId, selectedPace.pace).collect {
                 if (it is CommonResponse.Success<*>) {
                     RunnerBeApplication.mTokenPreference.setMyRunningPace(selectedPace.pace.key)
                     _action.emit(
