@@ -8,7 +8,7 @@ import com.applemango.runnerbe.data.network.request.GetRunningListRequest
 import com.applemango.runnerbe.data.network.response.GetRunningListResponse
 import com.applemango.runnerbe.data.vo.MapFilterData
 import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.post.GetPostsUseCase
+import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase
 import com.applemango.runnerbe.presentation.model.AfterPartyTag
 import com.applemango.runnerbe.presentation.model.PriorityFilterTag
 import com.applemango.runnerbe.presentation.model.RunningTag

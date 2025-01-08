@@ -1,10 +1,10 @@
-package kr.devkyu.domain.repository
+package com.applemango.runnerbe.repository
 
-import kr.devkyu.domain.entity.BaseEntity
-import kr.devkyu.domain.entity.JoinedRunnersEntity
-import kr.devkyu.domain.entity.MonthlyRunningLogEntity
-import kr.devkyu.domain.entity.RunningLogDetailEntity
-import kr.devkyu.domain.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
+import com.applemango.runnerbe.entity.BaseEntity
+import com.applemango.runnerbe.entity.JoinedRunnersEntity
+import com.applemango.runnerbe.entity.MonthlyRunningLogEntity
+import com.applemango.runnerbe.entity.RunningLogDetailEntity
+import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
 
 interface RunningLogRepository {
 

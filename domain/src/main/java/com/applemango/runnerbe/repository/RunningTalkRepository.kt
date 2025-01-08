@@ -1,8 +1,8 @@
-package kr.devkyu.domain.repository
+package com.applemango.runnerbe.repository
 
-import kr.devkyu.domain.entity.BaseEntity
-import kr.devkyu.domain.entity.RunningTalkMessagesEntity
-import kr.devkyu.domain.entity.RunningTalkRoomsEntity
+import com.applemango.runnerbe.entity.BaseEntity
+import com.applemango.runnerbe.entity.RunningTalkMessagesEntity
+import com.applemango.runnerbe.entity.RunningTalkRoomsEntity
 
 interface RunningTalkRepository {
     suspend fun getRunningTalkRooms() : RunningTalkRoomsEntity

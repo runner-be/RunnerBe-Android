@@ -1,13 +1,12 @@
-package kr.devkyu.domain.repository
+package com.applemango.runnerbe.repository
 
-import kr.devkyu.domain.entity.AlarmEntity
-import kr.devkyu.domain.entity.BaseEntity
-import kr.devkyu.domain.entity.OtherUserEntity
-import kr.devkyu.domain.entity.RegisterEntity
-import kr.devkyu.domain.entity.SocialLoginEntity
-import kr.devkyu.domain.entity.UserEntity
-import kr.devkyu.domain.usecaseImpl.user.RegisterUserUseCase
-import kr.devkyu.domain.usecaseImpl.user.RegisterUserUseCase.JoinUserParam
+import com.applemango.runnerbe.entity.AlarmEntity
+import com.applemango.runnerbe.entity.BaseEntity
+import com.applemango.runnerbe.entity.OtherUserEntity
+import com.applemango.runnerbe.entity.RegisterEntity
+import com.applemango.runnerbe.entity.SocialLoginEntity
+import com.applemango.runnerbe.entity.UserEntity
+import com.applemango.runnerbe.usecaseImpl.user.RegisterUserUseCase.JoinUserParam
 
 interface UserRepository {
 
