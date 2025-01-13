@@ -1,13 +1,13 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
+import com.applemango.runnerbe.data.dto.new.BookmarksDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface GetBookmarkApi {
+interface GetBookmarksApi {
     @GET("/users/{userId}/bookmarks/v2")
-    suspend fun postBookmark(
+    suspend fun getBookmarks(
         @Path("userId") userId: Int
-    ) : Response<GetBookmarkResponse>
+    ) : Response<BookmarksDto>
 }

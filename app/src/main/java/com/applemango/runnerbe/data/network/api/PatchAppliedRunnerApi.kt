@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.BaseResponse
+import com.applemango.runnerbe.data.dto.new.CommonDto
 import retrofit2.Response
 import retrofit2.http.PATCH
 import retrofit2.http.Path
@@ -12,5 +12,5 @@ interface PatchAppliedRunnerApi {
         @Path("postId") postId: Int,
         @Path("applicantId") applicantId: Int,
         @Path("whetherAccept") whetherAccept: String
-    ): Response<BaseResponse>
+    ): Response<CommonDto>
 }

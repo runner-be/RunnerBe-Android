@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.RunningTalkDetailResponse
+import com.applemango.runnerbe.data.dto.new.RunningTalkMessagesDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -8,5 +8,5 @@ import retrofit2.http.Path
 interface GetRunningTalkMessagesApi {
 
     @GET("/messages/rooms/{roomId}")
-    suspend fun getRunningTalkDetail(@Path("roomId") roomId : Int):Response<RunningTalkDetailResponse>
+    suspend fun getRunningTalkMessages(@Path("roomId") roomId : Int):Response<RunningTalkMessagesDto>
 }

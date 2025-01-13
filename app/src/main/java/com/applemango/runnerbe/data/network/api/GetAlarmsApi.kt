@@ -1,13 +1,13 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.GetNotificationsResponse
+import com.applemango.runnerbe.data.dto.new.AlarmsDto
 import retrofit2.Response
 import retrofit2.http.GET
 
 interface GetAlarmsApi {
 
     @GET("/users/alarms")
-    suspend fun getNotifications(
+    fun getAlarms(
 
-    ): Response<GetNotificationsResponse>
+    ): Response<AlarmsDto>
 }

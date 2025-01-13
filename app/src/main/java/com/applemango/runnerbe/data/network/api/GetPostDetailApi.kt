@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.GetPostDetailResponse
+import com.applemango.runnerbe.data.dto.new.PostingDetailDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,5 +11,5 @@ interface GetPostDetailApi {
     suspend fun getPostDetail(
         @Path("postId") postId : Int,
         @Path("userId") userId: Int
-    ): Response<GetPostDetailResponse>
+    ): Response<PostingDetailDto>
 }

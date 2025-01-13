@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.BaseResponse
+import com.applemango.runnerbe.data.dto.new.CommonDto
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.Path
@@ -11,5 +11,5 @@ interface DeleteRunningLogApi {
     suspend fun deleteRunningLog(
         @Path("userId") userId: Int,
         @Path("logId") logId: Int
-    ): Response<BaseResponse>
+    ): Response<CommonDto>
 }

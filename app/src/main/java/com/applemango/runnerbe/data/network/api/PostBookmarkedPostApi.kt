@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.BaseResponse
+import com.applemango.runnerbe.data.dto.new.CommonDto
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -13,5 +13,5 @@ interface PostBookmarkedPostApi {
         @Path("userId") userId: Int,
         @Path("whetherAdd") whetherAdd: String,
         @Query("postId") postId: Int
-    ): Response<BaseResponse>
+    ): Response<CommonDto>
 }
