@@ -1,13 +1,13 @@
 package com.applemango.runnerbe.usecaseImpl.post
 
-import com.applemango.runnerbe.entity.BaseEntity
-import com.applemango.runnerbe.repository.PostRepository
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.repository.PostingRepository
 import javax.inject.Inject
 
 class ReportPostUseCase @Inject constructor(
-    private val repo: PostRepository
+    private val repository: PostingRepository
 ) {
-    suspend operator fun invoke(postId: Int, userId : Int): BaseEntity {
-        return repo.reportPost(postId, userId)
+    suspend operator fun invoke(postId: Int, userId : Int): CommonEntity {
+        return repository.reportPost(postId, userId)
     }
 }

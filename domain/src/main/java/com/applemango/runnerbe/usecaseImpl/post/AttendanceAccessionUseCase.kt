@@ -1,11 +1,11 @@
 package com.applemango.runnerbe.usecaseImpl.post
 
-import com.applemango.runnerbe.entity.BaseEntity
-import com.applemango.runnerbe.repository.PostRepository
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.repository.JoinedRunnerRepository
 import javax.inject.Inject
 
 class AttendanceAccessionUseCase @Inject constructor(
-    private val repo: PostRepository
+    private val repository: JoinedRunnerRepository
 ) {
 
     data class AttendanceAccessionParam(
@@ -17,8 +17,8 @@ class AttendanceAccessionUseCase @Inject constructor(
         postId: Int,
         userIds: List<String>,
         whetherAttendList: List<String>
-    ): BaseEntity {
-        return repo.attendanceAccession(
+    ): CommonEntity {
+        return repository.attendanceAccession(
             postId,
             request = AttendanceAccessionParam(
                 getUserIdsToString(userIds),

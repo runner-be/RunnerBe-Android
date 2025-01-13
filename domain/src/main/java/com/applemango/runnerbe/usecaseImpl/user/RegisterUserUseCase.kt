@@ -2,17 +2,24 @@ package com.applemango.runnerbe.usecaseImpl.user
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import com.applemango.runnerbe.entity.RegisterEntity
+import com.applemango.runnerbe.entity.NewUserEntity
 import com.applemango.runnerbe.repository.UserRepository
 import javax.inject.Inject
 
 class RegisterUserUseCase @Inject constructor(
-    private val repo: UserRepository
+    private val repository: UserRepository
 ) {
 
-    operator fun invoke(request : JoinUserParam) : Flow<RegisterEntity> = flow {
+    operator fun invoke(params : JoinUserParam) : Flow<NewUserEntity> = flow {
         runCatching {
-            repo.joinUser(request)
+            repository.joinUser(
+                params.uuid,
+                params.nickName,
+                params.birthday,
+                params.genderTag,
+                params.jobTag,
+                params.deviceToken
+            )
         }.onSuccess {
             emit(it)
         }.onFailure { e ->

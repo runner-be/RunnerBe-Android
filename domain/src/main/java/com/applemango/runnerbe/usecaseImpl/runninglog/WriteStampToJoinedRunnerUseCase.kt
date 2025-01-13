@@ -1,14 +1,14 @@
 package com.applemango.runnerbe.usecaseImpl.runninglog
 
-import com.applemango.runnerbe.entity.BaseEntity
-import com.applemango.runnerbe.repository.RunningLogRepository
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.repository.JoinedRunnerRepository
 import javax.inject.Inject
 
 class WriteStampToJoinedRunnerUseCase @Inject constructor(
-    private val runningLogRepository: RunningLogRepository
+    private val repository: JoinedRunnerRepository
 ) {
-    suspend operator fun invoke(userId: Int, logId: Int, stamp: PostStampParam): BaseEntity {
-        return runningLogRepository.postStampToJoinedRunner(userId, logId, stamp)
+    suspend operator fun invoke(userId: Int, logId: Int, stamp: PostStampParam): CommonEntity {
+        return repository.postStampToJoinedRunner(userId, logId, stamp)
     }
 
     data class PostStampParam(

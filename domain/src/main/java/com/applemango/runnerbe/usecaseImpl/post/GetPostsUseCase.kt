@@ -1,14 +1,14 @@
 package com.applemango.runnerbe.usecaseImpl.post
 
 import com.applemango.runnerbe.entity.PostingsEntity
-import com.applemango.runnerbe.repository.PostRepository
+import com.applemango.runnerbe.repository.PostingRepository
 import javax.inject.Inject
 
 /**
  * 게시글 목록 조회
  */
 class GetPostsUseCase @Inject constructor(
-    private val repo: PostRepository
+    private val repo: PostingRepository
 ) {
     suspend operator fun invoke(runningTag: String, request : GetRunningListParam) : PostingsEntity {
         return repo.getRunningList(runningTag = runningTag, request = request)
