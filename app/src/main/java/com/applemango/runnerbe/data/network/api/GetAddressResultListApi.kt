@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.network.api
 
 import com.applemango.runnerbe.BuildConfig
-import com.applemango.runnerbe.data.network.response.KakaoLocalResponse
+import com.applemango.runnerbe.data.dto.new.KakaoAddressDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -16,5 +16,5 @@ interface GetAddressResultListApi {
         @Query("page") page: Int? = 1,
         @Query("size") size: Int? = 15,
         @Query("sort") sort: String? = "accuracy"
-    ) : Response<KakaoLocalResponse>
+    ) : Response<KakaoAddressDto>
 }

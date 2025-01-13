@@ -1,27 +1,26 @@
 package com.applemango.runnerbe.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.applemango.runnerbe.data.network.api.GetAddressResultListApi
-import com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressResult
+import com.applemango.runnerbe.entity.AddressEntity
 import java.io.IOException
 import javax.inject.Inject
 
 class AddressSearchPagingSource @Inject constructor(
-    private val getAddressResultListApi: GetAddressResultListApi
-) : PagingSource<Int, AddressResult>() {
+    private val getAddressResultListApi: GetAddressResultListApi,
+) : PagingSource<Int, AddressEntity>() {
     lateinit var query: String
     private var isLastResult: Boolean = false
 
-    override fun getRefreshKey(state: PagingState<Int, AddressResult>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, AddressEntity>): Int? {
         return state.anchorPosition?.let { position ->
             state.closestPageToPosition(position)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(position)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AddressResult> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AddressEntity> {
         val currPage = params.key ?: START_PAGE_NUMBER
 
         return try {
@@ -32,13 +31,13 @@ class AddressSearchPagingSource @Inject constructor(
                 val addressList = body.documents
                     .filter { it.roadAddressName.isNotEmpty() }
                     .map { document ->
-                    AddressResult(
-                        document.placeName,
-                        document.roadAddressName,
-                        document.latitude,
-                        document.longitude,
-                        currPage
-                    )
+                        AddressEntity(
+                            document.placeName,
+                            document.roadAddressName,
+                            document.latitude,
+                            document.longitude,
+                            currPage
+                        )
                 }
                 val isEnd = body.meta.isEnd
 

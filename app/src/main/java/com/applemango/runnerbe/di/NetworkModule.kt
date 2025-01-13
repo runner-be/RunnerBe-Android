@@ -94,8 +94,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRunningTalkApi(retrofit: Retrofit) : GetRunningTalkMessagesApi =
-        retrofit.create(GetRunningTalkMessagesApi::class.java)
+    fun provideRunningTalkApi(retrofit: Retrofit) : GetRunningTalkRoomsApi =
+        retrofit.create(GetRunningTalkRoomsApi::class.java)
 
     @Provides
     @Singleton
@@ -124,8 +124,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGetBookmarkApi(retrofit: Retrofit) : GetBookmarkApi =
-        retrofit.create(GetBookmarkApi::class.java)
+    fun provideGetBookmarkApi(retrofit: Retrofit) : GetBookmarksApi =
+        retrofit.create(GetBookmarksApi::class.java)
 
     @Provides
     @Singleton
@@ -174,8 +174,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRunningTalkDetail(retrofit: Retrofit) : GetRunningTalkDetailApi =
-        retrofit.create(GetRunningTalkDetailApi::class.java)
+    fun provideRunningTalkDetail(retrofit: Retrofit) : GetRunningTalkMessagesApi =
+        retrofit.create(GetRunningTalkMessagesApi::class.java)
 
     @Provides
     @Singleton
