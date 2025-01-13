@@ -8,4 +8,4 @@ data class JoinedRunnersEntity(
     val isOpened: Int?,
     var stampCode: String?,
     val isCaptain: Int,
-): BaseEntity()
+)

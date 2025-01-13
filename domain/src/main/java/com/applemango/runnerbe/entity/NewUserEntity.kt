@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.entity
 
-data class RegisterEntity(
+data class NewUserEntity(
     val insertedUserId: Int,
     val token: String
-): BaseEntity()
+)

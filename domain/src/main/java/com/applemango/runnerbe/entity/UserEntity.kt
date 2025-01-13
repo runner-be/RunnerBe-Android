@@ -16,4 +16,4 @@ data class UserEntity (
     val whetherAccept: String?, // 게시글 상세(작성자에서만) N: 대기중인 러너
     val nameChanged: String?, // 닉네임 변경되었는지
     val jobChangePossible: String? // 직군변경할 수 있는지 Y : 가능 N : 불가능
-): BaseEntity()
+)

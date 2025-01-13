@@ -1,6 +1,10 @@
 package com.applemango.runnerbe.entity
 
 data class OtherUserEntity(
+    val otherUser: OtherUser
+)
+
+data class OtherUser(
     val userInfo: OtherUserInfo,
     val userLogInfo: List<RunningLog>,
     val postTotalCount: Int,

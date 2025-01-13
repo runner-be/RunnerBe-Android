@@ -13,4 +13,4 @@ data class RunningTalkRoom(
     val repUserName: String,
     val profileImageUrl: String,
     val recentMessage: String
-): BaseEntity()
+)

@@ -1,9 +1,9 @@
 package com.applemango.runnerbe.entity
 
 data class RunningTalkMessagesEntity(
-    val roomInfo : ArrayList<RoomInfo>,
-    val messages : ArrayList<RunningTalkMessage>
-): BaseEntity()
+    val roomInfo : List<RoomInfo>,
+    val messages : List<RunningTalkMessage>
+)
 
 data class RoomInfo(
     val talkTitle : String,

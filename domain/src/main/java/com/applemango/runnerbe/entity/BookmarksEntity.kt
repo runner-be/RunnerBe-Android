@@ -1,5 +1,5 @@
 package com.applemango.runnerbe.entity
 
 data class BookmarksEntity(
-    var bookMarkList: List<PostingEntity>?
-): BaseEntity()
+    var bookmarks: List<PostingEntity>?
+)

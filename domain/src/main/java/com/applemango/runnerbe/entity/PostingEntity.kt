@@ -43,4 +43,4 @@ data class PostingEntity(
     val afterParty: Int?,
     // 모임 종료(러닝 끝난 후)부터 3시간 지났는지 여부
     val attendTimeOver: String?
-): BaseEntity()
+)

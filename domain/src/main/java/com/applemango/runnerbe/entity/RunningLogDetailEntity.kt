@@ -3,12 +3,12 @@ package com.applemango.runnerbe.entity
 import java.time.ZonedDateTime
 
 data class RunningLogDetailEntity(
-    val runningLog: DetailRunningLog,
+    val runningLog: RunningLogDetail,
     val gatheringCount: Int,
     val gotStamp: List<MemberStamp>
-): BaseEntity()
+)
 
-data class DetailRunningLog (
+data class RunningLogDetail (
     val status: String,
     val runnedDate: ZonedDateTime,
     val userId: Int,

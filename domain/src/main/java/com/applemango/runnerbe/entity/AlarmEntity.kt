@@ -9,4 +9,4 @@ data class AlarmEntity(
     val title: String,
     val content: String,
     val whetherRead: String,
-): BaseEntity()
+)

@@ -6,7 +6,7 @@ data class MonthlyRunningLogEntity (
     val totalCount: TotalCount?,
     val runningLog: List<RunningLog>,
     val gatheringDays: List<GatheringData>,
-): BaseEntity()
+)
 
 data class GatheringData (
     val gatheringId: Int,
