@@ -1,92 +1,80 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import com.applemango.runnerbe.data.network.api.GetRunningTalkDetailApi
+import com.applemango.runnerbe.data.mapper.CommonMapper
+import com.applemango.runnerbe.data.mapper.RunningTalkMessagesMapper
+import com.applemango.runnerbe.data.mapper.RunningTalkRoomsMapper
 import com.applemango.runnerbe.data.network.api.GetRunningTalkMessagesApi
+import com.applemango.runnerbe.data.network.api.GetRunningTalkRoomsApi
 import com.applemango.runnerbe.data.network.api.PostMessageReportApi
 import com.applemango.runnerbe.data.network.api.PostMessageApi
 import com.applemango.runnerbe.data.network.request.MessageReportRequest
 import com.applemango.runnerbe.data.network.request.SendMessageRequest
-import com.applemango.runnerbe.domain.repository.RunningTalkRepository
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.entity.RunningTalkMessagesEntity
+import com.applemango.runnerbe.entity.RunningTalkRoomsEntity
+import com.applemango.runnerbe.repository.RunningTalkRepository
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class RunningTalkRepositoryImpl @Inject constructor(
+    private val getRunningTalkRoomsApi: GetRunningTalkRoomsApi,
     private val getRunningTalkMessagesApi: GetRunningTalkMessagesApi,
-    private val getRunningTalkDetailApi: GetRunningTalkDetailApi,
     private val sendMessagesApi: PostMessageApi,
-    private val postMessageReportApi: PostMessageReportApi
-) : RunningTalkRepository {
-    override suspend fun getRunningTalks(): CommonResponse {
-        return try {
-            val response = getRunningTalkMessagesApi.getMessages()
-            if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
+    private val postMessageReportApi: PostMessageReportApi,
+    private val commonMapper: CommonMapper,
+    private val runningTalkRoomsMapper: RunningTalkRoomsMapper,
+    private val runningTalkMessagesMapper: RunningTalkMessagesMapper,
+) : BaseRepository(), RunningTalkRepository {
+
+    override suspend fun sendMessage(roomId: Int, content: String?, url: String?): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                sendMessagesApi.sendMessage(roomId, SendMessageRequest(content, url))
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
+        )
+    }
+
+    override suspend fun reportMessage(messageIdList: List<Int>): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                postMessageReportApi.messageReport(MessageReportRequest(
+                    messageIdList.joinToString(",")
+                ))
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
+            }
+        )
+    }
+
+    override suspend fun getRunningTalkRooms(): RunningTalkRoomsEntity {
+        val response = getRunningTalkRoomsApi.getRunningTalkRooms()
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+                return runningTalkRoomsMapper.mapToDomain(body)
+            } else {
+                throw IllegalStateException("Business logic failed: ${body?.message}")
+            }
+        } else {
+            throw HttpException(response)
         }
     }
 
-    override suspend fun getRunningTalkDetail(roomId: Int): CommonResponse {
-        return try {
-            val response = getRunningTalkDetailApi.getRunningTalkDetail(roomId)
-            if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
+    override suspend fun getRunningTalkMessages(roomId: Int): RunningTalkMessagesEntity {
+        val response = getRunningTalkMessagesApi.getRunningTalkMessages(roomId)
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+                return runningTalkMessagesMapper.mapToDomain(body)
             } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
+                throw IllegalStateException("Business logic failed: ${body?.message}")
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
+        } else {
+            throw HttpException(response)
         }
     }
-
-    override suspend fun sendMessage(roomId: Int, content: String?, url: String?): CommonResponse {
-        return try {
-            val response = sendMessagesApi.sendMessage(roomId, SendMessageRequest(content, url))
-            if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun reportMessage(messageIdList: List<Int>): CommonResponse {
-        return try {
-            val request = StringBuilder()
-            messageIdList.forEachIndexed { index, i ->
-                request.append(i.toString())
-                if (index < messageIdList.size) request.append(",")
-            }
-            val response = postMessageReportApi.messageReport(MessageReportRequest(request.toString()))
-            if (response.isSuccessful && response.body() != null && response.body()!!.isSuccess) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
 }

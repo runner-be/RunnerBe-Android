@@ -1,0 +1,47 @@
+package com.applemango.runnerbe.data.repositoryimpl
+
+import com.applemango.runnerbe.data.mapper.CommonMapper
+import com.applemango.runnerbe.data.network.api.GetAlarmsApi
+import com.applemango.runnerbe.data.network.api.PatchAlarmApi
+import com.applemango.runnerbe.entity.AlarmEntity
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.repository.AlarmRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
+import javax.inject.Inject
+
+class AlarmRepositoryImpl @Inject constructor(
+    private val patchAlarmApi: PatchAlarmApi,
+    private val getAlarmsApi: GetAlarmsApi,
+    private val commonMapper: CommonMapper,
+): BaseRepository(), AlarmRepository {
+    override suspend fun patchAlarm(userId: Int, pushOn: Boolean): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                /**
+                 * TODO
+                 * pushOn 함수 변환 과정 수정
+                 */
+                patchAlarmApi.patchAlarm(userId, pushOn.toString())
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
+            }
+        )
+    }
+
+    override fun getAlarms(): Flow<List<AlarmEntity>> {
+        val response = getAlarmsApi.getAlarms()
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+                return flow { body.alarms }
+            } else {
+                throw IllegalStateException("Business logic failed: ${body?.message}")
+            }
+        } else {
+            throw HttpException(response)
+        }
+    }
+}

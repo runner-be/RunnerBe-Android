@@ -1,203 +1,131 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import com.applemango.runnerbe.data.network.api.GetOtherUserProfileApi
+import com.applemango.runnerbe.data.mapper.CommonMapper
+import com.applemango.runnerbe.data.mapper.MonthlyRunningLogMapper
+import com.applemango.runnerbe.data.mapper.RunningLogDetailMapper
 import com.applemango.runnerbe.data.network.api.DeleteRunningLogApi
-import com.applemango.runnerbe.data.network.api.GetJoinedRunnersApi
 import com.applemango.runnerbe.data.network.api.GetMonthlyRunningLogsApi
 import com.applemango.runnerbe.data.network.api.GetRunningLogDetailApi
 import com.applemango.runnerbe.data.network.api.PatchRunningLogApi
 import com.applemango.runnerbe.data.network.api.PostRunningLogApi
-import com.applemango.runnerbe.data.network.api.PostStampToJoinedRunnerApi
-import com.applemango.runnerbe.data.network.request.PostStampRequest
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
-import com.applemango.runnerbe.domain.repository.RunningLogRepository
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.entity.MonthlyRunningLogEntity
+import com.applemango.runnerbe.entity.RunningLogDetailEntity
+import com.applemango.runnerbe.repository.RunningLogRepository
+import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class RunningLogRepositoryImpl @Inject constructor(
+    private val postRunningLogApi: PostRunningLogApi,
     private val deleteRunningLogApi: DeleteRunningLogApi,
-    private val getJoinedRunnersApi: GetJoinedRunnersApi,
-    private val getMonthlyRunningLogsApi: GetMonthlyRunningLogsApi,
     private val getRunningLogDetailApi: GetRunningLogDetailApi,
     private val patchRunningLogApi: PatchRunningLogApi,
-    private val postRunningLogApi: PostRunningLogApi,
-    private val postStampToJoinedRunnerApi: PostStampToJoinedRunnerApi,
-    private val getOtherUserProfileApi: GetOtherUserProfileApi
-) : RunningLogRepository {
-    override suspend fun getMonthlyRunningLogList(
-        userId: Int,
-        year: Int,
-        month: Int
-    ): CommonResponse {
-        return try {
-            val response = getMonthlyRunningLogsApi.getMonthlyRunningLog(userId, year, month)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!.result)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
+    private val getMonthlyRunningLogsApi: GetMonthlyRunningLogsApi,
+    private val commonMapper: CommonMapper,
+    private val monthlyRunningLogMapper: MonthlyRunningLogMapper,
+    private val runningLogDetailMapper: RunningLogDetailMapper,
+    ) : BaseRepository(), RunningLogRepository {
 
     override suspend fun postRunningLog(
         userId: Int,
         year: Int,
         month: Int,
-        runningLog: RunningLogRequest
-    ): CommonResponse {
-        return try {
-            val response = postRunningLogApi.postRunningLog(userId, year, month, runningLog)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
+        runningLog: RunningLogParam
+    ): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                postRunningLogApi.postRunningLog(
+                    userId, year, month,
+                    RunningLogRequest(
+                        runningLog.runningDate,
+                        runningLog.stampCode,
+                        runningLog.gatheringId,
+                        runningLog.contents,
+                        runningLog.imageUrl,
+                        runningLog.weatherDegree,
+                        runningLog.weatherIcon,
+                        runningLog.isOpened,
+                    )
                 )
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun getRunningLogDetail(userId: Int, logId: Int): CommonResponse {
-        return try {
-            val response = getRunningLogDetailApi.getRunningLogDetail(userId, logId)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
+        )
     }
 
     override suspend fun patchRunningLog(
         userId: Int,
         logId: Int,
-        runningLog: RunningLogRequest
-    ): CommonResponse {
-        return try {
-            val response = patchRunningLogApi.patchRunningLog(userId, logId, runningLog)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
+        runningLog: RunningLogParam
+    ): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                patchRunningLogApi.patchRunningLog(
+                    userId, logId,
+                    RunningLogRequest(
+                        runningLog.runningDate,
+                        runningLog.stampCode,
+                        runningLog.gatheringId,
+                        runningLog.contents,
+                        runningLog.imageUrl,
+                        runningLog.weatherDegree,
+                        runningLog.weatherIcon,
+                        runningLog.isOpened,
+                    )
                 )
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
+        )
     }
 
-    override suspend fun deleteRunningLog(userId: Int, logId: Int): CommonResponse {
-        return try {
-            val response = deleteRunningLogApi.deleteRunningLog(userId, logId)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun getJoinedRunnerList(userId: Int, logId: Int): CommonResponse {
-        return try {
-            val response = getJoinedRunnersApi.getJoinedRunnerList(userId, logId)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.result.isNotEmpty()
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
-        }
-    }
-
-    override suspend fun postStampToJoinedRunner(
+    override suspend fun deleteRunningLog(
         userId: Int,
-        logId: Int,
-        stamp: PostStampRequest
-    ): CommonResponse {
-        return try {
-            val response = postStampToJoinedRunnerApi.postStampToJoinedRunner(userId, logId, stamp)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!)
-            } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
+        logId: Int
+    ): CommonEntity {
+        return handleApiCall(
+            apiCall = {
+                deleteRunningLogApi.deleteRunningLog(userId, logId)
+            },
+            mapResponse = { body ->
+                commonMapper.mapToDomain(body)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
+        )
+    }
+
+    override suspend fun getMonthlyRunningLogs(
+        userId: Int,
+        year: Int,
+        month: Int
+    ): MonthlyRunningLogEntity {
+        val response = getMonthlyRunningLogsApi.getMonthlyRunningLog(userId, year, month)
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+                return monthlyRunningLogMapper.mapToDomain(body)
+            } else {
+                throw IllegalStateException("Business logic failed: ${body?.message}")
+            }
+        } else {
+            throw HttpException(response)
         }
     }
 
-    override suspend fun getOtherUserProfile(targetUserId: Int): CommonResponse {
-        return try {
-            val response = getOtherUserProfileApi.getOtherUserProfile(targetUserId)
-            if (response.isSuccessful
-                && response.body() != null
-                && response.body()!!.isSuccess
-            ) {
-                CommonResponse.Success(response.body()!!.code, response.body()!!.result)
+    override suspend fun getRunningLogDetail(userId: Int, logId: Int): RunningLogDetailEntity {
+        val response = getRunningLogDetailApi.getRunningLogDetail(userId, logId)
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body?.isSuccess == true) {
+                return runningLogDetailMapper.mapToDomain(body)
             } else {
-                CommonResponse.Failed(
-                    response.body()?.code ?: response.code(),
-                    response.body()?.message ?: response.message()
-                )
+                throw IllegalStateException("Business logic failed: ${body?.message}")
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            CommonResponse.Failed.getDefaultFailed(e.message)
+        } else {
+            throw HttpException(response)
         }
     }
 }

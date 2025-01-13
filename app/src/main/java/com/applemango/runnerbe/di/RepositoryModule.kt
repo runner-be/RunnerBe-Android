@@ -1,13 +1,13 @@
 package com.applemango.runnerbe.di
 
-import com.applemango.runnerbe.data.repositoryimpl.PostRepositoryImpl
+import com.applemango.runnerbe.data.repositoryimpl.PostingRepositoryImpl
 import com.applemango.runnerbe.data.repositoryimpl.RunningLogRepositoryImpl
 import com.applemango.runnerbe.data.repositoryimpl.RunningTalkRepositoryImpl
-import com.applemango.runnerbe.domain.repository.UserRepository
 import com.applemango.runnerbe.data.repositoryimpl.UserRepositoryImpl
-import com.applemango.runnerbe.domain.repository.PostRepository
-import com.applemango.runnerbe.domain.repository.RunningLogRepository
-import com.applemango.runnerbe.domain.repository.RunningTalkRepository
+import com.applemango.runnerbe.repository.PostingRepository
+import com.applemango.runnerbe.repository.RunningLogRepository
+import com.applemango.runnerbe.repository.RunningTalkRepository
+import com.applemango.runnerbe.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -33,8 +33,8 @@ interface RepositoryModule {
     @Singleton
     @Binds
     fun bindPostRepo(
-        repository: PostRepositoryImpl
-    ) : PostRepository
+        repository: PostingRepositoryImpl
+    ) : PostingRepository
 
     @Singleton
     @Binds
