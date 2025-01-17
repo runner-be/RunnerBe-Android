@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.model
+package com.applemango.runnerbe.util
 
 import android.view.View
 import androidx.core.widget.NestedScrollView

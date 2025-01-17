@@ -10,7 +10,7 @@ import java.io.IOException
 
 class ImageManager {
     companion object {
-        private val PROVIDER = "com.applemango.runnerbe.provider"
+        private const val PROVIDER = "com.applemango.runnerbe.provider"
 
         fun parseBitmapToUri(context: Context, bitmap: Bitmap): Uri? {
             return try {

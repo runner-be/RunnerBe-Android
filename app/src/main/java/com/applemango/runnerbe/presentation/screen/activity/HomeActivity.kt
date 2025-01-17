@@ -35,6 +35,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>(R.layout.activity_home) {
 
     override fun onDestroy() {
         onBackPressedCallback.remove()
+        if (isChangingConfigurations) {
+
+        }
         super.onDestroy()
     }
 }

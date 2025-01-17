@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ActivityImageCropBinding
+import com.applemango.runnerbe.presentation.model.type.CropRectRatio
 import com.applemango.runnerbe.presentation.screen.activity.BaseActivity
 import com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialog
 import com.jakewharton.rxbinding4.view.clicks

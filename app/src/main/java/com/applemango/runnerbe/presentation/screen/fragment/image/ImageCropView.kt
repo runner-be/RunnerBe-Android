@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.presentation.model.type.CropRectRatio
+import com.applemango.runnerbe.presentation.model.type.ResizeDirection
 import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.bumptech.glide.Glide

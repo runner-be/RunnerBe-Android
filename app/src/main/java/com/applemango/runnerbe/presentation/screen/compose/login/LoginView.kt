@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.presentation.model.LoginType
+import com.applemango.runnerbe.presentation.model.type.LoginType
 import com.applemango.runnerbe.data.network.request.SocialLoginRequest
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.screen.activity.HomeActivity
@@ -99,15 +99,11 @@ fun LogoAndTextView(modifier: Modifier) {
     val mContext = LocalContext.current as ComponentActivity
     LaunchedEffect(viewModel.isSocialLogin) {
         viewModel.isSocialLogin.collect {
-            when (it) {
-                is CommonResponse.Success<*> -> {
-                    mContext.startActivity(Intent(mContext, HomeActivity::class.java))
-                    mContext.finish()
-                }
-
-                else -> {
-                    Log.e("LogoAndTextView", "when - else")
-                }
+            if (it) {
+                mContext.startActivity(Intent(mContext, HomeActivity::class.java))
+                mContext.finish()
+            } else {
+                Log.e("LogoAndTextView", "when - else")
             }
         }
     }
