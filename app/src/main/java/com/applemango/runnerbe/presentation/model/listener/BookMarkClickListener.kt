@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.presentation.model.listener
 
-import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.presentation.model.PostingModel
 
 interface BookMarkClickListener {
-    fun onBookMarkClick(post: Posting)
-    fun onClick(post: Posting)
+    fun onBookMarkClick(post: PostingModel)
+    fun onClick(post: PostingModel)
 }

@@ -1,8 +1,9 @@
 package com.applemango.runnerbe.presentation.model.listener
 
-import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.presentation.model.UserModel
+
 
 interface PostAcceptListener {
-    fun onAcceptClick(userInfo: UserInfo)
-    fun onRefuseClick(userInfo: UserInfo)
+    fun onAcceptClick(userInfo: UserModel)
+    fun onRefuseClick(userInfo: UserModel)
 }

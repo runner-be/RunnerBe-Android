@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.model
+package com.applemango.runnerbe.presentation.model.listener
 
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 

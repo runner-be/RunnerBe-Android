@@ -1,8 +1,7 @@
 package com.applemango.runnerbe.presentation.model.listener
 
-import com.applemango.runnerbe.data.dto.Room
+import com.applemango.runnerbe.presentation.model.RunningTalkRoomModel
 
 interface RoomClickListener {
-
-    fun moveToRunningTalkRoom(item : Room)
+    fun moveToRunningTalkRoom(item : RunningTalkRoomModel)
 }

@@ -1,12 +1,12 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning
 
-import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.presentation.model.PostingModel
 
 interface JoinedRunningClickListener {
 
-    fun logWriteClick(post: Posting)
-    fun attendanceSeeClick(post: Posting)
-    fun attendanceManageClick(post: Posting)
-    fun bookMarkClick(post: Posting)
-    fun postClick(post: Posting)
+    fun logWriteClick(post: PostingModel)
+    fun attendanceSeeClick(post: PostingModel)
+    fun attendanceManageClick(post: PostingModel)
+    fun bookMarkClick(post: PostingModel)
+    fun postClick(post: PostingModel)
 }

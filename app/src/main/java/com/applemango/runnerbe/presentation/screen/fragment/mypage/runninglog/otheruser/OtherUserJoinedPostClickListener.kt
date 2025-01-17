@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser
 
-import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.presentation.model.PostingModel
 
 fun interface OtherUserJoinedPostClickListener {
-    fun onPostClick(item: Posting)
+    fun onPostClick(item: PostingModel)
 }

@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.presentation.model.listener
 
-import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.presentation.model.UserModel
 
 interface AttendanceAccessionClickListener {
-    fun onAcceptClick(userInfo: UserInfo)
-    fun onRefuseClick(userInfo: UserInfo)
+    fun onAcceptClick(user: UserModel)
+    fun onRefuseClick(user: UserModel)
 }
