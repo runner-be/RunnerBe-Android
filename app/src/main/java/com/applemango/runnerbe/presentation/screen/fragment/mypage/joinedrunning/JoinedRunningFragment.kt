@@ -10,8 +10,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentJoinedRunningBinding
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.type.JoinedRunningCategory
+import com.applemango.runnerbe.presentation.model.type.PostCalledFrom
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.util.ToastUtil
@@ -84,7 +86,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
             adapter = joinedRunningPostAdapter.apply {
                 setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object: JoinedRunningClickListener {
-                    override fun logWriteClick(post: Posting) {
+                    override fun logWriteClick(post: PostingModel) {
                         val userId = post.userId
                         val logId = post.logId
 
@@ -107,7 +109,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                         }
                     }
 
-                    override fun attendanceSeeClick(post: Posting) {
+                    override fun attendanceSeeClick(post: PostingModel) {
                         try {
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceSeeFragment(
@@ -121,7 +123,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                         }
                     }
 
-                    override fun attendanceManageClick(post: Posting) {
+                    override fun attendanceManageClick(post: PostingModel) {
                         try {
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceAccessionFragment(
@@ -135,12 +137,12 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                         }
                     }
 
-                    override fun bookMarkClick(post: Posting) {
+                    override fun bookMarkClick(post: PostingModel) {
                         mainViewModel.bookmarkStatusChange(post)
                         viewModel.updatePostBookmark(post)
                     }
 
-                    override fun postClick(post: Posting) {
+                    override fun postClick(post: PostingModel) {
                         navigate(
                             JoinedRunningFragmentDirections.actionJoinedRunningFragmentToPostDetailFragment(
                                 post

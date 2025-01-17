@@ -40,7 +40,6 @@ class GroupProfilesFragment :
         viewModel.updateRunnerInfo(userId, navArgs.gatheringId)
         initGroupProfileRecyclerView()
         setupRunnerList()
-        setupPostStampResult()
     }
 
     private fun setupRunnerList() {
@@ -52,24 +51,6 @@ class GroupProfilesFragment :
                         profileAdapter.submitList(list)
                     } else {
                         binding.tvGroupProfileCount.text = getString(R.string.group_profile_count, 0)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setupPostStampResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.stampResult.collectLatest { response ->
-                    when (response) {
-                        is CommonResponse.Failed -> {
-                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> {
-
-                        }
                     }
                 }
             }

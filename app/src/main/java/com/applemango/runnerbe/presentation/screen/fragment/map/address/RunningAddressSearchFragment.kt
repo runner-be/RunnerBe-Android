@@ -22,6 +22,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningAddressSearchBinding
+import com.applemango.runnerbe.presentation.model.AddressModel
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -95,7 +96,7 @@ class RunningAddressSearchFragment :
                     getAddressFromLatLng(requireContext(), latitude, longitude) { addressResult ->
                         addressResult?.let {
                             navigateToSearchDetailFragment(
-                                AddressResult(
+                                AddressModel(
                                     "장소 정보 없음",
                                     addressResult,
                                     latitude.toString(),
@@ -211,7 +212,7 @@ class RunningAddressSearchFragment :
         }
     }
 
-    private fun navigateToSearchDetailFragment(address: AddressResult) {
+    private fun navigateToSearchDetailFragment(address: AddressModel) {
         navigate(
             RunningAddressSearchFragmentDirections.actionRunningAddressSearchFragmentToRunningAddressSearchDetailFragment(
                 address

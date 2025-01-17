@@ -15,10 +15,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AdditionalYearInfoSelectFragment: BaseFragment<FragmentAdditionalYearInfoSelectBinding>(R.layout.fragment_additional_year_info_select) {
+class AdditionalYearInfoSelectFragment :
+    BaseFragment<FragmentAdditionalYearInfoSelectBinding>(R.layout.fragment_additional_year_info_select) {
 
-    private val infoViewModel : AdditionalInfoViewModel by activityViewModels()
-    private val viewModel : AdditionalYearInfoSelectViewModel by viewModels()
+    private val infoViewModel: AdditionalInfoViewModel by activityViewModels()
+    private val viewModel: AdditionalYearInfoSelectViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,9 +27,15 @@ class AdditionalYearInfoSelectFragment: BaseFragment<FragmentAdditionalYearInfoS
         setWheelYear()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.actions.collect {
-                when(it) {
-                    is AdditionalYearInfoSelectAction.MoveToBack -> { navPopStack() }
-                    is AdditionalYearInfoSelectAction.ActivityFinish -> { activity?.finish() }
+                when (it) {
+                    is AdditionalYearInfoSelectAction.MoveToBack -> {
+                        navPopStack()
+                    }
+
+                    is AdditionalYearInfoSelectAction.ActivityFinish -> {
+                        activity?.finish()
+                    }
+
                     is AdditionalYearInfoSelectAction.MoveToNext -> {
                         infoViewModel.yearOfBrith = binding.yearWheelView.getCurrentItem()
                         infoViewModel.yearOfBrith?.let {
@@ -55,7 +62,10 @@ class AdditionalYearInfoSelectFragment: BaseFragment<FragmentAdditionalYearInfoS
                 override fun onWheelLoopFinished(view: WheelView?) {}
 
             })
-            setData(yearList, yearList.indexOf(infoViewModel.yearOfBrith?:yearList[yearList.size/2]))
+            setData(
+                yearList,
+                yearList.indexOf(infoViewModel.yearOfBrith ?: yearList[yearList.size / 2])
+            )
             viewModel.selectYear(getCurrentItem())
         }
     }

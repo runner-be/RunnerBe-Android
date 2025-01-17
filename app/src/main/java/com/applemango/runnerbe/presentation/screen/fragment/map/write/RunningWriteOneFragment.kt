@@ -14,9 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
 import com.applemango.runnerbe.databinding.FragmentRunningWriteBinding
-import com.applemango.runnerbe.presentation.model.DateResultListener
-import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.model.TimeResultListener
+import com.applemango.runnerbe.presentation.model.listener.DateResultListener
+import com.applemango.runnerbe.presentation.model.type.RunningTag
+import com.applemango.runnerbe.presentation.model.listener.TimeResultListener
 import com.applemango.runnerbe.presentation.screen.activity.AddressActivity
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateTimePickerDialog

@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogDateSelectBinding
-import com.applemango.runnerbe.presentation.model.DateResultListener
+import com.applemango.runnerbe.presentation.model.listener.DateResultListener
 import com.applemango.runnerbe.util.NumberUtil
 import com.applemango.runnerbe.util.TimeUtil
 import com.applemango.runnerbe.util.ToastUtil

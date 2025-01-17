@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentEditProfileBinding
-import com.applemango.runnerbe.presentation.model.JobButtonId
+import com.applemango.runnerbe.presentation.model.type.JobButtonId
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
@@ -42,7 +42,7 @@ class EditProfileFragment :
     private fun observeBind() {
         viewModel.userInfo.observe(viewLifecycleOwner) {
             if (it.nameChanged == "Y") {
-                viewModel.name.value = it.nickName?:""
+                viewModel.name.value = it.nickname?:""
             }
             initJob()
         }
@@ -150,7 +150,7 @@ class EditProfileFragment :
                 .filter { it.length <= 8 }
                 .subscribe {
                     binding.nameFailTxt.isVisible =
-                        (it.toString() == viewModel.userInfo.value?.nickName) &&
+                        (it.toString() == viewModel.userInfo.value?.nickname) &&
                                 viewModel.userInfo.value?.nameChanged != "Y"
                 },
             binding.nameChangeBtn.clicks()
@@ -165,7 +165,7 @@ class EditProfileFragment :
                             firstEvent = {},
                             secondEvent = {
                                 val name = binding.tieNickname.text.toString()
-                                if (name != viewModel.userInfo.value?.nickName) {
+                                if (name != viewModel.userInfo.value?.nickname) {
                                     viewModel.nicknameChange(name)
                                 }
                             }

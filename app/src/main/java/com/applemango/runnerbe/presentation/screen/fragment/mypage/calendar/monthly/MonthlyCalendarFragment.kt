@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,16 +10,14 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.response.GatheringData
-import com.applemango.runnerbe.data.network.response.RunningLog
-import com.applemango.runnerbe.data.network.response.RunningLogResult
 import com.applemango.runnerbe.databinding.FragmentMonthlyCalendarBinding
+import com.applemango.runnerbe.presentation.model.GatheringData
+import com.applemango.runnerbe.presentation.model.RunningLogModel
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.yearmonthselect.YearMonthSelectDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.DayOfWeekAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.initYearMonthDays
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -88,15 +85,15 @@ class MonthlyCalendarFragment :
 
     private fun combineGatheringDataToRunningLogs(
         gatheringDataList: List<GatheringData>,
-        runningLogList: List<RunningLog>
-    ): List<RunningLog> {
+        runningLogList: List<RunningLogModel>
+    ): List<RunningLogModel> {
         val runningLogsMap = runningLogList.associateBy { it.runnedDate.toLocalDate() }
         val logsDateSet = runningLogsMap.keys
         val gatheredMap = gatheringDataList
             .filter { it.date.toLocalDate() !in logsDateSet }
             .associateBy({ it.date },
                 { gatheringData ->
-                    RunningLog(
+                    RunningLogModel(
                         null,
                         gatheringId = gatheringData.gatheringId,
                         runnedDate = gatheringData.date,
@@ -114,37 +111,28 @@ class MonthlyCalendarFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.selectedYearMonthFlow.collectLatest { response ->
-                    when (response) {
-                        is CommonResponse.Success<*> -> {
-                            val monthlyRunningLog = response.body as? RunningLogResult
-                            val monthlyStatistic = monthlyRunningLog?.totalCount
-                            val monthlyGatheringData = monthlyRunningLog?.gatheringDays.orEmpty()
-                            val monthlyLogList = monthlyRunningLog?.runningLog.orEmpty()
+                    val monthlyStatistic = response.totalCount
+                    val monthlyGatheringData = response.gatheringDays
+                    val monthlyLogList = response.runningLog
 
-                            val parsedRunningLogs = combineGatheringDataToRunningLogs(
-                                monthlyGatheringData,
-                                monthlyLogList
-                            )
+                    val parsedRunningLogs = combineGatheringDataToRunningLogs(
+                        monthlyGatheringData,
+                        monthlyLogList
+                    )
 
-                            binding.tvStampMonthly.text = if (monthlyStatistic != null) {
-                                getString(
-                                    R.string.calendar_monthly_statistic,
-                                    monthlyStatistic.groupRunningCount,
-                                    monthlyStatistic.personalRunningCount
-                                )
-                            } else {
-                                getString(R.string.calendar_monthly_statistic_empty)
-                            }
-
-                            val (selectedYear, selectedMonth) = viewModel.selectedYearMonth.value
-                            val newCalendarData = initYearMonthDays(selectedYear, selectedMonth, parsedRunningLogs)
-                            monthlyCalendarAdapter.submitList(newCalendarData)
-                        }
-
-                        else -> {
-                            Log.e("MyPageViewModel", "getUserData - when - else")
-                        }
+                    binding.tvStampMonthly.text = if (monthlyStatistic != null) {
+                        getString(
+                            R.string.calendar_monthly_statistic,
+                            monthlyStatistic.groupRunningCount,
+                            monthlyStatistic.personalRunningCount
+                        )
+                    } else {
+                        getString(R.string.calendar_monthly_statistic_empty)
                     }
+
+                    val (selectedYear, selectedMonth) = viewModel.selectedYearMonth.value
+                    val newCalendarData = initYearMonthDays(selectedYear, selectedMonth, parsedRunningLogs)
+                    monthlyCalendarAdapter.submitList(newCalendarData)
                 }
             }
         }

@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentMypageBinding
+import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
@@ -27,7 +27,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.weekly.WeeklyCalendarPagerAdapter
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningPostAdapter
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
+import com.applemango.runnerbe.presentation.model.type.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
@@ -292,7 +292,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             adapter = joinedRunningPostAdapter.apply {
                 setPostFrom(PostCalledFrom.MY_PAGE)
                 setPostClickListener(object : JoinedRunningClickListener {
-                    override fun logWriteClick(post: Posting) {
+                    override fun logWriteClick(post: PostingModel) {
                         val userId = post.userId
                         val logId = post.logId
 
@@ -315,7 +315,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         }
                     }
 
-                    override fun attendanceSeeClick(post: Posting) {
+                    override fun attendanceSeeClick(post: PostingModel) {
                         navigate(
                             MainFragmentDirections.actionMainFragmentToMyPostAttendanceSeeFragment(
                                 post.postId,
@@ -324,7 +324,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         )
                     }
 
-                    override fun attendanceManageClick(post: Posting) {
+                    override fun attendanceManageClick(post: PostingModel) {
                         navigate(
                             MainFragmentDirections.actionMainFragmentToMyPostAttendanceAccessionFragment(
                                 post.postId,
@@ -333,12 +333,12 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         )
                     }
 
-                    override fun bookMarkClick(post: Posting) {
+                    override fun bookMarkClick(post: PostingModel) {
                         mainViewModel.bookmarkStatusChange(post)
                         viewModel.updatePostBookmark(post)
                     }
 
-                    override fun postClick(post: Posting) {
+                    override fun postClick(post: PostingModel) {
                         navigate(
                             MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
                         )

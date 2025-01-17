@@ -13,8 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.DialogWaitingRunnuerListBinding
+import com.applemango.runnerbe.presentation.model.UserModel
 import com.applemango.runnerbe.presentation.model.listener.PostDialogListener
 import com.applemango.runnerbe.presentation.screen.dialog.CustomBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
@@ -27,7 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class WaitingRunnerListDialog(
@@ -103,7 +102,7 @@ class WaitingRunnerListDialog(
         binding.waitingUserInfoRecyclerView.apply {
             adapter = waitingRunnerInfoAdapter.apply {
                 setProfileClickListener(object : WaitingRunnerClickListener {
-                    override fun onProfileClicked(userInfo: UserInfo) {
+                    override fun onProfileClicked(userInfo: UserModel) {
                         requireParentFragment().findNavController().navigate(
                             PostDetailFragmentDirections
                                 .actionPostDetailFragmentToOtherUserProfileFragment(
@@ -112,11 +111,11 @@ class WaitingRunnerListDialog(
                         )
                     }
 
-                    override fun onRefuseClicked(userInfo: UserInfo) {
+                    override fun onRefuseClicked(userInfo: UserModel) {
                         viewModel.acceptClick(userInfo, "D")
                     }
 
-                    override fun onAcceptClicked(userInfo: UserInfo) {
+                    override fun onAcceptClicked(userInfo: UserModel) {
                         viewModel.acceptClick(userInfo, "Y")
                     }
                 })

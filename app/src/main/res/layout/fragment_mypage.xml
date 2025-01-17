@@ -61,7 +61,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/userNameView"
                     style="@style/TextStyleHead16"
-                    nick_name_text="@{myPageViewModel.userInfo.nickName}"
+                    nick_name_text="@{myPageViewModel.userInfo.nickname}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"

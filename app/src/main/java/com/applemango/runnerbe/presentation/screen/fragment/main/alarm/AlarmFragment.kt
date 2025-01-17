@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.network.response.Alarm
 import com.applemango.runnerbe.databinding.FragmentAlarmBinding
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.jakewharton.rxbinding4.view.clicks

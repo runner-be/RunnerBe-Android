@@ -6,10 +6,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRegistPaceInfoBinding
-import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialog

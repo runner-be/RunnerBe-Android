@@ -9,10 +9,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.response.GatheringData
-import com.applemango.runnerbe.data.network.response.RunningLog
-import com.applemango.runnerbe.data.network.response.TotalCount
 import com.applemango.runnerbe.databinding.FragmentWeeklyCalendarBinding
+import com.applemango.runnerbe.presentation.model.GatheringData
+import com.applemango.runnerbe.presentation.model.RunningLogModel
+import com.applemango.runnerbe.presentation.model.TotalCount
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
@@ -158,15 +158,15 @@ class WeeklyCalendarFragment() :
 
     private fun combineGatheringDataToRunningLogs(
         gatheringDataList: List<GatheringData>,
-        runningLogList: List<RunningLog>
-    ): List<RunningLog> {
+        runningLogList: List<RunningLogModel>
+    ): List<RunningLogModel> {
         val runningLogsMap = runningLogList.associateBy { it.runnedDate.toLocalDate() }
         val logsDateSet = runningLogsMap.keys // 이미 러닝로그가 작성된 날짜들
         val gatheredMap = gatheringDataList
             .filter { it.date.toLocalDate() !in logsDateSet }
             .associateBy({ it.date },
                 { gatheringData ->
-                    RunningLog(
+                    RunningLogModel(
                         null,
                         gatheringId = gatheringData.gatheringId,
                         runnedDate = gatheringData.date,
@@ -181,8 +181,8 @@ class WeeklyCalendarFragment() :
 
     private fun parseRunningLogs(
         startDate: LocalDate,
-        runningLogs: List<RunningLog>
-    ): List<RunningLog> {
+        runningLogs: List<RunningLogModel>
+    ): List<RunningLogModel> {
         val thisWeekEndDate = startDate.plusDays(6)
         return runningLogs
             .filter {

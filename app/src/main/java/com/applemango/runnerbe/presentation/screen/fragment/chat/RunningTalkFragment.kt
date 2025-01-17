@@ -8,8 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.databinding.FragmentRunningTalkBinding
+import com.applemango.runnerbe.presentation.model.RunningTalkRoomModel
 import com.applemango.runnerbe.presentation.model.listener.RoomClickListener
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
@@ -52,7 +52,7 @@ class RunningTalkFragment: BaseFragment<FragmentRunningTalkBinding>(R.layout.fra
         binding.rcvRunningTalk.apply {
             adapter = talkAdapter.apply {
                 setRoomClickListener(object: RoomClickListener {
-                    override fun moveToRunningTalkRoom(item: Room) {
+                    override fun moveToRunningTalkRoom(item: RunningTalkRoomModel) {
                         navigate(MainFragmentDirections.actionMainFragmentToRunningTalkDetailFragment(item.roomId, item.repUserName))
                     }
                 })

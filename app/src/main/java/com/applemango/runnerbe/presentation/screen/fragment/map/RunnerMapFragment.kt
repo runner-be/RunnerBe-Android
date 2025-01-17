@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentRunnerMapBinding
-import com.applemango.runnerbe.presentation.model.NestedScrollableViewHelper
+import com.applemango.runnerbe.util.NestedScrollableViewHelper
+import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
 import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
@@ -22,7 +22,7 @@ import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom
+import com.applemango.runnerbe.presentation.model.type.PostCalledFrom
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.util.AddressUtil
 import com.applemango.runnerbe.util.ToastUtil
@@ -284,21 +284,21 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             adapter = postAdapter.apply {
                 setPostFrom(PostCalledFrom.HOME)
                 setPostClickListener(object : JoinedRunningClickListener {
-                    override fun logWriteClick(post: Posting) {
+                    override fun logWriteClick(post: PostingModel) {
                     }
 
-                    override fun attendanceSeeClick(post: Posting) {
+                    override fun attendanceSeeClick(post: PostingModel) {
                     }
 
-                    override fun attendanceManageClick(post: Posting) {
+                    override fun attendanceManageClick(post: PostingModel) {
                     }
 
-                    override fun bookMarkClick(post: Posting) {
+                    override fun bookMarkClick(post: PostingModel) {
                         mainViewModel.bookmarkStatusChange(post) // 북마크 화면에 추가/제거할 아이템 설정
                         viewModel.updatePostBookmark(post) // 게시글 화면에 해당 아이템 북마크 상태 변경
                     }
 
-                    override fun postClick(post: Posting) {
+                    override fun postClick(post: PostingModel) {
                         navigate(
                             MainFragmentDirections.actionMainFragmentToPostDetailFragment(post)
                         )
@@ -494,7 +494,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         }
     }
 
-    private fun onClickMarker(overlay: Marker, posting: Posting?) {
+    private fun onClickMarker(overlay: Marker, posting: PostingModel?) {
         if (overlay == clickedMarker) {
             overlay.icon = OverlayImage.fromResource(getNoSelectMapMarkerResource(posting))
             clickedMarker = null
@@ -507,12 +507,12 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         }
     }
 
-    private fun getNoSelectMapMarkerResource(posting: Posting?): Int {
+    private fun getNoSelectMapMarkerResource(posting: PostingModel?): Int {
         return if (posting?.whetherEnd == "Y") R.drawable.ic_map_marker_whether_end
         else R.drawable.ic_map_marker
     }
 
-    private fun getSelectMapMarkerResource(posting: Posting?): Int {
+    private fun getSelectMapMarkerResource(posting: PostingModel?): Int {
         return if (posting?.whetherEnd == "Y") R.drawable.ic_select_map_marker_whether_end_no_profile
         else R.drawable.ic_select_map_marker_no_profile
     }

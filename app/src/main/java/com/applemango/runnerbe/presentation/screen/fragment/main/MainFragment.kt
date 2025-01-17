@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentMainBinding
 import com.applemango.runnerbe.databinding.ItemTabListBinding
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.presentation.model.MainBottomTab
+import com.applemango.runnerbe.presentation.model.type.MainBottomTab
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.map.RunnerMapViewModel
 import com.applemango.runnerbe.util.MainFragmentPageAdapter

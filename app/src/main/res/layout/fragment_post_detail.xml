@@ -10,7 +10,7 @@
 
         <variable
             name="pace"
-            type="com.applemango.runnerbe.domain.entity.Pace" />
+            type="com.applemango.runnerbe.presentation.model.type.Pace" />
 
         <variable
             name="vm"

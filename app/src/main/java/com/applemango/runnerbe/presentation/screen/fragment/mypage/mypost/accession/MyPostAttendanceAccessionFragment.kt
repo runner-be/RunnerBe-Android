@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.FragmentMyPostAttendanceAccessionBinding
+import com.applemango.runnerbe.presentation.model.UserModel
 import com.applemango.runnerbe.presentation.model.listener.AttendanceAccessionClickListener
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
@@ -42,14 +42,14 @@ class MyPostAttendanceAccessionFragment : BaseFragment<FragmentMyPostAttendanceA
         binding.rcvAttendanceAccession.apply {
             adapter = attendanceAccessionAdapter.apply {
                 setAccessionClickListener(object: AttendanceAccessionClickListener {
-                    override fun onAcceptClick(userInfo: UserInfo) {
+                    override fun onAcceptClick(user: UserModel) {
                         viewModel.select()
-                        userInfo.attendance = 1
+                        user.attendance = 1
                     }
 
-                    override fun onRefuseClick(userInfo: UserInfo) {
+                    override fun onRefuseClick(user: UserModel) {
                         viewModel.select()
-                        userInfo.attendance = 0
+                        user.attendance = 0
                     }
                 })
             }

@@ -7,9 +7,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.FragmentBookMarkBinding
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.type.RunningTag
+import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/*
-TODO - 필터 변경에 따른 리사이클러뷰 리스트 변경 시 Flow 적용하기
+/**
+ * TODO - 필터 변경에 따른 리사이클러뷰 리스트 변경 시 Flow 적용하기
  */
 @AndroidEntryPoint
 class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment_book_mark) {
@@ -51,21 +51,21 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
         binding.bookmarkRecyclerView.apply {
             adapter = bookmarkAdapter.apply {
                 setBookmarkClickListener(object : JoinedRunningClickListener {
-                    override fun logWriteClick(post: Posting) {
+                    override fun logWriteClick(post: PostingModel) {
                     }
 
-                    override fun attendanceSeeClick(post: Posting) {
+                    override fun attendanceSeeClick(post: PostingModel) {
                     }
 
-                    override fun attendanceManageClick(post: Posting) {
+                    override fun attendanceManageClick(post: PostingModel) {
                     }
 
-                    override fun bookMarkClick(post: Posting) {
+                    override fun bookMarkClick(post: PostingModel) {
                         mainViewModel.bookmarkStatusChange(post)
                         viewModel.addOrRemoveBookmarkedPost(post)
                     }
 
-                    override fun postClick(post: Posting) {
+                    override fun postClick(post: PostingModel) {
                     }
                 })
             }
@@ -77,8 +77,8 @@ class BookMarkFragment : BaseFragment<FragmentBookMarkBinding>(R.layout.fragment
         binding.rgTag.setOnCheckedChangeListener { _, checkedId ->
             val tag = when(checkedId) {
                 R.id.allTab -> RunningTag.All
-                R.id.beforeTab ->RunningTag.Before
-                R.id.afterTab ->RunningTag.After
+                R.id.beforeTab -> RunningTag.Before
+                R.id.afterTab -> RunningTag.After
                 R.id.holidayTab -> RunningTag.Holiday
                 else -> throw IllegalStateException("잘못된 러닝 태그입니다.")
             }

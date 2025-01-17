@@ -6,12 +6,10 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.DialogTimeSelectBinding
-import com.applemango.runnerbe.presentation.model.TimeResultListener
+import com.applemango.runnerbe.presentation.model.listener.TimeResultListener
 import com.applemango.runnerbe.util.NumberUtil
 import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
 import com.github.gzuliyujiang.wheelview.widget.WheelView
-import com.jakewharton.rxbinding4.view.clicks
-import java.util.concurrent.TimeUnit
 
 class TimeSelectPickerDialog(context: Context) : Dialog(context, R.style.confirmDialogStyle) {
 

@@ -133,7 +133,7 @@ class OtherUserProfileFragment :
     private fun getJoinedRunningClickDisposable() = binding.constJoinedRunningPostTitle.clicks()
         .throttleFirst(1000L, TimeUnit.MILLISECONDS)
         .subscribe {
-            val user = viewModel.userInfo.value
+            val user = viewModel.otherUserInfo.value
             user?.let {
                 navigate(
                     OtherUserProfileFragmentDirections.actionOtherUserProfileFragmentToOtherUserJoinedRunningFragment(
@@ -147,7 +147,7 @@ class OtherUserProfileFragment :
     private fun getCalendarClickDisposable() = binding.ivCalendar.clicks()
         .throttleFirst(1000L, TimeUnit.MILLISECONDS)
         .subscribe {
-            val user = viewModel.userInfo.value
+            val user = viewModel.otherUserInfo.value
             user?.let {
                 navigate(
                     OtherUserProfileFragmentDirections.actionUserProfileFragmentToMonthlyCalendarFragment(

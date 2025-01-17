@@ -16,8 +16,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentRunningTalkDetailBinding
-import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.presentation.component.PaceComponentMini
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewHorizontalItemDeco
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
@@ -37,7 +37,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class RunningTalkDetailFragment :

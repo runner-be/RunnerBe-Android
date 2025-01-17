@@ -149,16 +149,11 @@ class RunningLogDetailFragment :
 
     private fun setupDeleteRunningLogResult() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.deleteRunningLogResultFlow.collect { response ->
-                when (response) {
-                    is CommonResponse.Success<*> -> goBack()
-                    is CommonResponse.Failed -> Toast.makeText(
-                        context,
-                        getString(R.string.error_failed),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    else -> Toast.makeText(
+            viewModel.deleteRunningLogResultFlow.collect { isSuccess ->
+                if (isSuccess) {
+                    goBack()
+                } else {
+                    Toast.makeText(
                         context,
                         getString(R.string.error_failed),
                         Toast.LENGTH_SHORT

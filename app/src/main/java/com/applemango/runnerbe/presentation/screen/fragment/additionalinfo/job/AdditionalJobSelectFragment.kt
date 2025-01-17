@@ -7,7 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.FragmentAdditionalJobSelectBinding
-import com.applemango.runnerbe.presentation.model.JobButtonId
+import com.applemango.runnerbe.presentation.model.type.JobButtonId
 import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.AdditionalInfoAction
 import com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.AdditionalInfoViewModel

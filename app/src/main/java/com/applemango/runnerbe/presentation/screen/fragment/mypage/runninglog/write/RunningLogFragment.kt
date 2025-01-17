@@ -104,20 +104,18 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.postedRunningLogFlow.collect { response ->
-                    response?.let {
-                        val log = response.result.runningLog
-                        val stamp = getStampItemByCode(log.stampCode)
-                        viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
-                        stamp?.let {
-                            viewModel.updateStamp(it)
-                        }
-                        viewModel.updateLogDiary(log.contents)
-                        viewModel.updateDegreeAndWeather(
-                            log.weatherDegree.toString(),
-                            getWeatherItemByCode(log.weatherCode)
-                        )
-                        viewModel.updateLogVisibility(log.isOpened == 1)
+                    val log = response.runningLog
+                    val stamp = getStampItemByCode(log.stampCode)
+                    viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
+                    stamp?.let {
+                        viewModel.updateStamp(it)
                     }
+                    viewModel.updateLogDiary(log.contents)
+                    viewModel.updateDegreeAndWeather(
+                        log.weatherDegree.toString(),
+                        getWeatherItemByCode(log.weatherCode)
+                    )
+                    viewModel.updateLogVisibility(log.isOpened == 1)
                 }
             }
         }
