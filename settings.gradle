@@ -17,5 +17,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "RunnerBe-Android"
-include ':app'
+include ':presentation'
 include ':domain'
+include ':data'
