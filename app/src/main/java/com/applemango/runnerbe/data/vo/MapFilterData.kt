@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.vo
 
 import android.os.Parcelable
-import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.presentation.model.type.Pace
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

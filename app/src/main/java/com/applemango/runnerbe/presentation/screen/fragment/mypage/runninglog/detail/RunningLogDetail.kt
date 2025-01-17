@@ -1,7 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail
 
 import android.os.Parcelable
-import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -35,32 +34,3 @@ data class MemberStampData (
     val profileImageUrl: String?,
     val stampCode: String,
 ) : Parcelable
-
-fun parseRunningLogDetailToPresentation(runningLogResponse: DetailRunningLogResponse): RunningLogDetail {
-    val runningLog = runningLogResponse.result.runningLog
-    return RunningLogDetail(
-        runningLog = RunningLogData(
-            status = runningLog.status,
-            runnedDate = runningLog.runnedDate,
-            userId = runningLog.userId,
-            nickname = runningLog.nickname,
-            gatheringId = runningLog.gatheringId,
-            stampCode = runningLog.stampCode,
-            contents = runningLog.contents,
-            imageUrl = runningLog.imageUrl,
-            weatherDegree = runningLog.weatherDegree,
-            weatherCode = runningLog.weatherCode,
-            isOpened = runningLog.isOpened,
-        ),
-        gatheringCount = runningLogResponse.result.gatheringCount,
-        gotStamp = runningLogResponse.result.gotStamp.map {
-            MemberStampData(
-                it.userId,
-                it.logId,
-                it.nickname,
-                it.profileImageUrl,
-                it.stampCode
-            )
-        }
-    )
-}

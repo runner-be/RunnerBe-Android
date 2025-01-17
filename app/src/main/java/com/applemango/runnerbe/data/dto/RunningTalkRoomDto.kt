@@ -1,6 +1,6 @@
-package com.applemango.runnerbe.entity
+package com.applemango.runnerbe.data.dto
 
-data class RunningTalkRoomEntity(
+data class RunningTalkRoomDto(
     val roomId: Int,
     val title: String,
     val repUserName: String,

@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.data.vo
 
 import android.os.Parcelable
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 import com.naver.maps.geometry.LatLng

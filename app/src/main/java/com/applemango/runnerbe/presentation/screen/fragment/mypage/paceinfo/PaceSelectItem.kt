@@ -2,7 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo
 
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.domain.entity.Pace
+import com.applemango.runnerbe.presentation.model.type.Pace
 
 data class PaceSelectItem(
     val pace: Pace,

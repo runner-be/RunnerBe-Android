@@ -1,7 +1,7 @@
 package com.applemango.runnerbe.presentation.screen.dialog.dateselect
 
 import android.os.Parcelable
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.type.RunningTag
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Calendar

@@ -1,8 +1,8 @@
-package com.applemango.runnerbe.entity
+package com.applemango.runnerbe.data.dto
 
-data class UserEntity (
+data class UserDto (
     val userId: Int,
-    val nickname: String?,
+    val nickName: String?,
     val gender: String?,
     val age: String?,
     val diligence: String?,

@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.BuildConfig
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.domain.usecase.alarm.UpdateAlarmUseCase
-import com.applemango.runnerbe.domain.usecase.user.WithdrawalUserUseCase
+import com.applemango.runnerbe.usecaseImpl.alarm.UpdateAlarmUseCase
+import com.applemango.runnerbe.usecaseImpl.user.WithdrawalUserUseCase
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,19 +43,14 @@ class SettingViewModel @Inject constructor(
 
     fun withdrawalUser() = viewModelScope.launch {
         runCatching {
-            withdrawalUserUseCase(
+            val result = withdrawalUserUseCase(
                 RunnerBeApplication.mTokenPreference.getUserId(),
                 BuildConfig.WITHDRAWAL_API_KEY
-            ).collect {
-                when (it) {
-                    is CommonResponse.Success<*> -> _withdrawalState.emit(UiState.Success(it.code))
-                    is CommonResponse.Failed -> {
-                        if (it.code <= 999) _withdrawalState.emit(UiState.NetworkError)
-                        else _withdrawalState.emit(UiState.Failed(it.message))
-                    }
-                    is CommonResponse.Loading -> _withdrawalState.emit(UiState.Loading)
-                    else -> _withdrawalState.emit(UiState.Empty)
-                }
+            )
+            if (result.isSuccess) {
+                _withdrawalState.emit(UiState.Success(result.code))
+            } else {
+                _withdrawalState.emit(UiState.Failed(result.message ?: ""))
             }
         }.onFailure {
             _withdrawalState.emit(UiState.NetworkError)
@@ -64,7 +59,7 @@ class SettingViewModel @Inject constructor(
 
     suspend fun patchAlarm(userId : Int, pushOn : Boolean) {
         runCatching {
-            if(beforeAlarmCheck != pushOn) updateAlarmUseCase(userId, pushOn).collectLatest {  }
+            if(beforeAlarmCheck != pushOn) updateAlarmUseCase(userId, pushOn)
         }.onFailure { it.printStackTrace() }
     }
 }
