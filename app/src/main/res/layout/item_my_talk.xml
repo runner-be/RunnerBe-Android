@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.dto.Messages" />
+            type="com.applemango.runnerbe.presentation.model.RunningTalkMessageModel" />
         <import type="com.applemango.runnerbe.util.DateUtilKt"/>
     </data>
 

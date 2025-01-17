@@ -8,11 +8,11 @@
 
         <variable
             name="pace"
-            type="com.applemango.runnerbe.domain.entity.Pace" />
+            type="com.applemango.runnerbe.presentation.model.type.Pace" />
 
         <variable
-            name="userInfo"
-            type="com.applemango.runnerbe.data.dto.UserInfo" />
+            name="user"
+            type="com.applemango.runnerbe.presentation.model.UserModel" />
 
         <variable
             name="listener"
@@ -25,13 +25,13 @@
         android:layout_height="wrap_content"
         android:background="@color/dark_g7"
         android:focusable="true"
-        android:onClick="@{() -> listener.onProfileClicked(userInfo)}"
+        android:onClick="@{() -> listener.onProfileClicked(user)}"
         android:paddingVertical="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/profileImageView"
-            profileImageFromUrl="@{String.valueOf(userInfo.profileImageUrl)}"
+            profileImageFromUrl="@{String.valueOf(user.profileImageUrl)}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="@{userInfo.nickName}"
+            android:text="@{user.nickname}"
             android:textColor="@color/dark_g1"
             app:layout_constraintLeft_toRightOf="@id/profileImageView"
             app:layout_constraintTop_toTopOf="@id/profileImageView"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:gravity="center"
-            android:text="@{@string/comma_text(userInfo.gender, userInfo.age)}"
+            android:text="@{@string/comma_text(user.gender, user.age)}"
             android:textColor="@color/dark_g3_5"
             app:layout_constraintBottom_toBottomOf="@id/userNameView"
             app:layout_constraintLeft_toRightOf="@id/userNameView"
@@ -83,7 +83,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:paceImage16="@{userInfo.pace}" />
+                bind:paceImage16="@{user.pace}" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_pace"
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="@{pace.Companion.getPaceByName(userInfo.pace).time}"
+                android:text="@{pace.Companion.getPaceByName(user.pace).time}"
                 android:textColor="@color/dark_g1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +120,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:paceImage16="@{userInfo.diligence}" />
+                bind:paceImage16="@{user.diligence}" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/runner_status_txt"
@@ -130,7 +130,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:text="@{userInfo.diligence}"
+                android:text="@{user.diligence}"
                 android:textColor="@color/dark_g1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/status_img"
@@ -150,7 +150,7 @@
             android:paddingTop="4dp"
             android:paddingRight="8dp"
             android:paddingBottom="4dp"
-            android:text="@{userInfo.job}"
+            android:text="@{user.job}"
             android:textColor="@color/dark_g2_5"
             app:layout_constraintBottom_toBottomOf="@id/runnerStatus"
             app:layout_constraintLeft_toRightOf="@id/runnerStatus"
@@ -177,7 +177,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_dark_g4_stroke_radius_20"
                 android:gravity="center"
-                android:onClick="@{() -> listener.onRefuseClicked(userInfo)}"
+                android:onClick="@{() -> listener.onRefuseClicked(user)}"
                 android:paddingVertical="6dp"
                 android:text="@string/do_refuse"
                 android:textColor="@color/dark_g3" />
@@ -190,7 +190,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_primary_solid_radius_20"
                 android:gravity="center"
-                android:onClick="@{() -> listener.onAcceptClicked(userInfo)}"
+                android:onClick="@{() -> listener.onAcceptClicked(user)}"
                 android:paddingVertical="6dp"
                 android:text="@string/do_accept"
                 android:textColor="@color/black" />

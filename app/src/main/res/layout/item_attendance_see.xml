@@ -12,7 +12,7 @@
 
         <variable
             name="userInfo"
-            type="com.applemango.runnerbe.data.dto.UserInfo" />
+            type="com.applemango.runnerbe.presentation.model.UserModel" />
 
         <variable
             name="listener"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@{userInfo.nickName}"
+                android:text="@{userInfo.nickname}"
                 android:textColor="@color/dark_g1"
                 app:layout_constraintLeft_toRightOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="@id/iv_profile"

@@ -7,10 +7,10 @@
     <data>
         <variable
             name="pace"
-            type="com.applemango.runnerbe.domain.entity.Pace" />
+            type="com.applemango.runnerbe.presentation.model.type.Pace" />
         <variable
             name="userInfo"
-            type="com.applemango.runnerbe.data.dto.UserInfo" />
+            type="com.applemango.runnerbe.presentation.model.UserModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="기한 끝"
-                android:text="@{userInfo.nickName}"
+                android:text="@{userInfo.nickname}"
                 android:textColor="@color/dark_g1"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium"

@@ -13,7 +13,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.network.response.JoinedRunnerResult" />
+            type="com.applemango.runnerbe.presentation.model.JoinedRunnerModel" />
 
         <variable
             name="listener"

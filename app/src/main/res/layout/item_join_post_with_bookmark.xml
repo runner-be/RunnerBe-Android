@@ -5,13 +5,13 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
-        <import type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom"/>
+        <import type="com.applemango.runnerbe.presentation.model.type.PostCalledFrom"/>
         <variable
             name="postFrom"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.PostCalledFrom" />
+            type="com.applemango.runnerbe.presentation.model.type.PostCalledFrom" />
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.dto.Posting" />
+            type="com.applemango.runnerbe.presentation.model.PostingModel" />
         <variable
             name="runningEndTextViewVisibility"
             type="Boolean" />

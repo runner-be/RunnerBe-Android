@@ -10,7 +10,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.dto.Posting" />
+            type="com.applemango.runnerbe.presentation.model.PostingModel" />
 
         <variable
             name="clickListener"

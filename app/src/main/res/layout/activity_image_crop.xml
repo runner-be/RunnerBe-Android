@@ -9,7 +9,7 @@
 
         <variable
             name="ratio"
-            type="com.applemango.runnerbe.presentation.screen.fragment.image.CropRectRatio" />
+            type="com.applemango.runnerbe.presentation.model.type.CropRectRatio" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

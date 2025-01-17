@@ -11,7 +11,7 @@
             type="boolean" />
         <variable
             name="item"
-            type="com.applemango.runnerbe.data.dto.Messages" />
+            type="com.applemango.runnerbe.presentation.model.RunningTalkMessageModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

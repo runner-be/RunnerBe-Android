@@ -133,7 +133,7 @@
 
         <argument
             android:name="userData"
-            app:argType="com.applemango.runnerbe.data.dto.UserInfo"/>
+            app:argType="com.applemango.runnerbe.presentation.model.UserModel"/>
     </fragment>
     <fragment
         android:id="@+id/runningWriteFragment"
@@ -170,7 +170,7 @@
 
         <argument
             android:name="paces"
-            app:argType="com.applemango.runnerbe.domain.entity.Pace[]"/>
+            app:argType="com.applemango.runnerbe.presentation.model.type.Pace[]"/>
         <argument
             android:name="gender"
             app:argType="string"/>
@@ -258,7 +258,7 @@
 
         <argument
             android:name="posting"
-            app:argType="com.applemango.runnerbe.data.dto.Posting"/>
+            app:argType="com.applemango.runnerbe.presentation.model.PostingModel"/>
         <action
             android:id="@+id/action_postDetailFragment_to_runningTalkDetailFragment"
             app:destination="@id/runningTalkDetailFragment"

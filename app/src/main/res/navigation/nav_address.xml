@@ -19,7 +19,7 @@
 
         <argument
             android:name="address"
-            app:argType="com.applemango.runnerbe.presentation.screen.fragment.map.address.AddressResult"/>
+            app:argType="com.applemango.runnerbe.presentation.model.AddressModel"/>
 
     </fragment>
 </navigation>

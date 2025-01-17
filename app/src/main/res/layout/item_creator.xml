@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.applemango.runnerbe.presentation.model.CreatorImageAndPosition" />
+            type="com.applemango.runnerbe.presentation.model.type.CreatorImageAndPosition" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
