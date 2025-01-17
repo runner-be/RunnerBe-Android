@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.model
+package com.applemango.runnerbe.presentation.model.type
 
 enum class LoginType(val value : Int) {
     KAKAO(1),

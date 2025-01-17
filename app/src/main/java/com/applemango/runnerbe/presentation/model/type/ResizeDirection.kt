@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.screen.fragment.image
+package com.applemango.runnerbe.presentation.model.type
 
 enum class ResizeDirection {
     LEFT,

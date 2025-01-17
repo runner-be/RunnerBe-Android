@@ -1,4 +1,4 @@
-package com.applemango.runnerbe.presentation.model
+package com.applemango.runnerbe.presentation.model.type
 
 import com.applemango.runnerbe.R
 
