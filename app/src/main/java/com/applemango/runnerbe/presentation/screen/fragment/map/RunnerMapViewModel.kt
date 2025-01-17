@@ -3,18 +3,17 @@ package com.applemango.runnerbe.presentation.screen.fragment.map
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.request.GetRunningListRequest
-import com.applemango.runnerbe.data.network.response.GetRunningListResponse
 import com.applemango.runnerbe.data.vo.MapFilterData
-import com.applemango.runnerbe.domain.entity.Pace
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase
-import com.applemango.runnerbe.presentation.model.AfterPartyTag
-import com.applemango.runnerbe.presentation.model.PriorityFilterTag
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.type.AfterPartyTag
+import com.applemango.runnerbe.presentation.model.type.PriorityFilterTag
+import com.applemango.runnerbe.presentation.model.type.RunningTag
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListParam
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,10 +29,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunnerMapViewModel @Inject constructor(
-    private val getPostsUseCase: GetPostsUseCase
+    private val getPostsUseCase: GetPostsUseCase,
+    private val postingMapper: PostingMapper
 ) : ViewModel() {
 
-    val postList: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
+    val postList: MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
     val panelTop: MutableStateFlow<Int?> = MutableStateFlow(null)
 
     private val pageSize = 10
@@ -113,7 +113,7 @@ class RunnerMapViewModel @Inject constructor(
         } else {
             coordinator
         }
-        val request = GetRunningListRequest(
+        val request = GetRunningListParam(
             userLat = iCoordinator.latitude,
             userLng = iCoordinator.longitude,
             paceFilter = filterData.value.paceTags.joinToString(","),
@@ -129,26 +129,11 @@ class RunnerMapViewModel @Inject constructor(
             pageSize = pageSize,
             page = if (isRefresh) 1 else postList.value.size / pageSize + 1
         )
-        getPostsUseCase(filterRunningTag.value, request).collect {
-            if (it is CommonResponse.Success<*> && it.body is GetRunningListResponse) {
-                if (it.body.isSuccess) {
-                    isEndPage = it.body.runningList.size < pageSize
-                    val newList = it.body.runningList
-                    postList.value = newList
-                }
+        getPostsUseCase(filterRunningTag.value.tag, request).collect {
+            isEndPage = it.size < pageSize
+            postList.value = it.map { posting ->
+                postingMapper.mapToPresentation(posting)
             }
-            _listUpdateUiState.emit(
-                when (it) {
-                    is CommonResponse.Success<*> -> UiState.Success(it.code)
-                    is CommonResponse.Failed -> {
-                        if (it.code >= 999) UiState.NetworkError
-                        else UiState.Failed(it.message)
-                    }
-
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
-                }
-            )
         }
     }
 
@@ -158,8 +143,8 @@ class RunnerMapViewModel @Inject constructor(
         getRunningList(userId, isRefresh = true)
     }
 
-    fun updatePostBookmark(post: Posting) {
-        val postList: MutableList<Posting> = postList.value.toMutableList()
+    fun updatePostBookmark(post: PostingModel) {
+        val postList: MutableList<PostingModel> = postList.value.toMutableList()
         val parsedPostList = postList.map { item ->
             if (item.postId == post.postId) {
                 val prevBookmark = if (post.bookMark == 1) 0 else 1

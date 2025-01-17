@@ -2,10 +2,9 @@ package com.applemango.runnerbe.presentation.screen.fragment.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.data.dto.Room
-import com.applemango.runnerbe.domain.usecase.runningtalk.GetRunningTalkRoomsUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.data.network.response.RunningTalksResponse
+import com.applemango.runnerbe.presentation.mapper.RunningTalkRoomMapper
+import com.applemango.runnerbe.presentation.model.RunningTalkRoomModel
+import com.applemango.runnerbe.usecaseImpl.runningtalk.GetRunningTalkRoomsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -13,16 +12,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningTalkViewModel @Inject constructor(
-    private val runningTalkUseCase: GetRunningTalkRoomsUseCase
+    private val runningTalkUseCase: GetRunningTalkRoomsUseCase,
+    private val runningTalkRoomMapper: RunningTalkRoomMapper
 ): ViewModel() {
 
-    val roomList : MutableStateFlow<List<Room>> = MutableStateFlow(emptyList())
+    val roomList : MutableStateFlow<List<RunningTalkRoomModel>> = MutableStateFlow(emptyList())
 
     fun getRunningTalkList() {
         viewModelScope.launch {
             runningTalkUseCase().collect {
-                if(it is CommonResponse.Success<*> && it.body is RunningTalksResponse) {
-                    roomList.value = it.body.result.sortedByDescending { room -> room.roomId }
+                roomList.value = it.map { room ->
+                    runningTalkRoomMapper.mapToPresentation(room)
                 }
             }
         }

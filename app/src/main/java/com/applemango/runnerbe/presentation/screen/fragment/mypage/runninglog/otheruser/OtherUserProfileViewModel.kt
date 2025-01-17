@@ -2,11 +2,12 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.o
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.OtherUser
-import com.applemango.runnerbe.data.network.response.OtherUserInfo
-import com.applemango.runnerbe.domain.usecase.user.GetOtherUserDataUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.mapper.OtherUserMyPageMapper
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.model.OtherUserInfo
+import com.applemango.runnerbe.presentation.model.OtherUserMyPageModel
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.usecaseImpl.user.GetOtherUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OtherUserProfileViewModel @Inject constructor(
-    private val getOtherUserDataUseCase: GetOtherUserDataUseCase
+    private val getOtherUserDataUseCase: GetOtherUserDataUseCase,
+    private val otherUserMyPageMapper: OtherUserMyPageMapper,
+    private val postingMapper: PostingMapper,
 ) : ViewModel() {
     private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int> = MutableStateFlow(2)
     val currentWeeklyViewPagerPosition: StateFlow<Int> get() = _currentWeeklyViewPagerPosition.asStateFlow()
@@ -31,30 +34,22 @@ class OtherUserProfileViewModel @Inject constructor(
     private val date = LocalDate.now()
     val today: String = "${date.year}년 ${date.monthValue}월"
 
-    private val _userInfo = MutableStateFlow<OtherUserInfo?>(null)
-    val userInfo: StateFlow<OtherUserInfo?> = _userInfo.asStateFlow()
+    private val _otherUserInfo = MutableStateFlow<OtherUserInfo?>(null)
+    val otherUserInfo: StateFlow<OtherUserInfo?> = _otherUserInfo.asStateFlow()
 
-    private val _userJoinedPosting = MutableStateFlow<List<Posting>>(emptyList())
-    val userJoinedPosting: StateFlow<List<Posting>> = _userJoinedPosting.asStateFlow()
+    private val _userJoinedPosting = MutableStateFlow<List<PostingModel>>(emptyList())
+    val userJoinedPosting: StateFlow<List<PostingModel>> = _userJoinedPosting.asStateFlow()
 
     fun getOtherUserProfile(userId: Int) {
         viewModelScope.launch {
             getOtherUserDataUseCase(userId)
-                .collectLatest { response ->
-                    when (response) {
-                        is CommonResponse.Success<*> -> {
-                            val result = response.body as? OtherUser
-                            _userJoinedPosting.value =
-                                result?.userPosting?.sortedByDescending { running ->
-                                    running.gatheringTime
-                                } ?: emptyList()
-                            _userInfo.value = result?.userInfo
-                        }
-
-                        else -> {
-                            throw Exception("")
-                        }
-                    }
+                .collectLatest { result ->
+                    val parsedResult = otherUserMyPageMapper.mapToPresentation(result)
+                    _userJoinedPosting.value =
+                        parsedResult.otherUser.userPosting.sortedByDescending { running ->
+                            running.gatheringTime
+                        } ?: emptyList()
+                    _otherUserInfo.value = parsedResult.otherUser.userInfo
                 }
         }
     }

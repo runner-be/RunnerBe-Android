@@ -1,18 +1,15 @@
 package com.applemango.runnerbe.presentation.screen.compose.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.SocialLoginRequest
-import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.repository.KakaoLoginRepository
-import com.applemango.runnerbe.domain.repository.NaverLoginRepository
-import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
-import com.applemango.runnerbe.presentation.model.LoginType
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
+import com.applemango.runnerbe.presentation.model.type.LoginType
+import com.applemango.runnerbe.usecaseImpl.user.KakaoLoginUseCase
+import com.applemango.runnerbe.usecaseImpl.user.NaverLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,18 +21,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val kakaoRepo: KakaoLoginRepository,
-    private val naverRepo: NaverLoginRepository,
+    private val kakaoLoginUseCase: KakaoLoginUseCase,
+    private val naverLoginUseCase: NaverLoginUseCase,
     private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
 
     private val _isTokenLogin: MutableLiveData<Boolean> = MutableLiveData()
     val isTokenLogin: LiveData<Boolean> = _isTokenLogin
 
-    private var _isSocialLogin: MutableStateFlow<CommonResponse> =
-        MutableStateFlow(CommonResponse.Empty)
-    val isSocialLogin : StateFlow<CommonResponse> = _isSocialLogin
-
+    private var _isSocialLogin: MutableStateFlow<Boolean> =
+        MutableStateFlow(false)
+    val isSocialLogin : StateFlow<Boolean> = _isSocialLogin
 
     //UI 동작 확인용 테스트 코드
     fun isTokenCheck() {
@@ -55,45 +51,36 @@ class SplashViewModel @Inject constructor(
     fun login(type : LoginType, body: SocialLoginRequest) = viewModelScope.launch  {
         runCatching {
             when(type) {
-                LoginType.KAKAO -> kakaoRepo.getData(body)
-                LoginType.NAVER -> naverRepo.getData(body)
+                LoginType.KAKAO -> kakaoLoginUseCase(body.accessToken)
+                LoginType.NAVER -> naverLoginUseCase(body.accessToken)
             }
         }.onSuccess { repo ->
             repo.catch {
-                _isSocialLogin.value = CommonResponse.Failed(999,it.message?:"error")
+                _isSocialLogin.value = false
                 it.printStackTrace()
             }.collect {
-                if(it.isSuccess) {
-                    val result = it.result
-                    RunnerBeApplication.mTokenPreference.setLoginType(type)
-                    if(result.jwt != null) RunnerBeApplication.mTokenPreference.setToken(result.jwt)
-                    // 추가정보 입력시
-                    result.userId?.let { userId ->
-                        RunnerBeApplication.mTokenPreference.setUserId(userId)
-                        getUserData(userId)
+                val result = it.login
+                RunnerBeApplication.mTokenPreference.apply {
+                    setLoginType(type)
+                    result.jwt?.let { token -> setToken(token) }
+                    result.userId?.let { id ->
+                        setUserId(id)
+                        getUserData(id)
                     }
-                    // 추가정보 미입력시
-                    result.uuid?.let { it1 -> RunnerBeApplication.mTokenPreference.setUuid(it1) }
-
-                    _isSocialLogin.value = CommonResponse.Success(it.code, it)
-                } else _isSocialLogin.value = CommonResponse.Failed(it.code,it.message?:"error")
+                    result.uuid?.let { uuid ->
+                        setUuid(uuid)
+                    }
+                }
+                _isSocialLogin.value = true
             }
         }
     }
 
     private fun getUserData(userId: Int) = CoroutineScope(Dispatchers.IO).launch {
         getUserDataUseCase(userId).collect {
-            when (it) {
-                is CommonResponse.Success<*> -> {
-                    if (it.body is UserDataResponse) {
-                        val result = it.body.result
-                        RunnerBeApplication.mTokenPreference.setMyRunningPace(result.userInfo?.pace?:"")
-                    }
-                }
-
-                else -> {
-                    Log.e(this.javaClass.name, "getUserData - when - else - CommonResponse")
-                }
+            kotlin.runCatching {
+                val result = it.userInfo?.pace
+                RunnerBeApplication.mTokenPreference.setMyRunningPace(result ?: "")
             }
         }
     }

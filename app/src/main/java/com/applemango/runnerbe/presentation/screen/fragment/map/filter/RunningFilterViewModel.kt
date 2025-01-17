@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.presentation.model.AfterPartyTag
-import com.applemango.runnerbe.presentation.model.GenderTag
-import com.applemango.runnerbe.presentation.model.JobButtonId
+import com.applemango.runnerbe.presentation.model.type.AfterPartyTag
+import com.applemango.runnerbe.presentation.model.type.GenderTag
+import com.applemango.runnerbe.presentation.model.type.JobButtonId
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoListWithAll
 import kotlinx.coroutines.flow.MutableSharedFlow

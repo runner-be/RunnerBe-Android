@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.user.UpdateUserPaceUseCase
+import com.applemango.runnerbe.usecaseImpl.user.UpdateUserPaceUseCase
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,28 +63,17 @@ class PaceInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             val selectedPace = paceInfoList.value.firstOrNull { it.isSelected } ?: return@launch
-            updateUserPaceUseCase(userId, selectedPace.pace).collect {
-                if (it is CommonResponse.Success<*>) {
-                    RunnerBeApplication.mTokenPreference.setMyRunningPace(selectedPace.pace.key)
-                    _action.emit(
-                        PaceInfoRegistAction.ShowCompleteDialog(
-                            selectedPace.pace,
-                            R.string.pace_complete_title,
-                            R.string.pace_complete_description
-                        )
+            val result = updateUserPaceUseCase(userId, selectedPace.pace.key)
+            if (result.isSuccess) {
+                _action.emit(
+                    PaceInfoRegistAction.ShowCompleteDialog(
+                        selectedPace.pace,
+                        R.string.pace_complete_title,
+                        R.string.pace_complete_description
                     )
-                }
-                _paceInfoUiState.postValue(
-                    when (it) {
-                        is CommonResponse.Failed -> {
-                            if (it.code <= 999) UiState.NetworkError
-                            else UiState.Failed(it.message)
-                        }
-
-                        is CommonResponse.Loading -> UiState.Loading
-                        else -> UiState.Empty
-                    }
                 )
+            } else {
+                UiState.Failed(result.message ?: "")
             }
         }
     }

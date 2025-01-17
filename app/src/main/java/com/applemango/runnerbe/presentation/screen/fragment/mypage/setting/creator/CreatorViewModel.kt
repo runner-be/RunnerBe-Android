@@ -2,7 +2,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.crea
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.presentation.model.CreatorImageAndPosition
+import com.applemango.runnerbe.presentation.model.type.CreatorImageAndPosition
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch

@@ -6,15 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
-import com.applemango.runnerbe.data.network.response.DetailRunningLogResponse
-import com.applemango.runnerbe.data.network.response.JoinedRunnerResponse
-import com.applemango.runnerbe.domain.usecase.runninglog.GetJoinedRunnersUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.GetRunningLogDetailUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.UpdateRunningLogUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.WriteRunningLogUseCase
+import com.applemango.runnerbe.usecaseImpl.runninglog.GetJoinedRunnersUseCase
+import com.applemango.runnerbe.usecaseImpl.runninglog.GetRunningLogDetailUseCase
+import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase
+import com.applemango.runnerbe.usecaseImpl.runninglog.WriteRunningLogUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
 import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.parseKoreanDateToLocalDate
 import com.google.firebase.ktx.Firebase
@@ -66,21 +65,7 @@ class RunningLogViewModel @Inject constructor(
         .filterNotNull()
         .flatMapLatest {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            getRunningLogDetailUseCase(userId, it).map { response ->
-                when (response) {
-                    is CommonResponse.Success<*> -> {
-                        response.body as? DetailRunningLogResponse
-                    }
-
-                    is CommonResponse.Failed -> {
-                        throw Exception(response.message)
-                    }
-
-                    else -> {
-                        throw Exception("RunningLogDetailViewModel-runningLogDetailFlow-when-else")
-                    }
-                }
-            }
+            getRunningLogDetailUseCase(userId, it)
         }.flowOn(Dispatchers.IO)
 
     suspend fun postRunningLog(
@@ -94,7 +79,7 @@ class RunningLogViewModel @Inject constructor(
 
         val runningLog = try {
             val degree = logDegree.value?.replace("+", "0")?.toInt()
-            RunningLogRequest(
+            RunningLogParam(
                 parseKoreanDateToLocalDate(logDate.value).toString(),
                 requireNotNull(logStamp.value?.code),
                 gatheringId.value,
@@ -109,32 +94,27 @@ class RunningLogViewModel @Inject constructor(
             return Pair(false, e.message)
         }
 
-        var success = false
         val date = parseKoreanDateToLocalDate(logDate.value)
         val logId = logId.value
 
-        if (logId == null) {
-            writeRunningLogUseCase(
+
+
+        return if (logId == null) {
+            val result = writeRunningLogUseCase(
                 userId,
                 date.year,
                 date.monthValue,
                 runningLog
-            ).collect { response ->
-                success = response is CommonResponse.Success<*> && response.code != 999
-                // TODO() 러닝 통계 조회 및 표시
-            }
+            )
+            Pair(result.isSuccess, null)
         } else {
-            updateRunningLogUseCase(
+            val result = updateRunningLogUseCase(
                 userId,
                 logId,
                 runningLog
-            ).collect { response ->
-                success = response is CommonResponse.Success<*> && response.code != 999
-                // TODO() 러닝 통계 조회 및 표시
-            }
+            )
+            Pair(result.isSuccess, null)
         }
-
-        return Pair(success, null)
     }
 
     private suspend fun uploadImg(uri: String): String? {
@@ -196,20 +176,7 @@ class RunningLogViewModel @Inject constructor(
                 getJoinedRunnersUseCase(userId, gId).catch {
                     it.printStackTrace()
                 }.collectLatest { response ->
-                    when (response) {
-                        is CommonResponse.Success<*> -> {
-                            val joinedRunnerList = response.body as? JoinedRunnerResponse
-                            joinedRunnerSize.value = joinedRunnerList?.result?.size ?: 0
-                        }
-
-                        is CommonResponse.Failed -> {
-                            LogUtil.errorLog(response.message)
-                        }
-
-                        else -> {
-                            throw Exception("RunningLogDetailViewModel-runningLogDetailFlow-when-else")
-                        }
-                    }
+                    joinedRunnerSize.value = response.size
                 }
             }
         }

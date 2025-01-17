@@ -1,13 +1,10 @@
 package com.applemango.runnerbe.presentation.screen.fragment.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.BaseResponse
-import com.applemango.runnerbe.domain.usecase.bookmark.UpdateBookmarkUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.usecaseImpl.bookmark.UpdateBookmarkUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +17,9 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
-    val clickedPost: MutableStateFlow<Posting?> = MutableStateFlow(null)
+    val clickedPost: MutableStateFlow<PostingModel?> = MutableStateFlow(null)
 
-    private val _bookmarkPost : MutableSharedFlow<Posting> = MutableSharedFlow()
+    private val _bookmarkPost : MutableSharedFlow<PostingModel> = MutableSharedFlow()
     val bookmarkPost get() = _bookmarkPost
 
     private var _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
@@ -32,29 +29,28 @@ class MainViewModel @Inject constructor(
         currentItem.emit(index)
     }
 
-    fun clickPost(posting: Posting?) {
+    fun clickPost(posting: PostingModel?) {
         clickedPost.value = posting
     }
 
-    fun bookmarkStatusChange(post: Posting) = viewModelScope.launch {
+    fun bookmarkStatusChange(post: PostingModel) = viewModelScope.launch {
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        if (userId > 0) {
-            updateBookmarkUseCase(
+        if (userId == -1) {
+            _isShowInfoDialog.emit(true)
+            return@launch
+        }
+
+        try {
+            val result = updateBookmarkUseCase(
                 userId,
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"
-            ).collect {
-                when(it) {
-                    is CommonResponse.Success<*> -> {
-                        if(it.body is BaseResponse && it.body.isSuccess) {
-                            _bookmarkPost.emit(post)
-                        }
-                    }
-                    else -> {
-                        Log.e("MainViewModel", "bookmarkStatusChange - when - else")
-                    }
-                }
+            )
+            if (result.isSuccess) {
+                _bookmarkPost.emit(post)
             }
-        } else _isShowInfoDialog.emit(true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

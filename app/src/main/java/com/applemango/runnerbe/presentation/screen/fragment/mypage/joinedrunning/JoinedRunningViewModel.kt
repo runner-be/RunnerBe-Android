@@ -3,11 +3,11 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.GetMyPageResult
-import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.mapper.UserMapper
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.type.JoinedRunningCategory
+import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,16 +22,18 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class JoinedRunningViewModel @Inject constructor(
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val userMapper: UserMapper,
+    private val postingMapper: PostingMapper,
 ) : ViewModel() {
     val selectedCategoryId: MutableStateFlow<JoinedRunningCategory> = MutableStateFlow(
         JoinedRunningCategory.ALL
     )
-    private val userPostings: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
+    private val userPostings: MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
 
     val userPostingSize: MutableStateFlow<Int> = MutableStateFlow(0)
 
-    val userPostingFlow: Flow<List<Posting>> = combine(
+    val userPostingFlow: Flow<List<PostingModel>> = combine(
         userPostings,
         selectedCategoryId
     ) { postings, categoryId ->
@@ -50,8 +52,8 @@ class JoinedRunningViewModel @Inject constructor(
         }
     }
 
-    fun updatePostBookmark(post: Posting) {
-        val postList: MutableList<Posting> = userPostings.value.toMutableList()
+    fun updatePostBookmark(post: PostingModel) {
+        val postList: MutableList<PostingModel> = userPostings.value.toMutableList()
         val parsedPostList = postList.map { item ->
             if (item.postId == post.postId) {
                 val prevBookmark = if (post.bookMark == 1) 0 else 1
@@ -67,18 +69,10 @@ class JoinedRunningViewModel @Inject constructor(
         viewModelScope.launch {
             getUserDataUseCase(userId)
                 .collectLatest { response ->
-                    when (response) {
-                        is CommonResponse.Success<*> -> {
-                            if (response.body is UserDataResponse) {
-                                val result = response.body.result as? GetMyPageResult
-                                userPostings.value = result?.myRunning ?: emptyList()
-                            }
-                        }
-
-                        else -> {
-                            throw Exception("")
-                        }
+                    val result = response.myRunning.map {
+                        postingMapper.mapToPresentation(it)
                     }
+                    userPostings.value = result
                 }
         }
     }

@@ -1,34 +1,32 @@
 package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.BaseResponse
-import com.applemango.runnerbe.data.network.response.GetBookmarkResponse
-import com.applemango.runnerbe.domain.usecase.bookmark.*
-import com.applemango.runnerbe.presentation.model.RunningTag
-import com.applemango.runnerbe.presentation.state.CommonResponse
-import com.applemango.runnerbe.util.LogUtil
+import com.applemango.runnerbe.presentation.model.type.RunningTag
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.model.PostingModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import com.applemango.runnerbe.usecaseImpl.bookmark.GetBookmarkedPostsUseCase
+import com.applemango.runnerbe.usecaseImpl.bookmark.UpdateBookmarkUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class BookMarkViewModel @Inject constructor(
     private val getBookmarkedPostsUseCase: GetBookmarkedPostsUseCase,
-    private val updateBookmarkUseCase: UpdateBookmarkUseCase
+    private val updateBookmarkUseCase: UpdateBookmarkUseCase,
+    private val postingMapper: PostingMapper
 ): ViewModel() {
 
     private val selectedTag : MutableStateFlow<RunningTag> = MutableStateFlow(RunningTag.All)
-    private val bookmarkList : MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
+    private val bookmarkList : MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
     val bookmarkListSize : MutableStateFlow<Int> = MutableStateFlow(0)
 
-    val filteredBookmark: Flow<List<Posting>> = combine(
+    val filteredBookmark: Flow<List<PostingModel>> = combine(
         selectedTag,
         bookmarkList
     ) { tag, bookmarkList ->
@@ -47,8 +45,8 @@ class BookMarkViewModel @Inject constructor(
         }
     }
 
-    fun addOrRemoveBookmarkedPost(post: Posting) {
-        val postList: MutableList<Posting> = bookmarkList.value.toMutableList()
+    fun addOrRemoveBookmarkedPost(post: PostingModel) {
+        val postList: MutableList<PostingModel> = bookmarkList.value.toMutableList()
         if (post.bookmarkCheck()) {
             postList.removeIf { it.postId == post.postId }
         } else {
@@ -68,49 +66,30 @@ class BookMarkViewModel @Inject constructor(
         viewModelScope.launch {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             getBookmarkedPostsUseCase(userId = userId).collect {
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        val response = it.body as GetBookmarkResponse
-                        bookmarkList.value = response.result.bookMarkList ?: emptyList()
-                    }
-
-                    is CommonResponse.Failed -> LogUtil.errorLog("getBookmarkList Failed")
-
-                    else -> LogUtil.errorLog("getBookmarkList else")
+                bookmarkList.value = it.map { posting ->
+                    postingMapper.mapToPresentation(posting)
                 }
             }
         }
     }
 
-    fun bookmarkStatusChange(post: Posting) {
+    fun bookmarkStatusChange(post: PostingModel) {
         viewModelScope.launch {
-            updateBookmarkUseCase(
+            val result = updateBookmarkUseCase(
                 RunnerBeApplication.mTokenPreference.getUserId(),
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"
-            ).collect {
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        if (it.body is BaseResponse && it.body.isSuccess) {
-                            val updatedList = bookmarkList.value.map { item ->
-                                if (item == post) {
-                                    val bookmarkStatus = if (item.bookMark == 1) 0 else 1
-                                    item.copy(bookMark = bookmarkStatus)
-                                } else {
-                                    item
-                                }
-                            }
-                            bookmarkList.value = updatedList
-                        }
-                    }
-
-                    else -> {
-                        Log.e(
-                            this.javaClass.name,
-                            "bookmarkStatusChange - when - else - CommonResponse"
-                        )
+            )
+            if (result.isSuccess) {
+                val updatedList = bookmarkList.value.map { item ->
+                    if (item == post) {
+                        val bookmarkStatus = if (item.bookMark == 1) 0 else 1
+                        item.copy(bookMark = bookmarkStatus)
+                    } else {
+                        item
                     }
                 }
+                bookmarkList.value = updatedList
             }
         }
     }

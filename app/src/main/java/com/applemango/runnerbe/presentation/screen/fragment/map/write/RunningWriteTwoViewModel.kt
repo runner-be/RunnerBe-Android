@@ -4,19 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.request.WriteRunningRequest
-import com.applemango.runnerbe.data.network.response.BaseResponse
 import com.applemango.runnerbe.data.vo.RunningWriteTransferData
-import com.applemango.runnerbe.domain.usecase.post.WritePostUseCase
-import com.applemango.runnerbe.presentation.model.GenderTag
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
+import com.applemango.runnerbe.presentation.model.type.GenderTag
+import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoList
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase.WriteRunningParam
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -88,8 +86,7 @@ class RunningWriteTwoViewModel @Inject constructor(
 
     fun writeRunning(userId: Int) = viewModelScope.launch {
         val placedata = oneData.value.placeData
-
-        writeUseCase(userId, WriteRunningRequest(
+        val result = writeUseCase(userId, WriteRunningParam(
             runningTitle = oneData.value.runningTitle,
             runningTag = oneData.value.runningTag.tag,
             gatheringTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(oneData.value.runningDate),
@@ -112,22 +109,13 @@ class RunningWriteTwoViewModel @Inject constructor(
             isAfterParty = when(afterPartyRadioChecked.value) {
                 R.id.hasExistTab -> 1
                 else -> 2
-            }
-        )).collect {
-            _writeSate.emit(
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        if (it.body is BaseResponse) {
-                            if (it.body.isSuccess) UiState.Success(it.code)
-                            else UiState.Failed(it.body.message ?: "error")
-                        } else UiState.Failed("서버에 문제가 발생했습니다.")
-                    }
-                    is CommonResponse.Failed -> UiState.Failed(it.message)
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
-                }
-            )
-        }
+            })
+        )
 
+        if (result.isSuccess) {
+            _writeSate.emit(UiState.Success(result.code))
+        } else {
+            _writeSate.emit(UiState.Failed(result.message ?: ""))
+        }
     }
 }

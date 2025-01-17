@@ -1,8 +1,9 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly
 
 import androidx.lifecycle.ViewModel
-import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogsUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.mapper.MonthlyRunningLogMapper
+import com.applemango.runnerbe.presentation.model.MonthlyRunningLogsModel
+import com.applemango.runnerbe.usecaseImpl.runninglog.GetMonthlyRunningLogsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,12 +14,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class MonthlyCalendarViewModel @Inject constructor(
-    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase
+    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase,
+    private val monthlyRunningLogMapper: MonthlyRunningLogMapper
 ): ViewModel() {
     val stampStatistic = MutableStateFlow(mapOf(Pair("크루", 4), Pair("개인", 6)))
 
@@ -33,11 +36,13 @@ class MonthlyCalendarViewModel @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    val selectedYearMonthFlow: Flow<CommonResponse> = selectedYearMonth
+    val selectedYearMonthFlow: Flow<MonthlyRunningLogsModel> = selectedYearMonth
         .flatMapLatest { yearMonthPair ->
             try {
                 val userId = requireNotNull(_targetUserId.value)
-                getMonthlyRunningLogsUseCase(userId, yearMonthPair.first, yearMonthPair.second)
+                getMonthlyRunningLogsUseCase(userId, yearMonthPair.first, yearMonthPair.second).map {
+                    monthlyRunningLogMapper.mapToPresentation(it)
+                }
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
                 emptyFlow()

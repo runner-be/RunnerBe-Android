@@ -6,19 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
-import com.applemango.runnerbe.domain.usecase.post.DeletePostUseCase
-import com.applemango.runnerbe.domain.usecase.post.GetPostDetailUseCase
-import com.applemango.runnerbe.domain.usecase.post.ApplyPostUseCase
-import com.applemango.runnerbe.domain.usecase.post.ClosePostUseCase
-import com.applemango.runnerbe.domain.usecase.post.PostDetailManufacture
-import com.applemango.runnerbe.domain.usecase.post.ReportPostUseCase
+import com.applemango.runnerbe.presentation.mapper.PostingDetailMapper
+import com.applemango.runnerbe.presentation.mapper.UserMapper
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.UserModel
+import com.applemango.runnerbe.presentation.model.type.Pace
+import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
+import com.applemango.runnerbe.usecaseImpl.post.DeletePostUseCase
+import com.applemango.runnerbe.usecaseImpl.post.GetPostDetailUseCase
+import com.applemango.runnerbe.usecaseImpl.post.ApplyPostUseCase
+import com.applemango.runnerbe.usecaseImpl.post.ClosePostUseCase
+import com.applemango.runnerbe.usecaseImpl.post.ReportPostUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,14 +36,16 @@ class PostDetailViewModel @Inject constructor(
     private val applyPostUseCase: ApplyPostUseCase,
     private val deletePostUseCase: DeletePostUseCase,
     private val reportPostUseCase: ReportPostUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val userMapper: UserMapper,
+    private val postingDetailMapper: PostingDetailMapper
 ) : ViewModel() {
 
     private var isApplyComplete: Boolean = false //내가 신청한 모임이면 true
-    val post: MutableLiveData<Posting> = MutableLiveData()
+    val post: MutableLiveData<PostingModel> = MutableLiveData()
     var roomId: Int? = null
-    val waitingInfo: ObservableArrayList<UserInfo> = ObservableArrayList()
-    val runnerInfoList: MutableStateFlow<List<UserInfo>> = MutableStateFlow(emptyList())
+    val waitingInfo: ObservableArrayList<UserModel> = ObservableArrayList()
+    val runnerInfoList: MutableStateFlow<List<UserModel>> = MutableStateFlow(emptyList())
     private val _processUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Empty)
     val processUiState get() = _processUiState
 
@@ -65,14 +66,16 @@ class PostDetailViewModel @Inject constructor(
 
     fun getPostDetail(postId: Int, userId: Int) = viewModelScope.launch {
         getPostDetailUseCase(postId, userId).collect {
-            if (it is CommonResponse.Success<*> && it.body is PostDetailManufacture) {
-                isApplyComplete = it.body.code == 1015
-                post.value = it.body.post
-                it.body.runnerInfo?.let { runnerList -> runnerInfoList.value = runnerList }
-                waitingInfo.clear()
-                it.body.waitingInfo?.let { waitingList -> waitingInfo.addAll(waitingList) }
-                roomId = it.body.roomId
+            val result = postingDetailMapper.mapToPresentation(it)
+            isApplyComplete = run {
+                result.waitingRunnerInfo?.any { user -> user.userId == userId } == true ||
+                       result.runnerInfo?.any { user -> user.userId == userId } == true
             }
+            post.value = result.postList.first()
+            runnerInfoList.value = result.runnerInfo ?: emptyList()
+            waitingInfo.clear()
+            waitingInfo.addAll(result.waitingRunnerInfo ?: emptyList())
+            roomId = result.roomId
         }
     }
 
@@ -81,17 +84,12 @@ class PostDetailViewModel @Inject constructor(
         if (postId != null) {
             val userId = RunnerBeApplication.mTokenPreference.getUserId()
             if (userId > 0) {
-                val response = if (isMyPost()) closePostUseCase(postId)
+                val result = if (isMyPost()) closePostUseCase(postId)
                 else applyPostUseCase(postId, userId)
-                response.collect {
-                    _processUiState.emit(
-                        when (it) {
-                            is CommonResponse.Success<*> -> UiState.Success(it.code)
-                            is CommonResponse.Failed -> UiState.Failed(it.message)
-                            is CommonResponse.Loading -> UiState.Loading
-                            else -> UiState.Empty
-                        }
-                    )
+                if (result.isSuccess) {
+                    _processUiState.emit(UiState.Success(result.code))
+                } else {
+                    _processUiState.emit(UiState.Failed(result.message ?: ""))
                 }
             } else _processUiState.emit(UiState.Failed("로그인이 필요합니다."))
         } else _processUiState.emit(UiState.AnonymousFailed())
@@ -100,21 +98,11 @@ class PostDetailViewModel @Inject constructor(
     suspend fun getUserPace(userId: Int): Pace? {
         return getUserDataUseCase(userId)
             .map { response ->
-                when(response) {
-                    is CommonResponse.Success<*> -> {
-                        val userData = response.body as? UserDataResponse
-                        if (userData == null) {
-                            // 약관 동의 화면 켜기
-                        }
+                val paceName = response.userInfo?.let {
+                    userMapper.mapToPresentation(it)
+                }?.pace
 
-                        val userPaceName = userData?.result?.userInfo?.pace
-                        Pace.getPaceByName(userPaceName)
-                    }
-
-                    else -> {
-                        null
-                    }
-                }
+                Pace.getPaceByName(paceName)
             }.firstOrNull()
     }
 
@@ -180,7 +168,7 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun setBottomButtonText(posting: Posting): Int {
+    fun setBottomButtonText(posting: PostingModel): Int {
         return if (isPostClose()) R.string.post_close_complete
         else {
             if (isMyPost()) R.string.do_post_close
@@ -203,19 +191,11 @@ class PostDetailViewModel @Inject constructor(
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
-                deletePostUseCase(postId, userId).collect {
-                    _dropUiState.emit(
-                        when (it) {
-                            is CommonResponse.Success<*> -> UiState.Success(it.code)
-                            is CommonResponse.Failed -> {
-                                if (it.code <= 999) UiState.NetworkError
-                                else UiState.Failed(it.message)
-                            }
-
-                            is CommonResponse.Loading -> UiState.Loading
-                            else -> UiState.Empty
-                        }
-                    )
+                val result = deletePostUseCase(postId, userId)
+                if (result.isSuccess) {
+                    _dropUiState.emit(UiState.Success(result.code))
+                } else {
+                    _dropUiState.emit(UiState.Failed(result.message ?: ""))
                 }
             } ?: run {
                 _dropUiState.emit(UiState.Failed("앱 재실행 후 다시 시도해 주세요."))
@@ -227,35 +207,27 @@ class PostDetailViewModel @Inject constructor(
         val userId = RunnerBeApplication.mTokenPreference.getUserId()
         if (userId > 0) {
             post.value?.postId?.let { postId ->
-                reportPostUseCase(postId, userId).collect {
-                    _reportUiState.emit(
-                        when (it) {
-                            is CommonResponse.Success<*> -> UiState.Success(it.code)
-                            is CommonResponse.Failed -> {
-                                if (it.code <= 999) UiState.NetworkError
-                                else UiState.Failed(it.message)
-                            }
-
-                            is CommonResponse.Loading -> UiState.Loading
-                            else -> UiState.Empty
-                        }
-                    )
+                val result = reportPostUseCase(postId, userId)
+                if (result.isSuccess) {
+                    _reportUiState.emit(UiState.Success(result.code))
+                } else {
+                    _reportUiState.emit(UiState.Failed(result.message ?: ""))
                 }
             }
         }
     }
 
-    fun isParticipatePostIn(posting: Posting): Boolean =
+    fun isParticipatePostIn(posting: PostingModel): Boolean =
         runnerInfoList.value.any { it.userId == RunnerBeApplication.mTokenPreference.getUserId() }
 
     private fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
     fun isMyPost(): Boolean =
         RunnerBeApplication.mTokenPreference.getUserId() == post.value?.postUserId
 
-    fun isWaitingUserExist(waitingList: ArrayList<UserInfo>): Boolean =
+    fun isWaitingUserExist(waitingList: ArrayList<UserModel>): Boolean =
         isMyPost() && waitingList.size > 0
 
-    fun ageString(posting: Posting): String {
+    fun ageString(posting: PostingModel): String {
         val age = posting.age
         var result = RunnerBeApplication.instance.resources.getString(R.string.all_age)
         runCatching {

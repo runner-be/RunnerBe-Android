@@ -2,10 +2,10 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.o
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.OtherUser
-import com.applemango.runnerbe.domain.usecase.user.GetOtherUserDataUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.mapper.OtherUserMyPageMapper
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.usecaseImpl.user.GetOtherUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,30 +16,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OtherUserJoinedPostViewModel @Inject constructor(
-    private val getOtherUserDataUseCase: GetOtherUserDataUseCase
+    private val getOtherUserDataUseCase: GetOtherUserDataUseCase,
+    private val otherUserMyPageMapper: OtherUserMyPageMapper,
+    private val postingMapper: PostingMapper,
 ) : ViewModel() {
     val targetNickname = MutableStateFlow<String?>(null)
     val postSize = MutableStateFlow<Int>(0)
 
-    private var _postList: MutableStateFlow<List<Posting>> = MutableStateFlow(emptyList())
-    val postList: StateFlow<List<Posting>> get() = _postList.asStateFlow()
+    private var _postList: MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
+    val postList: StateFlow<List<PostingModel>> get() = _postList.asStateFlow()
 
     fun getJoinedPostList(userId: Int) {
         viewModelScope.launch {
-            getOtherUserDataUseCase(userId).collectLatest { response ->
-                when (response) {
-                    is CommonResponse.Success<*> -> {
-                        val result = response.body as? OtherUser
-                        _postList.value = result?.userPosting?.sortedByDescending {
-                            it.gatheringTime
-                        } ?: emptyList()
-                        postSize.value = _postList.value.size
-                    }
-
-                    else -> {
-
-                    }
+            getOtherUserDataUseCase(userId).collectLatest { result ->
+                val parsedResult = otherUserMyPageMapper.mapToPresentation(result)
+                _postList.value = parsedResult.otherUser.userPosting.sortedByDescending { running ->
+                    running.gatheringTime
                 }
+                postSize.value = _postList.value.size
             }
         }
     }

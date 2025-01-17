@@ -1,21 +1,20 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Messages
-import com.applemango.runnerbe.data.dto.RoomInfo
-import com.applemango.runnerbe.data.network.response.RunningTalkDetailResponse
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.domain.usecase.runningtalk.GetRunningTalkMessagesUseCase
-import com.applemango.runnerbe.domain.usecase.runningtalk.ReportMessageUseCase
-import com.applemango.runnerbe.domain.usecase.runningtalk.SendMessageUseCase
+import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.presentation.mapper.RunningTalkMessageMapper
+import com.applemango.runnerbe.presentation.model.RoomInfoModel
+import com.applemango.runnerbe.presentation.model.RunningTalkMessageModel
+import com.applemango.runnerbe.presentation.model.type.Pace
+import com.applemango.runnerbe.usecaseImpl.runningtalk.GetRunningTalkMessagesUseCase
+import com.applemango.runnerbe.usecaseImpl.runningtalk.ReportMessageUseCase
+import com.applemango.runnerbe.usecaseImpl.runningtalk.SendMessageUseCase
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.RunningTalkDetailMapper
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -34,20 +33,20 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-
 @HiltViewModel
 class RunningTalkDetailViewModel @Inject constructor(
     private val runningTalkDetailUseCase: GetRunningTalkMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
-    private val reportMessageUseCase: ReportMessageUseCase
+    private val reportMessageUseCase: ReportMessageUseCase,
+    private val runningTalkMessageMapper: RunningTalkMessageMapper,
 ) : ViewModel() {
 
     val actions: MutableSharedFlow<RunningTalkDetailAction> = MutableSharedFlow()
     var roomId: Int? = null
     var roomRepName: String = ""
-    val roomInfo: MutableStateFlow<RoomInfo> =
-        MutableStateFlow(RoomInfo("러닝 제목", Pace.BEGINNER.time))
-    val messageList: ArrayList<Messages> = ArrayList()
+    val roomInfo: MutableStateFlow<RoomInfoModel> =
+        MutableStateFlow(RoomInfoModel("러닝 제목", Pace.BEGINNER.time))
+    val messageList: MutableList<RunningTalkMessageModel> = mutableListOf()
     val talkList: MutableStateFlow<List<RunningTalkUiState>> = MutableStateFlow(emptyList())
     val message: MutableStateFlow<String> = MutableStateFlow("")
     val isDeclaration: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -64,23 +63,19 @@ class RunningTalkDetailViewModel @Inject constructor(
     fun getDetailData(isRefresh: Boolean): Job = viewModelScope.launch {
         roomId?.let { roomId ->
             runningTalkDetailUseCase(roomId).collectLatest {
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        if (it.body is RunningTalkDetailResponse) {
-                            if (isRefresh) messageList.clear()
-                            roomInfo.emit(it.body.result.roomInfo[0])
-                            messageList.addAll(it.body.result.messages)
-                            talkList.value =
-                                RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(it.body.result.messages)
-                        }
-                    }
-
-                    is CommonResponse.Failed -> {}
-
-                    else -> {
-
-                    }
+                val roomData= it.roomInfo.map { room ->
+                    RoomInfoModel(
+                        room.talkTitle,
+                        room.pace
+                    )
                 }
+                val messages = it.messages.map { message ->
+                    runningTalkMessageMapper.mapToPresentation(message)
+                }
+                if (isRefresh) messageList.clear()
+                roomInfo.emit(roomData[0])
+                messageList.addAll(messages)
+                talkList.value = RunningTalkDetailMapper.parseMessagesToRunningTalkUiState(messages)
             }
         }
     }
@@ -104,7 +99,7 @@ class RunningTalkDetailViewModel @Inject constructor(
     }
 
     private suspend fun handleResults(
-        textResult: CommonResponse?,
+        textResult: CommonEntity?,
         imageResults: List<Pair<String, Boolean>>,
         content: String
     ) {
@@ -116,22 +111,11 @@ class RunningTalkDetailViewModel @Inject constructor(
         }
         attachImageUrls.value = failedImageList
 
-        when (textResult) {
-            is CommonResponse.Success<*> -> {
-                _messageSendUiState.emit(UiState.Success(textResult.code))
-            }
-            is CommonResponse.Failed -> {
-                message.value = content
-                _messageSendUiState.emit(UiState.Failed(textResult.message))
-            }
-            null -> {
-                if (successImageList.isNotEmpty()) {
-                    _messageSendUiState.emit(UiState.Success(200))
-                } else {
-                    _messageSendUiState.emit(UiState.Empty)
-                }
-            }
-            else -> {}
+        if (textResult?.isSuccess == true) {
+            _messageSendUiState.emit(UiState.Success(textResult.code))
+        } else {
+            message.value = content
+            _messageSendUiState.emit(UiState.Failed(textResult?.message ?: ""))
         }
     }
 
@@ -193,16 +177,14 @@ class RunningTalkDetailViewModel @Inject constructor(
             }
 
             downloadUrl?.let { path ->
-                when (sendMessageUseCase(roomId, null, path)) {
-                    is CommonResponse.Success<*> -> {
-                        successImageList.add(path)
-                        path
-                    }
-                    is CommonResponse.Failed -> {
-                        failedImageList.add(path)
-                        null
-                    }
-                    else -> null
+                val result = sendMessageUseCase(roomId, null, path)
+
+                if (result.isSuccess) {
+                    successImageList.add(path)
+                    path
+                } else {
+                    failedImageList.add(path)
+                    null
                 }
             } ?: run {
                 failedImageList.add(originUrl)
@@ -229,20 +211,11 @@ class RunningTalkDetailViewModel @Inject constructor(
             }
         }
         if (messageIdList.isNotEmpty()) {
-            reportMessageUseCase(messageIdList).collect {
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        _messageReportUiState.emit(UiState.Success(it.code))
-                    }
-
-                    is CommonResponse.Failed -> {
-                        _messageReportUiState.emit(UiState.Failed(it.message))
-                    }
-
-                    else -> {
-                        Log.e(this.javaClass.name, "messageReport - when - else - CommonResponse")
-                    }
-                }
+            val result = reportMessageUseCase(messageIdList)
+            if (result.isSuccess) {
+                _messageReportUiState.emit(UiState.Success(result.code))
+            } else {
+                _messageReportUiState.emit(UiState.Failed(result.message ?: ""))
             }
         } else {
             isDeclaration.value = false

@@ -1,21 +1,21 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage
 
-import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.data.network.response.RunningLogResult
-import com.applemango.runnerbe.data.network.response.UserDataResponse
-import com.applemango.runnerbe.domain.usecase.user.GetUserDataUseCase
-import com.applemango.runnerbe.domain.usecase.user.UpdateUserImageUseCase
-import com.applemango.runnerbe.domain.usecase.runninglog.GetMonthlyRunningLogsUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.mapper.MonthlyRunningLogMapper
+import com.applemango.runnerbe.presentation.mapper.PostingMapper
+import com.applemango.runnerbe.presentation.mapper.RunningLogDetailMapper
+import com.applemango.runnerbe.presentation.mapper.UserMapper
+import com.applemango.runnerbe.presentation.model.MonthlyRunningLogsModel
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.UserModel
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.util.LogUtil
+import com.applemango.runnerbe.usecaseImpl.runninglog.GetMonthlyRunningLogsUseCase
+import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
+import com.applemango.runnerbe.usecaseImpl.user.UpdateUserImageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -34,24 +34,29 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val updateUserImageUseCase: UpdateUserImageUseCase,
-    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase
+    private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase,
+    private val runningLogDetailMapper: RunningLogDetailMapper,
+    private val monthlyRunningLogMapper: MonthlyRunningLogMapper,
+    private val userMapper: UserMapper,
+    private val postingMapper: PostingMapper,
 ) : ViewModel() {
-    private val _currentMondayYearMonth: MutableStateFlow<String> = MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
+    private val _currentMondayYearMonth: MutableStateFlow<String> =
+        MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
     val currentMondayYearMonth: StateFlow<String> get() = _currentMondayYearMonth.asStateFlow()
 
     private val _currentWeeklyViewPagerPosition: MutableStateFlow<Int?> = MutableStateFlow(null)
     val currentWeeklyViewPagerPosition: StateFlow<Int?> get() = _currentWeeklyViewPagerPosition.asStateFlow()
 
     private val _viewpagerRunningCount: MutableStateFlow<Pair<Int, Int>> = MutableStateFlow(
-        Pair(0,0)
+        Pair(0, 0)
     )
     val viewpagerRunningCount: StateFlow<Pair<Int, Int>> get() = _viewpagerRunningCount
 
-    val userInfo: MutableStateFlow<UserInfo?> = MutableStateFlow(null)
+    val userInfo: MutableStateFlow<UserModel?> = MutableStateFlow(null)
     val diligence: MutableStateFlow<String?> = MutableStateFlow(null)
     val pace: MutableStateFlow<String?> = MutableStateFlow(null)
-    val joinPosts = MutableStateFlow<List<Posting>>(emptyList())
-    val myPosts: ObservableArrayList<Posting> = ObservableArrayList()
+    val joinPosts = MutableStateFlow<List<PostingModel>>(emptyList())
+    val myPosts: ObservableArrayList<PostingModel> = ObservableArrayList()
     val moveTab: MutableSharedFlow<Int> = MutableSharedFlow()
 
     private var _updateUserImageState: MutableLiveData<UiState> = MutableLiveData()
@@ -60,8 +65,8 @@ class MyPageViewModel @Inject constructor(
     private val _actions = MutableSharedFlow<MyPageAction>()
     val actions get() = _actions
 
-    private val _runningLogResult = MutableStateFlow<Map<Int, RunningLogResult>>(emptyMap())
-    val runningLogResult: StateFlow<Map<Int, RunningLogResult>> get() = _runningLogResult.asStateFlow()
+    private val _runningLogResult = MutableStateFlow<Map<Int, MonthlyRunningLogsModel>>(emptyMap())
+    val runningLogResult: StateFlow<Map<Int, MonthlyRunningLogsModel>> get() = _runningLogResult.asStateFlow()
 
     /**
      * >> 총 21개의 데이터가 보여야하므로 <<
@@ -88,10 +93,10 @@ class MyPageViewModel @Inject constructor(
 
                 try {
                     val prevMonthResult = deferredPrevMonthResult.await().map {
-                        it.processRunningLogResult()
+                        monthlyRunningLogMapper.mapToPresentation(it)
                     }
                     val thisMonthResult = deferredThisMonthResult.await().map {
-                        it.processRunningLogResult()
+                        monthlyRunningLogMapper.mapToPresentation(it)
                     }
                     combine(prevMonthResult, thisMonthResult) { prevMonthData, thisMonthData ->
                         mapOf(
@@ -107,7 +112,7 @@ class MyPageViewModel @Inject constructor(
             } else {
                 getMonthlyRunningLogsUseCase(userId, thisYear, thisMonth)
                     .map { response ->
-                        response.processRunningLogResult()
+                        monthlyRunningLogMapper.mapToPresentation(response)
                     }
                     .collectLatest { result ->
                         _runningLogResult.value = mapOf(Pair(thisMonth, result))
@@ -116,51 +121,36 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private fun CommonResponse.processRunningLogResult() : RunningLogResult {
-        return when(this) {
-            is CommonResponse.Success<*> -> this.body as RunningLogResult
-            is CommonResponse.Failed -> {
-                LogUtil.errorLog("${this.code} | " + this.message)
-                throw Exception(this.message)
-            }
-            else -> throw Exception("unexpected response")
-        }
-    }
-
     fun getUserData(userId: Int) = viewModelScope.launch {
         if (userId > -1) {
             getUserDataUseCase(userId).collect {
-                when (it) {
-                    is CommonResponse.Success<*> -> {
-                        if (it.body is UserDataResponse) {
-                            val result = it.body.result
-                            val userInfo: UserInfo? = result.userInfo
-                            myPosts.clear()
-                            joinPosts.value = result.myRunning.sortedByDescending { running -> running.gatheringTime }
-                            result.myPosting?.let { postingList ->
-                                myPosts.addAll(postingList)
-                            }
-                            this@MyPageViewModel.userInfo.value = userInfo
-                            RunnerBeApplication.mTokenPreference.setMyRunningPace(
-                                userInfo?.pace ?: ""
-                            )
-                            pace.emit(userInfo?.pace)
-                            diligence.emit(result.userInfo?.diligence ?: "초보 출석")
-                        }
+                val userInfo: UserModel? =
+                    it.userInfo?.let { user -> userMapper.mapToPresentation(user) }
+                myPosts.clear()
+                joinPosts.value = it.myRunning
+                    .map {
+                        postingMapper.mapToPresentation(it)
+                    }.sortedByDescending { running -> running.gatheringTime }
+                it.myPosting
+                    .map { postingEntity ->
+                        postingMapper.mapToPresentation(postingEntity)
+                    }.let { postingList ->
+                        myPosts.addAll(postingList)
                     }
-
-                    else -> {
-                        Log.e("MyPageViewModel", "getUserData - when - else")
-                    }
-                }
+                this@MyPageViewModel.userInfo.value = userInfo
+                RunnerBeApplication.mTokenPreference.setMyRunningPace(
+                    userInfo?.pace ?: ""
+                )
+                pace.emit(userInfo?.pace)
+                diligence.emit(it.userInfo?.diligence ?: "초보 출석")
             }
         } else {
             //에러 메시지 뱉자~
         }
     }
 
-    fun updatePostBookmark(post: Posting) {
-        val postList: MutableList<Posting> = joinPosts.value.toMutableList()
+    fun updatePostBookmark(post: PostingModel) {
+        val postList: MutableList<PostingModel> = joinPosts.value.toMutableList()
         val parsedPostList = postList.map { item ->
             if (item.postId == post.postId) {
                 val prevBookmark = if (post.bookMark == 1) 0 else 1
@@ -174,19 +164,12 @@ class MyPageViewModel @Inject constructor(
 
 
     fun userProfileImageChange(imageUrl: String?) = viewModelScope.launch {
-        updateUserImageUseCase(imageUrl).collect {
-            _updateUserImageState.postValue(
-                when (it) {
-                    is CommonResponse.Success<*> -> UiState.Success(it.code)
-                    is CommonResponse.Failed -> {
-                        if (it.code <= 999) UiState.NetworkError
-                        else UiState.Failed(it.message)
-                    }
-
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
-                }
-            )
+        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+        val result = updateUserImageUseCase(userId, imageUrl)
+        if (result.isSuccess) {
+            _updateUserImageState.value = UiState.Success(result.code)
+        } else {
+            _updateUserImageState.value = UiState.Failed(result.message ?: "")
         }
     }
 

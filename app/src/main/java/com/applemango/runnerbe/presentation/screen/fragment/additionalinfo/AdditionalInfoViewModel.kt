@@ -1,17 +1,15 @@
 package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.request.JoinUserRequest
-import com.applemango.runnerbe.data.network.response.JoinUserResponse
-import com.applemango.runnerbe.domain.usecase.user.RegisterUserUseCase
-import com.applemango.runnerbe.presentation.model.GenderTag
-import com.applemango.runnerbe.presentation.model.JobButtonId
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.model.type.GenderTag
+import com.applemango.runnerbe.presentation.model.type.JobButtonId
+import com.applemango.runnerbe.presentation.model.NewUserModel
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.usecaseImpl.user.RegisterUserUseCase
+import com.applemango.runnerbe.usecaseImpl.user.RegisterUserUseCase.JoinUserParam
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,34 +47,29 @@ class AdditionalInfoViewModel @Inject constructor(
                 runCatching {
                     val year = it.toInt()
                     getJobTag()?.let { job ->
-                        registerUserUseCase(
-                            JoinUserRequest(
-                                uuid = uuid,
-                                deviceToken = deviceToken,
-                                birthday = year,
-                                jobTag = job,
-                                genderTag = getGenderTag(genderRadioChecked.value)
+                        val result: NewUserModel? = try {
+                            val registerResult = registerUserUseCase(
+                                JoinUserParam(
+                                    uuid = uuid,
+                                    deviceToken = deviceToken,
+                                    birthday = year,
+                                    jobTag = job,
+                                    genderTag = getGenderTag(genderRadioChecked.value)
+                                )
                             )
-                        ).collect {
-                            when(it) {
-                                is CommonResponse.Success<*> -> {
-                                    if(it.body is JoinUserResponse) {
-                                        if(it.body.isSuccess) {
-                                            RunnerBeApplication.mTokenPreference.apply {
-                                                setUserId(it.body.result.insertedUserId)
-                                                setToken(it.body.result.token)
-                                            }
-                                            _registerState.emit(UiState.Success(it.code))
-                                        } else _registerState.emit(UiState.Failed(it.body.message?:""))
-                                    }
-                                }
-                                is CommonResponse.Failed -> {
-                                    _registerState.emit(UiState.Failed(it.message))
-                                }
+                            NewUserModel(
+                                registerResult.insertedUserId,
+                                registerResult.token,
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            null
+                        }
 
-                                else -> {
-                                    Log.e(this.javaClass.name, "register - when - else - CommonResponse")
-                                }
+                        if (result != null) {
+                            RunnerBeApplication.mTokenPreference.apply {
+                                setUserId(result.insertedUserId)
+                                setToken(result.token)
                             }
                         }
                     }?:run {

@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
-import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.domain.usecase.user.UpdateJobUseCase
-import com.applemango.runnerbe.domain.usecase.user.UpdateNicknameUseCase
-import com.applemango.runnerbe.presentation.state.CommonResponse
+import com.applemango.runnerbe.presentation.model.UserModel
+import com.applemango.runnerbe.usecaseImpl.user.UpdateJobUseCase
+import com.applemango.runnerbe.usecaseImpl.user.UpdateNicknameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +19,7 @@ class EditProfileViewModel @Inject constructor(
     private val updateJobUseCase: UpdateJobUseCase
 ): ViewModel() {
 
-    val userInfo : MutableLiveData<UserInfo> = MutableLiveData()
+    val userInfo : MutableLiveData<UserModel> = MutableLiveData()
     val radioChecked : MutableLiveData<Int> = MutableLiveData()
     val name: MutableStateFlow<String> = MutableStateFlow("")
     var currentJob : String = ""
@@ -31,33 +30,20 @@ class EditProfileViewModel @Inject constructor(
     val jobChangeState get() = _jobChangeState
 
     fun nicknameChange(changedNickname : String) = viewModelScope.launch {
-        updateNicknameUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedNickname).collect {
-            _nicknameChangeState.postValue(
-                when(it) {
-                is CommonResponse.Success<*> -> UiState.Success(it.code)
-                is CommonResponse.Failed -> {
-                    if (it.code <= 999) UiState.NetworkError
-                    else UiState.Failed(it.message)
-                }
-                is CommonResponse.Loading -> UiState.Loading
-                else -> UiState.Empty
-            })
+        val result = updateNicknameUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedNickname)
+        if (result.isSuccess) {
+            _nicknameChangeState.postValue(UiState.Success(result.code))
+        } else {
+            _nicknameChangeState.postValue(UiState.Failed(result.message ?: ""))
         }
     }
 
     fun jobChange(changedJob: String) = viewModelScope.launch {
-        updateJobUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedJob).collect {
-            _jobChangeState.postValue(
-                when(it) {
-                    is CommonResponse.Success<*> -> UiState.Success(it.code)
-                    is CommonResponse.Failed -> {
-                        if (it.code <= 999) UiState.NetworkError
-                        else UiState.Failed(it.message)
-                    }
-                    is CommonResponse.Loading -> UiState.Loading
-                    else -> UiState.Empty
-                }
-            )
+        val result = updateJobUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedJob)
+        if (result.isSuccess) {
+            _jobChangeState.postValue(UiState.Success(result.code))
+        } else {
+            _jobChangeState.postValue(UiState.Failed(result.message ?: ""))
         }
     }
 
