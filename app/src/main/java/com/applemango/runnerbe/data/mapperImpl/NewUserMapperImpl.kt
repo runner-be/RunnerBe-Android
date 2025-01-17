@@ -1,11 +1,12 @@
 package com.applemango.runnerbe.data.mapperImpl
 
+import com.applemango.runnerbe.data.dto.NewUserDto
 import com.applemango.runnerbe.data.dto.Register
-import com.applemango.runnerbe.data.dto.new.NewUserDto
 import com.applemango.runnerbe.data.mapper.NewUserMapper
 import com.applemango.runnerbe.entity.NewUserEntity
+import javax.inject.Inject
 
-class NewUserMapperImpl: NewUserMapper {
+class NewUserMapperImpl @Inject constructor(): NewUserMapper {
     override fun mapToData(input: NewUserEntity): NewUserDto {
         return NewUserDto(
             result = Register(

@@ -1,11 +1,12 @@
 package com.applemango.runnerbe.data.mapperImpl
 
-import com.applemango.runnerbe.data.dto.new.Alarm
-import com.applemango.runnerbe.data.dto.new.AlarmsDto
+import com.applemango.runnerbe.data.dto.Alarm
+import com.applemango.runnerbe.data.dto.AlarmsDto
 import com.applemango.runnerbe.data.mapper.AlarmMapper
 import com.applemango.runnerbe.entity.AlarmEntity
+import javax.inject.Inject
 
-class AlarmMapperImpl: AlarmMapper {
+class AlarmMapperImpl @Inject constructor(): AlarmMapper {
     override fun mapToData(input: List<AlarmEntity>): AlarmsDto {
         val result = input.map {
             Alarm(

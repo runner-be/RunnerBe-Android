@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper
 
-import com.applemango.runnerbe.data.dto.Messages
+import com.applemango.runnerbe.presentation.model.RunningTalkMessageModel
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.util.LogUtil
@@ -12,7 +12,7 @@ import java.util.Locale
 object RunningTalkDetailMapper {
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
 
-    fun parseMessagesToRunningTalkUiState(messages: List<Messages>): List<RunningTalkUiState> {
+    fun parseMessagesToRunningTalkUiState(messages: List<RunningTalkMessageModel>): List<RunningTalkUiState> {
         val groupedMessages = messages.groupBy {
             val parsedDateString = dateStringToString(it.createAt, formatter)
             val messageFrom = it.from.lowercase()
@@ -47,7 +47,7 @@ object RunningTalkDetailMapper {
         }
     }
 
-    private fun messageToRunningTalkItem(message: Messages): RunningTalkItem? {
+    private fun messageToRunningTalkItem(message: RunningTalkMessageModel): RunningTalkItem? {
         return if (message.content != null) RunningTalkItem.MessageTalkItem(
             id = message.messageId, message = message.content
         ) else if (message.imageUrl != null) RunningTalkItem.ImageTalkItem(

@@ -1,10 +1,11 @@
 package com.applemango.runnerbe.data.mapperImpl
 
-import com.applemango.runnerbe.data.dto.new.ProfileUrl
+import com.applemango.runnerbe.data.dto.ProfileUrl
 import com.applemango.runnerbe.data.mapper.ProfileUrlMapper
 import com.applemango.runnerbe.entity.ProfileUrlEntity
+import javax.inject.Inject
 
-class ProfileUrlMapperImpl: ProfileUrlMapper {
+class ProfileUrlMapperImpl @Inject constructor(): ProfileUrlMapper {
     override fun mapToDomain(input: ProfileUrl): ProfileUrlEntity {
         return ProfileUrlEntity(
             userId = input.userId,

@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.mapperImpl
 
-import com.applemango.runnerbe.data.dto.new.PostingDto
+import com.applemango.runnerbe.data.dto.PostingDto
 import com.applemango.runnerbe.data.mapper.PostingMapper
 import com.applemango.runnerbe.data.mapper.ProfileUrlMapper
 import com.applemango.runnerbe.data.mapper.UserMapper
