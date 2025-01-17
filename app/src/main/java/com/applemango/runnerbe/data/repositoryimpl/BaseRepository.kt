@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
-import com.applemango.runnerbe.data.dto.new.CommonDto
+import com.applemango.runnerbe.data.dto.CommonDto
 import retrofit2.HttpException
 import retrofit2.Response
 

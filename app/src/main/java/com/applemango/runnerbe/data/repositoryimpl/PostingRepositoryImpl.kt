@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import com.applemango.runnerbe.data.mapper.CommonMapper
 import com.applemango.runnerbe.data.mapper.PostingDetailMapper
 import com.applemango.runnerbe.data.mapper.PostingMapper
-import com.applemango.runnerbe.data.mapper.WriteRunningMapper
 import com.applemango.runnerbe.data.network.api.DeletePostApi
 import com.applemango.runnerbe.data.network.api.GetBookmarksApi
 import com.applemango.runnerbe.data.network.api.GetPostDetailApi
@@ -15,12 +14,12 @@ import com.applemango.runnerbe.data.network.api.PostApplyToPostApi
 import com.applemango.runnerbe.data.network.api.PostClosingApi
 import com.applemango.runnerbe.data.network.api.PostReportPostingApi
 import com.applemango.runnerbe.data.network.api.PostRunningApi
+import com.applemango.runnerbe.data.network.request.WriteRunningRequest
 import com.applemango.runnerbe.data.paging.AddressSearchPagingSource
 import com.applemango.runnerbe.entity.AddressEntity
 import com.applemango.runnerbe.entity.CommonEntity
-import com.applemango.runnerbe.entity.BookmarksEntity
 import com.applemango.runnerbe.entity.PostingDetailEntity
-import com.applemango.runnerbe.entity.PostingsEntity
+import com.applemango.runnerbe.entity.PostingEntity
 import com.applemango.runnerbe.repository.PostingRepository
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListParam
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
@@ -41,7 +40,6 @@ class PostingRepositoryImpl @Inject constructor(
     private val commonMapper: CommonMapper,
     private val postingMapper: PostingMapper,
     private val postingDetailMapper: PostingDetailMapper,
-    private val writeRunningMapper: WriteRunningMapper,
 ) : BaseRepository(), PostingRepository {
 
     override suspend fun writeRunning(
@@ -50,8 +48,26 @@ class PostingRepositoryImpl @Inject constructor(
     ): CommonEntity {
         return handleApiCall(
             apiCall = {
-                val requestParam = writeRunningMapper.mapToData(request)
-                postRunningApi.writingRunning(userId, requestParam)
+                postRunningApi.writingRunning(userId,
+                    WriteRunningRequest(
+                        runningTitle = request.runningTitle,
+                        gatheringTime = request.gatheringTime,
+                        runningTime = request.runningTime,
+                        latitude = request.latitude,
+                        longitude = request.longitude,
+                        placeName = request.placeName,
+                        placeAddress = request.placeAddress,
+                        placeExplain = request.placeExplain,
+                        runningTag = request.runningTag,
+                        minAge = request.minAge,
+                        maxAge = request.maxAge,
+                        numberOfRunner = request.numberOfRunner,
+                        contents = request.contents,
+                        gender = request.gender,
+                        paceGrade = request.paceGrade,
+                        isAfterParty = request.isAfterParty
+                    )
+                )
             },
             mapResponse = { body ->
                 commonMapper.mapToDomain(body)
@@ -102,7 +118,7 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getBookmarkList(userId: Int): BookmarksEntity {
+    override suspend fun getBookmarkList(userId: Int): List<PostingEntity> {
         val response = getBookmarksApi.getBookmarks(userId)
         if (response.isSuccessful) {
             val body = response.body()
@@ -110,9 +126,7 @@ class PostingRepositoryImpl @Inject constructor(
                 postingMapper.mapToDomain(it)
             }
             if (body?.isSuccess == true) {
-                return BookmarksEntity(
-                    bookmarks = postings
-                )
+                return postings ?: emptyList()
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }
@@ -124,7 +138,7 @@ class PostingRepositoryImpl @Inject constructor(
     override suspend fun getRunningList(
         runningTag: String,
         request: GetRunningListParam
-    ): PostingsEntity {
+    ): List<PostingEntity> {
         val response = getRunningListApi.getRunningList(
             runningTag = runningTag,
             whetherEnd = request.whetherEnd,
@@ -145,13 +159,11 @@ class PostingRepositoryImpl @Inject constructor(
         )
         if (response.isSuccessful) {
             val body = response.body()
-            val result = body?.runningList?.map {
-                postingMapper.mapToDomain(it)
+            val result = body?.runningList?.map { posting ->
+                postingMapper.mapToDomain(posting)
             } ?: emptyList()
             if (body?.isSuccess == true) {
-                return PostingsEntity(
-                    runningList = result
-                )
+                return result
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }

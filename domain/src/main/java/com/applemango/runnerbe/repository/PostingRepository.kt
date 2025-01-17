@@ -5,6 +5,7 @@ import com.applemango.runnerbe.entity.AddressEntity
 import com.applemango.runnerbe.entity.BookmarksEntity
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.entity.PostingDetailEntity
+import com.applemango.runnerbe.entity.PostingEntity
 import com.applemango.runnerbe.entity.PostingsEntity
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListParam
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase.WriteRunningParam
@@ -18,8 +19,8 @@ interface PostingRepository {
     suspend fun dropPost(postId: Int, userId: Int): CommonEntity
     suspend fun reportPost(postId: Int, userId: Int): CommonEntity
 
-    suspend fun getRunningList(runningTag: String, request: GetRunningListParam) : PostingsEntity
+    suspend fun getRunningList(runningTag: String, request: GetRunningListParam) : List<PostingEntity>
     fun getAddressList(keyword: String): Flow<PagingData<AddressEntity>>
-    suspend fun getBookmarkList(userId: Int) : BookmarksEntity
+    suspend fun getBookmarkList(userId: Int) :List<PostingEntity>
     suspend fun getPostDetail(postId : Int, userId: Int) : PostingDetailEntity
 }

@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
 import com.applemango.runnerbe.data.mapper.CommonMapper
-import com.applemango.runnerbe.data.mapper.RunningTalkMessagesMapper
-import com.applemango.runnerbe.data.mapper.RunningTalkRoomsMapper
+import com.applemango.runnerbe.data.mapper.RunningTalkMessageMapper
+import com.applemango.runnerbe.data.mapper.RunningTalkRoomMapper
 import com.applemango.runnerbe.data.network.api.GetRunningTalkMessagesApi
 import com.applemango.runnerbe.data.network.api.GetRunningTalkRoomsApi
 import com.applemango.runnerbe.data.network.api.PostMessageReportApi
@@ -11,7 +11,7 @@ import com.applemango.runnerbe.data.network.request.MessageReportRequest
 import com.applemango.runnerbe.data.network.request.SendMessageRequest
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.entity.RunningTalkMessagesEntity
-import com.applemango.runnerbe.entity.RunningTalkRoomsEntity
+import com.applemango.runnerbe.entity.RunningTalkRoomEntity
 import com.applemango.runnerbe.repository.RunningTalkRepository
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -22,8 +22,8 @@ class RunningTalkRepositoryImpl @Inject constructor(
     private val sendMessagesApi: PostMessageApi,
     private val postMessageReportApi: PostMessageReportApi,
     private val commonMapper: CommonMapper,
-    private val runningTalkRoomsMapper: RunningTalkRoomsMapper,
-    private val runningTalkMessagesMapper: RunningTalkMessagesMapper,
+    private val runningTalkRoomMapper: RunningTalkRoomMapper,
+    private val runningTalkMessageMapper: RunningTalkMessageMapper,
 ) : BaseRepository(), RunningTalkRepository {
 
     override suspend fun sendMessage(roomId: Int, content: String?, url: String?): CommonEntity {
@@ -50,12 +50,14 @@ class RunningTalkRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getRunningTalkRooms(): RunningTalkRoomsEntity {
+    override suspend fun getRunningTalkRooms(): List<RunningTalkRoomEntity> {
         val response = getRunningTalkRoomsApi.getRunningTalkRooms()
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return runningTalkRoomsMapper.mapToDomain(body)
+                return body.result.map {
+                    runningTalkRoomMapper.mapToDomain(it)
+                }
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }
@@ -69,7 +71,10 @@ class RunningTalkRepositoryImpl @Inject constructor(
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return runningTalkMessagesMapper.mapToDomain(body)
+                return RunningTalkMessagesEntity(
+                    body.roomInfo,
+                    body.messages
+                )
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }

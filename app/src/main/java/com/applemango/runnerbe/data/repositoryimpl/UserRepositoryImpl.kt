@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.data.repositoryimpl
 
 import com.applemango.runnerbe.data.mapper.CommonMapper
+import com.applemango.runnerbe.data.mapper.MyPageMapper
 import com.applemango.runnerbe.data.mapper.NewUserMapper
 import com.applemango.runnerbe.data.mapper.OtherUserMapper
 import com.applemango.runnerbe.data.mapper.SocialLoginMapper
@@ -14,6 +15,7 @@ import com.applemango.runnerbe.data.network.request.PatchUserPaceRegisterRequest
 import com.applemango.runnerbe.data.network.request.SocialLoginRequest
 import com.applemango.runnerbe.data.network.request.WithdrawalUserRequest
 import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.entity.MyPageEntity
 import com.applemango.runnerbe.entity.OtherUserEntity
 import com.applemango.runnerbe.entity.NewUserEntity
 import com.applemango.runnerbe.entity.SocialLoginEntity
@@ -38,6 +40,7 @@ class UserRepositoryImpl @Inject constructor(
     private val socialLoginMapper: SocialLoginMapper,
     private val newUserMapper: NewUserMapper,
     private val userMapper: UserMapper,
+    private val myPageMapper: MyPageMapper,
     private val otherUserMapper: OtherUserMapper,
 ) : BaseRepository(), UserRepository {
     override suspend fun withdrawalUser(userId: Int, secretKey: String): CommonEntity {
@@ -161,12 +164,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserData(userId: Int): UserEntity {
+    override suspend fun getUserData(userId: Int): MyPageEntity {
         val response = getUserDataApi.getUserData(userId)
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return userMapper.mapToDomain(body)
+                return myPageMapper.mapToDomain(body)
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }

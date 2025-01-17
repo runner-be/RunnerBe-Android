@@ -1,6 +1,7 @@
 package com.applemango.runnerbe.repository
 
 import com.applemango.runnerbe.entity.CommonEntity
+import com.applemango.runnerbe.entity.MyPageEntity
 import com.applemango.runnerbe.entity.OtherUserEntity
 import com.applemango.runnerbe.entity.NewUserEntity
 import com.applemango.runnerbe.entity.SocialLoginEntity
@@ -23,6 +24,6 @@ interface UserRepository {
         genderTag : String,
         jobTag : String,
         deviceToken : String) : NewUserEntity
-    suspend fun getUserData(userId : Int) : UserEntity
+    suspend fun getUserData(userId : Int) : MyPageEntity
     suspend fun getOtherUserProfile(targetUserId: Int): OtherUserEntity
 }
