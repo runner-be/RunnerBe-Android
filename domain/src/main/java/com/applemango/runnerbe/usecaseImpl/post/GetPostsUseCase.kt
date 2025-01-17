@@ -1,7 +1,10 @@
 package com.applemango.runnerbe.usecaseImpl.post
 
+import com.applemango.runnerbe.entity.PostingEntity
 import com.applemango.runnerbe.entity.PostingsEntity
 import com.applemango.runnerbe.repository.PostingRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -10,8 +13,8 @@ import javax.inject.Inject
 class GetPostsUseCase @Inject constructor(
     private val repo: PostingRepository
 ) {
-    suspend operator fun invoke(runningTag: String, request : GetRunningListParam) : PostingsEntity {
-        return repo.getRunningList(runningTag = runningTag, request = request)
+    suspend operator fun invoke(runningTag: String, request : GetRunningListParam) : Flow<List<PostingEntity>> = flow {
+        repo.getRunningList(runningTag = runningTag, request = request)
     }
 
     data class GetRunningListParam(

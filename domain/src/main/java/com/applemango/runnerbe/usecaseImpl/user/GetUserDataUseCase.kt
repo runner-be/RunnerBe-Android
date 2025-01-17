@@ -1,5 +1,6 @@
 package com.applemango.runnerbe.usecaseImpl.user
 
+import com.applemango.runnerbe.entity.MyPageEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import com.applemango.runnerbe.entity.UserEntity
@@ -10,7 +11,7 @@ class GetUserDataUseCase @Inject constructor(
     private val repo : UserRepository
 ) {
 
-    operator fun invoke(userId: Int) :Flow<UserEntity> = flow {
+    operator fun invoke(userId: Int) :Flow<MyPageEntity> = flow {
         runCatching {
             repo.getUserData(userId)
         }.onSuccess {

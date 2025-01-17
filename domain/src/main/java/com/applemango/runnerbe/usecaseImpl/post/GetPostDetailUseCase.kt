@@ -4,14 +4,16 @@ import com.applemango.runnerbe.entity.PostingDetailEntity
 import com.applemango.runnerbe.entity.PostingEntity
 import com.applemango.runnerbe.entity.UserEntity
 import com.applemango.runnerbe.repository.PostingRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetPostDetailUseCase @Inject constructor(
-    private val repo: PostingRepository
+    private val repository: PostingRepository
 ) {
 
-    suspend operator fun invoke(postId: Int, userId: Int): PostingDetailEntity {
-        return repo.getPostDetail(postId, userId)
+    suspend operator fun invoke(postId: Int, userId: Int): Flow<PostingDetailEntity> = flow {
+        repository.getPostDetail(postId, userId)
     }
 }
 

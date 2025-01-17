@@ -1,7 +1,9 @@
 package com.applemango.runnerbe.usecaseImpl.bookmark
 
-import com.applemango.runnerbe.entity.BookmarksEntity
+import com.applemango.runnerbe.entity.PostingEntity
 import com.applemango.runnerbe.repository.PostingRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -10,7 +12,7 @@ import javax.inject.Inject
 class GetBookmarkedPostsUseCase @Inject constructor(
     private val repo: PostingRepository
 ) {
-    suspend operator fun invoke(userId: Int): BookmarksEntity {
-        return repo.getBookmarkList(userId)
+    suspend operator fun invoke(userId: Int): Flow<List<PostingEntity>> = flow {
+        repo.getBookmarkList(userId)
     }
 }
