@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.dto.new.NewUserDto
+import com.applemango.runnerbe.data.dto.NewUserDto
 import com.applemango.runnerbe.data.network.request.JoinUserRequest
 import retrofit2.Response
 import retrofit2.http.Body

@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.dto.new.CommonDto
+import com.applemango.runnerbe.data.dto.CommonDto
 import com.applemango.runnerbe.data.network.request.RunningLogRequest
 import retrofit2.Response
 import retrofit2.http.Body

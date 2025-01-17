@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.dto.new.RunningTalkRoomsDto
+import com.applemango.runnerbe.data.dto.RunningTalkRoomsDto
 import retrofit2.Response
 import retrofit2.http.GET
 

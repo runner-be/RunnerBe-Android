@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.dto.new.RunningTalkMessagesDto
+import com.applemango.runnerbe.data.dto.RunningTalkMessagesDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

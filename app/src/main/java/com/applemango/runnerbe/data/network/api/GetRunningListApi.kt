@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.network.response.GetRunningListResponse
+import com.applemango.runnerbe.data.dto.PostingsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -24,5 +24,5 @@ interface GetRunningListApi {
         @Query("userId") userId : Int? = null,
         @Query("pageSize") pageSize : Int = 10,
         @Query("page") page: Int = 1
-    ) : Response<GetRunningListResponse>
+    ) : Response<PostingsDto>
 }

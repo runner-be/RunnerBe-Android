@@ -1,6 +1,6 @@
 package com.applemango.runnerbe.data.network.api
 
-import com.applemango.runnerbe.data.dto.new.PostingDetailDto
+import com.applemango.runnerbe.data.dto.PostingDetailDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
