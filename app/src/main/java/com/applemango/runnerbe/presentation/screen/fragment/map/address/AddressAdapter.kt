@@ -5,21 +5,22 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.applemango.runnerbe.databinding.ItemAddressBinding
+import com.applemango.runnerbe.presentation.model.AddressModel
 import javax.inject.Inject
 
 class AddressAdapter @Inject constructor() :
-    PagingDataAdapter<AddressResult, AddressViewHolder>(addressDiffUtil) {
+    PagingDataAdapter<AddressModel, AddressViewHolder>(addressDiffUtil) {
     private lateinit var onAddressClickListener: OnAddressClickListener
 
     companion object {
-        private val addressDiffUtil = object : DiffUtil.ItemCallback<AddressResult>() {
-            override fun areItemsTheSame(oldItem: AddressResult, newItem: AddressResult): Boolean {
+        private val addressDiffUtil = object : DiffUtil.ItemCallback<AddressModel>() {
+            override fun areItemsTheSame(oldItem: AddressModel, newItem: AddressModel): Boolean {
                 return oldItem.roadAddress == newItem.roadAddress
             }
 
             override fun areContentsTheSame(
-                oldItem: AddressResult,
-                newItem: AddressResult
+                oldItem: AddressModel,
+                newItem: AddressModel
             ): Boolean {
                 return oldItem == newItem
             }

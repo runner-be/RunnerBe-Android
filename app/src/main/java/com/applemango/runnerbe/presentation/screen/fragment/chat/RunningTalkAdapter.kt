@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Room
 import com.applemango.runnerbe.presentation.model.listener.RoomClickListener
+import com.applemango.runnerbe.presentation.model.RunningTalkRoomModel
 
-class RunningTalkAdapter : ListAdapter<Room, RunningTalkViewHolder>(talkDiffUtil) {
+class RunningTalkAdapter : ListAdapter<RunningTalkRoomModel, RunningTalkViewHolder>(talkDiffUtil) {
     private var roomClickListener: RoomClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunningTalkViewHolder {
@@ -36,12 +36,12 @@ class RunningTalkAdapter : ListAdapter<Room, RunningTalkViewHolder>(talkDiffUtil
     }
 
     companion object {
-        private val talkDiffUtil = object : DiffUtil.ItemCallback<Room>() {
-            override fun areItemsTheSame(oldItem: Room, newItem: Room): Boolean {
+        private val talkDiffUtil = object : DiffUtil.ItemCallback<RunningTalkRoomModel>() {
+            override fun areItemsTheSame(oldItem: RunningTalkRoomModel, newItem: RunningTalkRoomModel): Boolean {
                 return oldItem.roomId == newItem.roomId
             }
 
-            override fun areContentsTheSame(oldItem: Room, newItem: Room): Boolean {
+            override fun areContentsTheSame(oldItem: RunningTalkRoomModel, newItem: RunningTalkRoomModel): Boolean {
                 return oldItem.roomId == newItem.roomId &&
                         oldItem.title == newItem.title &&
                         oldItem.recentMessage == newItem.recentMessage

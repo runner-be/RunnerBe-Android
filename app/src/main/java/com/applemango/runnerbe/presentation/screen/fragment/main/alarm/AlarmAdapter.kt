@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.applemango.runnerbe.data.network.response.Alarm
 import com.applemango.runnerbe.databinding.ItemAlarmBinding
+import com.applemango.runnerbe.presentation.model.AlarmModel
 
-class AlarmAdapter: ListAdapter<Alarm, AlarmViewHolder>(alarmDiffUtil) {
+class AlarmAdapter: ListAdapter<AlarmModel, AlarmViewHolder>(alarmDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return AlarmViewHolder(ItemAlarmBinding.inflate(inflater, parent,false))
@@ -19,12 +19,12 @@ class AlarmAdapter: ListAdapter<Alarm, AlarmViewHolder>(alarmDiffUtil) {
     }
 
     companion object {
-        private val alarmDiffUtil = object : DiffUtil.ItemCallback<Alarm>() {
-            override fun areItemsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
+        private val alarmDiffUtil = object : DiffUtil.ItemCallback<AlarmModel>() {
+            override fun areItemsTheSame(oldItem: AlarmModel, newItem: AlarmModel): Boolean {
                 return oldItem== newItem
             }
 
-            override fun areContentsTheSame(oldItem: Alarm, newItem: Alarm): Boolean {
+            override fun areContentsTheSame(oldItem: AlarmModel, newItem: AlarmModel): Boolean {
                 return oldItem == newItem
             }
         }

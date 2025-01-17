@@ -3,16 +3,13 @@ package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.presentation.model.listener.BookMarkClickListener
+import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener
 
-class BookMarkAdapter : ListAdapter<Posting, BookMarkViewHolder>(bookmarkDiffUtil) {
+class BookMarkAdapter : ListAdapter<PostingModel, BookMarkViewHolder>(bookmarkDiffUtil) {
     private lateinit var bookmarkListener: JoinedRunningClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookMarkViewHolder {
@@ -38,12 +35,12 @@ class BookMarkAdapter : ListAdapter<Posting, BookMarkViewHolder>(bookmarkDiffUti
     }
 
     companion object {
-        private val bookmarkDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
-            override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+        private val bookmarkDiffUtil = object : DiffUtil.ItemCallback<PostingModel>() {
+            override fun areItemsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+            override fun areContentsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem.bookMark == newItem.bookMark
             }
 

@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.databinding.ItemGotStampBinding
+import com.applemango.runnerbe.presentation.model.MemberStampModel
 
-class GotStampAdapter : ListAdapter<MemberStampData, GotStampViewHolder>(
+class GotStampAdapter : ListAdapter<MemberStampModel, GotStampViewHolder>(
     GOT_STAMP_DIFF_UTIL
 ) {
     private var listener : GotStampClickListener? = null
@@ -30,12 +31,12 @@ class GotStampAdapter : ListAdapter<MemberStampData, GotStampViewHolder>(
     }
 
     companion object {
-        private val GOT_STAMP_DIFF_UTIL = object: DiffUtil.ItemCallback<MemberStampData>() {
-            override fun areItemsTheSame(oldItem: MemberStampData, newItem: MemberStampData): Boolean {
+        private val GOT_STAMP_DIFF_UTIL = object: DiffUtil.ItemCallback<MemberStampModel>() {
+            override fun areItemsTheSame(oldItem: MemberStampModel, newItem: MemberStampModel): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: MemberStampData, newItem: MemberStampData): Boolean {
+            override fun areContentsTheSame(oldItem: MemberStampModel, newItem: MemberStampModel): Boolean {
                 return oldItem.nickname == newItem.nickname
             }
 

@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.databinding.ItemGroupProfileBinding
+import com.applemango.runnerbe.presentation.model.JoinedRunnerModel
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
 
-class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileViewHolder>(
+class ProfileAdapter: ListAdapter<JoinedRunnerModel, ProfileViewHolder>(
     profileDiffUtil
 ) {
     private var otherUserProfileClickListener: OtherUserProfileClickListener? = null
@@ -49,17 +49,17 @@ class ProfileAdapter: ListAdapter<JoinedRunnerResult, ProfileViewHolder>(
     }
 
     companion object {
-        private val profileDiffUtil = object : DiffUtil.ItemCallback<JoinedRunnerResult>() {
+        private val profileDiffUtil = object : DiffUtil.ItemCallback<JoinedRunnerModel>() {
             override fun areItemsTheSame(
-                oldItem: JoinedRunnerResult,
-                newItem: JoinedRunnerResult
+                oldItem: JoinedRunnerModel,
+                newItem: JoinedRunnerModel
             ): Boolean {
                 return oldItem.userId == newItem.userId
             }
 
             override fun areContentsTheSame(
-                oldItem: JoinedRunnerResult,
-                newItem: JoinedRunnerResult
+                oldItem: JoinedRunnerModel,
+                newItem: JoinedRunnerModel
             ): Boolean {
                 return oldItem == newItem
             }

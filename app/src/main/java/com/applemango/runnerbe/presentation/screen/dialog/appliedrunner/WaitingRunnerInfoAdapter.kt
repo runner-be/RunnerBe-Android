@@ -3,15 +3,12 @@ package com.applemango.runnerbe.presentation.screen.dialog.appliedrunner
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.UserInfo
-import com.applemango.runnerbe.presentation.model.listener.PostAcceptListener
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
+import com.applemango.runnerbe.presentation.model.UserModel
 
-class WaitingRunnerInfoAdapter : ListAdapter<UserInfo, WaitingRunnerInfoViewHolder>(waitingRunnerDiffUtil) {
+class WaitingRunnerInfoAdapter : ListAdapter<UserModel, WaitingRunnerInfoViewHolder>(waitingRunnerDiffUtil) {
     private lateinit var listener: WaitingRunnerClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WaitingRunnerInfoViewHolder {
@@ -37,12 +34,12 @@ class WaitingRunnerInfoAdapter : ListAdapter<UserInfo, WaitingRunnerInfoViewHold
     }
 
     companion object {
-        private val waitingRunnerDiffUtil = object : DiffUtil.ItemCallback<UserInfo>() {
-            override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+        private val waitingRunnerDiffUtil = object : DiffUtil.ItemCallback<UserModel>() {
+            override fun areItemsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {
                 return oldItem.userId == newItem.userId
             }
 
-            override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+            override fun areContentsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {
                 return oldItem == newItem
             }
 

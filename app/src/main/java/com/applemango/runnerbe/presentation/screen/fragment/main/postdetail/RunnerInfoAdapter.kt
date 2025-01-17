@@ -3,14 +3,12 @@ package com.applemango.runnerbe.presentation.screen.fragment.main.postdetail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.UserInfo
+import com.applemango.runnerbe.presentation.model.UserModel
 
-class RunnerInfoAdapter : ListAdapter<UserInfo, RunnerInfoViewHolder>(runnerInfoDiffUtil){
+class RunnerInfoAdapter : ListAdapter<UserModel, RunnerInfoViewHolder>(runnerInfoDiffUtil){
     private lateinit var runnerInfoClickListener: RunnerInfoClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunnerInfoViewHolder {
@@ -36,12 +34,12 @@ class RunnerInfoAdapter : ListAdapter<UserInfo, RunnerInfoViewHolder>(runnerInfo
     }
 
     companion object {
-        private val runnerInfoDiffUtil = object: DiffUtil.ItemCallback<UserInfo>() {
-            override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+        private val runnerInfoDiffUtil = object: DiffUtil.ItemCallback<UserModel>() {
+            override fun areItemsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {
                 return oldItem.userId == newItem.userId
             }
 
-            override fun areContentsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
+            override fun areContentsTheSame(oldItem: UserModel, newItem: UserModel): Boolean {
                 return oldItem == newItem
             }
 

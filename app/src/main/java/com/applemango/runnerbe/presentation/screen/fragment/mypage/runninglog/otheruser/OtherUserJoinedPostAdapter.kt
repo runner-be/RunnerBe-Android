@@ -6,9 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
+import com.applemango.runnerbe.presentation.model.PostingModel
 
-class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewHolder>(
+class OtherUserJoinedPostAdapter : ListAdapter<PostingModel, OtherUserJoinedPostViewHolder>(
     joinedPostDiffUtil
 ) {
     private lateinit var onPostClickListener: OtherUserJoinedPostClickListener
@@ -36,12 +36,12 @@ class OtherUserJoinedPostAdapter : ListAdapter<Posting, OtherUserJoinedPostViewH
     }
 
     companion object {
-        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
-            override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+        private val joinedPostDiffUtil = object : DiffUtil.ItemCallback<PostingModel>() {
+            override fun areItemsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+            override fun areContentsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem == newItem
             }
         }

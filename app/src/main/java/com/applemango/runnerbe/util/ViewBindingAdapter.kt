@@ -11,17 +11,17 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.Posting
-import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.data.vo.MapFilterData
-import com.applemango.runnerbe.domain.entity.Pace
-import com.applemango.runnerbe.presentation.model.RunnerDiligence
-import com.applemango.runnerbe.presentation.model.RunningTag
+import com.applemango.runnerbe.presentation.model.JoinedRunnerModel
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.type.RunnerDiligence
+import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
-import com.applemango.runnerbe.presentation.screen.fragment.image.CropRectRatio
+import com.applemango.runnerbe.presentation.model.type.CropRectRatio
+import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -165,7 +165,7 @@ fun getGenderAndAgeString(textView: TextView, age: String?, gender: String?) {
 private const val THREE_HOURS_IN_MILLIS = 3 * 60 * 60 * 1000L
 
 @BindingAdapter("bind:whetherEndCheckStatus")
-fun getWhetherEndCheckStatus(textView: TextView, post: Posting) {
+fun getWhetherEndCheckStatus(textView: TextView, post: PostingModel) {
     val resources = textView.resources
     val currentTime = System.currentTimeMillis()
 
@@ -465,7 +465,7 @@ fun TextView.setPostAddressText(address: String?) {
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("bind:postPlaceAddressText")
-fun TextView.setPostAddressText(posting: Posting?) {
+fun TextView.setPostAddressText(posting: PostingModel?) {
     this.text = "${posting?.placeAddress} ${posting?.placeExplain}"
 }
 
@@ -481,7 +481,7 @@ fun View.setAlarmBackground(whetherRead: String) {
 
 // 참여한 러닝
 @BindingAdapter("bind:logWriteOrSeeText")
-fun TextView.setLogWriteOrSeeText(posting: Posting) {
+fun TextView.setLogWriteOrSeeText(posting: PostingModel) {
     val logId = posting.logId
     this.text =if (logId == null) {
          "로그 쓰기"
@@ -490,7 +490,7 @@ fun TextView.setLogWriteOrSeeText(posting: Posting) {
 
 // 함께한 러너
 @BindingAdapter("bind:groupLogSeeCtrl")
-fun TextView.setGroupLogSee(joinedRunnerResult: JoinedRunnerResult) {
+fun TextView.setGroupLogSee(joinedRunnerResult: JoinedRunnerModel) {
     if (joinedRunnerResult.logId != null) {
         this.visibility = View.VISIBLE
         if (joinedRunnerResult.isOpened == 1) {

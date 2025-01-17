@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.applemango.runnerbe.data.dto.Posting
 import com.applemango.runnerbe.databinding.ItemJoinPostWithBookmarkBinding
+import com.applemango.runnerbe.presentation.model.PostingModel
+import com.applemango.runnerbe.presentation.model.type.PostCalledFrom
 
-class JoinedRunningPostAdapter : ListAdapter<Posting, JoinedRunningPostViewHolder>(
+class JoinedRunningPostAdapter : ListAdapter<PostingModel, JoinedRunningPostViewHolder>(
     joinedRunningPostDiffUtil
 ) {
     private lateinit var listener: JoinedRunningClickListener
@@ -34,12 +35,12 @@ class JoinedRunningPostAdapter : ListAdapter<Posting, JoinedRunningPostViewHolde
     }
 
     companion object {
-        private val joinedRunningPostDiffUtil = object : DiffUtil.ItemCallback<Posting>() {
-            override fun areItemsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+        private val joinedRunningPostDiffUtil = object : DiffUtil.ItemCallback<PostingModel>() {
+            override fun areItemsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem.postId == newItem.postId
             }
 
-            override fun areContentsTheSame(oldItem: Posting, newItem: Posting): Boolean {
+            override fun areContentsTheSame(oldItem: PostingModel, newItem: PostingModel): Boolean {
                 return oldItem == newItem
             }
         }
