@@ -4,9 +4,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.ItemAttendanceAccessionBinding
 import com.applemango.runnerbe.presentation.model.listener.AttendanceAccessionClickListener
+import com.applemango.runnerbe.presentation.model.UserModel
 import kotlin.properties.Delegates
 
 class AttendanceAccessionViewHolder(
@@ -33,7 +33,7 @@ class AttendanceAccessionViewHolder(
         }
     }
 
-    fun bind(item: UserInfo) {
+    fun bind(item: UserModel) {
         binding.userInfo = item
         binding.refuseButton.setOnClickListener {
             item.attendanceState = false

@@ -2,28 +2,28 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see
 
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.dto.UserInfo
 import com.applemango.runnerbe.databinding.ItemAttendanceSeeBinding
+import com.applemango.runnerbe.presentation.model.UserModel
 
 class AttendanceSeeViewHolder(
     private val binding: ItemAttendanceSeeBinding
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: UserInfo, listener: AttendanceProfileClickListener) {
+    fun bind(item: UserModel, listener: AttendanceProfileClickListener) {
         binding.userInfo = item
         binding.vh = this
         binding.listener = listener
     }
 
-    fun getAttendanceMessageResource(userInfo: UserInfo): Int {
+    fun getAttendanceMessageResource(userInfo: UserModel): Int {
         return if (userInfo.whetherCheck == "Y") {
             if (userInfo.attendance == 1) R.string.msg_attendance_complete
             else R.string.msg_not_attendance_complete
         } else R.string.msg_not_attendance_check
     }
 
-    fun isAttendanceComplete(userInfo: UserInfo): Boolean {
+    fun isAttendanceComplete(userInfo: UserModel): Boolean {
         return userInfo.whetherCheck == "Y" && userInfo.attendance == 1
     }
 }

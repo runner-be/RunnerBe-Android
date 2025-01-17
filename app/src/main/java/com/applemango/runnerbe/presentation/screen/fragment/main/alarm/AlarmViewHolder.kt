@@ -2,8 +2,8 @@ package com.applemango.runnerbe.presentation.screen.fragment.main.alarm
 
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
-import com.applemango.runnerbe.data.network.response.Alarm
 import com.applemango.runnerbe.databinding.ItemAlarmBinding
+import com.applemango.runnerbe.presentation.model.AlarmModel
 import java.time.Duration
 import java.time.Period
 import java.time.ZoneId
@@ -13,7 +13,7 @@ class AlarmViewHolder(
     val binding: ItemAlarmBinding
 ): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Alarm) {
+    fun bind(item: AlarmModel) {
         binding.item = item
 
         val currentTimeKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))

@@ -3,8 +3,8 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.g
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.data.network.response.JoinedRunnerResult
 import com.applemango.runnerbe.databinding.ItemGroupProfileBinding
+import com.applemango.runnerbe.presentation.model.JoinedRunnerModel
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener
 
@@ -13,7 +13,7 @@ class ProfileViewHolder(
     private val updateSelectedPosition: (Int) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
-        item: JoinedRunnerResult,
+        item: JoinedRunnerModel,
         selectedPosition: Int,
         otherUserProfileClickListener: OtherUserProfileClickListener?
     ) {

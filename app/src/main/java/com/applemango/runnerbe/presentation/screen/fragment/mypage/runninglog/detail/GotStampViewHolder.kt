@@ -3,13 +3,14 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.d
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ItemGotStampBinding
+import com.applemango.runnerbe.presentation.model.MemberStampModel
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.bumptech.glide.Glide
 
 class GotStampViewHolder(
     private val binding: ItemGotStampBinding
 ): RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MemberStampData, listener : GotStampClickListener?) {
+    fun bind(item: MemberStampModel, listener : GotStampClickListener?) {
         binding.item = item
         binding.listener = listener
         with(binding) {
