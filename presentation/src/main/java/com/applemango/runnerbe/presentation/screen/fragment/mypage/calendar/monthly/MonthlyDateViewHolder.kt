@@ -6,7 +6,6 @@ import com.applemango.runnerbe.R
 import com.applemango.runnerbe.databinding.ItemDateMonthlyBinding
 import com.applemango.runnerbe.databinding.ItemDateMonthlyEmptyBinding
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.DateItem
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.OnDateClickListener
 import com.applemango.runnerbe.util.ToastUtil
@@ -47,7 +46,7 @@ class MonthlyOtherUserDateViewHolder (
                 val stampImage = if (log.stampCode == null || log.stampCode == StampItem.availableStampItem.code) {
                     StampItem.otherUserUnavailableStampItem.image
                 } else {
-                    getStampItemByCode(log.stampCode)?.image!!
+                    StampItem.getStampItemByCode(itemView.context, log.stampCode)?.image!!
                 }
                 ivStamp.setImageResource(stampImage)
                 llDate.setOnClickListener {
@@ -81,7 +80,7 @@ class MonthlyDateViewHolder (
                 if (log.stampCode == null && log.gatheringId != null) {
                     ivStamp.setImageResource(StampItem.availableStampItem.image)
                 } else {
-                    ivStamp.setImageResource(getStampItemByCode(log.stampCode)!!.image)
+                    ivStamp.setImageResource(StampItem.getStampItemByCode(itemView.context, log.stampCode)!!.image)
                 }
             } ?: ivStamp.setImageResource(StampItem.unavailableStampItem.image)
             llDate.setOnClickListener {

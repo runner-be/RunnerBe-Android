@@ -3,7 +3,7 @@ package com.applemango.runnerbe.presentation.screen.fragment.map
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.presentation.model.vo.MapFilterData
+import com.applemango.runnerbe.presentation.model.MapFilterModel
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase
 import com.applemango.runnerbe.presentation.model.type.AfterPartyTag
 import com.applemango.runnerbe.presentation.model.type.PriorityFilterTag
@@ -58,9 +58,9 @@ class RunnerMapViewModel @Inject constructor(
     private var prePriorityTag = filterPriorityTag.value
     val includeFinish: MutableStateFlow<Boolean> = MutableStateFlow(true)
     private var preIncludeFinish = includeFinish.value
-    val filterData: MutableStateFlow<MapFilterData> =
+    val filterData: MutableStateFlow<MapFilterModel> =
         MutableStateFlow(
-            MapFilterData(
+            MapFilterModel(
                 listOf(
                     Pace.ALL,
                     Pace.BEGINNER,
@@ -77,18 +77,18 @@ class RunnerMapViewModel @Inject constructor(
         filterPriorityTag,
         includeFinish,
         filterData
-    ) { currentRunningTag: RunningTag, currentAfterPartyTag: AfterPartyTag, currentPriorityTag: PriorityFilterTag, currentIncludeFinish: Boolean, currentMapFilterData: MapFilterData ->
+    ) { currentRunningTag: RunningTag, currentAfterPartyTag: AfterPartyTag, currentPriorityTag: PriorityFilterTag, currentIncludeFinish: Boolean, currentMapFilterModel: MapFilterModel ->
         val result =
             preFilterRunningTag != currentRunningTag
                     || preFilterAfterPartyTag != currentAfterPartyTag
                     || prePriorityTag != currentPriorityTag
                     || preIncludeFinish != currentIncludeFinish
-                    || preFilterData != currentMapFilterData
+                    || preFilterData != currentMapFilterModel
         preFilterRunningTag = currentRunningTag
         preFilterAfterPartyTag = currentAfterPartyTag
         prePriorityTag = currentPriorityTag
         preIncludeFinish = currentIncludeFinish
-        preFilterData = currentMapFilterData
+        preFilterData = currentMapFilterModel
         if (result) ++refreshCount
         else refreshCount
     }.stateIn(
@@ -164,7 +164,7 @@ class RunnerMapViewModel @Inject constructor(
         minAge: Int? = 0,
         maxAge: Int?
     ) {
-        filterData.value = MapFilterData(
+        filterData.value = MapFilterModel(
             paces,
             gender ?: "A",
             afterParty ?: "all",
@@ -233,6 +233,6 @@ class RunnerMapViewModel @Inject constructor(
             val list: List<SelectItemParameter>
         ) : RunnerMapAction()
 
-        data class MoveToRunningFilter(val filterData: MapFilterData) : RunnerMapAction()
+        data class MoveToRunningFilter(val filterData: MapFilterModel) : RunnerMapAction()
     }
 }

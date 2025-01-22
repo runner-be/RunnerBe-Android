@@ -79,9 +79,13 @@ class StampBottomSheetDialog(
         stamp: StampItem?
     ) {
         if (stamp != null) {
-            val stampList = getStampItems()
-            smoothScroller.targetPosition = stampList.indexOf(stamp)
-            layoutManager.startSmoothScroll(smoothScroller)
+            val stampList: List<StampItem> = context?.let {
+                StampItem.getStampItems(it)
+            }?: emptyList()
+            if (stampList.isNotEmpty()) {
+                smoothScroller.targetPosition = stampList.indexOf(stamp)
+                layoutManager.startSmoothScroll(smoothScroller)
+            }
         }
     }
 
@@ -91,7 +95,7 @@ class StampBottomSheetDialog(
                 setIsPersonalLog(isPersonalLog)
             }
             adapter = stampAdapter.apply {
-                submitList(getStampItems())
+                submitList(StampItem.getStampItems(context))
                 setSelectedStamp(selectedStamp)
                 setOnStampClickListener { stamp ->
                     selectedStamp = stamp
