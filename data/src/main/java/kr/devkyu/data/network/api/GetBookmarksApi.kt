@@ -9,5 +9,5 @@ interface GetBookmarksApi {
     @GET("/users/{userId}/bookmarks/v2")
     suspend fun getBookmarks(
         @Path("userId") userId: Int
-    ) : Response<kr.devkyu.data.dto.BookmarksDto>
+    ) : Response<BookmarksDto>
 }

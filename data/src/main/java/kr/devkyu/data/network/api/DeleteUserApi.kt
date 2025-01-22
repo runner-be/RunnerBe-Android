@@ -1,7 +1,7 @@
 package kr.devkyu.data.network.api
 
 import kr.devkyu.data.dto.CommonDto
-import com.applemango.runnerbe.data.network.request.WithdrawalUserRequest
+import kr.devkyu.data.network.request.WithdrawalUserRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,5 +12,5 @@ interface DeleteUserApi {
     suspend fun withdrawalUser(
         @Path("userId") userId: Int,
         @Body request: WithdrawalUserRequest
-    ) : Response<kr.devkyu.data.dto.CommonDto>
+    ) : Response<CommonDto>
 }

@@ -10,5 +10,5 @@ interface PatchAlarmApi {
     suspend fun patchAlarm(
         @Path("userId") userId: Int,
         @Path("pushOn") pushOn: String
-    ) : Response<kr.devkyu.data.dto.CommonDto>
+    ) : Response<CommonDto>
 }

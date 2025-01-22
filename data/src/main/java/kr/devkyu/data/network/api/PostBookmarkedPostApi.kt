@@ -13,5 +13,5 @@ interface PostBookmarkedPostApi {
         @Path("userId") userId: Int,
         @Path("whetherAdd") whetherAdd: String,
         @Query("postId") postId: Int
-    ): Response<kr.devkyu.data.dto.CommonDto>
+    ): Response<CommonDto>
 }

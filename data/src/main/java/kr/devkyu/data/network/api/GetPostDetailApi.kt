@@ -11,5 +11,5 @@ interface GetPostDetailApi {
     suspend fun getPostDetail(
         @Path("postId") postId : Int,
         @Path("userId") userId: Int
-    ): Response<kr.devkyu.data.dto.PostingDetailDto>
+    ): Response<PostingDetailDto>
 }

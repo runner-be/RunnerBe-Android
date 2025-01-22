@@ -11,5 +11,5 @@ interface GetJoinedRunnersApi {
     suspend fun getJoinedRunnerList(
         @Path("userId") userId: Int,
         @Path("gatheringId") gatheringId: Int,
-    ): Response<kr.devkyu.data.dto.JoinedRunnersResponse>
+    ): Response<JoinedRunnersResponse>
 }

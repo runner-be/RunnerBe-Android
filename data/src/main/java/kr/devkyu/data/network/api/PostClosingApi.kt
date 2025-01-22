@@ -7,5 +7,7 @@ import retrofit2.http.Path
 
 interface PostClosingApi {
     @POST("postings/{postId}/closing")
-    suspend fun postClose(@Path("postId") postId: Int) : Response<kr.devkyu.data.dto.CommonDto>
+    suspend fun postClose(
+        @Path("postId") postId: Int
+    ) : Response<CommonDto>
 }

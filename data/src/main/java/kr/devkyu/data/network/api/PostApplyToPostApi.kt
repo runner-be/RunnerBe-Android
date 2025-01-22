@@ -11,5 +11,5 @@ interface PostApplyToPostApi {
     suspend fun postApply(
         @Path("postId") postId: Int,
         @Path("userId") userId : Int
-    ) :Response<kr.devkyu.data.dto.CommonDto>
+    ) :Response<CommonDto>
 }

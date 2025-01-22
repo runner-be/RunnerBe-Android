@@ -9,5 +9,5 @@ interface GetAlarmsApi {
     @GET("/users/alarms")
     fun getAlarms(
 
-    ): Response<kr.devkyu.data.dto.AlarmsDto>
+    ): Response<AlarmsDto>
 }

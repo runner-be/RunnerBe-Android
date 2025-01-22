@@ -16,5 +16,5 @@ interface GetAddressResultListApi {
         @Query("page") page: Int? = 1,
         @Query("size") size: Int? = 15,
         @Query("sort") sort: String? = "accuracy"
-    ) : Response<kr.devkyu.data.dto.KakaoAddressDto>
+    ) : Response<KakaoAddressDto>
 }

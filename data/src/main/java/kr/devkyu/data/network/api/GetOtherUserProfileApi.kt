@@ -10,5 +10,5 @@ interface GetOtherUserProfileApi {
     @GET("/users/{userId}/userPage/v2")
     suspend fun getOtherUserProfile(
         @Path("userId") userId: Int
-    ): Response<kr.devkyu.data.dto.OtherUserDto>
+    ): Response<OtherUserDto>
 }

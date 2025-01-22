@@ -1,7 +1,7 @@
 package kr.devkyu.data.network.api
 
 import kr.devkyu.data.dto.CommonDto
-import com.applemango.runnerbe.data.network.request.AttendanceAccessionRequest
+import kr.devkyu.data.network.request.AttendanceAccessionRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.PATCH
@@ -13,5 +13,5 @@ interface PatchJoinedRunnerAttendanceApi {
     suspend fun attendanceAccession(
         @Path("postId") postId: Int,
         @Body request: AttendanceAccessionRequest
-    ): Response<kr.devkyu.data.dto.CommonDto>
+    ): Response<CommonDto>
 }

@@ -13,5 +13,5 @@ interface GetMonthlyRunningLogsApi {
         @Path("userId") userId: Int,
         @Query("year") year: Int,
         @Query("month") month: Int,
-    ): Response<kr.devkyu.data.dto.MonthlyRunningLogDto>
+    ): Response<MonthlyRunningLogDto>
 }

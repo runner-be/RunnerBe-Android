@@ -1,7 +1,7 @@
 package kr.devkyu.data.network.api
 
-import com.applemango.runnerbe.data.dto.SocialLoginDto
-import com.applemango.runnerbe.data.network.request.SocialLoginRequest
+import kr.devkyu.data.dto.SocialLoginDto
+import kr.devkyu.data.network.request.SocialLoginRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

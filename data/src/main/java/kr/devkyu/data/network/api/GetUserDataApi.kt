@@ -1,7 +1,5 @@
 package kr.devkyu.data.network.api
 
-import kr.devkyu.data.dto.MyPageDto
-import com.applemango.runnerbe.data.dto.UserDto
 import retrofit2.Response
 import retrofit2.http.*
 

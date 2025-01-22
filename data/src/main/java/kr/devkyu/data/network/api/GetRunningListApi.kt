@@ -1,6 +1,6 @@
 package kr.devkyu.data.network.api
 
-import com.applemango.runnerbe.data.dto.PostingsDto
+import kr.devkyu.data.dto.PostingsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

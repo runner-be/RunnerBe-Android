@@ -12,5 +12,5 @@ interface PatchAppliedRunnerApi {
         @Path("postId") postId: Int,
         @Path("applicantId") applicantId: Int,
         @Path("whetherAccept") whetherAccept: String
-    ): Response<kr.devkyu.data.dto.CommonDto>
+    ): Response<CommonDto>
 }

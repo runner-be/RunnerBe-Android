@@ -1,7 +1,7 @@
 package kr.devkyu.data.network.api
 
 import kr.devkyu.data.dto.CommonDto
-import com.applemango.runnerbe.data.network.request.WriteRunningRequest
+import kr.devkyu.data.network.request.WriteRunningRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -13,5 +13,5 @@ interface PostRunningApi {
     suspend fun writingRunning(
         @Path("userId") userId: Int,
         @Body body: WriteRunningRequest
-    ) : Response<kr.devkyu.data.dto.CommonDto>
+    ) : Response<CommonDto>
 }

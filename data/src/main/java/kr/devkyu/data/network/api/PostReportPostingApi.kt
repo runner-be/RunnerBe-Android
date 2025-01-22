@@ -11,5 +11,5 @@ interface PostReportPostingApi {
     suspend fun reportPosting(
         @Path("postId") postId: Int,
         @Path("userId") userId: Int
-    ): Response<kr.devkyu.data.dto.CommonDto>
+    ): Response<CommonDto>
 }
