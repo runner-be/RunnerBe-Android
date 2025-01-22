@@ -1,9 +1,9 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.vo.RunningWriteTransferData
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
 import com.applemango.runnerbe.presentation.model.type.GenderTag
@@ -25,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningWriteTwoViewModel @Inject constructor(
+    private val applicationContext: Context,
     private val writeUseCase: WritePostUseCase
 ) : ViewModel() {
     val paceList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(initPaceInfoList())
@@ -54,7 +55,7 @@ class RunningWriteTwoViewModel @Inject constructor(
         data[0].any { it.isSelected }
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(1000L),initialValue = false)
     val recruitmentAge = combine(recruitmentStartAge, recruitmentEndAge) { start, end ->
-        RunnerBeApplication.ApplicationContext().resources.getString(
+        applicationContext.resources.getString(
             R.string.display_recruitment_age_setting,
             start.toString(),
             end.toString()

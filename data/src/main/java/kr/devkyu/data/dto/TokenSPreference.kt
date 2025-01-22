@@ -1,13 +1,12 @@
-package com.applemango.runnerbe.util
+package kr.devkyu.data.dto
 
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.applemango.runnerbe.presentation.model.type.LoginType
 
 class TokenSPreference(applicationContext : Context) {
-    val sSharedPreferences: SharedPreferences = applicationContext.getSharedPreferences("runnerBe", Application.MODE_PRIVATE)
-    val editor: SharedPreferences.Editor = sSharedPreferences.edit()
+    private val sSharedPreferences: SharedPreferences = applicationContext.getSharedPreferences("runnerBe", Application.MODE_PRIVATE)
+    private val editor: SharedPreferences.Editor = sSharedPreferences.edit()
 
     fun isNaver() : Boolean = getLoginType() == LoginType.NAVER
     fun isKakao() : Boolean = getLoginType() == LoginType.KAKAO
