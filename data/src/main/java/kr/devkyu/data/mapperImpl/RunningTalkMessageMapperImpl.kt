@@ -1,8 +1,8 @@
 package kr.devkyu.data.mapperImpl
 
-import com.applemango.runnerbe.data.dto.RunningTalkMessageDto
 import kr.devkyu.data.mapper.RunningTalkMessageMapper
 import com.applemango.runnerbe.entity.RunningTalkMessageEntity
+import kr.devkyu.data.dto.RunningTalkMessageDto
 import javax.inject.Inject
 
 class RunningTalkMessageMapperImpl @Inject constructor():

@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class JoinedRunnerMapperImpl @Inject constructor():
     JoinedRunnerMapper {
-    override fun mapToData(input: JoinedRunnerEntity): kr.devkyu.data.dto.JoinedRunnerDto {
-        return kr.devkyu.data.dto.JoinedRunnerDto(
+    override fun mapToData(input: JoinedRunnerEntity): JoinedRunnerDto {
+        return JoinedRunnerDto(
             userId = input.userId,
             nickname = input.nickname,
             profileImageUrl = input.profileImageUrl,
@@ -19,7 +19,7 @@ class JoinedRunnerMapperImpl @Inject constructor():
         )
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.JoinedRunnerDto): JoinedRunnerEntity {
+    override fun mapToDomain(input: JoinedRunnerDto): JoinedRunnerEntity {
         return JoinedRunnerEntity(
             userId = input.userId,
             nickname = input.nickname,

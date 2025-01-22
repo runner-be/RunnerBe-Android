@@ -1,15 +1,15 @@
 package kr.devkyu.data.mapperImpl
 
-import kr.devkyu.data.dto.Alarm
-import kr.devkyu.data.dto.AlarmsDto
 import kr.devkyu.data.mapper.AlarmMapper
 import com.applemango.runnerbe.entity.AlarmEntity
+import kr.devkyu.data.dto.Alarm
+import kr.devkyu.data.dto.AlarmsDto
 import javax.inject.Inject
 
 class AlarmMapperImpl @Inject constructor(): AlarmMapper {
-    override fun mapToData(input: List<AlarmEntity>): kr.devkyu.data.dto.AlarmsDto {
+    override fun mapToData(input: List<AlarmEntity>): AlarmsDto {
         val result = input.map {
-            kr.devkyu.data.dto.Alarm(
+            val alarm = Alarm(
                 it.alarmId,
                 it.userId,
                 it.createdAt,
@@ -17,13 +17,14 @@ class AlarmMapperImpl @Inject constructor(): AlarmMapper {
                 it.content,
                 it.whetherRead,
             )
+            alarm
         }
-        return kr.devkyu.data.dto.AlarmsDto(
+        return AlarmsDto(
             alarms = result
         )
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.AlarmsDto): List<AlarmEntity> {
+    override fun mapToDomain(input: AlarmsDto): List<AlarmEntity> {
         val result = input.alarms.map {
             AlarmEntity(
                 it.alarmId,

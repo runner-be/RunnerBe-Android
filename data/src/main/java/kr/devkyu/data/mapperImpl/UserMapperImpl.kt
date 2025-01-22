@@ -1,8 +1,8 @@
 package kr.devkyu.data.mapperImpl
 
-import com.applemango.runnerbe.data.dto.UserDto
 import kr.devkyu.data.mapper.UserMapper
 import com.applemango.runnerbe.entity.UserEntity
+import kr.devkyu.data.dto.UserDto
 import javax.inject.Inject
 
 class UserMapperImpl @Inject constructor(): UserMapper {

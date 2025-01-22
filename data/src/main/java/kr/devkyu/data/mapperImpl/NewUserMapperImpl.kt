@@ -8,16 +8,16 @@ import javax.inject.Inject
 
 class NewUserMapperImpl @Inject constructor():
     NewUserMapper {
-    override fun mapToData(input: NewUserEntity): kr.devkyu.data.dto.NewUserDto {
-        return kr.devkyu.data.dto.NewUserDto(
-            result = kr.devkyu.data.dto.Register(
+    override fun mapToData(input: NewUserEntity): NewUserDto {
+        return NewUserDto(
+            result = Register(
                 input.insertedUserId,
                 input.token
             )
         )
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.NewUserDto): NewUserEntity {
+    override fun mapToDomain(input: NewUserDto): NewUserEntity {
         return NewUserEntity(
             input.result.insertedUserId,
             input.result.token,

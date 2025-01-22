@@ -4,8 +4,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 data class KakaoAddressDto(
-    @Json(name = "documents") val documents: List<kr.devkyu.data.dto.Document>,
-    @Json(name = "meta") val meta: kr.devkyu.data.dto.Meta
+    @Json(name = "documents") val documents: List<Document>,
+    @Json(name = "meta") val meta: Meta
 )
 
 @JsonClass(generateAdapter = true)

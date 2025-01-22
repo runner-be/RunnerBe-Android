@@ -12,7 +12,7 @@ class PostingDetailMapperImpl @Inject constructor(
     private val userMapper: UserMapper,
     private val postingMapper: PostingMapper
 ) : PostingDetailMapper {
-    override fun mapToDomain(input: kr.devkyu.data.dto.PostingDetailDto): PostingDetailEntity {
+    override fun mapToDomain(input: PostingDetailDto): PostingDetailEntity {
         val result = input.result
         return PostingDetailEntity(
             result.postList.map {
@@ -28,9 +28,9 @@ class PostingDetailMapperImpl @Inject constructor(
         )
     }
 
-    override fun mapToData(input: PostingDetailEntity): kr.devkyu.data.dto.PostingDetailDto {
-        return kr.devkyu.data.dto.PostingDetailDto(
-            result = kr.devkyu.data.dto.PostingDetail(
+    override fun mapToData(input: PostingDetailEntity): PostingDetailDto {
+        return PostingDetailDto(
+            result = PostingDetail(
                 input.postList.map {
                     postingMapper.mapToData(it)
                 },

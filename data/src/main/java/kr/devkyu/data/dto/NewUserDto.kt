@@ -6,7 +6,7 @@ data class NewUserDto(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
     @Json(name = "message") val message: String? = null,
-    @Json(name = "result") val result: kr.devkyu.data.dto.Register
+    @Json(name = "result") val result: Register
 )
 
 data class Register(

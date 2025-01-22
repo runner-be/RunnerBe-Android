@@ -1,21 +1,19 @@
 package kr.devkyu.data.mapperImpl
 
-import kr.devkyu.data.dto.GatheringData
-import kr.devkyu.data.dto.MonthlyRunningLog
 import kr.devkyu.data.dto.MonthlyRunningLogDto
-import com.applemango.runnerbe.data.dto.RunningLogDto
 import kr.devkyu.data.dto.TotalCount
 import kr.devkyu.data.mapper.MonthlyRunningLogMapper
 import com.applemango.runnerbe.entity.MonthlyRunningLogEntity
 import com.applemango.runnerbe.entity.RunningLog
+import kr.devkyu.data.dto.RunningLogDto
 import javax.inject.Inject
 
 class MonthlyRunningLogMapperImpl @Inject constructor() :
     MonthlyRunningLogMapper {
-    override fun mapToData(input: MonthlyRunningLogEntity): kr.devkyu.data.dto.MonthlyRunningLogDto {
-        return kr.devkyu.data.dto.MonthlyRunningLogDto(
+    override fun mapToData(input: MonthlyRunningLogEntity): MonthlyRunningLogDto {
+        return MonthlyRunningLogDto(
             result = kr.devkyu.data.dto.MonthlyRunningLog(
-                totalCount = kr.devkyu.data.dto.TotalCount(
+                totalCount = TotalCount(
                     input.totalCount?.groupRunningCount ?: 0,
                     input.totalCount?.personalRunningCount ?: 0,
                 ),
@@ -38,7 +36,7 @@ class MonthlyRunningLogMapperImpl @Inject constructor() :
         )
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.MonthlyRunningLogDto): MonthlyRunningLogEntity {
+    override fun mapToDomain(input: MonthlyRunningLogDto): MonthlyRunningLogEntity {
         val data = input.result
         return MonthlyRunningLogEntity(
             totalCount = com.applemango.runnerbe.entity.TotalCount(

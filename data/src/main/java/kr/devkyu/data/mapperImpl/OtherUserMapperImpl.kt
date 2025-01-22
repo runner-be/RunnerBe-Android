@@ -7,13 +7,13 @@ import javax.inject.Inject
 
 class OtherUserMapperImpl @Inject constructor():
     OtherUserMapper {
-    override fun mapToData(input: OtherUserEntity): kr.devkyu.data.dto.OtherUserDto {
-        return kr.devkyu.data.dto.OtherUserDto(
+    override fun mapToData(input: OtherUserEntity): OtherUserDto {
+        return OtherUserDto(
             result = input.otherUser
         )
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.OtherUserDto): OtherUserEntity {
+    override fun mapToDomain(input: OtherUserDto): OtherUserEntity {
         return OtherUserEntity(
             input.result
         )

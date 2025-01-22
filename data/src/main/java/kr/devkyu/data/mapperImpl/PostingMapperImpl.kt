@@ -11,7 +11,7 @@ class PostingMapperImpl @Inject constructor(
     private val userMapper: UserMapper,
     private val profileUrlMapper: ProfileUrlMapper
 ): PostingMapper {
-    override fun mapToDomain(input: kr.devkyu.data.dto.PostingDto): PostingEntity {
+    override fun mapToDomain(input: PostingDto): PostingEntity {
         val runnerList = input.runnerList?.map {
             userMapper.mapToDomain(it)
         } ?: emptyList()
@@ -57,7 +57,7 @@ class PostingMapperImpl @Inject constructor(
         )
     }
 
-    override fun mapToData(input: PostingEntity): kr.devkyu.data.dto.PostingDto {
+    override fun mapToData(input: PostingEntity): PostingDto {
         val runnerList = input.runnerList?.map {
             userMapper.mapToData(it)
         } ?: emptyList()
@@ -65,7 +65,7 @@ class PostingMapperImpl @Inject constructor(
             profileUrlMapper.mapToData(it)
         } ?: emptyList()
 
-        return kr.devkyu.data.dto.PostingDto(
+        return PostingDto(
             postId = input.postId,
             postingTime = input.postingTime,
             postUserId = input.postUserId,

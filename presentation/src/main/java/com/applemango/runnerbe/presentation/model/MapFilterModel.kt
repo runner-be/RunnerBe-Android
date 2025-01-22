@@ -1,11 +1,11 @@
-package com.applemango.runnerbe.presentation.model.vo
+package com.applemango.runnerbe.presentation.model
 
 import android.os.Parcelable
 import com.applemango.runnerbe.presentation.model.type.Pace
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class MapFilterData(
+data class MapFilterModel(
     val paceTags: List<Pace>,
     val genderTag: String,
     val afterPartyTag: String,
@@ -14,8 +14,8 @@ data class MapFilterData(
     val maxAge: Int
 ) : Parcelable {
     companion object {
-        fun isFilterApplied(data: MapFilterData): Boolean =
-            data != MapFilterData(
+        fun isFilterApplied(data: MapFilterModel): Boolean =
+            data != MapFilterModel(
                 listOf(
                     Pace.ALL,
                     Pace.BEGINNER,

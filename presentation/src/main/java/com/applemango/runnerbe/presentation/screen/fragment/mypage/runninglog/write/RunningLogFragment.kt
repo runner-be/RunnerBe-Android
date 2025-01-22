@@ -20,7 +20,6 @@ import com.applemango.runnerbe.presentation.screen.dialog.message.MessageDialog
 import com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
@@ -105,7 +104,9 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.postedRunningLogFlow.collect { response ->
                     val log = response.runningLog
-                    val stamp = getStampItemByCode(log.stampCode)
+                    val stamp: StampItem? = context?.let {
+                        StampItem.getStampItemByCode(it, log.stampCode)
+                    }
                     viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
                     stamp?.let {
                         viewModel.updateStamp(it)

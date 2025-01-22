@@ -11,13 +11,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.presentation.model.vo.MapFilterData
+import com.applemango.runnerbe.presentation.model.MapFilterModel
 import com.applemango.runnerbe.presentation.model.JoinedRunnerModel
 import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.model.type.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
-import com.applemango.runnerbe.presentation.screen.dialog.stamp.getStampItemByCode
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.model.type.CropRectRatio
@@ -212,8 +211,8 @@ fun getAfterPartyStatus(textView: TextView, isAfterParty: Int) {
 }
 
 @BindingAdapter("bind:filterRedDotVisibility")
-fun ImageView.filterVisibility(filterData: MapFilterData) {
-    val visibility = if (MapFilterData.isFilterApplied(filterData)) {
+fun ImageView.filterVisibility(filterData: MapFilterModel) {
+    val visibility = if (MapFilterModel.isFilterApplied(filterData)) {
         View.VISIBLE
     } else {
         View.GONE
@@ -396,7 +395,7 @@ fun TextView.setLogDateText(date: ZonedDateTime?) {
 @BindingAdapter("bind:logStampSrc")
 fun ImageView.setLogStampSrc(stampCode: String?) {
     if (stampCode == null) return
-    val stamp = getStampItemByCode(stampCode)
+    val stamp = StampItem.getStampItemByCode(this.context, stampCode)
     stamp?.image?.let {
         this.setImageResource(it)
     }
@@ -405,7 +404,7 @@ fun ImageView.setLogStampSrc(stampCode: String?) {
 @BindingAdapter("bind:logStampText")
 fun TextView.setLogStampText(stampCode: String?) {
     if (stampCode == null) return
-    val stamp = getStampItemByCode(stampCode)
+    val stamp = StampItem.getStampItemByCode(this.context, stampCode)
     this.text = stamp?.name ?: ""
 }
 

@@ -7,11 +7,11 @@ import javax.inject.Inject
 
 class CommonMapperImpl @Inject constructor():
     CommonMapper {
-    override fun mapToData(input: CommonEntity): kr.devkyu.data.dto.CommonDto {
-        return kr.devkyu.data.dto.CommonDto()
+    override fun mapToData(input: CommonEntity): CommonDto {
+        return CommonDto()
     }
 
-    override fun mapToDomain(input: kr.devkyu.data.dto.CommonDto): CommonEntity {
+    override fun mapToDomain(input: CommonDto): CommonEntity {
         return CommonEntity(
             isSuccess = input.isSuccess,
             code = input.code,

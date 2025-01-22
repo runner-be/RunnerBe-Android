@@ -115,13 +115,8 @@ class RunningWriteOneFragment :
                     .subscribe {
                         TimeSelectPickerDialog.createShow(
                             requireContext(),
-                            selectedData = viewModel.runningDisplayTime.value,
-                            resultListener = object : TimeResultListener {
-                                override fun getDate(displayTime: TimeSelectData) {
-                                    viewModel.runningDisplayTime.value = displayTime
-                                }
-                            }
-                        )
+                            selectedData = viewModel.runningDisplayTime.value
+                        ) { displayTime -> viewModel.runningDisplayTime.value = displayTime }
                     },
                 locationLayout.clicks()
                     .throttleFirst(1000L, TimeUnit.MILLISECONDS)

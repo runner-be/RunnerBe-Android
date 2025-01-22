@@ -10,11 +10,6 @@ import kr.devkyu.data.dto.OtherUserDto
 import kr.devkyu.data.dto.PostingDetailDto
 import kr.devkyu.data.dto.PostingDto
 import kr.devkyu.data.dto.ProfileUrl
-import com.applemango.runnerbe.data.dto.RunningLogDetailDto
-import com.applemango.runnerbe.data.dto.RunningTalkMessageDto
-import com.applemango.runnerbe.data.dto.RunningTalkRoomDto
-import com.applemango.runnerbe.data.dto.SocialLoginDto
-import com.applemango.runnerbe.data.dto.UserDto
 import com.applemango.runnerbe.entity.AlarmEntity
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.entity.JoinedRunnerEntity
@@ -30,6 +25,11 @@ import com.applemango.runnerbe.entity.RunningTalkMessageEntity
 import com.applemango.runnerbe.entity.RunningTalkRoomEntity
 import com.applemango.runnerbe.entity.SocialLoginEntity
 import com.applemango.runnerbe.entity.UserEntity
+import kr.devkyu.data.dto.RunningLogDetailDto
+import kr.devkyu.data.dto.RunningTalkMessageDto
+import kr.devkyu.data.dto.RunningTalkRoomDto
+import kr.devkyu.data.dto.SocialLoginDto
+import kr.devkyu.data.dto.UserDto
 
 interface CommonMapper:
     BaseMapper<CommonDto, CommonEntity>

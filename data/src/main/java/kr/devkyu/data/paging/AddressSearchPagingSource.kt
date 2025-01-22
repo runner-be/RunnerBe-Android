@@ -2,8 +2,8 @@ package kr.devkyu.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.applemango.runnerbe.data.network.api.GetAddressResultListApi
 import com.applemango.runnerbe.entity.AddressEntity
+import kr.devkyu.data.network.api.GetAddressResultListApi
 import java.io.IOException
 import javax.inject.Inject
 

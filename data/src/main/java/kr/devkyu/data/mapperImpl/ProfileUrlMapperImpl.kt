@@ -7,15 +7,15 @@ import javax.inject.Inject
 
 class ProfileUrlMapperImpl @Inject constructor():
     ProfileUrlMapper {
-    override fun mapToDomain(input: kr.devkyu.data.dto.ProfileUrl): ProfileUrlEntity {
+    override fun mapToDomain(input: ProfileUrl): ProfileUrlEntity {
         return ProfileUrlEntity(
             userId = input.userId,
             profileImageUrl = input.profileImageUrl
         )
     }
 
-    override fun mapToData(input: ProfileUrlEntity): kr.devkyu.data.dto.ProfileUrl {
-        return kr.devkyu.data.dto.ProfileUrl(
+    override fun mapToData(input: ProfileUrlEntity): ProfileUrl {
+        return ProfileUrl(
             userId = input.userId,
             profileImageUrl = input.profileImageUrl
         )

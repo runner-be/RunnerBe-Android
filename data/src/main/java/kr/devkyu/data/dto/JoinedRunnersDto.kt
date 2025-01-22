@@ -7,7 +7,7 @@ data class JoinedRunnersResponse(
     @Json(name = "isSuccess") val isSuccess: Boolean = false,
     @Json(name = "code") val code: Int = 0,
     @Json(name = "message") val message: String? = null,
-    @Json(name = "result") val result: List<kr.devkyu.data.dto.JoinedRunnerDto>
+    @Json(name = "result") val result: List<JoinedRunnerDto>
 )
 
 @JsonClass(generateAdapter = true)
