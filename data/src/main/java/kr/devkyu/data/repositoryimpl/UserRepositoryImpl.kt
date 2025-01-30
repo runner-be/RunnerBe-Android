@@ -12,6 +12,8 @@ import com.applemango.runnerbe.entity.OtherUserEntity
 import com.applemango.runnerbe.entity.NewUserEntity
 import com.applemango.runnerbe.entity.SocialLoginEntity
 import com.applemango.runnerbe.repository.UserRepository
+import kotlinx.coroutines.flow.first
+import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.DeleteUserApi
 import kr.devkyu.data.network.api.GetOtherUserProfileApi
 import kr.devkyu.data.network.api.GetUserDataApi
@@ -34,6 +36,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
+    private val userDataStore: UserDataStore,
     private val kakaoLoginAPI: PostKakaoLoginAPI,
     private val naverLoginAPI: PostNaverLoginAPI,
     private val postNewUserApi: PostNewUserApi,
@@ -52,7 +55,53 @@ class UserRepositoryImpl @Inject constructor(
     private val myPageMapper: MyPageMapper,
     private val otherUserMapper: OtherUserMapper,
 ) : BaseRepository(), UserRepository {
-    override suspend fun withdrawalUser(userId: Int, secretKey: String): CommonEntity {
+    private var cachedUserId: Int? = null
+
+    override suspend fun getUserId(): Int {
+        if (cachedUserId == -1 || cachedUserId == null) {
+            cachedUserId = userDataStore.getUserId().first()
+        }
+        return cachedUserId!!
+    }
+
+    override suspend fun getUserPace(): String {
+        return userDataStore.getPace().first()
+    }
+
+    override suspend fun getDeviceToken(): String? {
+        return userDataStore.getDeviceToken().first()
+    }
+
+    override suspend fun getUuid(): String? {
+        return userDataStore.getUuid().first()
+    }
+
+    override suspend fun updateUserPace(pace: String) {
+        userDataStore.setRunningPace(pace)
+    }
+
+    override suspend fun updateJwtToken(jwtToken: String) {
+        userDataStore.setJwtToken(jwtToken)
+    }
+
+    override suspend fun updateUserId(userId: Int) {
+        userDataStore.setUserId(userId)
+    }
+
+    override suspend fun updateUuid(uuid: String) {
+        userDataStore.setUuid(uuid)
+    }
+
+    override suspend fun updateLoginType(loginType: Int) {
+        userDataStore.setLoginType(loginType)
+    }
+
+    override suspend fun logout() {
+        userDataStore.logoutSet()
+    }
+
+    override suspend fun withdrawalUser(secretKey: String): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 deleteUserApi.withdrawalUser(userId, WithdrawalUserRequest(secretKey))
@@ -63,7 +112,8 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun nicknameChange(userId: Int, nickname: String): CommonEntity {
+    override suspend fun nicknameChange(nickname: String): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 updateNicknameApi.editNickname(userId, EditNicknameRequest(nickname))
@@ -74,7 +124,8 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun jobChange(userId: Int, job: String): CommonEntity {
+    override suspend fun jobChange(job: String): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 jobChangeApi.editJob(userId, EditJobRequest(job))
@@ -85,7 +136,8 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun patchUserImage(userId: Int, imageUrl: String?): CommonEntity {
+    override suspend fun patchUserImage(imageUrl: String?): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 patchUserImageApi.patchUserImg(userId, PatchUserImgRequest(imageUrl))
@@ -97,10 +149,10 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun bookMarkStatusChange(
-        userId: Int,
         postId: Int,
         whetherAdd: String
     ): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 postBookmarkedPostApi.bookMarkStatusChange(userId, whetherAdd, postId)
@@ -111,7 +163,8 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun patchUserPaceRegist(userId: Int, pace: String): CommonEntity {
+    override suspend fun patchUserPaceRegist(pace: String): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 patchUserPaceApi.patchUserPaceRegist(userId, PatchUserPaceRegisterRequest(pace))
@@ -173,7 +226,8 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserData(userId: Int): MyPageEntity {
+    override suspend fun getUserData(): MyPageEntity {
+        val userId = getUserId()
         val response = getUserDataApi.getUserData(userId)
         if (response.isSuccessful) {
             val body = response.body()

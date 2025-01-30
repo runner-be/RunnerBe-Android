@@ -14,13 +14,13 @@ abstract class BaseRepository {
      * @throws IllegalStateException 비즈니스 로직 실패
      */
     protected inline fun <R> handleApiCall(
-        apiCall: () -> Response<kr.devkyu.data.dto.CommonDto>,
-        mapResponse: (kr.devkyu.data.dto.CommonDto) -> R
+        apiCall: () -> Response<CommonDto>,
+        mapResponse: (CommonDto) -> R
     ): R {
         val response = apiCall()
         if (response.isSuccessful) {
             val body = response.body()
-            if (body is kr.devkyu.data.dto.CommonDto && body.isSuccess) {
+            if (body is CommonDto && body.isSuccess) {
                 return mapResponse(body)
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")

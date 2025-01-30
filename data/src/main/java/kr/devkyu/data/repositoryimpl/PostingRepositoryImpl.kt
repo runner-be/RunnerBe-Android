@@ -14,6 +14,9 @@ import com.applemango.runnerbe.repository.PostingRepository
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListParam
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kr.devkyu.data.network.TokenSPreference
+import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.DeletePostApi
 import kr.devkyu.data.network.api.GetBookmarksApi
 import kr.devkyu.data.network.api.GetPostDetailApi
@@ -28,6 +31,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class PostingRepositoryImpl @Inject constructor(
+    private val userDataStore: UserDataStore,
     private val getBookmarksApi: GetBookmarksApi,
     private val postRunningApi: PostRunningApi,
     private val getRunningListApi: GetRunningListApi,
@@ -41,11 +45,19 @@ class PostingRepositoryImpl @Inject constructor(
     private val postingMapper: PostingMapper,
     private val postingDetailMapper: PostingDetailMapper,
 ) : BaseRepository(), PostingRepository {
+    private var cachedUserId: Int? = null
+
+    private suspend fun getUserId(): Int {
+        if (cachedUserId == -1 || cachedUserId == null) {
+            cachedUserId = userDataStore.getUserId().first()
+        }
+        return cachedUserId!!
+    }
 
     override suspend fun writeRunning(
-        userId: Int,
         request: WritePostUseCase.WriteRunningParam
     ): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 postRunningApi.writingRunning(userId,
@@ -86,7 +98,8 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun postApply(postId: Int, userId: Int): CommonEntity {
+    override suspend fun postApply(postId: Int): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 postApplyToPostApi.postApply(postId, userId)
@@ -96,7 +109,8 @@ class PostingRepositoryImpl @Inject constructor(
             }
         )
     }
-    override suspend fun dropPost(postId: Int, userId: Int): CommonEntity {
+    override suspend fun dropPost(postId: Int): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 deletePostApi.dropPost(postId, userId)
@@ -107,7 +121,8 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun reportPost(postId: Int, userId: Int): CommonEntity {
+    override suspend fun reportPost(postId: Int): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 reportPostApi.reportPosting(postId, userId)
@@ -118,7 +133,8 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getBookmarkList(userId: Int): List<PostingEntity> {
+    override suspend fun getBookmarkList(): List<PostingEntity> {
+        val userId = getUserId()
         val response = getBookmarksApi.getBookmarks(userId)
         if (response.isSuccessful) {
             val body = response.body()
@@ -139,6 +155,7 @@ class PostingRepositoryImpl @Inject constructor(
         runningTag: String,
         request: GetRunningListParam
     ): List<PostingEntity> {
+        val userId = userDataStore.getUserId().first()
         val response = getRunningListApi.getRunningList(
             runningTag = runningTag,
             whetherEnd = request.whetherEnd,
@@ -153,7 +170,7 @@ class PostingRepositoryImpl @Inject constructor(
             userLat = request.userLat,
             afterPartyFilter = request.afterPartyFilter,
             keyword = request.keyword,
-            userId = request.userId,
+            userId = userId,
             pageSize = request.pageSize,
             page = request.page
         )
@@ -172,7 +189,8 @@ class PostingRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostDetail(postId: Int, userId: Int): PostingDetailEntity {
+    override suspend fun getPostDetail(postId: Int): PostingDetailEntity {
+        val userId = getUserId()
         val response = getPostDetailApi.getPostDetail(postId, userId)
         if (response.isSuccessful) {
             val body = response.body()

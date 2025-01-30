@@ -8,12 +8,24 @@ import com.applemango.runnerbe.entity.SocialLoginEntity
 import com.applemango.runnerbe.entity.UserEntity
 
 interface UserRepository {
-    suspend fun withdrawalUser(userId: Int, secretKey: String) : CommonEntity
-    suspend fun nicknameChange(userId: Int, nickname : String) : CommonEntity
-    suspend fun jobChange(userId: Int, job : String) : CommonEntity
-    suspend fun patchUserImage(userId: Int, imageUrl : String?) : CommonEntity
-    suspend fun bookMarkStatusChange(userId: Int, postId : Int, whetherAdd : String) : CommonEntity
-    suspend fun patchUserPaceRegist(userId: Int, pace:String): CommonEntity
+
+    suspend fun logout()
+    suspend fun getUserId(): Int
+    suspend fun getUserPace(): String
+    suspend fun getDeviceToken(): String?
+    suspend fun getUuid(): String?
+    suspend fun updateUserPace(pace: String)
+    suspend fun updateJwtToken(jwtToken: String)
+    suspend fun updateUserId(userId: Int)
+    suspend fun updateUuid(uuid: String)
+    suspend fun updateLoginType(loginType: Int)
+
+    suspend fun withdrawalUser(secretKey: String) : CommonEntity
+    suspend fun nicknameChange(nickname : String) : CommonEntity
+    suspend fun jobChange(job : String) : CommonEntity
+    suspend fun patchUserImage(imageUrl : String?) : CommonEntity
+    suspend fun bookMarkStatusChange(postId : Int, whetherAdd : String) : CommonEntity
+    suspend fun patchUserPaceRegist(pace:String): CommonEntity
 
     suspend fun kakaoLogin(accessToken: String): SocialLoginEntity
     suspend fun naverLogin(accessToken: String): SocialLoginEntity
@@ -24,6 +36,6 @@ interface UserRepository {
         genderTag : String,
         jobTag : String,
         deviceToken : String) : NewUserEntity
-    suspend fun getUserData(userId : Int) : MyPageEntity
+    suspend fun getUserData() : MyPageEntity
     suspend fun getOtherUserProfile(targetUserId: Int): OtherUserEntity
 }

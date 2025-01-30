@@ -1,13 +1,16 @@
 package kr.devkyu.data.repositoryimpl
 
-import kr.devkyu.data.mapper.CommonMapper
-import kr.devkyu.data.mapper.MonthlyRunningLogMapper
-import kr.devkyu.data.mapper.RunningLogDetailMapper
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.entity.MonthlyRunningLogEntity
 import com.applemango.runnerbe.entity.RunningLogDetailEntity
 import com.applemango.runnerbe.repository.RunningLogRepository
 import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
+import kotlinx.coroutines.flow.first
+import kr.devkyu.data.mapper.CommonMapper
+import kr.devkyu.data.mapper.MonthlyRunningLogMapper
+import kr.devkyu.data.mapper.RunningLogDetailMapper
+import kr.devkyu.data.network.TokenSPreference
+import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.DeleteRunningLogApi
 import kr.devkyu.data.network.api.GetMonthlyRunningLogsApi
 import kr.devkyu.data.network.api.GetRunningLogDetailApi
@@ -18,6 +21,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class RunningLogRepositoryImpl @Inject constructor(
+    private val userDataStore: UserDataStore,
     private val postRunningLogApi: PostRunningLogApi,
     private val deleteRunningLogApi: DeleteRunningLogApi,
     private val getRunningLogDetailApi: GetRunningLogDetailApi,
@@ -26,14 +30,22 @@ class RunningLogRepositoryImpl @Inject constructor(
     private val commonMapper: CommonMapper,
     private val monthlyRunningLogMapper: MonthlyRunningLogMapper,
     private val runningLogDetailMapper: RunningLogDetailMapper,
-    ) : BaseRepository(), RunningLogRepository {
+) : BaseRepository(), RunningLogRepository {
+    private var cachedUserId: Int? = null
+
+    private suspend fun getUserId(): Int {
+        if (cachedUserId == -1 || cachedUserId == null) {
+            cachedUserId = userDataStore.getUserId().first()
+        }
+        return cachedUserId!!
+    }
 
     override suspend fun postRunningLog(
-        userId: Int,
         year: Int,
         month: Int,
         runningLog: RunningLogParam
     ): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 postRunningLogApi.postRunningLog(
@@ -57,10 +69,10 @@ class RunningLogRepositoryImpl @Inject constructor(
     }
 
     override suspend fun patchRunningLog(
-        userId: Int,
         logId: Int,
         runningLog: RunningLogParam
     ): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 patchRunningLogApi.patchRunningLog(
@@ -84,9 +96,9 @@ class RunningLogRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteRunningLog(
-        userId: Int,
         logId: Int
     ): CommonEntity {
+        val userId = getUserId()
         return handleApiCall(
             apiCall = {
                 deleteRunningLogApi.deleteRunningLog(userId, logId)
@@ -97,16 +109,16 @@ class RunningLogRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getMonthlyRunningLogs(
-        userId: Int,
-        year: Int,
-        month: Int
-    ): MonthlyRunningLogEntity {
-        val response = getMonthlyRunningLogsApi.getMonthlyRunningLog(userId, year, month)
+    override suspend fun getRunningLogDetail(
+        targetUserId: Int,
+        logId: Int
+    ): RunningLogDetailEntity {
+        val userId = getUserId()
+        val response = getRunningLogDetailApi.getRunningLogDetail(userId, logId)
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return monthlyRunningLogMapper.mapToDomain(body)
+                return runningLogDetailMapper.mapToDomain(body)
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }
@@ -115,12 +127,16 @@ class RunningLogRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRunningLogDetail(userId: Int, logId: Int): RunningLogDetailEntity {
-        val response = getRunningLogDetailApi.getRunningLogDetail(userId, logId)
+    override suspend fun getMonthlyRunningLogs(
+        targetUserId: Int,
+        year: Int,
+        month: Int
+    ): MonthlyRunningLogEntity {
+        val response = getMonthlyRunningLogsApi.getMonthlyRunningLog(targetUserId, year, month)
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return runningLogDetailMapper.mapToDomain(body)
+                return monthlyRunningLogMapper.mapToDomain(body)
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }

@@ -8,6 +8,6 @@ import com.applemango.runnerbe.usecaseImpl.runninglog.WriteStampToJoinedRunnerUs
 interface JoinedRunnerRepository {
     suspend fun attendanceAccession(postId: Int, request: AttendanceAccessionUseCase.AttendanceAccessionParam) : CommonEntity
     suspend fun postWhetherAccept(postId: Int, applicantId: Int, whetherAccept : String) : CommonEntity
-    suspend fun getJoinedRunnerList(userId: Int, logId: Int): List<JoinedRunnerEntity>
-    suspend fun postStampToJoinedRunner(userId: Int, logId: Int, stamp: WriteStampToJoinedRunnerUseCase.PostStampParam): CommonEntity
+    suspend fun getJoinedRunnerList(logId: Int): List<JoinedRunnerEntity>
+    suspend fun postStampToJoinedRunner(logId: Int, stamp: WriteStampToJoinedRunnerUseCase.PostStampParam): CommonEntity
 }

@@ -5,6 +5,6 @@ import com.applemango.runnerbe.entity.CommonEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
-    suspend fun patchAlarm(userId: Int, pushOn : Boolean) : CommonEntity
+    suspend fun patchAlarm(pushOn : Boolean) : CommonEntity
     fun getAlarms(): Flow<List<AlarmEntity>>
 }

@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 
 interface PostingRepository {
 
-    suspend fun writeRunning(userId: Int, request : WriteRunningParam) : CommonEntity
+    suspend fun writeRunning(request : WriteRunningParam) : CommonEntity
     suspend fun postClosing(postId: Int) : CommonEntity
-    suspend fun postApply(postId: Int, userId: Int) : CommonEntity
-    suspend fun dropPost(postId: Int, userId: Int): CommonEntity
-    suspend fun reportPost(postId: Int, userId: Int): CommonEntity
+    suspend fun postApply(postId: Int) : CommonEntity
+    suspend fun dropPost(postId: Int): CommonEntity
+    suspend fun reportPost(postId: Int): CommonEntity
 
     suspend fun getRunningList(runningTag: String, request: GetRunningListParam) : List<PostingEntity>
     fun getAddressList(keyword: String): Flow<PagingData<AddressEntity>>
-    suspend fun getBookmarkList(userId: Int) :List<PostingEntity>
-    suspend fun getPostDetail(postId : Int, userId: Int) : PostingDetailEntity
+    suspend fun getBookmarkList() :List<PostingEntity>
+    suspend fun getPostDetail(postId : Int) : PostingDetailEntity
 }

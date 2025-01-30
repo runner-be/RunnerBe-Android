@@ -1,12 +1,13 @@
 package kr.devkyu.data.repositoryimpl
 
-import kr.devkyu.data.mapper.CommonMapper
-import kr.devkyu.data.mapper.RunningTalkMessageMapper
-import kr.devkyu.data.mapper.RunningTalkRoomMapper
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.entity.RunningTalkMessagesEntity
 import com.applemango.runnerbe.entity.RunningTalkRoomEntity
 import com.applemango.runnerbe.repository.RunningTalkRepository
+import kr.devkyu.data.mapper.CommonMapper
+import kr.devkyu.data.mapper.RunningTalkMessageMapper
+import kr.devkyu.data.mapper.RunningTalkRoomMapper
+import kr.devkyu.data.network.TokenSPreference
 import kr.devkyu.data.network.api.GetRunningTalkMessagesApi
 import kr.devkyu.data.network.api.GetRunningTalkRoomsApi
 import kr.devkyu.data.network.api.PostMessageApi
@@ -26,7 +27,11 @@ class RunningTalkRepositoryImpl @Inject constructor(
     private val runningTalkMessageMapper: RunningTalkMessageMapper,
 ) : BaseRepository(), RunningTalkRepository {
 
-    override suspend fun sendMessage(roomId: Int, content: String?, url: String?): CommonEntity {
+    override suspend fun sendMessage(
+        roomId: Int,
+        content: String?,
+        url: String?
+    ): CommonEntity {
         return handleApiCall(
             apiCall = {
                 sendMessagesApi.sendMessage(roomId, SendMessageRequest(content, url))
@@ -42,8 +47,8 @@ class RunningTalkRepositoryImpl @Inject constructor(
             apiCall = {
                 postMessageReportApi.messageReport(
                     MessageReportRequest(
-                    messageIdList.joinToString(",")
-                )
+                        messageIdList.joinToString(",")
+                    )
                 )
             },
             mapResponse = { body ->
