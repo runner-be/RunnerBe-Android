@@ -11,8 +11,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AgreeToTermsViewModel : ViewModel() {
+class AgreeToTermsViewModel @Inject constructor(
+    application: RunnerBeApplication
+): ViewModel() {
+    private val resource = application.resources
 
     val serviceTerms : MutableStateFlow<Boolean> = MutableStateFlow(false)
     val privacyTerms : MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -44,7 +48,7 @@ class AgreeToTermsViewModel : ViewModel() {
     fun serviceUseTermsClicked() {
         viewModelScope.launch {
             _actions.emit(AgreeToTermsAction.MoveToWebView(
-                title = RunnerBeApplication.instance.resources.getString(R.string.terms_of_service),
+                title = resource.getString(R.string.terms_of_service),
                 url = "https://raw.githubusercontent.com/runner-be/runner-be.github.io/main/Policy_Service.txt"
             ))
         }
@@ -53,7 +57,7 @@ class AgreeToTermsViewModel : ViewModel() {
     fun privacyTermsClicked() {
         viewModelScope.launch {
             _actions.emit(AgreeToTermsAction.MoveToWebView(
-                title = RunnerBeApplication.instance.resources.getString(R.string.privacy_policy),
+                title = resource.getString(R.string.privacy_policy),
                 url = "https://raw.githubusercontent.com/runner-be/runner-be.github.io/main/Policy_Privacy_Collect.txt"
             ))
         }
@@ -62,7 +66,7 @@ class AgreeToTermsViewModel : ViewModel() {
     fun locationServiceUseTermsClicked() {
         viewModelScope.launch {
             _actions.emit(AgreeToTermsAction.MoveToWebView(
-                title = RunnerBeApplication.instance.resources.getString(R.string.use_a_location_service),
+                title = resource.getString(R.string.use_a_location_service),
                 url = "https://raw.githubusercontent.com/runner-be/runner-be.github.io/main/Policy_Location.txt"
             ))
         }

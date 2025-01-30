@@ -9,7 +9,6 @@ import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.usecaseImpl.user.UpdateUserPaceUseCase
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.model.type.Pace
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.presentation.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,10 +22,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PaceInfoViewModel @Inject constructor(
+    application: RunnerBeApplication,
     val updateUserPaceUseCase: UpdateUserPaceUseCase,
+    paceInfoProvider: PaceInfoProvider,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val paceInfoList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(initPaceInfoList())
+    private val resources = application.resources
+
+    val paceInfoList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(paceInfoProvider.initPaceInfoList())
     val isConfirmButtonEnabled = combine(paceInfoList) { data ->
         data[0].any { it.isSelected }
     }.stateIn(
@@ -61,9 +64,8 @@ class PaceInfoViewModel @Inject constructor(
 
     fun patchUserPace() {
         viewModelScope.launch {
-            val userId = RunnerBeApplication.mTokenPreference.getUserId()
             val selectedPace = paceInfoList.value.firstOrNull { it.isSelected } ?: return@launch
-            val result = updateUserPaceUseCase(userId, selectedPace.pace.key)
+            val result = updateUserPaceUseCase(selectedPace.pace.key)
             if (result.isSuccess) {
                 _action.emit(
                     PaceInfoRegistAction.ShowCompleteDialog(

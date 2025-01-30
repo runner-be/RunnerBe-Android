@@ -1,10 +1,11 @@
 package com.applemango.runnerbe.presentation.screen.fragment.chat.detail
 
+import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.presentation.mapper.RunningTalkMessageMapper
 import com.applemango.runnerbe.presentation.model.RoomInfoModel
@@ -16,16 +17,20 @@ import com.applemango.runnerbe.usecaseImpl.runningtalk.SendMessageUseCase
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.mapper.RunningTalkDetailMapper
 import com.applemango.runnerbe.presentation.screen.fragment.chat.detail.uistate.RunningTalkUiState
 import com.applemango.runnerbe.presentation.state.UiState
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -35,11 +40,16 @@ import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class RunningTalkDetailViewModel @Inject constructor(
+    private val contentResolver: ContentResolver,
     private val runningTalkDetailUseCase: GetRunningTalkMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
     private val reportMessageUseCase: ReportMessageUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
     private val runningTalkMessageMapper: RunningTalkMessageMapper,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
 
     val actions: MutableSharedFlow<RunningTalkDetailAction> = MutableSharedFlow()
     var roomId: Int? = null
@@ -59,6 +69,13 @@ class RunningTalkDetailViewModel @Inject constructor(
     private val failedImageList = ArrayList<String>()
     private val successImageList = ArrayList<String>()
     private val maxImageCount = 3
+
+    fun fetchUserId() {
+        viewModelScope.launch {
+            val id = getUserIdUseCase()
+            _userId.value = id
+        }
+    }
 
     fun getDetailData(isRefresh: Boolean): Job = viewModelScope.launch {
         roomId?.let { roomId ->
@@ -126,7 +143,7 @@ class RunningTalkDetailViewModel @Inject constructor(
             } else {
                 actions.emit(
                     RunningTalkDetailAction.ShowToast(
-                        RunnerBeApplication.instance.getString(R.string.image_count_alert)
+                        context.resources.getString(R.string.image_count_alert)
                     )
                 )
             }
@@ -136,11 +153,11 @@ class RunningTalkDetailViewModel @Inject constructor(
     // firebase storage 에 이미지 업로드하는 method
     private suspend fun uploadImg(roomId: Int, uri: String, primaryKey: Int): String? {
         return try {
-            val name = RunnerBeApplication.mTokenPreference.getUserId()
-            val fileName = "$name${Calendar.getInstance().time}${primaryKey}_.png"
+            val id = userId.value
+            val fileName = "$id${Calendar.getInstance().time}${primaryKey}_.png"
             val reference: StorageReference = Firebase.storage.reference.child("item").child(fileName)
 
-            val inputStream = RunnerBeApplication.instance.contentResolver.openInputStream(Uri.parse(uri))
+            val inputStream = contentResolver.openInputStream(Uri.parse(uri))
                 ?: throw IllegalArgumentException("Cannot open InputStream for URI: $uri")
 
             val uploadTask = reference.putStream(inputStream)

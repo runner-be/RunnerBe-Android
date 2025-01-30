@@ -3,7 +3,6 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.presentation.model.UserModel
 import com.applemango.runnerbe.usecaseImpl.user.UpdateJobUseCase
@@ -16,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
     private val updateNicknameUseCase: UpdateNicknameUseCase,
-    private val updateJobUseCase: UpdateJobUseCase
+    private val updateJobUseCase: UpdateJobUseCase,
 ): ViewModel() {
 
     val userInfo : MutableLiveData<UserModel> = MutableLiveData()
@@ -30,7 +29,7 @@ class EditProfileViewModel @Inject constructor(
     val jobChangeState get() = _jobChangeState
 
     fun nicknameChange(changedNickname : String) = viewModelScope.launch {
-        val result = updateNicknameUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedNickname)
+        val result = updateNicknameUseCase(changedNickname)
         if (result.isSuccess) {
             _nicknameChangeState.postValue(UiState.Success(result.code))
         } else {
@@ -39,7 +38,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun jobChange(changedJob: String) = viewModelScope.launch {
-        val result = updateJobUseCase(RunnerBeApplication.mTokenPreference.getUserId(), changedJob)
+        val result = updateJobUseCase(changedJob)
         if (result.isSuccess) {
             _jobChangeState.postValue(UiState.Success(result.code))
         } else {

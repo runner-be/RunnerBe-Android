@@ -27,14 +27,14 @@ class GroupProfilesViewModel @Inject constructor(
     private val writeStampToJoinedRunnerUseCase: WriteStampToJoinedRunnerUseCase,
     private val joinedRunnerMapper: JoinedRunnerMapper,
 ): ViewModel() {
-    private val runnerInfo = MutableStateFlow<Pair<Int, Int>?>(null)
+    private val logId = MutableStateFlow<Int?>(null)
     private val lastSelectedUserId = MutableStateFlow<Int?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val joinedRunnerListFlow: Flow<List<JoinedRunnerModel>> = runnerInfo
+    val joinedRunnerListFlow: Flow<List<JoinedRunnerModel>> = logId
         .filterNotNull()
-        .flatMapLatest { (first, second) ->
-            getJoinedRunnersUseCase(first, second).map {
+        .flatMapLatest { lId ->
+            getJoinedRunnersUseCase(lId).map {
                 it.map { entity ->
                     joinedRunnerMapper.mapToPresentation(entity)
                 }
@@ -45,7 +45,7 @@ class GroupProfilesViewModel @Inject constructor(
         }
         .flowOn(Dispatchers.IO)
 
-    fun postStampToJoinedRunner(userId: Int, gatheringId: Int, stampCode: String) {
+    fun postStampToJoinedRunner(gatheringId: Int, stampCode: String) {
         viewModelScope.launch {
             try {
                 val targetUserId = requireNotNull(lastSelectedUserId.value) {
@@ -60,7 +60,7 @@ class GroupProfilesViewModel @Inject constructor(
                  * @author Loki
                  * 스탬프 부여 성공 여부에 따라 피드백 추가하기
                  */
-                writeStampToJoinedRunnerUseCase(userId, gatheringId, stampRequest)
+                writeStampToJoinedRunnerUseCase(gatheringId, stampRequest)
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
             }
@@ -71,7 +71,7 @@ class GroupProfilesViewModel @Inject constructor(
         lastSelectedUserId.value = userId
     }
 
-    fun updateRunnerInfo(userId: Int, logId: Int) {
-        runnerInfo.value = Pair(userId, logId)
+    fun updateRunnerInfo(logId: Int) {
+        this.logId.value = logId
     }
 }

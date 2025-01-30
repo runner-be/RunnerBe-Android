@@ -4,18 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.request.SocialLoginRequest
 import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
 import com.applemango.runnerbe.presentation.model.type.LoginType
+import com.applemango.runnerbe.repository.FirebaseTokenRepository
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
 import com.applemango.runnerbe.usecaseImpl.user.KakaoLoginUseCase
 import com.applemango.runnerbe.usecaseImpl.user.NaverLoginUseCase
+import com.applemango.runnerbe.usecaseImpl.user.UpdateFirebaseTokenUseCase
+import com.applemango.runnerbe.usecaseImpl.user.UpdateUserPaceUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateJwtTokenUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateLoginTypeUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateUserIdUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateUuidUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +28,14 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val kakaoLoginUseCase: KakaoLoginUseCase,
     private val naverLoginUseCase: NaverLoginUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val updateUserPaceUseCase: UpdateUserPaceUseCase,
+    private val updateUuidUseCase: UpdateUuidUseCase,
+    private val updateUserIdUseCase: UpdateUserIdUseCase,
+    private val updateJwtTokenUseCase: UpdateJwtTokenUseCase,
+    private val updateLoginTypeUseCase: UpdateLoginTypeUseCase,
+    private val updateFirebaseTokenUseCase: UpdateFirebaseTokenUseCase
 ) : ViewModel() {
 
     private val _isTokenLogin: MutableLiveData<Boolean> = MutableLiveData()
@@ -36,11 +48,10 @@ class SplashViewModel @Inject constructor(
     //UI 동작 확인용 테스트 코드
     fun isTokenCheck() {
         viewModelScope.launch {
-            // userId = -1, uuid = ""
-            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            val uuid = RunnerBeApplication.mTokenPreference.getUuid()
+            val userId = getUserIdUseCase()
+//            val uuid = RunnerBeApplication.mTokenPreference.getUuid()
 
-            if (userId == -1 && uuid.isNullOrEmpty()) {
+            if (userId == -1) {
                 _isTokenLogin.postValue(false)
             } else {
                 _isTokenLogin.postValue(true)
@@ -48,40 +59,38 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    fun login(type : LoginType, body: SocialLoginRequest) = viewModelScope.launch  {
-        runCatching {
-            when(type) {
-                LoginType.KAKAO -> kakaoLoginUseCase(body.accessToken)
-                LoginType.NAVER -> naverLoginUseCase(body.accessToken)
+    fun login(type : LoginType, accessToken: String) = viewModelScope.launch  {
+        try {
+            val repo = when (type) {
+                LoginType.KAKAO -> kakaoLoginUseCase(accessToken)
+                LoginType.NAVER -> naverLoginUseCase(accessToken)
             }
-        }.onSuccess { repo ->
-            repo.catch {
-                _isSocialLogin.value = false
-                it.printStackTrace()
-            }.collect {
-                val result = it.login
-                RunnerBeApplication.mTokenPreference.apply {
-                    setLoginType(type)
-                    result.jwt?.let { token -> setToken(token) }
-                    result.userId?.let { id ->
-                        setUserId(id)
-                        getUserData(id)
-                    }
-                    result.uuid?.let { uuid ->
-                        setUuid(uuid)
-                    }
-                }
+
+            repo.collect { result ->
+                val loginResult = result.login
+
+                val updateLoginTypeDeferred = async { updateLoginTypeUseCase(type.value) }
+                val updateJwtTokenDeferred = async { loginResult.jwt?.let { updateJwtTokenUseCase(it) } }
+                val updateUserIdDeferred = async { loginResult.userId?.let { updateUserIdUseCase(it) } }
+                val updateUuidDeferred = async { loginResult.uuid?.let { updateUuidUseCase(it) } }
+
+                val userDeferred = async { loginResult.userId?.let { getUserDataUseCase().first().userInfo } }
+
+                updateLoginTypeDeferred.await()
+                updateJwtTokenDeferred.await()
+                updateUserIdDeferred.await()
+                updateUuidDeferred.await()
+
+                val user = userDeferred.await()
+                user?.pace?.let { updateUserPaceUseCase(it) }
+
+                updateFirebaseTokenUseCase()
+
                 _isSocialLogin.value = true
             }
-        }
-    }
-
-    private fun getUserData(userId: Int) = CoroutineScope(Dispatchers.IO).launch {
-        getUserDataUseCase(userId).collect {
-            kotlin.runCatching {
-                val result = it.userInfo?.pace
-                RunnerBeApplication.mTokenPreference.setMyRunningPace(result ?: "")
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            _isSocialLogin.value = false
         }
     }
 }

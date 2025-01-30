@@ -1,9 +1,9 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map.write
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
+import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.vo.RunningWriteTransferData
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
 import com.applemango.runnerbe.presentation.model.type.GenderTag
@@ -11,8 +11,8 @@ import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.screen.dialog.dateselect.DateSelectData
 import com.applemango.runnerbe.presentation.screen.dialog.timeselect.TimeSelectData
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoProvider
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoList
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase.WriteRunningParam
 import com.naver.maps.geometry.LatLng
@@ -25,10 +25,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningWriteTwoViewModel @Inject constructor(
-    private val applicationContext: Context,
+    application: RunnerBeApplication,
+    paceInfoProvider: PaceInfoProvider,
     private val writeUseCase: WritePostUseCase
 ) : ViewModel() {
-    val paceList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(initPaceInfoList())
+    private val resources = application.resources
+
+    val paceList: MutableStateFlow<List<PaceSelectItem>> = MutableStateFlow(paceInfoProvider.initPaceInfoList())
     val oneData: MutableStateFlow<RunningWriteTransferData> = MutableStateFlow(
         RunningWriteTransferData(
             runningTitle = "",
@@ -55,7 +58,7 @@ class RunningWriteTwoViewModel @Inject constructor(
         data[0].any { it.isSelected }
     }.stateIn(scope = viewModelScope, started = SharingStarted.WhileSubscribed(1000L),initialValue = false)
     val recruitmentAge = combine(recruitmentStartAge, recruitmentEndAge) { start, end ->
-        applicationContext.resources.getString(
+        resources.getString(
             R.string.display_recruitment_age_setting,
             start.toString(),
             end.toString()
@@ -85,9 +88,9 @@ class RunningWriteTwoViewModel @Inject constructor(
         }
     }
 
-    fun writeRunning(userId: Int) = viewModelScope.launch {
+    fun writeRunning() = viewModelScope.launch {
         val placedata = oneData.value.placeData
-        val result = writeUseCase(userId, WriteRunningParam(
+        val result = writeUseCase(WriteRunningParam(
             runningTitle = oneData.value.runningTitle,
             runningTag = oneData.value.runningTag.tag,
             gatheringTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(oneData.value.runningDate),

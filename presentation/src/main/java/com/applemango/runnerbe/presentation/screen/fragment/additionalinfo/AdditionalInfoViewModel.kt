@@ -3,14 +3,18 @@ package com.applemango.runnerbe.presentation.screen.fragment.additionalinfo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.type.GenderTag
 import com.applemango.runnerbe.presentation.model.type.JobButtonId
 import com.applemango.runnerbe.presentation.model.NewUserModel
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.usecaseImpl.user.RegisterUserUseCase
 import com.applemango.runnerbe.usecaseImpl.user.RegisterUserUseCase.JoinUserParam
+import com.applemango.runnerbe.usecaseImpl.user.local.GetDeviceTokenUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUuidUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateJwtTokenUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,7 +23,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdditionalInfoViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val getDeviceTokenUseCase: GetDeviceTokenUseCase,
+    private val getUuidUseCase: GetUuidUseCase,
+    private val updateUserIdUseCase: UpdateUserIdUseCase,
+    private val updateJwtTokenUseCase: UpdateJwtTokenUseCase,
 ): ViewModel() {
 
     var yearOfBrith : String? = null
@@ -40,8 +48,12 @@ class AdditionalInfoViewModel @Inject constructor(
 
     fun register() = viewModelScope.launch {
         _registerState.emit(UiState.Loading)
-        val deviceToken = RunnerBeApplication.mTokenPreference.getDeviceToken() // 디바이스 토큰
-        val uuid = RunnerBeApplication.mTokenPreference.getUuid()
+        val deferredDeviceToken = async { getDeviceTokenUseCase() }
+        val deferredUuid = async { getUuidUseCase() }
+
+        val deviceToken = deferredDeviceToken.await()
+        val uuid = deferredUuid.await()
+
         if(deviceToken != null && uuid != null) {
             yearOfBrith?.let {
                 runCatching {
@@ -67,10 +79,8 @@ class AdditionalInfoViewModel @Inject constructor(
                         }
 
                         if (result != null) {
-                            RunnerBeApplication.mTokenPreference.apply {
-                                setUserId(result.insertedUserId)
-                                setToken(result.token)
-                            }
+                            updateUserIdUseCase(result.insertedUserId)
+                            updateJwtTokenUseCase(result.token)
                         }
                     }?:run {
                         _registerState.emit(UiState.Failed("직업을 선택해주세요."))

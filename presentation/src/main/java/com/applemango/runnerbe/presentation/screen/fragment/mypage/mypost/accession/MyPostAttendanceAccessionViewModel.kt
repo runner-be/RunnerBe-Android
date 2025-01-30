@@ -30,11 +30,10 @@ class MyPostAttendanceAccessionViewModel @Inject constructor(
 
     fun getUserList(
         postId: Int,
-        userId: Int
     ) {
         this.postId = postId
         viewModelScope.launch {
-            getPostDetailUseCase(postId, userId).collect {
+            getPostDetailUseCase(postId).collect {
                 userListFlow.value = it.runnerInfo?.map { user ->
                     userMapper.mapToPresentation(user)
                 } ?: emptyList()

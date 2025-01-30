@@ -48,14 +48,10 @@ class OtherUserProfileViewModel @Inject constructor(
                     _userJoinedPosting.value =
                         parsedResult.otherUser.userPosting.sortedByDescending { running ->
                             running.gatheringTime
-                        } ?: emptyList()
+                        }
                     _otherUserInfo.value = parsedResult.otherUser.userInfo
                 }
         }
-    }
-
-    fun updateWeeklyViewPagerPosition(position: Int) {
-        _currentWeeklyViewPagerPosition.value = position
     }
 
     fun addViewPagerCounts(groupCount: Int, personalCount: Int) {

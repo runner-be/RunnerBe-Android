@@ -2,15 +2,17 @@ package com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunnin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.mapper.PostingMapper
 import com.applemango.runnerbe.presentation.mapper.UserMapper
 import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.model.type.JoinedRunningCategory
 import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -23,9 +25,13 @@ import javax.inject.Inject
 @HiltViewModel
 class JoinedRunningViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
     private val userMapper: UserMapper,
     private val postingMapper: PostingMapper,
 ) : ViewModel() {
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
     val selectedCategoryId: MutableStateFlow<JoinedRunningCategory> = MutableStateFlow(
         JoinedRunningCategory.ALL
     )
@@ -40,7 +46,7 @@ class JoinedRunningViewModel @Inject constructor(
         when (categoryId) {
             JoinedRunningCategory.ALL -> postings
             JoinedRunningCategory.MY -> {
-                val userId = RunnerBeApplication.mTokenPreference.getUserId()
+                val userId = getUserIdUseCase()
                 postings.filter {
                     it.postUserId == userId
                 }
@@ -65,9 +71,9 @@ class JoinedRunningViewModel @Inject constructor(
         this.userPostings.value = parsedPostList
     }
 
-    fun getUserRunningPostings(userId: Int) {
+    fun getUserRunningPostings() {
         viewModelScope.launch {
-            getUserDataUseCase(userId)
+            getUserDataUseCase()
                 .collectLatest { response ->
                     val result = response.myRunning.map {
                         postingMapper.mapToPresentation(it)

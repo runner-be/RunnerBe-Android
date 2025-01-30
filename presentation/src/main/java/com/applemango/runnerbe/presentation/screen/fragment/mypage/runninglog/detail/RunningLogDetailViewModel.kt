@@ -40,9 +40,9 @@ class RunningLogDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteRunningLog(userId: Int, logId: Int) {
+    fun deleteRunningLog(logId: Int) {
         viewModelScope.launch {
-            val result = deleteRunningLogUseCase(userId, logId)
+            val result = deleteRunningLogUseCase(logId)
             _deleteRunningLogResultFlow.emit(result.isSuccess)
         }
     }

@@ -18,10 +18,9 @@ import javax.inject.Inject
 class OtherUserJoinedPostViewModel @Inject constructor(
     private val getOtherUserDataUseCase: GetOtherUserDataUseCase,
     private val otherUserMyPageMapper: OtherUserMyPageMapper,
-    private val postingMapper: PostingMapper,
 ) : ViewModel() {
     val targetNickname = MutableStateFlow<String?>(null)
-    val postSize = MutableStateFlow<Int>(0)
+    val postSize = MutableStateFlow(0)
 
     private var _postList: MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
     val postList: StateFlow<List<PostingModel>> get() = _postList.asStateFlow()

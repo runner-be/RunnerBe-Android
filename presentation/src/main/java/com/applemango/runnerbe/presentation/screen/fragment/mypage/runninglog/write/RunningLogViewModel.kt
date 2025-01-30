@@ -1,27 +1,29 @@
 package com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write
 
+import android.content.ContentResolver
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
-import com.applemango.runnerbe.data.network.request.RunningLogRequest
+import com.applemango.runnerbe.presentation.mapper.RunningLogDetailMapper
+import com.applemango.runnerbe.presentation.model.RunningLogDetailModel
 import com.applemango.runnerbe.usecaseImpl.runninglog.GetJoinedRunnersUseCase
 import com.applemango.runnerbe.usecaseImpl.runninglog.GetRunningLogDetailUseCase
 import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase
 import com.applemango.runnerbe.usecaseImpl.runninglog.WriteRunningLogUseCase
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.usecaseImpl.runninglog.UpdateRunningLogUseCase.RunningLogParam
-import com.applemango.runnerbe.util.LogUtil
 import com.applemango.runnerbe.util.parseKoreanDateToLocalDate
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
@@ -40,8 +42,13 @@ class RunningLogViewModel @Inject constructor(
     private val writeRunningLogUseCase: WriteRunningLogUseCase,
     private val updateRunningLogUseCase: UpdateRunningLogUseCase,
     private val getJoinedRunnersUseCase: GetJoinedRunnersUseCase,
-    private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase
+    private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase,
+    private val runningLogDetailMapper: RunningLogDetailMapper,
+    private val contentResolver: ContentResolver
 ) : ViewModel() {
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
     private val logId = MutableStateFlow<Int?>(null)
     val gatheringId = MutableStateFlow<Int?>(null)
     val logDate = MutableStateFlow("")
@@ -60,17 +67,16 @@ class RunningLogViewModel @Inject constructor(
     val logVisibility = MutableStateFlow(true)
     val joinedRunnerSize = MutableStateFlow(0)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val postedRunningLogFlow = logId
-        .filterNotNull()
-        .flatMapLatest {
-            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            getRunningLogDetailUseCase(userId, it)
+    suspend fun getPostedRunningLog(
+        targetUserId: Int,
+        logId: Int
+    ): Flow<RunningLogDetailModel> {
+        return getRunningLogDetailUseCase(targetUserId, logId).map {
+            runningLogDetailMapper.mapToPresentation(it)
         }.flowOn(Dispatchers.IO)
+    }
 
-    suspend fun postRunningLog(
-        userId: Int,
-    ): Pair<Boolean, String?> {
+    suspend fun postRunningLog(): Pair<Boolean, String?> {
         val imageUrl = if (logImage.value != null) {
             uploadImg(logImage.value.toString())
         } else {
@@ -101,7 +107,6 @@ class RunningLogViewModel @Inject constructor(
 
         return if (logId == null) {
             val result = writeRunningLogUseCase(
-                userId,
                 date.year,
                 date.monthValue,
                 runningLog
@@ -109,7 +114,6 @@ class RunningLogViewModel @Inject constructor(
             Pair(result.isSuccess, null)
         } else {
             val result = updateRunningLogUseCase(
-                userId,
                 logId,
                 runningLog
             )
@@ -119,11 +123,10 @@ class RunningLogViewModel @Inject constructor(
 
     private suspend fun uploadImg(uri: String): String? {
         return try {
-            val name = RunnerBeApplication.mTokenPreference.getUserId()
-            val fileName = "${name}_running_log_${Calendar.getInstance().time}png"
+            val fileName = "${System.currentTimeMillis()}_running_log_${Calendar.getInstance().time}png"
             val reference: StorageReference = Firebase.storage.reference.child("item").child(fileName)
 
-            val inputStream = RunnerBeApplication.instance.contentResolver.openInputStream(Uri.parse(uri))
+            val inputStream = contentResolver.openInputStream(Uri.parse(uri))
                 ?: throw IllegalArgumentException("Cannot open InputStream for URI: $uri")
 
             val uploadTask = reference.putStream(inputStream)
@@ -172,8 +175,7 @@ class RunningLogViewModel @Inject constructor(
         gatheringId?.let { gId ->
             this.gatheringId.value = gId
             viewModelScope.launch(Dispatchers.IO) {
-                val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                getJoinedRunnersUseCase(userId, gId).catch {
+                getJoinedRunnersUseCase(gId).catch {
                     it.printStackTrace()
                 }.collectLatest { response ->
                     joinedRunnerSize.value = response.size

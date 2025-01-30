@@ -21,10 +21,9 @@ class MyPostAttendanceSeeViewModel @Inject constructor(
 
     fun getUserList(
         postId: Int,
-        userId: Int
     ) {
         viewModelScope.launch {
-            getPostDetailUseCase(postId, userId).collectLatest {
+            getPostDetailUseCase(postId).collectLatest {
                 userListFlow.value = it.runnerInfo?.map { user ->
                     userMapper.mapToPresentation(user)
                 } ?: emptyList()

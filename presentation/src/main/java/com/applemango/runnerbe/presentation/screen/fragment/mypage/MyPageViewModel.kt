@@ -4,10 +4,8 @@ import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.mapper.MonthlyRunningLogMapper
 import com.applemango.runnerbe.presentation.mapper.PostingMapper
-import com.applemango.runnerbe.presentation.mapper.RunningLogDetailMapper
 import com.applemango.runnerbe.presentation.mapper.UserMapper
 import com.applemango.runnerbe.presentation.model.MonthlyRunningLogsModel
 import com.applemango.runnerbe.presentation.model.PostingModel
@@ -15,7 +13,9 @@ import com.applemango.runnerbe.presentation.model.UserModel
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.usecaseImpl.runninglog.GetMonthlyRunningLogsUseCase
 import com.applemango.runnerbe.usecaseImpl.user.GetUserDataUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
 import com.applemango.runnerbe.usecaseImpl.user.UpdateUserImageUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.UpdateUserLocalPaceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -32,14 +32,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val getUserIdUseCase: GetUserIdUseCase,
     private val getUserDataUseCase: GetUserDataUseCase,
     private val updateUserImageUseCase: UpdateUserImageUseCase,
     private val getMonthlyRunningLogsUseCase: GetMonthlyRunningLogsUseCase,
-    private val runningLogDetailMapper: RunningLogDetailMapper,
+    private val updateUserLocalPaceUseCase: UpdateUserLocalPaceUseCase,
     private val monthlyRunningLogMapper: MonthlyRunningLogMapper,
     private val userMapper: UserMapper,
     private val postingMapper: PostingMapper,
 ) : ViewModel() {
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
     private val _currentMondayYearMonth: MutableStateFlow<String> =
         MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
     val currentMondayYearMonth: StateFlow<String> get() = _currentMondayYearMonth.asStateFlow()
@@ -67,6 +71,12 @@ class MyPageViewModel @Inject constructor(
 
     private val _runningLogResult = MutableStateFlow<Map<Int, MonthlyRunningLogsModel>>(emptyMap())
     val runningLogResult: StateFlow<Map<Int, MonthlyRunningLogsModel>> get() = _runningLogResult.asStateFlow()
+
+    fun fetchUserId() {
+        viewModelScope.launch {
+            _userId.value = getUserIdUseCase()
+        }
+    }
 
     /**
      * >> 총 21개의 데이터가 보여야하므로 <<
@@ -121,31 +131,25 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun getUserData(userId: Int) = viewModelScope.launch {
-        if (userId > -1) {
-            getUserDataUseCase(userId).collect {
-                val userInfo: UserModel? =
-                    it.userInfo?.let { user -> userMapper.mapToPresentation(user) }
-                myPosts.clear()
-                joinPosts.value = it.myRunning
-                    .map {
-                        postingMapper.mapToPresentation(it)
-                    }.sortedByDescending { running -> running.gatheringTime }
-                it.myPosting
-                    .map { postingEntity ->
-                        postingMapper.mapToPresentation(postingEntity)
-                    }.let { postingList ->
-                        myPosts.addAll(postingList)
-                    }
-                this@MyPageViewModel.userInfo.value = userInfo
-                RunnerBeApplication.mTokenPreference.setMyRunningPace(
-                    userInfo?.pace ?: ""
-                )
-                pace.emit(userInfo?.pace)
-                diligence.emit(it.userInfo?.diligence ?: "초보 출석")
-            }
-        } else {
-            //에러 메시지 뱉자~
+    fun getUserData() = viewModelScope.launch {
+        getUserDataUseCase().collect {
+            val userInfo: UserModel? =
+                it.userInfo?.let { user -> userMapper.mapToPresentation(user) }
+            myPosts.clear()
+            joinPosts.value = it.myRunning
+                .map {
+                    postingMapper.mapToPresentation(it)
+                }.sortedByDescending { running -> running.gatheringTime }
+            it.myPosting
+                .map { postingEntity ->
+                    postingMapper.mapToPresentation(postingEntity)
+                }.let { postingList ->
+                    myPosts.addAll(postingList)
+                }
+            this@MyPageViewModel.userInfo.value = userInfo
+            updateUserLocalPaceUseCase(userInfo?.pace ?: "")
+            pace.emit(userInfo?.pace)
+            diligence.emit(it.userInfo?.diligence ?: "초보 출석")
         }
     }
 
@@ -164,8 +168,7 @@ class MyPageViewModel @Inject constructor(
 
 
     fun userProfileImageChange(imageUrl: String?) = viewModelScope.launch {
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        val result = updateUserImageUseCase(userId, imageUrl)
+        val result = updateUserImageUseCase(imageUrl)
         if (result.isSuccess) {
             _updateUserImageState.value = UiState.Success(result.code)
         } else {

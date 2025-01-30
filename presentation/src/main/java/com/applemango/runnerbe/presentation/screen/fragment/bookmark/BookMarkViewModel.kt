@@ -2,7 +2,6 @@ package com.applemango.runnerbe.presentation.screen.fragment.bookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.mapper.PostingMapper
 import com.applemango.runnerbe.presentation.model.PostingModel
@@ -64,8 +63,7 @@ class BookMarkViewModel @Inject constructor(
 
     fun getBookmarkList() {
         viewModelScope.launch {
-            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-            getBookmarkedPostsUseCase(userId = userId).collect {
+            getBookmarkedPostsUseCase().collect {
                 bookmarkList.value = it.map { posting ->
                     postingMapper.mapToPresentation(posting)
                 }
@@ -76,7 +74,6 @@ class BookMarkViewModel @Inject constructor(
     fun bookmarkStatusChange(post: PostingModel) {
         viewModelScope.launch {
             val result = updateBookmarkUseCase(
-                RunnerBeApplication.mTokenPreference.getUserId(),
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"
             )

@@ -1,8 +1,8 @@
 package com.applemango.runnerbe.presentation.screen.fragment.map
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.MapFilterModel
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase
 import com.applemango.runnerbe.presentation.model.type.AfterPartyTag
@@ -14,13 +14,17 @@ import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemParameter
 import com.applemango.runnerbe.presentation.state.UiState
 import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListParam
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserPaceUseCase
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
@@ -30,8 +34,18 @@ import javax.inject.Inject
 @HiltViewModel
 class RunnerMapViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
-    private val postingMapper: PostingMapper
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val getUserPaceUseCase: GetUserPaceUseCase,
+    private val postingMapper: PostingMapper,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
+    private val resources = context.resources
+
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+
+    private val _userPace: MutableStateFlow<Pace?> = MutableStateFlow(null)
+    val userPace: StateFlow<Pace?> get() = _userPace.asStateFlow()
 
     val postList: MutableStateFlow<List<PostingModel>> = MutableStateFlow(emptyList())
     val panelTop: MutableStateFlow<Int?> = MutableStateFlow(null)
@@ -106,16 +120,23 @@ class RunnerMapViewModel @Inject constructor(
         }
     }
 
-    fun getRunningList(userId: Int?, isRefresh: Boolean = false) = viewModelScope.launch {
-        // TODO  테스트 용도이므로 종료 시 삭제
-        val iCoordinator = if (RunnerBeApplication.mTokenPreference.getIsTestMode()) {
-            LatLng(37.3419817000, 127.0940174000)
-        } else {
-            coordinator
+    fun getUserId() {
+        viewModelScope.launch {
+            _userId.value = getUserIdUseCase()
         }
+    }
+
+    fun getUserPace() {
+        viewModelScope.launch {
+            val paceString = getUserPaceUseCase()
+            _userPace.value = Pace.getPaceByName(paceString)
+        }
+    }
+
+    fun getRunningList(isRefresh: Boolean = false) = viewModelScope.launch {
         val request = GetRunningListParam(
-            userLat = iCoordinator.latitude,
-            userLng = iCoordinator.longitude,
+            userLat = coordinator.latitude,
+            userLng = coordinator.longitude,
             paceFilter = filterData.value.paceTags.joinToString(","),
             jobFilter = filterData.value.jobTag,
             gender = filterData.value.genderTag,
@@ -124,7 +145,6 @@ class RunnerMapViewModel @Inject constructor(
             maxAge = if (filterData.value.maxAge > 65) "N" else filterData.value.maxAge.toString(),
             priorityFilter = filterPriorityTag.value.tag,
             afterPartyFilter = filterData.value.afterPartyTag,
-            userId = userId,
             whetherEnd = if (includeFinish.value) "Y" else "N",
             pageSize = pageSize,
             page = if (isRefresh) 1 else postList.value.size / pageSize + 1
@@ -139,8 +159,7 @@ class RunnerMapViewModel @Inject constructor(
 
     fun refresh() {
         postList.value = emptyList()
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        getRunningList(userId, isRefresh = true)
+        getRunningList(isRefresh = true)
     }
 
     fun updatePostBookmark(post: PostingModel) {
@@ -181,7 +200,6 @@ class RunnerMapViewModel @Inject constructor(
     }
 
     fun priorityTagClicked() {
-        val resources = RunnerBeApplication.instance.resources
         viewModelScope.launch {
             _actions.emit(
                 RunnerMapAction.ShowSelectListDialog(
@@ -198,7 +216,6 @@ class RunnerMapViewModel @Inject constructor(
     }
 
     fun runningTagClicked() {
-        val resources = RunnerBeApplication.instance.resources
         viewModelScope.launch {
             _actions.emit(
                 RunnerMapAction.ShowSelectListDialog(

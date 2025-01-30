@@ -2,19 +2,24 @@ package com.applemango.runnerbe.presentation.screen.fragment.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.usecaseImpl.bookmark.UpdateBookmarkUseCase
+import com.applemango.runnerbe.usecaseImpl.user.local.GetUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val updateBookmarkUseCase: UpdateBookmarkUseCase
+    private val updateBookmarkUseCase: UpdateBookmarkUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase
 ) : ViewModel() {
+    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val userId: StateFlow<Int> get() = _userId.asStateFlow()
 
     val currentItem: MutableSharedFlow<Int> = MutableSharedFlow()
     val clickedPost: MutableStateFlow<PostingModel?> = MutableStateFlow(null)
@@ -25,6 +30,13 @@ class MainViewModel @Inject constructor(
     private var _isShowInfoDialog: MutableSharedFlow<Boolean> = MutableSharedFlow()
     val isShowInfoDialog get() = _isShowInfoDialog
 
+    fun fetchUserId() {
+        viewModelScope.launch {
+            val id = getUserIdUseCase()
+            _userId.value = id
+        }
+    }
+
     fun setTab(index: Int) = viewModelScope.launch {
         currentItem.emit(index)
     }
@@ -34,7 +46,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun bookmarkStatusChange(post: PostingModel) = viewModelScope.launch {
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
+        val userId = getUserIdUseCase()
         if (userId == -1) {
             _isShowInfoDialog.emit(true)
             return@launch
@@ -42,7 +54,6 @@ class MainViewModel @Inject constructor(
 
         try {
             val result = updateBookmarkUseCase(
-                userId,
                 post.postId,
                 if (!post.bookmarkCheck()) "Y" else "N"
             )

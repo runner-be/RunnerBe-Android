@@ -11,18 +11,25 @@ import com.applemango.runnerbe.presentation.model.type.GenderTag
 import com.applemango.runnerbe.presentation.model.type.JobButtonId
 import com.applemango.runnerbe.presentation.model.listener.PaceSelectListener
 import com.applemango.runnerbe.presentation.model.type.Pace
+import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoProvider
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem
-import com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.initPaceInfoListWithAll
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RunningFilterViewModel : ViewModel() {
+@HiltViewModel
+class RunningFilterViewModel @Inject constructor(
+    application: RunnerBeApplication,
+    private val paceInfoProvider: PaceInfoProvider
+): ViewModel() {
+    private val resources = application.resources
     val paceList: MutableStateFlow<List<PaceSelectItem>> =
-        MutableStateFlow(initPaceInfoListWithAll())
+        MutableStateFlow(paceInfoProvider.initPaceInfoList())
 
     val paceCheckedList: MutableStateFlow<List<Pace>> = MutableStateFlow(emptyList())
     val genderRadioChecked: MutableStateFlow<Int> = MutableStateFlow(R.id.allTab)
@@ -32,7 +39,7 @@ class RunningFilterViewModel : ViewModel() {
     val recruitmentStartAge: MutableStateFlow<Int> = MutableStateFlow(20)
     val recruitmentEndAge: MutableStateFlow<Int> = MutableStateFlow(40)
     val recruitmentAge = combine(recruitmentStartAge, recruitmentEndAge) { start, end ->
-        RunnerBeApplication.ApplicationContext().resources.getString(
+        resources.getString(
             R.string.display_recruitment_age_setting,
             start.toString(),
             end.toString()
@@ -45,7 +52,7 @@ class RunningFilterViewModel : ViewModel() {
 
     val actions: MutableSharedFlow<RunningFilterAction> = MutableSharedFlow()
     fun refresh() {
-        paceList.value = initPaceInfoListWithAll().map { pace ->
+        paceList.value = paceInfoProvider.initPaceInfoListWithAll().map { pace ->
             pace.copy(isSelected = true)
         }
         paceCheckedList.value = listOf(Pace.ALL)
