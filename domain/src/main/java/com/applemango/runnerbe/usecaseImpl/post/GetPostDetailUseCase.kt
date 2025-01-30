@@ -12,8 +12,8 @@ class GetPostDetailUseCase @Inject constructor(
     private val repository: PostingRepository
 ) {
 
-    suspend operator fun invoke(postId: Int, userId: Int): Flow<PostingDetailEntity> = flow {
-        repository.getPostDetail(postId, userId)
+    suspend operator fun invoke(postId: Int): Flow<PostingDetailEntity> = flow {
+        repository.getPostDetail(postId)
     }
 }
 

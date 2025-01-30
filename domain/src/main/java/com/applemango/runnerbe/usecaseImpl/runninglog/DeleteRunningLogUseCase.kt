@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteRunningLogUseCase @Inject constructor(
     private val repository: RunningLogRepository
 ) {
-    suspend operator fun invoke(userId: Int, logId: Int): CommonEntity {
-        return repository.deleteRunningLog(userId, logId)
+    suspend operator fun invoke(logId: Int): CommonEntity {
+        return repository.deleteRunningLog(logId)
     }
 }

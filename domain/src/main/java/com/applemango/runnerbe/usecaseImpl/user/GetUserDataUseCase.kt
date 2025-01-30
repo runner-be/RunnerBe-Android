@@ -8,12 +8,12 @@ import com.applemango.runnerbe.repository.UserRepository
 import javax.inject.Inject
 
 class GetUserDataUseCase @Inject constructor(
-    private val repo : UserRepository
+    private val repository : UserRepository
 ) {
 
-    operator fun invoke(userId: Int) :Flow<MyPageEntity> = flow {
+    operator fun invoke() :Flow<MyPageEntity> = flow {
         runCatching {
-            repo.getUserData(userId)
+            repository.getUserData()
         }.onSuccess {
             emit(it)
         }.onFailure {

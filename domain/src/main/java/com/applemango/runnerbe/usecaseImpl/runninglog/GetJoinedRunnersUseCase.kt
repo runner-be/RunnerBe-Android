@@ -9,9 +9,9 @@ import javax.inject.Inject
 class GetJoinedRunnersUseCase @Inject constructor(
     private val repository: JoinedRunnerRepository
 ) {
-    operator fun invoke(userId: Int, gatheringId: Int): Flow<List<JoinedRunnerEntity>> = flow {
+    operator fun invoke(gatheringId: Int): Flow<List<JoinedRunnerEntity>> = flow {
         kotlin.runCatching {
-            repository.getJoinedRunnerList(userId, gatheringId)
+            repository.getJoinedRunnerList(gatheringId)
         }.onSuccess {
             emit(it)
         }.onFailure {

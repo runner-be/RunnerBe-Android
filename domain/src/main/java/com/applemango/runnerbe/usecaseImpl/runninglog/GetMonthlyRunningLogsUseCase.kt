@@ -9,9 +9,9 @@ import javax.inject.Inject
 class GetMonthlyRunningLogsUseCase @Inject constructor(
     private val runningLogRepository: RunningLogRepository
 ) {
-    operator fun invoke(userId: Int, year: Int, month: Int): Flow<MonthlyRunningLogEntity> = flow {
+    operator fun invoke(targetUserId: Int, year: Int, month: Int): Flow<MonthlyRunningLogEntity> = flow {
         kotlin.runCatching {
-            runningLogRepository.getMonthlyRunningLogs(userId, year, month)
+            runningLogRepository.getMonthlyRunningLogs(targetUserId, year, month)
         }.onSuccess {
             emit(it)
         }.onFailure {

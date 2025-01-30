@@ -12,7 +12,7 @@ class UpdateAlarmUseCase @Inject constructor(
     private val repository: AlarmRepository
 ) {
 
-    suspend operator fun invoke(userId: Int, pushOn : Boolean) : CommonEntity {
-        return repository.patchAlarm(userId, pushOn)
+    suspend operator fun invoke(pushOn : Boolean) : CommonEntity {
+        return repository.patchAlarm(pushOn)
     }
 }

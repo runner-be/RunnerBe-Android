@@ -7,8 +7,8 @@ import javax.inject.Inject
 class UpdateRunningLogUseCase @Inject constructor(
     private val repository: RunningLogRepository
 ) {
-    suspend operator fun invoke(userId: Int, logId: Int, runningLog: RunningLogParam): CommonEntity {
-        return repository.patchRunningLog(userId, logId, runningLog)
+    suspend operator fun invoke(logId: Int, runningLog: RunningLogParam): CommonEntity {
+        return repository.patchRunningLog(logId, runningLog)
     }
 
     data class RunningLogParam(

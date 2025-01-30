@@ -4,9 +4,11 @@ import com.applemango.runnerbe.entity.CommonEntity
 import com.applemango.runnerbe.repository.UserRepository
 import javax.inject.Inject
 
-class WithdrawalUserUseCase @Inject constructor(private val repo : UserRepository) {
+class WithdrawalUserUseCase @Inject constructor(
+    private val repository : UserRepository,
+) {
 
-    suspend operator fun invoke(userId: Int, secretKey : String) : CommonEntity {
-        return repo.withdrawalUser(userId, secretKey)
+    suspend operator fun invoke(secretKey : String) : CommonEntity {
+        return repository.withdrawalUser(secretKey)
     }
 }

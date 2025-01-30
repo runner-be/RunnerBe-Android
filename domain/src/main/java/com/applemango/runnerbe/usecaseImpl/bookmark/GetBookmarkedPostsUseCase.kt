@@ -12,7 +12,7 @@ import javax.inject.Inject
 class GetBookmarkedPostsUseCase @Inject constructor(
     private val repo: PostingRepository
 ) {
-    suspend operator fun invoke(userId: Int): Flow<List<PostingEntity>> = flow {
-        repo.getBookmarkList(userId)
+    suspend operator fun invoke(): Flow<List<PostingEntity>> = flow {
+        repo.getBookmarkList()
     }
 }

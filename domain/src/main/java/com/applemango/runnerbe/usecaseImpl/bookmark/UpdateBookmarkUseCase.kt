@@ -10,7 +10,7 @@ import javax.inject.Inject
 class UpdateBookmarkUseCase @Inject constructor(
     private val repository : UserRepository
 ) {
-    suspend operator fun invoke(userId : Int, postId : Int, whetherAdd: String) : CommonEntity {
-        return repository.bookMarkStatusChange(userId, postId, whetherAdd)
+    suspend operator fun invoke(postId : Int, whetherAdd: String) : CommonEntity {
+        return repository.bookMarkStatusChange(postId, whetherAdd)
     }
 }

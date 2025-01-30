@@ -10,7 +10,7 @@ import javax.inject.Inject
 class ApplyPostUseCase @Inject constructor(
     private val repository: PostingRepository
 ) {
-    suspend operator fun invoke(postId: Int, userId : Int) : CommonEntity {
-        return repository.postApply(postId, userId)
+    suspend operator fun invoke(postId: Int) : CommonEntity {
+        return repository.postApply(postId)
     }
 }

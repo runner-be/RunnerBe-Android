@@ -8,7 +8,7 @@ import javax.inject.Inject
 class WriteRunningLogUseCase @Inject constructor(
     private val repository: RunningLogRepository
 ) {
-    suspend operator fun invoke(userId: Int, year: Int, month: Int, runningLog: RunningLogParam): CommonEntity {
-        return repository.postRunningLog(userId, year, month, runningLog)
+    suspend operator fun invoke(year: Int, month: Int, runningLog: RunningLogParam): CommonEntity {
+        return repository.postRunningLog(year, month, runningLog)
     }
 }

@@ -8,7 +8,7 @@ class UpdateJobUseCase @Inject constructor(
     private val repository : UserRepository
 ) {
 
-    suspend operator fun invoke(userId: Int, job: String) : CommonEntity {
-        return repository.jobChange(userId, job)
+    suspend operator fun invoke(job: String) : CommonEntity {
+        return repository.jobChange(job)
     }
 }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeletePostUseCase @Inject constructor(
     private val repository: PostingRepository
 ) {
-    suspend operator fun invoke(postId: Int, userId: Int) : CommonEntity {
-        return repository.dropPost(postId, userId)
+    suspend operator fun invoke(postId: Int) : CommonEntity {
+        return repository.dropPost(postId)
     }
 }

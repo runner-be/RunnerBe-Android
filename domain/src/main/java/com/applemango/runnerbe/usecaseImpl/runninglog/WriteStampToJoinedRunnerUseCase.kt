@@ -7,8 +7,8 @@ import javax.inject.Inject
 class WriteStampToJoinedRunnerUseCase @Inject constructor(
     private val repository: JoinedRunnerRepository
 ) {
-    suspend operator fun invoke(userId: Int, logId: Int, stamp: PostStampParam): CommonEntity {
-        return repository.postStampToJoinedRunner(userId, logId, stamp)
+    suspend operator fun invoke(logId: Int, stamp: PostStampParam): CommonEntity {
+        return repository.postStampToJoinedRunner(logId, stamp)
     }
 
     data class PostStampParam(

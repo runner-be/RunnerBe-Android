@@ -8,8 +8,8 @@ class WritePostUseCase @Inject constructor(
     private val repo: PostingRepository
 ) {
 
-    suspend operator fun invoke(userId : Int, body : WriteRunningParam) : CommonEntity {
-        return repo.writeRunning(userId, body)
+    suspend operator fun invoke(body : WriteRunningParam) : CommonEntity {
+        return repo.writeRunning(body)
     }
 
     data class WriteRunningParam(

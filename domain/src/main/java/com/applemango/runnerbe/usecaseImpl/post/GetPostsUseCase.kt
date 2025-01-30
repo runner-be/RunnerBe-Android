@@ -30,7 +30,6 @@ class GetPostsUseCase @Inject constructor(
         val userLat : Double,
         val afterPartyFilter: String,
         val keyword : String = "N",
-        val userId : Int?,
         val pageSize : Int,
         val page : Int
     )
