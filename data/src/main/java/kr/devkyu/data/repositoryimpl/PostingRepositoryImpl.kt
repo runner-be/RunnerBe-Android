@@ -15,7 +15,6 @@ import com.applemango.runnerbe.usecaseImpl.post.GetPostsUseCase.GetRunningListPa
 import com.applemango.runnerbe.usecaseImpl.post.WritePostUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kr.devkyu.data.network.TokenSPreference
 import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.DeletePostApi
 import kr.devkyu.data.network.api.GetBookmarksApi

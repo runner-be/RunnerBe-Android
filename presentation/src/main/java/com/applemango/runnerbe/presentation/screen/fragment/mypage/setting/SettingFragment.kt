@@ -32,6 +32,12 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        with(args) {
+            viewModel.beforeAlarmCheck = alarmCheck
+            binding.alarmSwitch.isChecked = alarmCheck
+        }
+
+        viewModel.fetchUserId()
         binding.logoutBtn.setOnClickListener(this)
         binding.makers.setOnClickListener(this)
         binding.termsOfServiceButton.setOnClickListener(this)
@@ -39,10 +45,8 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
         binding.instagramButton.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
         binding.withdrawalButton.setOnClickListener(this)
-        observeBind()
         binding.versionsTxt.text = getAppVersion()
-        viewModel.beforeAlarmCheck = args.alarmCheck
-        binding.alarmSwitch.isChecked = args.alarmCheck
+        observeBind()
     }
 
     private fun observeBind() {
@@ -84,7 +88,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
     override fun onDestroyView() {
         val check = binding.alarmSwitch.isChecked
         CoroutineScope(Dispatchers.IO).launch {
-            viewModel.patchAlarm(RunnerBeApplication.mTokenPreference.getUserId(), check)
+            viewModel.patchAlarm(viewModel.userId.value, check)
         }
         super.onDestroyView()
     }

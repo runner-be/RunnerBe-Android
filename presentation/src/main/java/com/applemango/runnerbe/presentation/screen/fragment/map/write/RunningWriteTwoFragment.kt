@@ -37,21 +37,7 @@ class RunningWriteTwoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val isTestMode = RunnerBeApplication.mTokenPreference.getIsTestMode()
-        viewModel.oneData.value = if (isTestMode) {
-            context?.let {
-                ToastUtil.showShortToast(it, "테스트 모드입니다. 일부 데이터가 현재 위치와 일치하지 않을 수 있습니다")
-            }
-
-            val testLatLng = LatLng(37.3419817, 127.0940174)
-            val testPlaceData = PlaceData(placeName="장소 정보 없음", placeAddress="대한민국 경기도 용인시 수지구 동천동", placeExplain="162-5")
-            args.data.copy(
-                coordinate = testLatLng,
-                placeData = testPlaceData
-            )
-        } else {
-            args.data
-        }
+        viewModel.oneData.value = args.data
 
         binding.vm = viewModel
         binding.backBtn.setOnClickListener(this)
@@ -151,11 +137,7 @@ class RunningWriteTwoFragment :
                         secondButtonText = resources.getString(R.string.yes),
                         firstEvent = {},
                         secondEvent = {
-                            with(RunnerBeApplication.mTokenPreference.getUserId()) {
-                                if(this > -1) {
-                                    viewModel.writeRunning(this)
-                                }
-                            }
+                            viewModel.writeRunning()
                         }
                     )
                 }

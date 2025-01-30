@@ -35,9 +35,8 @@ class GroupProfilesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
         linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        viewModel.updateRunnerInfo(userId, navArgs.gatheringId)
+        viewModel.updateRunnerInfo(navArgs.gatheringId)
         initGroupProfileRecyclerView()
         setupRunnerList()
     }
@@ -78,9 +77,8 @@ class GroupProfilesFragment :
                             null,
                             false
                         ) { stampItem ->
-                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
                             profileAdapter.updateProfileStampByPosition(position, stampItem.code)
-                            viewModel.postStampToJoinedRunner(userId, navArgs.gatheringId, stampItem.code)
+                            viewModel.postStampToJoinedRunner(navArgs.gatheringId, stampItem.code)
                         }
                     }
 

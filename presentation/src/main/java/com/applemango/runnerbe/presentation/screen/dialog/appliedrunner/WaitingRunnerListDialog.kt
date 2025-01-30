@@ -65,7 +65,6 @@ class WaitingRunnerListDialog(
                         is UiState.Success -> {
                             detailViewModel.getPostDetail(
                                 detailViewModel.post.value!!.postId,
-                                RunnerBeApplication.mTokenPreference.getUserId()
                             )
                         }
 
@@ -133,7 +132,7 @@ class WaitingRunnerListDialog(
         context?.let {
             TwoButtonDialog.createShow(
                 context = it,
-                title = resources.getString(if (detailViewModel.isMyPost()) R.string.question_post_close else R.string.question_post_apply),
+                title = resources.getString(if (detailViewModel.isMyPost.value) R.string.question_post_close else R.string.question_post_apply),
                 firstButtonText = resources.getString(R.string.no),
                 secondButtonText = resources.getString(R.string.yes),
                 firstEvent = {},

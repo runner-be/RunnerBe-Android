@@ -219,10 +219,9 @@ class WeeklyCalendarFragment() :
                 val runningLog = item.runningLog
 
                 if (runningLog?.logId != null) {
-                    val userId = RunnerBeApplication.mTokenPreference.getUserId()
                     navigate(
                         MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
-                            userId,
+                            viewModel.userId.value,
                             runningLog.logId,
                             0
                         )

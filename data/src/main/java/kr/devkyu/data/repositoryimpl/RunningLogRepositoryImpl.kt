@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.first
 import kr.devkyu.data.mapper.CommonMapper
 import kr.devkyu.data.mapper.MonthlyRunningLogMapper
 import kr.devkyu.data.mapper.RunningLogDetailMapper
-import kr.devkyu.data.network.TokenSPreference
 import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.DeleteRunningLogApi
 import kr.devkyu.data.network.api.GetMonthlyRunningLogsApi

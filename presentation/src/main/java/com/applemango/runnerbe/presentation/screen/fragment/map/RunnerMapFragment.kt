@@ -11,13 +11,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunnerMapBinding
 import com.applemango.runnerbe.util.NestedScrollableViewHelper
 import com.applemango.runnerbe.presentation.model.PostingModel
 import com.applemango.runnerbe.presentation.screen.deco.RecyclerViewItemDeco
 import com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectItemDialog
-import com.applemango.runnerbe.presentation.screen.dialog.twobutton.TwoButtonDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainFragmentDirections
 import com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel
@@ -49,8 +47,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragment_runner_map),
     OnMapReadyCallback {
-    private val userId
-        get() = RunnerBeApplication.mTokenPreference.getUserId()
     private lateinit var mNaverMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
 
@@ -69,7 +65,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RunnerBeApplication.instance.firebaseTokenUpdate()
         binding.vm = viewModel
         binding.postListLayout.vm = viewModel
         binding.postListLayout.mainVm = mainViewModel
@@ -87,6 +82,9 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         initSlideLayoutListener()
         initListeners()
         setupPostFlow()
+//        viewModel.updateFirebaseToken() 원래 여기서도 Jwt 토큰 업데이트 해야하는건지
+        viewModel.getUserId()
+        viewModel.getUserPace()
     }
 
     private fun setOnPostListUpdateListener() {
@@ -96,7 +94,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         ) { _, result ->
             val refresh = result.getBoolean("refresh", false)
             if (refresh) {
-                viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = true)
+                viewModel.getRunningList(isRefresh = true)
             }
         }
     }
@@ -116,10 +114,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                 viewModel.actions.collect {
                     when (it) {
                         is RunnerMapViewModel.RunnerMapAction.MoveToWrite -> {
-                            checkAdditionalUserInfo {
-                                if (RunnerBeApplication.mTokenPreference.getMyRunningPace()
-                                        .isNullOrBlank()
-                                ) {
+                            checkAdditionalUserInfo(viewModel.userId.value) {
+                                if (viewModel.userPace.value != null) {
                                     navigate(
                                         MainFragmentDirections.actionMainFragmentToPaceInfoFragment(
                                             "map"
@@ -161,7 +157,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
     override fun onStart() {
         super.onStart()
         binding.mapView.onStart()
-        viewModel.getRunningList(if (userId > 0) userId else null, isRefresh = false)
+        viewModel.getRunningList(isRefresh = false)
     }
 
     override fun onResume() {
@@ -225,8 +221,7 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
             binding.llMapRefresh.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                    if (userId == -1) {
+                    if (viewModel.userId.value == -1) {
                         context?.let {
                             ToastUtil.showShortToast(it, "사용자 정보를 불러올 수 없어요. 약관에 동의해주세요")
                         }
@@ -235,37 +230,6 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
 
                     viewModel.refresh()
                 },
-            binding.topTxt.clicks()
-                .window(3)
-                .flatMapSingle { it.toList() }
-                .filter { it.size >= 3 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        // TODO 테스트 용도이므로 기능 테스트 종료 시 삭제
-                        val isTestMode = RunnerBeApplication.mTokenPreference.getIsTestMode()
-                        val dialogMessage = if (!isTestMode)
-                            "테스트 모드를 활성화하시겠어요?\n\n1. 이후 작성하는 게시글의 경도/위도/장소 데이터가 고정된 값으로 적용됩니다.\n2. 러닝 목록이 (용인시 동천동) 데이터로 고정됩니다."
-                        else "테스트 모드를 비활성화하시겠어요?"
-
-                        context?.let {
-                            TwoButtonDialog.createShow(
-                                it,
-                                title = dialogMessage,
-                                firstButtonText = resources.getString(R.string.no),
-                                secondButtonText = resources.getString(R.string.yes),
-                                firstEvent = {},
-                                secondEvent = {
-                                    RunnerBeApplication.mTokenPreference.setIsTestMode(!isTestMode)
-                                    viewModel.refresh()
-                                }
-                            )
-                        }
-                    },
-                    { throwable ->
-                        throwable.printStackTrace()
-                    }
-                )
         )
     }
 
@@ -413,20 +377,11 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         binding.mapLayout.setHeight(binding.mapLayout.measuredHeight)
         // 현재위치로 주소 디폴트 셋팅
         // TODO  테스트 용도이므로 완료 시 삭제
-        binding.topTxt.text = if (RunnerBeApplication.mTokenPreference.getIsTestMode()) {
-            val testData = LatLng(37.3419817, 127.0940174)
-            AddressUtil.getAddress(
-                requireContext(),
-                testData.latitude,
-                testData.longitude
-            )
-        } else {
-            AddressUtil.getAddress(
-                requireContext(),
-                mNaverMap.cameraPosition.target.latitude,
-                mNaverMap.cameraPosition.target.longitude
-            )
-        }
+        binding.topTxt.text = AddressUtil.getAddress(
+            requireContext(),
+            mNaverMap.cameraPosition.target.latitude,
+            mNaverMap.cameraPosition.target.longitude
+        )
 
         mNaverMap.addOnLocationChangeListener { location ->
             binding.topTxt.run {

@@ -65,6 +65,7 @@ class PostDetailFragment :
         initListeners()
         initJoinedRunnerRecyclerView()
         setupJoinedRunnerList()
+        viewModel.fetchUserId()
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
     }
@@ -98,7 +99,7 @@ class PostDetailFragment :
 
     fun refresh() {
         viewModel.post.value?.let {
-            viewModel.getPostDetail(it.postId, RunnerBeApplication.mTokenPreference.getUserId())
+            viewModel.getPostDetail(it.postId)
         }
     }
 
@@ -149,10 +150,10 @@ class PostDetailFragment :
             binding.tvApply.clicks()
                 .throttleFirst(1000L, TimeUnit.MILLISECONDS)
                 .subscribe {
-                    checkAdditionalUserInfo {
+                    val userId = viewModel.userId.value
+                    checkAdditionalUserInfo(userId) {
                         viewLifecycleOwner.lifecycleScope.launch {
-                            val userId = RunnerBeApplication.mTokenPreference.getUserId()
-                            val userPace = viewModel.getUserPace(userId)
+                            val userPace = viewModel.getUserPace()
 
                             if (userPace != null) {
                                 viewModel.acceptUserApply()
@@ -214,7 +215,7 @@ class PostDetailFragment :
                         is UiState.Success -> {
                             Toast.makeText(
                                 context,
-                                resources.getString(if (viewModel.isMyPost()) R.string.msg_post_close else R.string.msg_post_apply),
+                                resources.getString(if (viewModel.isMyPost.value) R.string.msg_post_close else R.string.msg_post_apply),
                                 Toast.LENGTH_SHORT
                             ).show()
                             refresh()

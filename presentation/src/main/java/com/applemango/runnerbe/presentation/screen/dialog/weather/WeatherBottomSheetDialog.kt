@@ -81,7 +81,9 @@ class WeatherBottomSheetDialog(
         with(binding.rcvWeather) {
             _weatherAdapter = WeatherAdapter()
             adapter = weatherAdapter.apply {
-                submitList(initWeatherItems())
+                context?.let {
+                    submitList(WeatherItem.initWeatherItems(it))
+                }
                 setSelectedWeather(selectedWeather)
                 setOnWeatherClickListener { weather ->
                     selectedWeather = weather
@@ -97,8 +99,8 @@ class WeatherBottomSheetDialog(
         layoutManager: LinearLayoutManager,
         weather: WeatherItem
     ) {
-        val weatherList = initWeatherItems()
-        val weatherItem = getWeatherItemByCode(weather.code)
+        val weatherList: List<WeatherItem> = WeatherItem.initWeatherItems(requireContext())
+        val weatherItem: WeatherItem = WeatherItem.getWeatherItemByCode(requireContext(), weather.code)
         smoothScroller.targetPosition = weatherList.indexOf(weatherItem)
         layoutManager.startSmoothScroll(smoothScroller)
     }

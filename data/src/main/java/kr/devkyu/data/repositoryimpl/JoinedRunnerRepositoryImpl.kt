@@ -8,7 +8,6 @@ import com.applemango.runnerbe.repository.JoinedRunnerRepository
 import com.applemango.runnerbe.usecaseImpl.post.AttendanceAccessionUseCase
 import com.applemango.runnerbe.usecaseImpl.runninglog.WriteStampToJoinedRunnerUseCase.PostStampParam
 import kotlinx.coroutines.flow.first
-import kr.devkyu.data.network.TokenSPreference
 import kr.devkyu.data.network.UserDataStore
 import kr.devkyu.data.network.api.GetJoinedRunnersApi
 import kr.devkyu.data.network.api.PatchAppliedRunnerApi

@@ -50,9 +50,7 @@ data class PostingModel(
     // 모임 종료(러닝 끝난 후)부터 3시간 지났는지 여부
     val attendTimeOver: String?
 ): Parcelable {
-    private fun getMyUserId(): Int = RunnerBeApplication.mTokenPreference.getUserId()
-
-    fun isRunningCaptain() = (getMyUserId() == this.postUserId)
+    fun isRunningCaptain() = (this.userId == this.postUserId)
 
     fun bookmarkCheck(): Boolean = this.bookMark == 1
 

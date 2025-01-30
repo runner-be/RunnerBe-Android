@@ -10,10 +10,8 @@ import com.applemango.runnerbe.databinding.DialogEditDeleteBinding
 
 class MenuDialog(
     context: Context,
-    userId: Int,
     logId: Int
 ) : AlertDialog(context, R.style.confirmDialogStyle) {
-    private val userId: Int
     private val logId: Int
 
     private var onEditClickListener: OnEditClickListener? = null
@@ -29,7 +27,6 @@ class MenuDialog(
     }
 
     init {
-        this.userId = userId
         this.logId = logId
     }
 
@@ -42,7 +39,7 @@ class MenuDialog(
                 dismiss()
             }
             btnDelete.setOnClickListener {
-                onDeleteClickListener?.onDeleteClick(userId, logId)
+                onDeleteClickListener?.onDeleteClick(logId)
                 dismiss()
             }
         }
@@ -51,12 +48,11 @@ class MenuDialog(
     companion object {
         fun createAndShow(
             context: Context,
-            userId: Int,
             logId: Int,
             editClickListener: OnEditClickListener,
             deleteClickListener: OnDeleteClickListener
         ) {
-            val dialog = MenuDialog(context, userId, logId)
+            val dialog = MenuDialog(context, logId)
             with(dialog) {
                 this.onEditClickListener = editClickListener
                 this.onDeleteClickListener = deleteClickListener

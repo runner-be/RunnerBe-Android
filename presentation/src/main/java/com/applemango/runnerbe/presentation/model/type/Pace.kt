@@ -12,6 +12,14 @@ enum class Pace(val key: String, val time: String): Parcelable {
     MASTER("master", "430 이하");
 
     companion object {
-        fun getPaceByName(name: String?) : Pace? = Pace.values().firstOrNull { it.key == name }
+        const val NO_PACE_REGISTERED = "no_pace_registered"
+
+        fun getPaceByName(name: String?) : Pace? {
+            return if (name == null || name == NO_PACE_REGISTERED) {
+                null
+            } else {
+                Pace.values().firstOrNull { it.key == name }
+            }
+        }
     }
 }

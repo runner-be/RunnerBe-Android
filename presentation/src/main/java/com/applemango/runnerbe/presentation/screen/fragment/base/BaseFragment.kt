@@ -124,8 +124,8 @@ open class BaseFragment<T : ViewDataBinding>(@LayoutRes private val layoutId: In
             mLoadingDialog?.dismiss()
         }
     }
-    fun checkAdditionalUserInfo(isFullEvent : () -> Unit = {}) {
-        if(RunnerBeApplication.mTokenPreference.getUserId() <= 0) {
+    fun checkAdditionalUserInfo(userId: Int, isFullEvent : () -> Unit = {}) {
+        if (userId <= 0) {
             showAdditionalInfoDialog()
         } else isFullEvent()
     }

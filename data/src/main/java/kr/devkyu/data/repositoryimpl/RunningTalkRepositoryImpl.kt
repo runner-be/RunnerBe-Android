@@ -7,7 +7,6 @@ import com.applemango.runnerbe.repository.RunningTalkRepository
 import kr.devkyu.data.mapper.CommonMapper
 import kr.devkyu.data.mapper.RunningTalkMessageMapper
 import kr.devkyu.data.mapper.RunningTalkRoomMapper
-import kr.devkyu.data.network.TokenSPreference
 import kr.devkyu.data.network.api.GetRunningTalkMessagesApi
 import kr.devkyu.data.network.api.GetRunningTalkRoomsApi
 import kr.devkyu.data.network.api.PostMessageApi

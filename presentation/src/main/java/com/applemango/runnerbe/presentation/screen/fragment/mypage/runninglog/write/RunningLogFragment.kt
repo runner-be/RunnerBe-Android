@@ -22,7 +22,6 @@ import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampBottomSheet
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherBottomSheetDialog
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
-import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.manager.SinglePhotoManager
@@ -66,7 +65,6 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         initListeners()
-        setupPostedRunningLog()
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -99,28 +97,26 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         )
     }
 
-    private fun setupPostedRunningLog() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.postedRunningLogFlow.collect { response ->
-                    val log = response.runningLog
-                    val stamp: StampItem? = context?.let {
-                        StampItem.getStampItemByCode(it, log.stampCode)
-                    }
-                    viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
-                    stamp?.let {
-                        viewModel.updateStamp(it)
-                    }
-                    viewModel.updateLogDiary(log.contents)
-                    viewModel.updateDegreeAndWeather(
-                        log.weatherDegree.toString(),
-                        getWeatherItemByCode(log.weatherCode)
-                    )
-                    viewModel.updateLogVisibility(log.isOpened == 1)
-                }
-            }
-        }
-    }
+//    private fun setupPostedRunningLog() {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.postedRunningLogFlow.collect { response ->
+//                val log = response.runningLog
+//                val stamp: StampItem? = context?.let {
+//                    StampItem.getStampItemByCode(it, log.stampCode)
+//                }
+//                viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
+//                stamp?.let {
+//                    viewModel.updateStamp(it)
+//                }
+//                viewModel.updateLogDiary(log.contents)
+//                viewModel.updateDegreeAndWeather(
+//                    log.weatherDegree.toString(),
+//                    WeatherItem.getWeatherItemByCode(requireContext(), log.weatherCode)
+//                )
+//                viewModel.updateLogVisibility(log.isOpened == 1)
+//            }
+//        }
+//    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initListeners() {
@@ -273,9 +269,8 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                             return@subscribe
                         }
 
-                        val userId = RunnerBeApplication.mTokenPreference.getUserId()
                         viewLifecycleOwner.lifecycleScope.launch {
-                            val result = viewModel.postRunningLog(userId)
+                            val result = viewModel.postRunningLog()
 
                             if (result.first) {
                                 findNavController().popBackStack()

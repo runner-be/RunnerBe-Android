@@ -18,7 +18,6 @@ import com.applemango.runnerbe.presentation.model.type.RunnerDiligence
 import com.applemango.runnerbe.presentation.model.type.RunningTag
 import com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem
 import com.applemango.runnerbe.presentation.screen.dialog.weather.WeatherItem
-import com.applemango.runnerbe.presentation.screen.dialog.weather.getWeatherItemByCode
 import com.applemango.runnerbe.presentation.model.type.CropRectRatio
 import com.applemango.runnerbe.presentation.model.type.Pace
 import com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogType
@@ -423,7 +422,7 @@ fun ImageView.setLogContentImageSrc(url: String?) {
 @BindingAdapter("bind:logWeatherImageSrc")
 fun ImageView.setLogWeatherImageSrc(weatherCode: String?) {
     if (weatherCode == null) return
-    val weatherItem = getWeatherItemByCode(weatherCode)
+    val weatherItem = WeatherItem.getWeatherItemByCode(this.context, weatherCode)
     Glide.with(this.context)
         .load(weatherItem.image)
         .into(this)

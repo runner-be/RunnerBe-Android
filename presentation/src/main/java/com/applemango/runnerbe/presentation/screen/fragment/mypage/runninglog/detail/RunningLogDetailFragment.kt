@@ -10,11 +10,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applemango.runnerbe.R
-import com.applemango.runnerbe.RunnerBeApplication
 import com.applemango.runnerbe.databinding.FragmentRunningLogDetailBinding
 import com.applemango.runnerbe.presentation.screen.dialog.menu.MenuDialog
 import com.applemango.runnerbe.presentation.screen.fragment.base.BaseFragment
-import com.applemango.runnerbe.presentation.state.CommonResponse
 import com.applemango.runnerbe.util.ToastUtil
 import com.applemango.runnerbe.util.dpToPx
 import com.applemango.runnerbe.util.recyclerview.RightSpaceItemDecoration
@@ -125,11 +123,9 @@ class RunningLogDetailFragment :
             context?.let {
                 val runningLog = viewModel.runningLogDetail.value?.runningLog!!
                 val stringDate = runningLog.runnedDate.toLocalDate().toString()
-                val userId = RunnerBeApplication.mTokenPreference.getUserId()
                 val gatheringId = runningLog.gatheringId
                 MenuDialog.createAndShow(
                     it,
-                    userId,
                     logId,
                     { lId1 ->
                         navigate(
@@ -138,8 +134,8 @@ class RunningLogDetailFragment :
                             )
                         )
                     },
-                    { uId2, lId2 ->
-                        viewModel.deleteRunningLog(uId2, lId2)
+                    { lId ->
+                        viewModel.deleteRunningLog(lId)
                         goBack()
                     }
                 )

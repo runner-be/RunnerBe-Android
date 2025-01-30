@@ -29,7 +29,7 @@ class MyPostAttendanceSeeFragment : BaseFragment<FragmentMyPostAttendanceSeeBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-        viewModel.getUserList(args.postId, args.userId)
+        viewModel.getUserList(args.postId)
         initUserListRecyclerView()
         setupUserListFlow()
         setupListeners()

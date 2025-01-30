@@ -80,6 +80,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         setupJoinedRunningPosts()
         setupWeeklyViewPagerPosition()
         setupWeeklyRunningCount()
+        viewModel.fetchUserId()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.btnProfileEdit.setOnClickListener(this)
@@ -167,10 +168,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     }
 
     private fun refresh() {
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        if (userId > -1) {
-            viewModel.getUserData(userId)
-        }
+        viewModel.getUserData()
     }
 
     override fun resultCameraCapture(image: File) {
@@ -191,7 +189,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         showLoadingDialog(requireContext())
 //        firebase storage 에 이미지 업로드하는 method
         val uploadTask: UploadTask?  // 파일 업로드하는 객체
-        val name = RunnerBeApplication.mTokenPreference.getUserId().toString() + "_.png"
+        val name = viewModel.userId.value.toString() + "_.png"
         reference =
             storage.reference.child("item").child(name) // 이미지 파일 경로 지정 (/item/imageFileName)
         uploadTask = uri.let { reference.putFile(it) } // 업로드할 파일과 업로드할 위치 설정
@@ -254,7 +252,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
                 false,
-                RunnerBeApplication.mTokenPreference.getUserId()
+                viewModel.userId.value
             ) { groupCount, personalCount ->
                 viewModel.addViewPagerCounts(groupCount, personalCount)
             }
@@ -319,7 +317,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         navigate(
                             MainFragmentDirections.actionMainFragmentToMyPostAttendanceSeeFragment(
                                 post.postId,
-                                RunnerBeApplication.mTokenPreference.getUserId()
+                                viewModel.userId.value
                             )
                         )
                     }
@@ -328,7 +326,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                         navigate(
                             MainFragmentDirections.actionMainFragmentToMyPostAttendanceAccessionFragment(
                                 post.postId,
-                                RunnerBeApplication.mTokenPreference.getUserId()
+                                viewModel.userId.value
                             )
                         )
                     }
@@ -364,10 +362,9 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.ivCalendar -> {
-                val userId = RunnerBeApplication.mTokenPreference.getUserId()
                 navigate(
                     MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(
-                        userId,
+                        viewModel.userId.value,
                         0
                     )
                 )
@@ -378,7 +375,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.btnProfileEdit -> {
-                checkAdditionalUserInfo {
+                checkAdditionalUserInfo(viewModel.userId.value) {
                     viewModel.userInfo.value?.let {
                         navigate(
                             MainFragmentDirections.actionMainFragmentToEditProfileFragment(it)
@@ -388,7 +385,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.userImgEdit -> {
-                checkAdditionalUserInfo {
+                checkAdditionalUserInfo(viewModel.userId.value) {
                     context?.let {
                         SelectItemDialog.createShow(it, listOf(
                             SelectItemParameter("촬영하기") {

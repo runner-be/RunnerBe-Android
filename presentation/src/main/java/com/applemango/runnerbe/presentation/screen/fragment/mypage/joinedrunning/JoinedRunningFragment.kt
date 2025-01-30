@@ -42,16 +42,11 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
         initListeners()
         initRunningRecyclerView()
         setupRunningLogsFlow()
-        getUserPostings()
+        viewModel.getUserRunningPostings()
         binding.rgCategory.check(
             if (viewModel.selectedCategoryId.value == JoinedRunningCategory.ALL) R.id.rb_all
             else R.id.rb_my
         )
-    }
-
-    private fun getUserPostings() {
-        val userId = RunnerBeApplication.mTokenPreference.getUserId()
-        viewModel.getUserRunningPostings(userId)
     }
 
     private fun setupRunningLogsFlow() {
@@ -114,7 +109,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceSeeFragment(
                                     post.postId,
-                                    RunnerBeApplication.mTokenPreference.getUserId()
+                                    viewModel.userId.value
                                 )
                             )
                         } catch (e: IllegalArgumentException) {
@@ -128,7 +123,7 @@ class JoinedRunningFragment : BaseFragment<FragmentJoinedRunningBinding>(R.layou
                             navigate(
                                 JoinedRunningFragmentDirections.actionJoinedRunningFragmentToMyPostAttendanceAccessionFragment(
                                     post.postId,
-                                    RunnerBeApplication.mTokenPreference.getUserId()
+                                    viewModel.userId.value
                                 )
                             )
                         } catch (e: IllegalArgumentException) {

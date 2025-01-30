@@ -42,6 +42,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         pageSetting()
         observeBind()
+        mainViewModel.fetchUserId()
 
         setFragmentResultListener("filter") { _, bundle ->
             val paces: List<Pace> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -72,7 +73,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.isShowInfoDialog.collect {
-                if (it) checkAdditionalUserInfo()
+                if (it) checkAdditionalUserInfo(mainViewModel.userId.value)
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {

@@ -56,6 +56,7 @@ class RunningTalkDetailFragment :
         binding.fragment = this
         viewModel.roomId = args.roomId
         viewModel.roomRepName = args.roomRepUserName
+        viewModel.fetchUserId()
         observeBind()
         initTalkDetailRecyclerView()
         initTalkAttachedImageRecyclerView()
@@ -246,7 +247,7 @@ class RunningTalkDetailFragment :
     private fun handleAction(action: RunningTalkDetailAction) {
         when(action) {
             is RunningTalkDetailAction.ShowImageSelect -> {
-                checkAdditionalUserInfo {
+                checkAdditionalUserInfo(viewModel.userId.value) {
                     context?.let {
                         SelectItemDialog.createShow(it, listOf(
                             SelectItemParameter("촬영하기") {
