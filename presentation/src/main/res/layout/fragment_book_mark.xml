@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.bookmark.BookMarkViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.bookmark.BookMarkViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

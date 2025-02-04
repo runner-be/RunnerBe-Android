@@ -5,13 +5,13 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
-        <import type="com.applemango.runnerbe.presentation.model.type.PostCalledFrom"/>
+        <import type="com.applemango.presentation.ui.model.type.PostCalledFrom"/>
         <variable
             name="postFrom"
-            type="com.applemango.runnerbe.presentation.model.type.PostCalledFrom" />
+            type="com.applemango.presentation.ui.model.type.PostCalledFrom" />
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.PostingModel" />
+            type="com.applemango.presentation.ui.model.PostingModel" />
         <variable
             name="runningEndTextViewVisibility"
             type="Boolean" />
@@ -23,7 +23,7 @@
             type="Boolean" />
         <variable
             name="clickListener"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.joinedrunning.JoinedRunningClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.applemango.runnerbe.util.DateUtilKt"/>
+        <import type="com.applemango.presentation.util.DateUtilKt"/>
         <import type="android.view.View"/>
         <variable
             name="mode"
             type="boolean" />
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.RunningTalkMessageModel" />
+            type="com.applemango.presentation.ui.model.RunningTalkMessageModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

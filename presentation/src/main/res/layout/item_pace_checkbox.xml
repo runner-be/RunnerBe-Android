@@ -8,7 +8,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceSelectItem" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.paceinfo.PaceSelectItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

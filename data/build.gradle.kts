@@ -1,11 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
 
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").inputStream().use { inputStream ->
+        load(inputStream)
+    }
+}
+
 android {
-    namespace = "kr.devkyu.data"
+    namespace = "com.applemango.data"
     compileSdk = 33
 
     defaultConfig {
@@ -13,6 +22,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "BASE_URL", "\"https://runnerbe.shop\"")
+        buildConfigField("String", "KAKAO_API_KEY", localProperties["KAKAO_API_KEY"].toString())
+        buildConfigField("String", "REST_API_KEY", localProperties["REST_API_KEY"].toString())
+        buildConfigField("String", "WITHDRAWAL_API_KEY", localProperties["WITHDRAWAL_API_KEY"].toString())
     }
 
     buildTypes {
@@ -23,6 +37,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -36,9 +53,11 @@ android {
 dependencies {
     implementation(project(":domain"))
 
+    // Preferences DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.2")
 
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.46")
+    implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-compiler:2.46")
 
     // Coroutines
@@ -48,18 +67,25 @@ dependencies {
     implementation("androidx.paging:paging-common:3.1.1")
 
     // https://github.com/square/retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // https://github.com/square/okhttp
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 
     // https://github.com/square/moshi
-    implementation ("com.squareup.moshi:moshi:1.15.0")
-    implementation ("com.squareup.moshi:moshi-kotlin:1.15.0")
-    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.moshi:moshi:1.15.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    implementation("com.google.firebase:firebase-messaging-ktx:23.1.0")
+    implementation(platform("com.google.firebase:firebase-bom:30.1.0"))
+    implementation("com.google.firebase:firebase-storage-ktx")
+
+    implementation("com.navercorp.nid:oauth:5.10.0") // jdk 11
+    implementation("com.kakao.sdk:v2-all:2.20.0")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.7.0")

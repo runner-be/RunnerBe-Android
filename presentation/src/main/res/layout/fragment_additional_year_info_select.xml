@@ -8,7 +8,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.year.AdditionalYearInfoSelectViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.additionalinfo.year.AdditionalYearInfoSelectViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

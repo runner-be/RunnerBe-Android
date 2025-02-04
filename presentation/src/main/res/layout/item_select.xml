@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.screen.dialog.selectitem.SelectListData" />
+            type="com.applemango.presentation.ui.screen.dialog.selectitem.SelectListData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

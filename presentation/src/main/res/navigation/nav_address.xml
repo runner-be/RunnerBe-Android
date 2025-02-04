@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/runningAddressSearchFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.address.RunningAddressSearchFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchFragment"
         android:label="RunningAddressSearchFragment" >
         <action
             android:id="@+id/action_runningAddressSearchFragment_to_runningAddressSearchDetailFragment"
@@ -14,12 +14,12 @@
     </fragment>
     <fragment
         android:id="@+id/runningAddressSearchDetailFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.address.RunningAddressSearchDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchDetailFragment"
         android:label="RunningAddressSearchDetailFragment" >
 
         <argument
             android:name="address"
-            app:argType="com.applemango.runnerbe.presentation.model.AddressModel"/>
+            app:argType="com.applemango.presentation.ui.model.AddressModel"/>
 
     </fragment>
 </navigation>

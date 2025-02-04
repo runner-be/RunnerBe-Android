@@ -5,14 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="android.view.View" />
 
         <variable
-            name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.map.RunnerMapViewModel" />
+            name="runnerMapViewModel"
+            type="com.applemango.presentation.ui.screen.fragment.map.RunnerMapViewModel" />
     </data>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -99,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    bind:backgroundTop="@{vm.panelTop}">
+                    bind:backgroundTop="@{runnerMapViewModel.panelTop}">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="match_parent"
@@ -138,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:src="@drawable/ic_current_location"
-            bind:locationBtnVisibility="@{vm.panelTop}"
+            bind:locationBtnVisibility="@{runnerMapViewModel.panelTop}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mapTopLayout" />
 
@@ -152,7 +150,7 @@
             android:gravity="center"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp"
-            bind:mapRefreshBtnVisibility="@{vm.panelTop}"
+            bind:mapRefreshBtnVisibility="@{runnerMapViewModel.panelTop}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_current_location"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -175,7 +173,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:onClick="@{() -> vm.writeClicked()}"
+            android:onClick="@{() -> runnerMapViewModel.writeClicked()}"
             android:src="@drawable/ic_running_plus"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />

@@ -11,11 +11,11 @@
 
         <variable
             name="fragment"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile.EditProfileFragment" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.editprofile.EditProfileFragment" />
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile.EditProfileViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.editprofile.EditProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,11 +7,11 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.MemberStampModel" />
+            type="com.applemango.presentation.ui.model.MemberStampModel" />
 
         <variable
             name="listener"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.GotStampClickListener" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.detail.GotStampClickListener" />
 
     </data>
 

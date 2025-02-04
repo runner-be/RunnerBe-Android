@@ -5,7 +5,7 @@
     <data>
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.MyPostAttendanceSeeViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.mypost.see.MyPostAttendanceSeeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

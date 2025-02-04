@@ -6,8 +6,8 @@
     <data>
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.RunningTalkMessageModel" />
-        <import type="com.applemango.runnerbe.util.DateUtilKt"/>
+            type="com.applemango.presentation.ui.model.RunningTalkMessageModel" />
+        <import type="com.applemango.presentation.util.DateUtilKt"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

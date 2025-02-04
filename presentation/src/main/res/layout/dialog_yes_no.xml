@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.screen.dialog.message.YesNoButtonDialogData" />
+            type="com.applemango.presentation.ui.screen.dialog.message.YesNoButtonDialogData" />
     </data>
 
     <androidx.cardview.widget.CardView

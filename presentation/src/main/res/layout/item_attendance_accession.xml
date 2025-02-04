@@ -7,10 +7,10 @@
     <data>
         <variable
             name="pace"
-            type="com.applemango.runnerbe.presentation.model.type.Pace" />
+            type="com.applemango.presentation.ui.model.type.Pace" />
         <variable
             name="userInfo"
-            type="com.applemango.runnerbe.presentation.model.UserModel" />
+            type="com.applemango.presentation.ui.model.UserModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

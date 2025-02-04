@@ -11,7 +11,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.AlarmModel" />
+            type="com.applemango.presentation.ui.model.AlarmModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

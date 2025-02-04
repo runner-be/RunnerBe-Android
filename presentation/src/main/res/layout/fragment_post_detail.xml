@@ -10,11 +10,11 @@
 
         <variable
             name="pace"
-            type="com.applemango.runnerbe.presentation.model.type.Pace" />
+            type="com.applemango.presentation.ui.model.type.Pace" />
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.main.postdetail.PostDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -8,15 +8,15 @@
 
         <variable
             name="vh"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceSeeViewHolder" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.mypost.see.AttendanceSeeViewHolder" />
 
         <variable
             name="userInfo"
-            type="com.applemango.runnerbe.presentation.model.UserModel" />
+            type="com.applemango.presentation.ui.model.UserModel" />
 
         <variable
             name="listener"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.AttendanceProfileClickListener" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.mypost.see.AttendanceProfileClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

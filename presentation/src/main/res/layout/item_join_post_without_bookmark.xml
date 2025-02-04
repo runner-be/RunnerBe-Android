@@ -10,11 +10,11 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.PostingModel" />
+            type="com.applemango.presentation.ui.model.PostingModel" />
 
         <variable
             name="clickListener"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostClickListener" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView

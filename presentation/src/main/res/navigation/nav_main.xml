@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.main.MainFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.MainFragment"
         tools:layout="@layout/fragment_main"
         android:label="MainFragment" >
         <action
@@ -103,7 +103,7 @@
     <fragment
         android:id="@+id/settingFragment"
         tools:layout="@layout/fragment_settings"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.SettingFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.setting.SettingFragment"
         android:label="SettingFragment" >
         <action
             android:id="@+id/action_settingFragment_to_creatorFragment"
@@ -122,27 +122,27 @@
     <fragment
         android:id="@+id/creatorFragment"
         tools:layout="@layout/fragment_creators"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.setting.creator.CreatorFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.setting.creator.CreatorFragment"
         android:label="CreatorFragment" />
 
     <fragment
         android:id="@+id/editProfileFragment"
         tools:layout="@layout/fragment_edit_profile"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.editprofile.EditProfileFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.editprofile.EditProfileFragment"
         android:label="EditProfileFragment" >
 
         <argument
             android:name="userData"
-            app:argType="com.applemango.runnerbe.presentation.model.UserModel"/>
+            app:argType="com.applemango.presentation.ui.model.UserModel"/>
     </fragment>
     <fragment
         android:id="@+id/runningWriteFragment"
         tools:layout="@layout/fragment_running_write"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.write.RunningWriteOneFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.write.RunningWriteOneFragment"
         android:label="RunningWriteFragment" >
         <argument
             android:name="address"
-            app:argType="com.applemango.runnerbe.presentation.screen.fragment.map.write.AddressData"
+            app:argType="com.applemango.presentation.ui.screen.fragment.map.write.AddressData"
             app:nullable="true" />
         <action
             android:id="@+id/action_runningWriteFragment_to_runningWriteTwoFragment"
@@ -155,22 +155,22 @@
     <fragment
         android:id="@+id/runningWriteTwoFragment"
         tools:layout="@layout/fragment_running_write_two"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.write.RunningWriteTwoFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.write.RunningWriteTwoFragment"
         android:label="RunningWriteTwoFragment" >
 
         <argument
             android:name="data"
-            app:argType="com.applemango.runnerbe.presentation.model.vo.RunningWriteTransferData" />
+            app:argType="com.applemango.presentation.ui.model.vo.RunningWriteTransferData" />
     </fragment>
     <fragment
         android:id="@+id/runningFilterFragment"
         tools:layout="@layout/fragment_running_filter"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.map.filter.RunningFilterFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.filter.RunningFilterFragment"
         android:label="RunningFilterFragment" >
 
         <argument
             android:name="paces"
-            app:argType="com.applemango.runnerbe.presentation.model.type.Pace[]"/>
+            app:argType="com.applemango.presentation.ui.model.type.Pace[]"/>
         <argument
             android:name="gender"
             app:argType="string"/>
@@ -190,7 +190,7 @@
     <fragment
         android:id="@+id/myPostAttendanceSeeFragment"
         tools:layout="@layout/fragment_my_post_attendance_see"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.see.MyPostAttendanceSeeFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.mypost.see.MyPostAttendanceSeeFragment"
         android:label="MyPostAttendanceSeeFragment" >
 
         <argument
@@ -210,7 +210,7 @@
     <fragment
         android:id="@+id/myPostAttendanceAccessionFragment"
         tools:layout="@layout/fragment_my_post_attendance_accession"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.MyPostAttendanceAccessionFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.mypost.accession.MyPostAttendanceAccessionFragment"
         android:label="MyPostAttendanceAccessionFragment">
 
         <argument
@@ -223,7 +223,7 @@
     <fragment
         android:id="@+id/runningTalkDetailFragment"
         tools:layout="@layout/fragment_running_talk_detail"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.chat.detail.RunningTalkDetailFragment"
         android:label="RunningTalkDetailFragment" >
 
         <argument
@@ -239,7 +239,7 @@
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.base.WebViewFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.base.WebViewFragment"
         android:label="WebViewFragment" >
 
         <argument
@@ -253,12 +253,12 @@
     <fragment
         android:id="@+id/postDetailFragment"
         tools:layout="@layout/fragment_post_detail"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.postdetail.PostDetailFragment"
         android:label="PostDetailFragment" >
 
         <argument
             android:name="posting"
-            app:argType="com.applemango.runnerbe.presentation.model.PostingModel"/>
+            app:argType="com.applemango.presentation.ui.model.PostingModel"/>
         <action
             android:id="@+id/action_postDetailFragment_to_runningTalkDetailFragment"
             app:destination="@id/runningTalkDetailFragment"
@@ -280,7 +280,7 @@
     <fragment
         android:id="@+id/paceInfoRegistFragment"
         tools:layout="@layout/fragment_regist_pace_info"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoRegistFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.paceinfo.PaceInfoRegistFragment"
         android:label="PaceInfoRegistFragment" >
 
         <argument
@@ -293,7 +293,7 @@
     <fragment
         android:id="@+id/imageDetailFragment"
         tools:layout="@layout/fragment_image_detail"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.chat.detail.image.detail.ImageDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.chat.detail.image.detail.ImageDetailFragment"
         android:label="ImageDetailFragment" >
 
         <argument
@@ -311,7 +311,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.write.RunningLogFragment"
         android:label="RunningLogFragment" >
         <argument
             android:name="date"
@@ -341,7 +341,7 @@
     </fragment>
     <fragment
         android:id="@+id/groupProfilesFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.groupprofile.GroupProfilesFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.groupprofile.GroupProfilesFragment"
         android:label="GroupProfilesFragment" >
         <argument
             android:name="gatheringId"
@@ -363,7 +363,7 @@
     </fragment>
     <fragment
         android:id="@+id/monthlyCalendarFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.calendar.monthly.MonthlyCalendarFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.calendar.monthly.MonthlyCalendarFragment"
         android:label="fragment_monthly_calendar"
         tools:layout="@layout/fragment_monthly_calendar" >
 
@@ -392,7 +392,7 @@
     </fragment>
     <fragment
         android:id="@+id/runningLogDetailFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.detail.RunningLogDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.detail.RunningLogDetailFragment"
         android:label="RunningLogDetailFragment" >
 
         <argument
@@ -434,7 +434,7 @@
 
     <fragment
         android:id="@+id/otherUserProfileFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragment"
         android:label="OtherUserProfileFragment">
 
         <argument
@@ -480,7 +480,7 @@
 
     <fragment
         android:id="@+id/otherUserJoinedRunningFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment"
         android:label="OtherUserJoinedRunningFragment" >
 
         <argument
@@ -501,7 +501,7 @@
     </fragment>
     <fragment
         android:id="@+id/joinedRunningFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.mypage.joinedrunning.JoinedRunningFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.joinedrunning.JoinedRunningFragment"
         android:label="JoinedRunningFragment" >
         <action
             android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceSeeFragment"
@@ -541,7 +541,7 @@
     </fragment>
     <fragment
         android:id="@+id/waitingRunnerListDialog"
-        android:name="com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerListDialog"
+        android:name="com.applemango.presentation.ui.screen.dialog.appliedrunner.WaitingRunnerListDialog"
         android:label="WaitingRunnerListDialog" >
         <action
             android:id="@+id/action_waitingRunnerListDialog_to_otherUserProfileFragment"
@@ -553,6 +553,6 @@
     </fragment>
     <fragment
         android:id="@+id/alarmFragment"
-        android:name="com.applemango.runnerbe.presentation.screen.fragment.main.alarm.AlarmFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.alarm.AlarmFragment"
         android:label="AlarmFragment" />
 </navigation>

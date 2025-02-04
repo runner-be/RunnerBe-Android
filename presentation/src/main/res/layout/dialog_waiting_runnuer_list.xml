@@ -8,15 +8,15 @@
 
         <variable
             name="dialog"
-            type="com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerListDialog" />
+            type="com.applemango.presentation.ui.screen.dialog.appliedrunner.WaitingRunnerListDialog" />
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerViewModel" />
+            type="com.applemango.presentation.ui.screen.dialog.appliedrunner.WaitingRunnerViewModel" />
 
         <variable
             name="detailViewModel"
-            type="com.applemango.runnerbe.presentation.screen.fragment.main.postdetail.PostDetailViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.main.postdetail.PostDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

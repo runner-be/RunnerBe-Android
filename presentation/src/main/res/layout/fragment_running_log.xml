@@ -8,14 +8,14 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.write.RunningLogViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.write.RunningLogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_g7"
-        tools:context=".presentation.screen.fragment.mypage.runninglog.write.RunningLogFragment">
+        tools:context=".ui.screen.fragment.mypage.runninglog.write.RunningLogFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/const_top"

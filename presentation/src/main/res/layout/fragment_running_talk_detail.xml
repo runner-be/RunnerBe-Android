@@ -8,10 +8,10 @@
         <import type="android.view.View"/>
         <variable
             name="fragment"
-            type="com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailFragment" />
+            type="com.applemango.presentation.ui.screen.fragment.chat.detail.RunningTalkDetailFragment" />
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.chat.detail.RunningTalkDetailViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.chat.detail.RunningTalkDetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,11 +9,11 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.map.RunnerMapViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.map.RunnerMapViewModel" />
 
         <variable
             name="mainVm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.main.MainViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.main.MainViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

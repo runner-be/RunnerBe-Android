@@ -1,48 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.applemango.runnerbe">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android.hardware.camera.any" /> <!-- 인터넷 권환 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 저장소 권환 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 위치 권환 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <application
-        android:name=".RunnerBeApplication"
-        android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/runner_be"
-        android:screenOrientation="portrait"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.RunnerBeAndroid"
-        tools:targetApi="31">
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            tools:replace="android:authorities">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"
-                tools:replace="android:resource" />
-        </provider>
-
+    <application>
         <activity
-            android:name=".presentation.screen.activity.SignActivity"
-            android:exported="true"
-            android:label="@string/runner_be"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:name="com.applemango.presentation.ui.screen.activity.SignActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,9 +14,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.screen.activity.HomeActivity"
+            android:name="com.applemango.presentation.ui.screen.activity.HomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -60,26 +23,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.screen.fragment.image.ImageCropActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
+            android:name="com.applemango.presentation.ui.screen.fragment.image.ImageCropActivity"
             android:exported="false" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.screen.activity.AddressActivity"
+            android:name="com.applemango.presentation.ui.screen.activity.AddressActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.screen.activity.AdditionalInfoActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:name="com.applemango.presentation.ui.screen.activity.AdditionalInfoActivity"
+            android:exported="true" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -95,13 +55,6 @@
                     android:scheme="kakao5820a967bb81030d649333f17f04f062" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="d5vu9isrg5" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>

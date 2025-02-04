@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.terms.AgreeToTermsViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.additionalinfo.terms.AgreeToTermsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

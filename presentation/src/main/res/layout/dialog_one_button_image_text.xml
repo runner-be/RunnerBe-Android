@@ -7,7 +7,7 @@
     <data>
         <variable
             name="data"
-            type="com.applemango.runnerbe.presentation.screen.dialog.pace.OneButtonImageTextData" />
+            type="com.applemango.presentation.ui.screen.dialog.pace.OneButtonImageTextData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

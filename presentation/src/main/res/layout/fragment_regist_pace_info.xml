@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.paceinfo.PaceInfoViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.paceinfo.PaceInfoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

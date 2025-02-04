@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.additionalinfo.AdditionalInfoViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.additionalinfo.AdditionalInfoViewModel" />
 
     </data>
 
@@ -133,7 +133,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/psv_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/edu_btn"
@@ -150,7 +150,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/edu_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/dev_btn"
@@ -167,7 +167,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🖥 개발"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -202,7 +202,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/psm_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/des_btn"
@@ -219,7 +219,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/des_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -254,7 +254,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="📊  마케팅/PR"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/ser_btn"
@@ -271,7 +271,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="⚙ 서비스"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/pro_btn"
@@ -288,7 +288,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/pro_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -323,7 +323,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="🔬  연구"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/saf_btn"
@@ -340,7 +340,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/saf_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/med_btn"
@@ -357,7 +357,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/med_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -392,7 +392,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/hur_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/acc_btn"
@@ -409,7 +409,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/acc_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/cus_btn"
@@ -426,7 +426,7 @@
                         android:paddingRight="19dp"
                         android:paddingBottom="8dp"
                         android:text="@string/cus_and_icon"
-                        android:textColor="@drawable/tc_job_radio"></androidx.appcompat.widget.AppCompatRadioButton>
+                        android:textColor="@drawable/tc_job_radio" />
                 </RadioGroup>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

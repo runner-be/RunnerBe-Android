@@ -20,3 +20,4 @@ rootProject.name = "RunnerBe-Android"
 include ':presentation'
 include ':domain'
 include ':data'
+include ':app'

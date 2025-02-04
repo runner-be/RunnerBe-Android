@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.mypost.accession.MyPostAttendanceAccessionViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.mypost.accession.MyPostAttendanceAccessionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

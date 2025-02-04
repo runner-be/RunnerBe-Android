@@ -5,11 +5,11 @@
     <data>
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.RunningTalkRoomModel" />
+            type="com.applemango.presentation.ui.model.RunningTalkRoomModel" />
 
         <variable
             name="clickListener"
-            type="com.applemango.runnerbe.presentation.model.listener.RoomClickListener" />
+            type="com.applemango.presentation.ui.model.listener.RoomClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

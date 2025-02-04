@@ -1,80 +1,30 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
 }
-
-def versionPropsFile = rootProject.file("build-counter.properties")
-def versionProps = new Properties()
-
-if (versionPropsFile.exists()) {
-    versionProps.load(new FileInputStream(versionPropsFile))
-} else {
-    versionProps['BUILD_COUNT'] = "0"
-}
-
-def currentDate = new Date().format("yyyyMMdd")
-if (!versionProps.containsKey('LAST_BUILD_DATE') || versionProps['LAST_BUILD_DATE'] != currentDate) {
-    versionProps['LAST_BUILD_DATE'] = currentDate
-    versionProps['BUILD_COUNT'] = "0"
-}
-
-def buildCount = String.format('%02d', versionProps['BUILD_COUNT'].toInteger() + 1)
-versionProps['BUILD_COUNT'] = buildCount
-
-def buildVersionCode = "${currentDate}${buildCount}".toInteger()
-
-versionProps.store(new FileOutputStream(versionPropsFile), null)
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    namespace 'com.applemango.runnerbe'
-
-    signingConfigs {
-        release {
-            storeFile file('runnerBe-Key.jks')
-            storePassword 'runnerbe2023'
-            keyAlias 'key0'
-            keyPassword 'runnerbe2023'
-        }
-    }
+    namespace = "com.applemango.presentation"
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.applemango.runnerbe"
-        minSdk 26
-        targetSdk 34
-        versionCode buildVersionCode
+        minSdk 28
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary true
-        }
 
-        buildConfigField "String", "WITHDRAWAL_API_KEY", properties["WITHDRAWAL_API_KEY"]
-        buildConfigField "String", "KAKAO_API_KEY", properties["KAKAO_API_KEY"]
-        buildConfigField "String", "REST_API_KEY", properties["REST_API_KEY"]
+        buildConfigField("String", "WITHDRAWAL_API_KEY", properties["WITHDRAWAL_API_KEY"].toString())
+        buildConfigField("String", "VERSION_NAME", properties["VERSION_NAME"].toString())
+        buildConfigField("String", "APPLICATION_ID", properties["APPLICATION_ID"].toString())
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -83,30 +33,13 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        compose true
+        compose = true
         buildConfig = true
         viewBinding = true
         dataBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-    }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
-
-    flavorDimensions "server"
-    productFlavors {
-        dev {
-            dimension "server"
-            buildConfigField "String", "BASE_URL", "\"https://runnerbe.shop\""
-        }
-        real {
-            dimension "server"
-            buildConfigField "String", "BASE_URL", "\"https://runnerbe.shop\""
-        }
+        kotlinCompilerExtensionVersion composeCompilerVersion
     }
 }
 

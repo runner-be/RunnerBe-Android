@@ -9,11 +9,11 @@
 
         <variable
             name="stamp"
-            type="com.applemango.runnerbe.presentation.screen.dialog.stamp.StampItem" />
+            type="com.applemango.presentation.ui.screen.dialog.stamp.StampItem" />
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.JoinedRunnerModel" />
+            type="com.applemango.presentation.ui.model.JoinedRunnerModel" />
 
         <variable
             name="listener"
@@ -21,7 +21,7 @@
 
         <variable
             name="clickListener"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileClickListener" />
 
     </data>
 

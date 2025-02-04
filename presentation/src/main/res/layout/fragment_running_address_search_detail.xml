@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.map.address.RunningAddressSearchDetailViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchDetailViewModel" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_g7"
-        tools:context=".presentation.screen.fragment.map.address.RunningAddressSearchDetailFragment">
+        tools:context=".ui.screen.fragment.map.address.RunningAddressSearchDetailFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/running_search_detail_top"

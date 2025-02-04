@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="com.applemango.runnerbe.presentation.model.AddressModel" />
+            type="com.applemango.presentation.ui.model.AddressModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"

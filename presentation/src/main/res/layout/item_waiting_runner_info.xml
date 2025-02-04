@@ -8,15 +8,15 @@
 
         <variable
             name="pace"
-            type="com.applemango.runnerbe.presentation.model.type.Pace" />
+            type="com.applemango.presentation.ui.model.type.Pace" />
 
         <variable
             name="user"
-            type="com.applemango.runnerbe.presentation.model.UserModel" />
+            type="com.applemango.presentation.ui.model.UserModel" />
 
         <variable
             name="listener"
-            type="com.applemango.runnerbe.presentation.screen.dialog.appliedrunner.WaitingRunnerClickListener" />
+            type="com.applemango.presentation.ui.screen.dialog.appliedrunner.WaitingRunnerClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

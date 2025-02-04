@@ -8,11 +8,11 @@
 
         <variable
             name="pace"
-            type="com.applemango.runnerbe.presentation.model.type.Pace" />
+            type="com.applemango.presentation.ui.model.type.Pace" />
 
         <variable
             name="vm"
-            type="com.applemango.runnerbe.presentation.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileViewModel" />
+            type="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileViewModel" />
     </data>
 
     <ScrollView
