@@ -107,6 +107,7 @@
             app:endIconMode="clear_text"
             app:endIconTint="@null"
             app:hintTextColor="@color/dark_g3_5"
+            android:textColorHint="@color/dark_g3_5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_address_sub">
