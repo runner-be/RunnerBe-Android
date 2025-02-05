@@ -1,4 +1,4 @@
-package com.applemango.presentation.ui.di
+package com.applemango.presentation.di
 
 import com.applemango.presentation.ui.mapper.AddressMapper
 import com.applemango.presentation.ui.mapper.AlarmMapper

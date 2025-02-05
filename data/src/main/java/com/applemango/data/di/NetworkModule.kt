@@ -1,60 +1,59 @@
-package kr.devkyu.data.di
+package com.applemango.data.di
 
-import android.content.Context
-import com.applemango.runnerbe.BuildConfig
+import com.applemango.data.network.BearerInterceptor
+import com.applemango.data.network.XAccessTokenInterceptor
+import com.applemango.data.network.ZonedDateTimeAdapter
+import com.applemango.data.network.api.DeletePostApi
+import com.applemango.data.network.api.DeleteRunningLogApi
+import com.applemango.data.network.api.DeleteUserApi
+import com.applemango.data.network.api.GetAddressResultListApi
+import com.applemango.data.network.api.GetAlarmsApi
+import com.applemango.data.network.api.GetBookmarksApi
+import com.applemango.data.network.api.GetJoinedRunnersApi
+import com.applemango.data.network.api.GetMonthlyRunningLogsApi
+import com.applemango.data.network.api.GetOtherUserProfileApi
+import com.applemango.data.network.api.GetPostDetailApi
+import com.applemango.data.network.api.GetRunningListApi
+import com.applemango.data.network.api.GetRunningLogDetailApi
+import com.applemango.data.network.api.GetRunningTalkMessagesApi
+import com.applemango.data.network.api.GetRunningTalkRoomsApi
+import com.applemango.data.network.api.GetUserDataApi
+import com.applemango.data.network.api.PatchAlarmApi
+import com.applemango.data.network.api.PatchAppliedRunnerApi
+import com.applemango.data.network.api.PatchJoinedRunnerAttendanceApi
+import com.applemango.data.network.api.PatchRunningLogApi
+import com.applemango.data.network.api.PatchUserImageApi
+import com.applemango.data.network.api.PatchUserPaceRegistApi
+import com.applemango.data.network.api.PostApplyToPostApi
+import com.applemango.data.network.api.PostBookmarkedPostApi
+import com.applemango.data.network.api.PostClosingApi
+import com.applemango.data.network.api.PostKakaoLoginAPI
+import com.applemango.data.network.api.PostMessageApi
+import com.applemango.data.network.api.PostMessageReportApi
+import com.applemango.data.network.api.PostNaverLoginAPI
+import com.applemango.data.network.api.PostNewUserApi
+import com.applemango.data.network.api.PostReportPostingApi
+import com.applemango.data.network.api.PostRunningApi
+import com.applemango.data.network.api.PostRunningLogApi
+import com.applemango.data.network.api.PostStampToJoinedRunnerApi
+import com.applemango.data.network.api.UpdateFirebaseTokenApi
+import com.applemango.data.network.api.UpdateJobApi
+import com.applemango.data.network.api.UpdateNicknameApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kr.devkyu.data.dto.TokenSPreference
-import kr.devkyu.data.network.BearerInterceptor
-import kr.devkyu.data.network.XAccessTokenInterceptor
-import kr.devkyu.data.network.ZonedDateTimeAdapter
-import kr.devkyu.data.network.api.DeletePostApi
-import kr.devkyu.data.network.api.DeleteRunningLogApi
-import kr.devkyu.data.network.api.DeleteUserApi
-import kr.devkyu.data.network.api.GetAddressResultListApi
-import kr.devkyu.data.network.api.GetAlarmsApi
-import kr.devkyu.data.network.api.GetBookmarksApi
-import kr.devkyu.data.network.api.GetJoinedRunnersApi
-import kr.devkyu.data.network.api.GetMonthlyRunningLogsApi
-import kr.devkyu.data.network.api.GetOtherUserProfileApi
-import kr.devkyu.data.network.api.GetPostDetailApi
-import kr.devkyu.data.network.api.GetRunningListApi
-import kr.devkyu.data.network.api.GetRunningLogDetailApi
-import kr.devkyu.data.network.api.GetRunningTalkMessagesApi
-import kr.devkyu.data.network.api.GetRunningTalkRoomsApi
-import kr.devkyu.data.network.api.GetUserDataApi
-import kr.devkyu.data.network.api.PatchAlarmApi
-import kr.devkyu.data.network.api.PatchAppliedRunnerApi
-import kr.devkyu.data.network.api.PatchJoinedRunnerAttendanceApi
-import kr.devkyu.data.network.api.PatchRunningLogApi
-import kr.devkyu.data.network.api.PatchUserImageApi
-import kr.devkyu.data.network.api.PatchUserPaceRegistApi
-import kr.devkyu.data.network.api.PostApplyToPostApi
-import kr.devkyu.data.network.api.PostBookmarkedPostApi
-import kr.devkyu.data.network.api.PostClosingApi
-import kr.devkyu.data.network.api.PostKakaoLoginAPI
-import kr.devkyu.data.network.api.PostMessageApi
-import kr.devkyu.data.network.api.PostMessageReportApi
-import kr.devkyu.data.network.api.PostNaverLoginAPI
-import kr.devkyu.data.network.api.PostNewUserApi
-import kr.devkyu.data.network.api.PostReportPostingApi
-import kr.devkyu.data.network.api.PostRunningApi
-import kr.devkyu.data.network.api.PostRunningLogApi
-import kr.devkyu.data.network.api.PostStampToJoinedRunnerApi
-import kr.devkyu.data.network.api.UpdateFirebaseTokenApi
-import kr.devkyu.data.network.api.UpdateJobApi
-import kr.devkyu.data.network.api.UpdateNicknameApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import com.applemango.data.BuildConfig
+import com.applemango.data.network.UserDataStore
+import kotlinx.coroutines.runBlocking
 
 /**
  * author : 두루
@@ -65,20 +64,39 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTokenSPreference(@ApplicationContext context: Context): TokenSPreference {
-        return TokenSPreference(context)
+    fun provideXAccessTokenInterceptor(
+        userDataStore: UserDataStore
+    ): XAccessTokenInterceptor {
+        val jwtToken = userDataStore.getCachedJwtToken() ?: runBlocking {
+            userDataStore.getJwtToken()
+        }
+        return XAccessTokenInterceptor(jwtToken)
     }
 
-    @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    @Singleton
+    fun provideBearerInterceptor(
+        userDataStore: UserDataStore
+    ): BearerInterceptor {
+        val jwtToken = userDataStore.getCachedJwtToken() ?: runBlocking {
+            userDataStore.getJwtToken()
+        }
+        return BearerInterceptor(jwtToken)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        xAccessTokenInterceptor: XAccessTokenInterceptor,
+        bearerInterceptor: BearerInterceptor,
+    ): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .readTimeout(5000, TimeUnit.MILLISECONDS)
             .connectTimeout(5000, TimeUnit.MILLISECONDS)
             // 로그캣에 okhttp.OkHttpClient로 검색하면 http 통신 내용을 보여줍니다.
-            .addInterceptor(BearerInterceptor())
+            .addInterceptor(bearerInterceptor)
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
+            .addNetworkInterceptor(xAccessTokenInterceptor) // JWT 자동 헤더 전송
 
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()

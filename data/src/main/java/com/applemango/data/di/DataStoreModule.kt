@@ -1,7 +1,7 @@
-package com.applemango.presentation.di
+package com.applemango.data.di
 
-import android.content.ContentResolver
 import android.content.Context
+import com.applemango.data.network.UserDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,13 +11,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApplicationModule {
+object DataStoreModule {
 
     @Provides
     @Singleton
-    fun provideContentResolver(
+    fun provideUserDataStore(
         @ApplicationContext context: Context
-    ): ContentResolver {
-        return context.contentResolver
+    ): UserDataStore {
+        return UserDataStore(context)
     }
+
+    @Provides
+    fun provideContext(
+        @ApplicationContext context: Context
+    ): Context = context
 }
