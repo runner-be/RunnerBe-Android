@@ -13,14 +13,14 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        android:background="@color/dark_g2">
+        app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="12dp"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="16dp"
+            android:background="@color/dark_g5_5">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/select_btn"
@@ -58,6 +58,7 @@
                     tools:text="700 ~ 900"
                     android:text="@{data.paceName}"
                     android:textSize="15sp"
+                    android:textColor="@color/dark_g2"
                     android:fontFamily="@font/pretendard_semi_bold"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -68,6 +69,7 @@
                 tools:text="1km당 4.5분 미만으로 러닝하는 초고수 러너"
                 android:text="@{data.paceDescription}"
                 android:textSize="14sp"
+                android:textColor="@color/dark_g2"
                 android:fontFamily="@font/pretendard_regular"
                 android:includeFontPadding="false"
                 android:layout_marginTop="4dp"
