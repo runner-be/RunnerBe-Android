@@ -115,13 +115,13 @@ class RunnerMapViewModel @Inject constructor(
         }
     }
 
-    fun getUserId() {
+    fun fetchUserId() {
         viewModelScope.launch {
             _userId.value = getUserIdUseCase()
         }
     }
 
-    fun getUserPace() {
+    fun fetchUserPace() {
         viewModelScope.launch {
             val paceString = getUserPaceUseCase()
             _userPace.value = Pace.getPaceByName(paceString)
@@ -240,7 +240,7 @@ class RunnerMapViewModel @Inject constructor(
     }
 
     sealed class RunnerMapAction {
-        object MoveToWrite : RunnerMapAction()
+        data object MoveToWrite : RunnerMapAction()
         data class ShowSelectListDialog(
             val list: List<SelectItemParameter>
         ) : RunnerMapAction()

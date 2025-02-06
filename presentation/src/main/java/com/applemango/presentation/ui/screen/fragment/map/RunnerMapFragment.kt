@@ -82,8 +82,8 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
         initListeners()
         setupPostFlow()
 //        viewModel.updateFirebaseToken() 원래 여기서도 Jwt 토큰 업데이트 해야하는건지
-        viewModel.getUserId()
-        viewModel.getUserPace()
+        viewModel.fetchUserId()
+        viewModel.fetchUserPace()
     }
 
     private fun setOnPostListUpdateListener() {
@@ -114,17 +114,19 @@ class RunnerMapFragment : BaseFragment<FragmentRunnerMapBinding>(R.layout.fragme
                     when (it) {
                         is RunnerMapViewModel.RunnerMapAction.MoveToWrite -> {
                             checkAdditionalUserInfo(viewModel.userId.value) {
-                                if (viewModel.userPace.value != null) {
+                                if (viewModel.userPace.value == null) {
                                     navigate(
                                         MainFragmentDirections.actionMainFragmentToPaceInfoFragment(
                                             "map"
                                         )
                                     )
-                                } else navigate(
-                                    MainFragmentDirections.actionMainFragmentToRunningWriteFragment(
-                                        null
+                                } else {
+                                    navigate(
+                                        MainFragmentDirections.actionMainFragmentToRunningWriteFragment(
+                                            null
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
 
