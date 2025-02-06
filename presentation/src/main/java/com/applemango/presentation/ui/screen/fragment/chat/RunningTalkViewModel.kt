@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RunningTalkViewModel @Inject constructor(
-    private val runningTalkUseCase: GetRunningTalkRoomsUseCase,
+    private val getRunningTalkRoomsUseCase: GetRunningTalkRoomsUseCase,
     private val runningTalkRoomMapper: RunningTalkRoomMapper
 ): ViewModel() {
 
@@ -20,7 +20,7 @@ class RunningTalkViewModel @Inject constructor(
 
     fun getRunningTalkList() {
         viewModelScope.launch {
-            runningTalkUseCase().collect {
+            getRunningTalkRoomsUseCase().collect {
                 roomList.value = it.map { room ->
                     runningTalkRoomMapper.mapToPresentation(room)
                 }

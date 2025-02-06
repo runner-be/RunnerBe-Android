@@ -24,6 +24,8 @@ import com.applemango.data.network.request.PatchUserImgRequest
 import com.applemango.data.network.request.PatchUserPaceRegisterRequest
 import com.applemango.data.network.request.SocialLoginRequest
 import com.applemango.data.network.request.WithdrawalUserRequest
+import com.applemango.domain.entity.MyPageEntity
+import com.applemango.domain.entity.OtherUserEntity
 import com.applemango.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
@@ -219,7 +221,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserData(): com.applemango.domain.entity.MyPageEntity {
+    override suspend fun getUserData(): MyPageEntity {
         val userId = getUserId()
         val response = getUserDataApi.getUserData(userId)
         if (response.isSuccessful) {
@@ -234,7 +236,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getOtherUserProfile(targetUserId: Int): com.applemango.domain.entity.OtherUserEntity {
+    override suspend fun getOtherUserProfile(targetUserId: Int): OtherUserEntity {
         val response = getOtherUserProfileApi.getOtherUserProfile(targetUserId)
         if (response.isSuccessful) {
             val body = response.body()

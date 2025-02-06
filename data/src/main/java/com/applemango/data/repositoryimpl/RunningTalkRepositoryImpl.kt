@@ -9,6 +9,8 @@ import com.applemango.data.network.api.PostMessageApi
 import com.applemango.data.network.api.PostMessageReportApi
 import com.applemango.data.network.request.MessageReportRequest
 import com.applemango.data.network.request.SendMessageRequest
+import com.applemango.domain.entity.RunningTalkMessagesEntity
+import com.applemango.domain.entity.RunningTalkRoomEntity
 import com.applemango.domain.repository.RunningTalkRepository
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -53,7 +55,7 @@ class RunningTalkRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getRunningTalkRooms(): List<com.applemango.domain.entity.RunningTalkRoomEntity> {
+    override suspend fun getRunningTalkRooms(): List<RunningTalkRoomEntity> {
         val response = getRunningTalkRoomsApi.getRunningTalkRooms()
         if (response.isSuccessful) {
             val body = response.body()
@@ -69,12 +71,12 @@ class RunningTalkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRunningTalkMessages(roomId: Int): com.applemango.domain.entity.RunningTalkMessagesEntity {
+    override suspend fun getRunningTalkMessages(roomId: Int): RunningTalkMessagesEntity {
         val response = getRunningTalkMessagesApi.getRunningTalkMessages(roomId)
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return com.applemango.domain.entity.RunningTalkMessagesEntity(
+                return RunningTalkMessagesEntity(
                     body.roomInfo,
                     body.messages
                 )
