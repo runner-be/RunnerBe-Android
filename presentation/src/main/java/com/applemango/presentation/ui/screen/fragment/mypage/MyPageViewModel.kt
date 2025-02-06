@@ -16,6 +16,7 @@ import com.applemango.presentation.ui.model.MonthlyRunningLogsModel
 import com.applemango.presentation.ui.model.PostingModel
 import com.applemango.presentation.ui.model.UserModel
 import com.applemango.presentation.ui.state.UiState
+import com.applemango.presentation.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -41,8 +42,8 @@ class MyPageViewModel @Inject constructor(
     private val userMapper: UserMapper,
     private val postingMapper: PostingMapper,
 ) : ViewModel() {
-    private val _userId: MutableStateFlow<Int> = MutableStateFlow(-1)
-    val userId: StateFlow<Int> get() = _userId.asStateFlow()
+    private val _userId: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val userId: StateFlow<Int?> get() = _userId.asStateFlow()
 
     private val _currentMondayYearMonth: MutableStateFlow<String> =
         MutableStateFlow("${LocalDate.now().year}년 ${LocalDate.now().monthValue}월")
@@ -85,9 +86,10 @@ class MyPageViewModel @Inject constructor(
      */
     fun fetchUserRunningLog(
         today: LocalDate,
-        userId: Int,
+        targetUserId: Int?,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            val userId = targetUserId ?: getUserIdUseCase()
             val todayDate = today.dayOfMonth
             val thisYear = today.year
             val prevMonth = if (today.monthValue == 1) 12 else today.monthValue - 1
@@ -114,6 +116,9 @@ class MyPageViewModel @Inject constructor(
                             Pair(thisMonth, thisMonthData)
                         )
                     }.collectLatest { runningLogResults ->
+                        for (element in runningLogResults) {
+                            LogUtil.errorLog(element.toString())
+                        }
                         _runningLogResult.value = runningLogResults
                     }
                 } catch (e: Exception) {
@@ -137,8 +142,8 @@ class MyPageViewModel @Inject constructor(
                 it.userInfo?.let { user -> userMapper.mapToPresentation(user) }
             myPosts.clear()
             joinPosts.value = it.myRunning
-                .map {
-                    postingMapper.mapToPresentation(it)
+                .map { posting ->
+                    postingMapper.mapToPresentation(posting)
                 }.sortedByDescending { running -> running.gatheringTime }
             it.myPosting
                 .map { postingEntity ->

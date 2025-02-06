@@ -42,8 +42,8 @@ class WeeklyCalendarFragment() :
     private val isOtherUserProfile: Boolean by lazy {
         arguments?.getBoolean(ARG_IS_OTHER_USER) ?: false
     }
-    private val targetUserId: Int by lazy {
-        arguments?.getInt(ARG_USER_ID) ?: -1
+    private val targetUserId: Int? by lazy {
+        arguments?.getInt(ARG_USER_ID)
     }
     private var counts: Pair<Int, Int> = Pair(0, 0)
 
@@ -111,7 +111,7 @@ class WeeklyCalendarFragment() :
                                 prevMonthGatheringDataList + thisMonthGatheringDataList,
                                 prevMonthRunningLogList + thisMonthRunningLogList
                             )
-                            val thisWeekLogs = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
+                            val thisWeekLogs: List<RunningLogModel> = parseRunningLogs(thisWeekMonday, parsedRunningLogs)
                             val (groupCount, personalCount) = runningResultMap[thisWeekMondayMonth]?.totalCount
                                 ?: TotalCount(0, 0)
 
@@ -204,7 +204,7 @@ class WeeklyCalendarFragment() :
                     } else {
                         navigate(
                             OtherUserProfileFragmentDirections.actionUserProfileFragmentToRunningLogDetailFragment(
-                                targetUserId,
+                                targetUserId!!,
                                 item.runningLog.logId
                                     ?: throw IllegalArgumentException("RunningLogId is NULL"),
                                 if (isOtherUserProfile) 1 else 0
@@ -218,13 +218,16 @@ class WeeklyCalendarFragment() :
                 val runningLog = item.runningLog
 
                 if (runningLog?.logId != null) {
-                    navigate(
-                        MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
-                            viewModel.userId.value,
-                            runningLog.logId,
-                            0
+                    val userId = viewModel.userId.value
+                    if (userId != null) {
+                        navigate(
+                            MainFragmentDirections.actionMainFragmentToRunningLogDetailFragment(
+                                userId,
+                                runningLog.logId,
+                                0
+                            )
                         )
-                    )
+                    }
                 } else {
                     item.date?.let { itemDate ->
                         navigate(

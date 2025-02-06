@@ -41,6 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -68,6 +69,7 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.myPageViewModel = viewModel
+        viewModel.fetchUserId()
         observeBind()
         requireActivity()
             .supportFragmentManager
@@ -75,11 +77,10 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         initParticipatedRunningAdapter()
         initYearMonthSpinner()
         initListeners()
-        initWeeklyViewPagerAdapter()
+        setupUserId()
         setupJoinedRunningPosts()
         setupWeeklyViewPagerPosition()
         setupWeeklyRunningCount()
-        viewModel.fetchUserId()
         binding.constJoinedRunningPost.setOnClickListener(this)
         binding.settingButton.setOnClickListener(this)
         binding.btnProfileEdit.setOnClickListener(this)
@@ -103,6 +104,16 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
     override fun onDestroyView() {
         _weeklyCalendarPagerAdapter = null
         super.onDestroyView()
+    }
+
+    private fun setupUserId() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.userId.collect { userId ->
+                if (userId != null) {
+                    initWeeklyViewPagerAdapter(userId)
+                }
+            }
+        }
     }
 
     private fun initListeners() {
@@ -245,13 +256,13 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
         }
     }
 
-    private fun initWeeklyViewPagerAdapter() {
+    private fun initWeeklyViewPagerAdapter(userId: Int) {
         binding.vpWeeklyCalendar.apply {
             _weeklyCalendarPagerAdapter = WeeklyCalendarPagerAdapter(
                 childFragmentManager,
                 viewLifecycleOwner.lifecycle,
                 false,
-                viewModel.userId.value
+                userId
             ) { groupCount, personalCount ->
                 viewModel.addViewPagerCounts(groupCount, personalCount)
             }
@@ -313,21 +324,27 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
                     }
 
                     override fun attendanceSeeClick(post: PostingModel) {
-                        navigate(
-                            MainFragmentDirections.actionMainFragmentToMyPostAttendanceSeeFragment(
-                                post.postId,
-                                viewModel.userId.value
+                        val userId = viewModel.userId.value
+                        if (userId != null) {
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToMyPostAttendanceSeeFragment(
+                                    post.postId,
+                                    userId
+                                )
                             )
-                        )
+                        }
                     }
 
                     override fun attendanceManageClick(post: PostingModel) {
-                        navigate(
-                            MainFragmentDirections.actionMainFragmentToMyPostAttendanceAccessionFragment(
-                                post.postId,
-                                viewModel.userId.value
+                        val userId = viewModel.userId.value
+                        if (userId != null) {
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToMyPostAttendanceAccessionFragment(
+                                    post.postId,
+                                    userId
+                                )
                             )
-                        )
+                        }
                     }
 
                     override fun bookMarkClick(post: PostingModel) {
@@ -361,12 +378,17 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.ivCalendar -> {
-                navigate(
-                    MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(
-                        viewModel.userId.value,
-                        0
+                try {
+                    val userId = requireNotNull(viewModel.userId.value!!)
+                    navigate(
+                        MainFragmentDirections.actionMainFragmentToMonthlyCalendarFragment(
+                            userId,
+                            0
+                        )
                     )
-                )
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
+                }
             }
 
             binding.settingButton -> {
@@ -374,36 +396,46 @@ class MyPageFragment : ImageBaseFragment<FragmentMypageBinding>(R.layout.fragmen
             }
 
             binding.btnProfileEdit -> {
-                checkAdditionalUserInfo(viewModel.userId.value) {
-                    viewModel.userInfo.value?.let {
-                        navigate(
-                            MainFragmentDirections.actionMainFragmentToEditProfileFragment(it)
-                        )
+                try {
+                    val userId = requireNotNull(viewModel.userId.value!!)
+                    checkAdditionalUserInfo(userId) {
+                        viewModel.userInfo.value?.let {
+                            navigate(
+                                MainFragmentDirections.actionMainFragmentToEditProfileFragment(it)
+                            )
+                        }
                     }
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
                 }
             }
 
             binding.userImgEdit -> {
-                checkAdditionalUserInfo(viewModel.userId.value) {
-                    context?.let {
-                        SelectItemDialog.createShow(it, listOf(
-                            SelectItemParameter("촬영하기") {
-                                isImage = false
-                                permReqLauncher.launch(Manifest.permission.CAMERA)
-                            },
-                            SelectItemParameter("앨범에서 선택하기") {
-                                isImage = true
-                                permReqLauncher.launch(
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                                        Manifest.permission.READ_MEDIA_IMAGES
-                                    else Manifest.permission.READ_EXTERNAL_STORAGE
-                                )
-                            },
-                            SelectItemParameter("기본 이미지로 변경하기") {
-                                viewModel.userProfileImageChange(null)
-                            }
-                        ))
+                try {
+                    val userId = requireNotNull(viewModel.userId.value!!)
+                    checkAdditionalUserInfo(userId) {
+                        context?.let {
+                            SelectItemDialog.createShow(it, listOf(
+                                SelectItemParameter("촬영하기") {
+                                    isImage = false
+                                    permReqLauncher.launch(Manifest.permission.CAMERA)
+                                },
+                                SelectItemParameter("앨범에서 선택하기") {
+                                    isImage = true
+                                    permReqLauncher.launch(
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                                            Manifest.permission.READ_MEDIA_IMAGES
+                                        else Manifest.permission.READ_EXTERNAL_STORAGE
+                                    )
+                                },
+                                SelectItemParameter("기본 이미지로 변경하기") {
+                                    viewModel.userProfileImageChange(null)
+                                }
+                            ))
+                        }
                     }
+                } catch (e: IllegalArgumentException) {
+                    e.printStackTrace()
                 }
             }
         }
