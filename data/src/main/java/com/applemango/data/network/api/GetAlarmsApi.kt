@@ -7,7 +7,7 @@ import retrofit2.http.GET
 interface GetAlarmsApi {
 
     @GET("/users/alarms")
-    fun getAlarms(
+    suspend fun getAlarms(
 
     ): Response<AlarmsDto>
 }

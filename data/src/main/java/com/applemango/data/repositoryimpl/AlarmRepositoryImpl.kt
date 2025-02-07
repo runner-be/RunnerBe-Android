@@ -19,7 +19,7 @@ class AlarmRepositoryImpl @Inject constructor(
     private val getAlarmsApi: GetAlarmsApi,
     private val commonMapper: CommonMapper,
 ): BaseRepository(), AlarmRepository {
-    override suspend fun patchAlarm(pushOn: Boolean): com.applemango.domain.entity.CommonEntity {
+    override suspend fun patchAlarm(pushOn: Boolean): CommonEntity {
         val userId = userDataStore.getUserId().first()
         return handleApiCall(
             apiCall = {
@@ -35,7 +35,7 @@ class AlarmRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getAlarms(): Flow<List<com.applemango.domain.entity.AlarmEntity>> {
+    override suspend fun getAlarms(): Flow<List<AlarmEntity>> {
         val response = getAlarmsApi.getAlarms()
         if (response.isSuccessful) {
             val body = response.body()

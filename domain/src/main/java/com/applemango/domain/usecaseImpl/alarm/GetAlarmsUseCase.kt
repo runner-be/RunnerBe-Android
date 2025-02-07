@@ -11,7 +11,7 @@ import javax.inject.Inject
 class GetAlarmsUseCase @Inject constructor(
     private val repository: AlarmRepository
 ) {
-    operator fun invoke(): Flow<List<AlarmEntity>> {
+    suspend operator fun invoke(): Flow<List<AlarmEntity>> {
         return repository.getAlarms()
     }
 }

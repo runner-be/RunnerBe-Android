@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlarmRepository {
     suspend fun patchAlarm(pushOn : Boolean) : CommonEntity
-    fun getAlarms(): Flow<List<AlarmEntity>>
+    suspend fun getAlarms(): Flow<List<AlarmEntity>>
 }
