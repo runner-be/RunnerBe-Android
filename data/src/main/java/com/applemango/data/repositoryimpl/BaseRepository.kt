@@ -23,7 +23,8 @@ abstract class BaseRepository {
             if (body is CommonDto && body.isSuccess) {
                 return mapResponse(body)
             } else {
-                throw IllegalStateException("Business logic failed: ${body?.message}")
+                // Business logic failed
+                throw IllegalStateException("${body?.message}")
             }
         } else {
             throw HttpException(response)
