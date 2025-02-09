@@ -126,33 +126,32 @@ fun KakaoLoginView(modifier: Modifier) {
     val viewModel = hiltViewModel<SplashViewModel>()
     val mContext = LocalContext.current as ComponentActivity
 
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        if (error != null) {
-            val errorMessage = when (error.toString()) {
-                AuthErrorCause.AccessDenied.toString() -> "접근이 거부 됨(동의 취소)"
-                AuthErrorCause.InvalidClient.toString() -> "유효하지 않은 앱"
-                AuthErrorCause.InvalidGrant.toString() -> "인증 수단이 유효하지 않아 인증할 수 없는 상태"
-                AuthErrorCause.InvalidRequest.toString() -> "요청 파라미터 오류"
-                AuthErrorCause.InvalidScope.toString() -> "유효하지 않은 scope ID"
-                AuthErrorCause.Misconfigured.toString() -> "설정이 올바르지 않음(android key hash)"
-                AuthErrorCause.ServerError.toString() -> "서버 내부 에러"
-                AuthErrorCause.Unauthorized.toString() -> "앱이 요청 권한이 없음"
-                else -> {
-                    error.printStackTrace()
-                    Log.e("KakaoLogin", error.toString())
-                    error.toString()
-                }// Unknown
-
-            }
-            Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show()
-        } else if (token != null) {
-            Log.d("kakao_token", token.accessToken)
-            viewModel.login(LoginType.KAKAO, token.accessToken)
-        }
-    }
-
     Button(
         onClick = {
+            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+                if (error != null) {
+                    val errorMessage = when (error.toString()) {
+                        AuthErrorCause.AccessDenied.toString() -> "접근이 거부 됨(동의 취소)"
+                        AuthErrorCause.InvalidClient.toString() -> "유효하지 않은 앱"
+                        AuthErrorCause.InvalidGrant.toString() -> "인증 수단이 유효하지 않아 인증할 수 없는 상태"
+                        AuthErrorCause.InvalidRequest.toString() -> "요청 파라미터 오류"
+                        AuthErrorCause.InvalidScope.toString() -> "유효하지 않은 scope ID"
+                        AuthErrorCause.Misconfigured.toString() -> "설정이 올바르지 않음(android key hash)"
+                        AuthErrorCause.ServerError.toString() -> "서버 내부 에러"
+                        AuthErrorCause.Unauthorized.toString() -> "앱이 요청 권한이 없음"
+                        else -> {
+                            error.printStackTrace()
+                            error.toString()
+                        }// Unknown
+
+                    }
+                    Toast.makeText(mContext, errorMessage, Toast.LENGTH_SHORT).show()
+                } else if (token != null) {
+                    Log.d("kakao_token", token.accessToken)
+                    viewModel.login(LoginType.KAKAO, token.accessToken)
+                }
+            }
+
             /* 카카오 로그인 기능 */
             var keyHash = Utility.getKeyHash(mContext)
             Log.i("keyHash", keyHash)
@@ -192,15 +191,8 @@ fun NaverLoginView(modifier: Modifier, navController: NavController) {
     val mContext = LocalContext.current as ComponentActivity
     Button(
         onClick = {
-
             /* 네이버 로그인 기능 */
             var naverToken: String
-            NaverIdLoginSDK.initialize(
-                mContext,
-                mContext.getString(R.string.login_naver_client_id),
-                mContext.getString(R.string.login_naver_client_secret),
-                mContext.getString(R.string.app_name)
-            )
 
             val oauthLoginCallback = object : OAuthLoginCallback {
                 override fun onError(errorCode: Int, message: String) {

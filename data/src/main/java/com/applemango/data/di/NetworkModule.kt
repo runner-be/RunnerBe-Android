@@ -67,10 +67,7 @@ object NetworkModule {
     fun provideXAccessTokenInterceptor(
         userDataStore: UserDataStore
     ): XAccessTokenInterceptor {
-        val jwtToken = userDataStore.getCachedJwtToken() ?: runBlocking {
-            userDataStore.getJwtToken()
-        }
-        return XAccessTokenInterceptor(jwtToken)
+        return XAccessTokenInterceptor(userDataStore)
     }
 
     @Provides
@@ -78,10 +75,7 @@ object NetworkModule {
     fun provideBearerInterceptor(
         userDataStore: UserDataStore
     ): BearerInterceptor {
-        val jwtToken = userDataStore.getCachedJwtToken() ?: runBlocking {
-            userDataStore.getJwtToken()
-        }
-        return BearerInterceptor(jwtToken)
+        return BearerInterceptor(userDataStore)
     }
 
     @Provides

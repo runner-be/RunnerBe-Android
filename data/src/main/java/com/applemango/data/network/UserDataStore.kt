@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -33,8 +34,6 @@ class UserDataStore @Inject constructor(
     private val LOGIN_TYPE_KEY = intPreferencesKey("loginType")
     private val RUNNING_PACE_KEY = stringPreferencesKey("runningPace")
 
-    fun getCachedJwtToken(): String? = cachedJwtToken
-
     suspend fun logoutSet() {
         if (getLoginType().first() == LoginType.KAKAO) {
             UserApiClient.instance.logout { e ->
@@ -45,7 +44,8 @@ class UserDataStore @Inject constructor(
         }
 //        if(isNaver()) NaverIdLoginSDK.logout() //요긴 네이버 쪽 버그로 인해 로그아웃이 안되는 이슈가...
 //        if(isKakao()) {}//카카오도 SDK 로그아웃이 있는 경우 처리하기
-        withContext(Dispatchers.IO) {
+        runBlocking(Dispatchers.IO) {
+            cachedJwtToken = null
             removeUserId()
             removeLoginType()
             removePace()
@@ -60,13 +60,15 @@ class UserDataStore @Inject constructor(
         preferences[USER_ID_KEY] ?: -1
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getJwtToken(): String {
+    suspend fun getJwtToken(): String? {
         if (cachedJwtToken == null) {
-            cachedJwtToken = dataStore.data.map { preferences ->
-                preferences[TOKEN_KEY]
-            }.flowOn(Dispatchers.IO).first()
+            val token = dataStore.data
+                .map { preferences -> preferences[TOKEN_KEY] }
+                .flowOn(Dispatchers.IO)
+                .first()
+            cachedJwtToken = token
         }
-        return cachedJwtToken!!
+        return cachedJwtToken
     }
 
     private fun getLoginType(): Flow<LoginType?> = dataStore.data.map { preferences ->

@@ -1,5 +1,7 @@
 package com.applemango.data.network
 
+import android.util.Log
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -14,12 +16,12 @@ import javax.inject.Inject
  */
 
 class BearerInterceptor @Inject constructor(
-    private val jwtToken: String
+    private val userDataStore: UserDataStore
 ) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        var Baseresponse = chain.request()
-        if (Baseresponse.method == "HTTP 403 ") {
+        val bearerResponse = chain.request()
+        if (bearerResponse.method == "HTTP 403 ") {
 //            var refreshToken = RunnerBeApplication.sSharedPreferences.getString("refresh-token", null)
 
 //            val response = Retrofit.Builder()
@@ -39,8 +41,11 @@ class BearerInterceptor @Inject constructor(
 //
 //            accessToken = result.blockingGet().accessToken
 
+            val jwtToken = runBlocking {
+                userDataStore.getJwtToken()
+            }
             val newRequest =
-                chain.request().newBuilder().addHeader("Authorization", "Bearer ${jwtToken}")
+                chain.request().newBuilder().addHeader("Authorization", "Bearer $jwtToken")
                     .build()
 //            val newRequest = chain.request().newBuilder().build()
             return chain.proceed(newRequest)

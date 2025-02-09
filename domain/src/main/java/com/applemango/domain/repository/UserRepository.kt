@@ -11,7 +11,7 @@ interface UserRepository {
 //    fun getCachedJwtToken(): String?
     suspend fun logout()
     suspend fun getUserId(): Int
-//    suspend fun getJwtToken(): String?
+    suspend fun getJwtToken(): String?
     suspend fun getUserPace(): String
     suspend fun getDeviceToken(): String?
     suspend fun getUuid(): String?

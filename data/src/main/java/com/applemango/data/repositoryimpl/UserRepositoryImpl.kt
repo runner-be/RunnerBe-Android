@@ -59,6 +59,10 @@ class UserRepositoryImpl @Inject constructor(
         return cachedUserId!!
     }
 
+    override suspend fun getJwtToken(): String? {
+        return userDataStore.getJwtToken()
+    }
+
     override suspend fun getUserPace(): String {
         return userDataStore.getPace().first()
     }
@@ -92,6 +96,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logout() {
+        cachedUserId = null
         userDataStore.logoutSet()
     }
 

@@ -153,6 +153,8 @@ dependencies {
     implementation("com.kakao.sdk:v2-all:2.20.0")
     implementation("com.google.firebase:firebase-storage-ktx")
 
+    implementation("com.navercorp.nid:oauth:5.10.0")
+
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
