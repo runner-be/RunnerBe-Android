@@ -3,7 +3,6 @@ package com.applemango.presentation.ui.screen.fragment.chat.detail.mapper
 import com.applemango.presentation.ui.model.RunningTalkMessageModel
 import com.applemango.presentation.ui.screen.fragment.chat.detail.uistate.RunningTalkItem
 import com.applemango.presentation.ui.screen.fragment.chat.detail.uistate.RunningTalkUiState
-import com.applemango.presentation.util.LogUtil
 import com.applemango.presentation.util.dateStringToString
 import com.applemango.presentation.util.timeHourAndMinute
 import java.text.SimpleDateFormat
@@ -40,7 +39,6 @@ object RunningTalkDetailMapper {
                     items = items
                 )
                 else -> {
-                    LogUtil.errorLog("Unexpected from value: $targetFrom")
                     null
                 }
             }

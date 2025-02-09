@@ -5,7 +5,6 @@ import com.applemango.domain.usecaseImpl.runninglog.GetMonthlyRunningLogsUseCase
 import com.applemango.domain.usecaseImpl.user.local.GetUserIdUseCase
 import com.applemango.presentation.ui.mapper.MonthlyRunningLogMapper
 import com.applemango.presentation.ui.model.MonthlyRunningLogsModel
-import com.applemango.presentation.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,8 +55,6 @@ class MonthlyCalendarViewModel @Inject constructor(
         }.flowOn(Dispatchers.IO)
 
     fun updateSelectedYearMonth(year: Int, month: Int) {
-        LogUtil.debugLog("새로 선택한 년월 -> ${year}년 ${month}월")
-        LogUtil.debugLog("기존 선택된 년월 -> ${_selectedYearMonth.value.first}년 ${_selectedYearMonth.value.second}월")
         if (year != _selectedYearMonth.value.first || month != _selectedYearMonth.value.second) {
             _selectedYearMonth.value = Pair(year, month)
         }

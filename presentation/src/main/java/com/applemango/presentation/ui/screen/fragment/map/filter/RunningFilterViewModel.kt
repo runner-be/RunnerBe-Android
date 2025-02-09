@@ -116,9 +116,6 @@ class RunningFilterViewModel @Inject constructor(
         return paceList.value
             .filter { it.isSelected }
             .map { it.pace }
-            .also {
-                Log.e("getPaceTags", "when back pressed : $it")
-            }
     }
 
     fun setPaceTags(paceTags: List<Pace>) {

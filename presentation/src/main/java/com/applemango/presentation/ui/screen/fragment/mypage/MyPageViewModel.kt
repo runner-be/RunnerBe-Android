@@ -16,7 +16,6 @@ import com.applemango.presentation.ui.model.MonthlyRunningLogsModel
 import com.applemango.presentation.ui.model.PostingModel
 import com.applemango.presentation.ui.model.UserModel
 import com.applemango.presentation.ui.state.UiState
-import com.applemango.presentation.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -116,9 +115,6 @@ class MyPageViewModel @Inject constructor(
                             Pair(thisMonth, thisMonthData)
                         )
                     }.collectLatest { runningLogResults ->
-                        for (element in runningLogResults) {
-                            LogUtil.errorLog(element.toString())
-                        }
                         _runningLogResult.value = runningLogResults
                     }
                 } catch (e: Exception) {

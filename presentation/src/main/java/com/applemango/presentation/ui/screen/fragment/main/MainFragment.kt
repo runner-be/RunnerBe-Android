@@ -52,8 +52,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                 bundle.getParcelableArray("paces")?.filterIsInstance<Pace>()
             } ?: emptyList()
 
-            Log.e("MainFragment", paces.toString())
-
             viewModel.setFilter(
                 paces = paces,
                 gender = bundle.getString("gender"),

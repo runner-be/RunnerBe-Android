@@ -7,7 +7,6 @@ import com.applemango.presentation.ui.screen.dialog.CustomBottomSheetDialog
 import com.applemango.presentation.util.NumberUtil
 import com.applemango.presentation.R
 import com.applemango.presentation.databinding.DialogBottomSheetYearMonthBinding
-import com.applemango.presentation.util.LogUtil
 import com.github.gzuliyujiang.wheelview.contract.OnWheelChangedListener
 import com.github.gzuliyujiang.wheelview.widget.WheelView
 import java.time.LocalDate
@@ -40,18 +39,7 @@ class YearMonthSelectDialog ()
         initWheelViews()
     }
 
-    override fun onPause() {
-        LogUtil.debugLog("onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        LogUtil.debugLog("onStop")
-        super.onStop()
-    }
-
     override fun onDestroyView() {
-        LogUtil.debugLog("onDestroyView")
         dismiss()
         super.onDestroyView()
     }
