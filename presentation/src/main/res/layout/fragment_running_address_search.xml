@@ -104,6 +104,7 @@
                     android:inputType="text"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
+                    android:textColor="@color/dark_g3_5"
                     android:textColorHint="@color/dark_g3_5" />
             </com.google.android.material.textfield.TextInputLayout>
 
