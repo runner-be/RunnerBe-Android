@@ -42,7 +42,6 @@ class UserDataStore @Inject constructor(
         } else {
             NaverIdLoginSDK.logout()
         }
-//        if(isNaver()) NaverIdLoginSDK.logout() //요긴 네이버 쪽 버그로 인해 로그아웃이 안되는 이슈가...
 //        if(isKakao()) {}//카카오도 SDK 로그아웃이 있는 경우 처리하기
         runBlocking(Dispatchers.IO) {
             cachedJwtToken = null

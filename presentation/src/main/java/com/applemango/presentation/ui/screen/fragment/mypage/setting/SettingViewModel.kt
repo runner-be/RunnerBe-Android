@@ -51,8 +51,8 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun withdrawalUser() = viewModelScope.launch {
-        runCatching {
+    fun withdrawalUser() {
+        viewModelScope.launch {
             val result = withdrawalUserUseCase(
                 BuildConfig.WITHDRAWAL_API_KEY
             )
@@ -61,8 +61,6 @@ class SettingViewModel @Inject constructor(
             } else {
                 _withdrawalState.emit(UiState.Failed(result.message ?: ""))
             }
-        }.onFailure {
-            _withdrawalState.emit(UiState.NetworkError)
         }
     }
 

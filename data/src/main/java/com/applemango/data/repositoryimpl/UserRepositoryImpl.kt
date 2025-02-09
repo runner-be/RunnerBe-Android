@@ -104,7 +104,11 @@ class UserRepositoryImpl @Inject constructor(
         val userId = getUserId()
         return handleApiCall(
             apiCall = {
-                deleteUserApi.withdrawalUser(userId, WithdrawalUserRequest(secretKey))
+                val response = deleteUserApi.withdrawalUser(userId, WithdrawalUserRequest(secretKey))
+                if (response.isSuccessful) {
+                    logout()
+                }
+                response
             },
             mapResponse = { body ->
                 commonMapper.mapToDomain(body)

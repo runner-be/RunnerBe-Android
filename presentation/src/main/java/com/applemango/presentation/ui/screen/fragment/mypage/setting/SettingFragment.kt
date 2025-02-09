@@ -137,7 +137,7 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
                         firstButtonText = resources.getString(R.string.no),
                         secondButtonText = resources.getString(R.string.yes),
                         firstEvent = {},
-                        secondEvent = { withdrawal() },
+                        secondEvent = { viewModel.withdrawalUser() },
                         title = resources.getString(R.string.question_withdrawal)
                     )
                 }
@@ -151,10 +151,6 @@ class SettingFragment : BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
     private fun moveToLoginActivity() {
         activity?.startActivity(Intent(context, SignActivity::class.java))
         activity?.finish()
-    }
-
-    private fun withdrawal() = viewLifecycleOwner.lifecycleScope.launch {
-        viewModel.withdrawalUser()
     }
 
     private fun getAppVersion() = BuildConfig.VERSION_NAME
