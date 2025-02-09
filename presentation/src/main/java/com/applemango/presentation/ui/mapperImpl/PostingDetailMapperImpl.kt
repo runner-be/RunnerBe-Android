@@ -20,7 +20,8 @@ class PostingDetailMapperImpl @Inject constructor(
             waitingRunnerInfo = input.waitingRunnerInfo?.map {
                 userMapper.mapToDomain(it)
             },
-            roomId = input.roomId
+            roomId = input.roomId,
+            gatheringId = input.gatheringId
         )
     }
 
@@ -33,7 +34,8 @@ class PostingDetailMapperImpl @Inject constructor(
             waitingRunnerInfo = input.waitingRunnerInfo?.map {
                 userMapper.mapToPresentation(it)
             },
-            roomId = input.roomId
+            roomId = input.roomId,
+            gatheringId = input.gatheringId
         )
     }
 }

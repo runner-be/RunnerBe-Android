@@ -25,6 +25,7 @@ class PostingDetailMapperImpl @Inject constructor(
                 userMapper.mapToDomain(it)
             },
             result.roomId,
+            result.gatheringId
         )
     }
 
@@ -41,6 +42,7 @@ class PostingDetailMapperImpl @Inject constructor(
                     userMapper.mapToData(it)
                 },
                 input.roomId,
+                input.gatheringId
             )
         )
     }

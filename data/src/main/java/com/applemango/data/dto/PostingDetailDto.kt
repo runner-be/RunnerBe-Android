@@ -10,8 +10,9 @@ data class PostingDetailDto(
 )
 
 data class PostingDetail(
-    val postList : List<PostingDto>,
-    val runnerInfo : List<UserDto>?,
-    val waitingRunnerInfo : List<UserDto>?,
-    val roomId: Int
+    @Json(name = "postingInfo") val postList : List<PostingDto>,
+    @Json(name = "runnerInfo") val runnerInfo : List<UserDto>?,
+    @Json(name = "waitingRunnerInfo") val waitingRunnerInfo : List<UserDto>?,
+    @Json(name = "roomId") val roomId: Int,
+    @Json(name = "gatheringId") val gatheringId: Int,
 )

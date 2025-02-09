@@ -223,7 +223,7 @@ class PostDetailViewModel @Inject constructor(
     }
 
     fun isParticipatePostIn(posting: PostingModel): Boolean =
-        runnerInfoList.value.firstOrNull { it.userId == posting.userId!! } != null
+        runnerInfoList.value.firstOrNull { it.userId == posting.postUserId } != null
 
     private fun isPostClose(): Boolean = post.value?.whetherEnd == "Y"
 

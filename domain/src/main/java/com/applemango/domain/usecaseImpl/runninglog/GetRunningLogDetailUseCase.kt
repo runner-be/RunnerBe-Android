@@ -10,6 +10,6 @@ class GetRunningLogDetailUseCase @Inject constructor(
     private val runningLogRepository: RunningLogRepository
 ) {
     suspend operator fun invoke(targetUserId: Int, logId: Int): Flow<RunningLogDetailEntity> = flow {
-        runningLogRepository.getRunningLogDetail(targetUserId, logId)
+        emit(runningLogRepository.getRunningLogDetail(targetUserId, logId))
     }
 }

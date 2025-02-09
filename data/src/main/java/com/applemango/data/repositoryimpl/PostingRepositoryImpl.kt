@@ -17,6 +17,8 @@ import com.applemango.data.network.api.PostReportPostingApi
 import com.applemango.data.network.api.PostRunningApi
 import com.applemango.data.network.request.WriteRunningRequest
 import com.applemango.data.paging.AddressSearchPagingSource
+import com.applemango.domain.entity.CommonEntity
+import com.applemango.domain.entity.PostingEntity
 import com.applemango.domain.repository.PostingRepository
 import com.applemango.domain.usecaseImpl.post.GetPostsUseCase
 import com.applemango.domain.usecaseImpl.post.WritePostUseCase
@@ -51,7 +53,7 @@ class PostingRepositoryImpl @Inject constructor(
 
     override suspend fun writeRunning(
         request: WritePostUseCase.WriteRunningParam
-    ): com.applemango.domain.entity.CommonEntity {
+    ): CommonEntity {
         val userId = getUserId()
         return handleApiCall(
             apiCall = {
@@ -82,7 +84,7 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun postClosing(postId: Int): com.applemango.domain.entity.CommonEntity {
+    override suspend fun postClosing(postId: Int): CommonEntity {
         return handleApiCall(
             apiCall = {
                 postClosingApi.postClose(postId)
@@ -93,7 +95,7 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun postApply(postId: Int): com.applemango.domain.entity.CommonEntity {
+    override suspend fun postApply(postId: Int): CommonEntity {
         val userId = getUserId()
         return handleApiCall(
             apiCall = {
@@ -104,7 +106,7 @@ class PostingRepositoryImpl @Inject constructor(
             }
         )
     }
-    override suspend fun dropPost(postId: Int): com.applemango.domain.entity.CommonEntity {
+    override suspend fun dropPost(postId: Int): CommonEntity {
         val userId = getUserId()
         return handleApiCall(
             apiCall = {
@@ -116,7 +118,7 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun reportPost(postId: Int): com.applemango.domain.entity.CommonEntity {
+    override suspend fun reportPost(postId: Int): CommonEntity {
         val userId = getUserId()
         return handleApiCall(
             apiCall = {
@@ -128,7 +130,7 @@ class PostingRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getBookmarkList(): List<com.applemango.domain.entity.PostingEntity> {
+    override suspend fun getBookmarkList(): List<PostingEntity> {
         val userId = getUserId()
         val response = getBookmarksApi.getBookmarks(userId)
         if (response.isSuccessful) {
@@ -139,7 +141,7 @@ class PostingRepositoryImpl @Inject constructor(
             if (body?.isSuccess == true) {
                 return postings ?: emptyList()
             } else {
-                throw IllegalStateException("Business logic failed: ${body?.message}")
+                throw IllegalStateException("${body?.message}")
             }
         } else {
             throw HttpException(response)
@@ -149,7 +151,7 @@ class PostingRepositoryImpl @Inject constructor(
     override suspend fun getRunningList(
         runningTag: String,
         request: GetPostsUseCase.GetRunningListParam
-    ): List<com.applemango.domain.entity.PostingEntity> {
+    ): List<PostingEntity> {
         val userId = userDataStore.getUserId().first()
         val response = getRunningListApi.getRunningList(
             runningTag = runningTag,
@@ -177,7 +179,7 @@ class PostingRepositoryImpl @Inject constructor(
             if (body?.isSuccess == true) {
                 return result
             } else {
-                throw IllegalStateException("Business logic failed: ${body?.message}")
+                throw IllegalStateException("${body?.message}")
             }
         } else {
             throw HttpException(response)
@@ -192,7 +194,7 @@ class PostingRepositoryImpl @Inject constructor(
             if (body?.isSuccess == true) {
                 return postingDetailMapper.mapToDomain(body)
             } else {
-                throw IllegalStateException("Business logic failed: ${body?.message}")
+                throw IllegalStateException("${body?.message}")
             }
         } else {
             throw HttpException(response)

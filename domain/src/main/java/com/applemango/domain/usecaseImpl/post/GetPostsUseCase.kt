@@ -13,7 +13,7 @@ class GetPostsUseCase @Inject constructor(
     private val repository: PostingRepository
 ) {
     suspend operator fun invoke(runningTag: String, request : GetRunningListParam) : Flow<List<PostingEntity>> = flow {
-        repository.getRunningList(runningTag = runningTag, request = request)
+        emit(repository.getRunningList(runningTag = runningTag, request = request))
     }
 
     data class GetRunningListParam(
