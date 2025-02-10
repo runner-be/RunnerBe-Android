@@ -108,7 +108,7 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
                     }
                     viewModel.updateDegreeAndWeather(
                         log.weatherDegree.toString(),
-                        WeatherItem.getWeatherItemByCode(requireContext(), log.weatherCode)
+                        WeatherItem.getWeatherItemByCode(requireContext(), log.weatherIcon)
                     )
                 }
             }
