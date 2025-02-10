@@ -18,7 +18,7 @@ data class RunningLogDetail (
     val contents: String,
     val imageUrl: String?,
     val weatherDegree: Int?,
-    val weatherCode: String?,
+    val weatherIcon: String?,
     val isOpened: Int,
 )
 
