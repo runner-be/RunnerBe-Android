@@ -71,8 +71,10 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         _photoManager = SinglePhotoManager(this) { croppedImage ->
             viewModel.updateLogImage(croppedImage)
         }
-        viewModel.getPostedRunningLog(navArgs.logId?.toInt() ?: 0)
-        setupPostedRunningLog()
+        navArgs.logId?.let {
+            viewModel.getPostedRunningLog(it.toInt())
+            setupPostedRunningLog()
+        }
     }
 
     override fun onDestroyView() {

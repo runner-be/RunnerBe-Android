@@ -95,6 +95,7 @@
                 android:hint="@string/weather_temperature_hint"
                 android:includeFontPadding="false"
                 android:textSize="16sp"
+                android:textColor="@color/dark_g1"
                 android:textColorHint="@color/dark_g3_5"
                 android:inputType="numberSigned"
                 android:paddingHorizontal="12dp"
