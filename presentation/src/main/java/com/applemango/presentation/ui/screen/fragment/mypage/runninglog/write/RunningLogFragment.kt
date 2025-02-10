@@ -71,6 +71,8 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         _photoManager = SinglePhotoManager(this) { croppedImage ->
             viewModel.updateLogImage(croppedImage)
         }
+        viewModel.getPostedRunningLog(navArgs.logId?.toInt() ?: 0)
+        setupPostedRunningLog()
     }
 
     override fun onDestroyView() {
@@ -93,26 +95,25 @@ class RunningLogFragment : BaseFragment<FragmentRunningLogBinding>(R.layout.frag
         )
     }
 
-//    private fun setupPostedRunningLog() {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            viewModel.postedRunningLogFlow.collect { response ->
-//                val log = response.runningLog
-//                val stamp: StampItem? = context?.let {
-//                    StampItem.getStampItemByCode(it, log.stampCode)
-//                }
-//                viewModel.updateLogDate(parseLocalDateToKorean(log.runnedDate.toLocalDate()))
-//                stamp?.let {
-//                    viewModel.updateStamp(it)
-//                }
-//                viewModel.updateLogDiary(log.contents)
-//                viewModel.updateDegreeAndWeather(
-//                    log.weatherDegree.toString(),
-//                    WeatherItem.getWeatherItemByCode(requireContext(), log.weatherCode)
-//                )
-//                viewModel.updateLogVisibility(log.isOpened == 1)
-//            }
-//        }
-//    }
+    private fun setupPostedRunningLog() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.runningLogData.collect { response ->
+                if (response != null) {
+                    val log = response.runningLog
+                    val stamp: StampItem? = context?.let {
+                        StampItem.getStampItemByCode(it, log.stampCode)
+                    }
+                    stamp?.let {
+                        viewModel.updateStamp(it)
+                    }
+                    viewModel.updateDegreeAndWeather(
+                        log.weatherDegree.toString(),
+                        WeatherItem.getWeatherItemByCode(requireContext(), log.weatherCode)
+                    )
+                }
+            }
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initListeners() {
