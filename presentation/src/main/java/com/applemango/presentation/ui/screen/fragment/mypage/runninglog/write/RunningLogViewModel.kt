@@ -8,12 +8,15 @@ import com.applemango.domain.usecaseImpl.runninglog.GetJoinedRunnersUseCase
 import com.applemango.domain.usecaseImpl.runninglog.GetRunningLogDetailUseCase
 import com.applemango.domain.usecaseImpl.runninglog.UpdateRunningLogUseCase
 import com.applemango.domain.usecaseImpl.runninglog.WriteRunningLogUseCase
+import com.applemango.domain.usecaseImpl.user.local.GetUserIdUseCase
 import com.applemango.presentation.ui.mapper.RunningLogDetailMapper
 import com.applemango.presentation.ui.model.RunningLogDetailModel
 import com.applemango.presentation.ui.screen.dialog.stamp.StampItem
 import com.applemango.presentation.ui.screen.dialog.weather.WeatherItem
 import com.applemango.presentation.util.parseKoreanDateToLocalDate
 import com.applemango.presentation.R
+import com.applemango.presentation.ui.model.PostingModel
+import com.applemango.presentation.util.parseLocalDateToKorean
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +40,7 @@ import com.google.firebase.storage.StorageReference as StorageReference
 class RunningLogViewModel @Inject constructor(
     private val writeRunningLogUseCase: WriteRunningLogUseCase,
     private val updateRunningLogUseCase: UpdateRunningLogUseCase,
+    private val getUserIdUseCase: GetUserIdUseCase,
     private val getJoinedRunnersUseCase: GetJoinedRunnersUseCase,
     private val getRunningLogDetailUseCase: GetRunningLogDetailUseCase,
     private val runningLogDetailMapper: RunningLogDetailMapper,
@@ -63,13 +67,24 @@ class RunningLogViewModel @Inject constructor(
     val logVisibility = MutableStateFlow(true)
     val joinedRunnerSize = MutableStateFlow(0)
 
-    suspend fun getPostedRunningLog(
-        targetUserId: Int,
+    private val _runningLogData = MutableStateFlow<RunningLogDetailModel?>(null)
+    val runningLogData: StateFlow<RunningLogDetailModel?> get() = _runningLogData
+
+    fun getPostedRunningLog(
         logId: Int
-    ): Flow<RunningLogDetailModel> {
-        return getRunningLogDetailUseCase(targetUserId, logId).map {
-            runningLogDetailMapper.mapToPresentation(it)
-        }.flowOn(Dispatchers.IO)
+    ) {
+        viewModelScope.launch {
+            val userId = getUserIdUseCase()
+            val result = getRunningLogDetailUseCase(userId, logId).map {
+                runningLogDetailMapper.mapToPresentation(it)
+            }
+            result.collect { log ->
+                _runningLogData.value = log
+                updateLogDate(parseLocalDateToKorean(log.runningLog.runnedDate.toLocalDate()))
+                updateLogDiary(log.runningLog.contents)
+                updateLogVisibility(log.runningLog.isOpened == 1)
+            }
+        }
     }
 
     suspend fun postRunningLog(): Pair<Boolean, String?> {
