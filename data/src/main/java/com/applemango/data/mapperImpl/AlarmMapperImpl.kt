@@ -1,15 +1,16 @@
 package com.applemango.data.mapperImpl
 
-import com.applemango.data.dto.Alarm
+import com.applemango.data.dto.AlarmDto
+import com.applemango.data.dto.Alarms
 import com.applemango.data.dto.AlarmsDto
 import com.applemango.data.mapper.AlarmMapper
 import com.applemango.domain.entity.AlarmEntity
 import javax.inject.Inject
 
 class AlarmMapperImpl @Inject constructor(): AlarmMapper {
-    override fun mapToData(input: List<com.applemango.domain.entity.AlarmEntity>): AlarmsDto {
+    override fun mapToData(input: List<AlarmEntity>): AlarmsDto {
         val result = input.map {
-            val alarm = Alarm(
+            val alarm = AlarmDto(
                 it.alarmId,
                 it.userId,
                 it.createdAt,
@@ -20,13 +21,13 @@ class AlarmMapperImpl @Inject constructor(): AlarmMapper {
             alarm
         }
         return AlarmsDto(
-            alarms = result
+            alarms = Alarms(result)
         )
     }
 
-    override fun mapToDomain(input: AlarmsDto): List<com.applemango.domain.entity.AlarmEntity> {
-        val result = input.alarms.map {
-            com.applemango.domain.entity.AlarmEntity(
+    override fun mapToDomain(input: AlarmsDto): List<AlarmEntity> {
+        val result = input.alarms.alarms.map {
+            AlarmEntity(
                 it.alarmId,
                 it.userId,
                 it.createdAt,

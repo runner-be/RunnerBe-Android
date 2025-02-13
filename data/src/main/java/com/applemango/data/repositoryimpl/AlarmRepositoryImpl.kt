@@ -1,5 +1,6 @@
 package com.applemango.data.repositoryimpl
 
+import com.applemango.data.mapper.AlarmMapper
 import com.applemango.data.mapper.CommonMapper
 import com.applemango.data.network.UserDataStore
 import com.applemango.data.network.api.GetAlarmsApi
@@ -18,6 +19,7 @@ class AlarmRepositoryImpl @Inject constructor(
     private val patchAlarmApi: PatchAlarmApi,
     private val getAlarmsApi: GetAlarmsApi,
     private val commonMapper: CommonMapper,
+    private val alarmMapper: AlarmMapper
 ): BaseRepository(), AlarmRepository {
     override suspend fun patchAlarm(pushOn: Boolean): CommonEntity {
         val userId = userDataStore.getUserId().first()
@@ -40,7 +42,8 @@ class AlarmRepositoryImpl @Inject constructor(
         if (response.isSuccessful) {
             val body = response.body()
             if (body?.isSuccess == true) {
-                return flow { body.alarms }
+                val alarms = alarmMapper.mapToDomain(body)
+                return flow { emit(alarms) }
             } else {
                 throw IllegalStateException("Business logic failed: ${body?.message}")
             }
