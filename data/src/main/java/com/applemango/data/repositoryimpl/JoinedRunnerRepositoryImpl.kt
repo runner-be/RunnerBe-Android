@@ -9,6 +9,8 @@ import com.applemango.data.network.api.PatchJoinedRunnerAttendanceApi
 import com.applemango.data.network.api.PostStampToJoinedRunnerApi
 import com.applemango.data.network.request.AttendanceAccessionRequest
 import com.applemango.data.network.request.PostStampRequest
+import com.applemango.domain.entity.CommonEntity
+import com.applemango.domain.entity.JoinedRunnerEntity
 import com.applemango.domain.repository.JoinedRunnerRepository
 import com.applemango.domain.usecaseImpl.post.AttendanceAccessionUseCase
 import com.applemango.domain.usecaseImpl.runninglog.WriteStampToJoinedRunnerUseCase
@@ -29,7 +31,7 @@ class JoinedRunnerRepositoryImpl @Inject constructor(
     override suspend fun attendanceAccession(
         postId: Int,
         request: AttendanceAccessionUseCase.AttendanceAccessionParam
-    ): com.applemango.domain.entity.CommonEntity {
+    ): CommonEntity {
         return handleApiCall(
             apiCall = {
                 patchJoinedRunnerAttendanceApi.attendanceAccession(
@@ -50,7 +52,7 @@ class JoinedRunnerRepositoryImpl @Inject constructor(
         postId: Int,
         applicantId: Int,
         whetherAccept: String
-    ): com.applemango.domain.entity.CommonEntity {
+    ): CommonEntity {
         return handleApiCall(
             apiCall = {
                 patchAppliedRunnerApi.whetherAccept(postId, applicantId, whetherAccept)
@@ -64,7 +66,7 @@ class JoinedRunnerRepositoryImpl @Inject constructor(
     override suspend fun postStampToJoinedRunner(
         logId: Int,
         stamp: WriteStampToJoinedRunnerUseCase.PostStampParam
-    ): com.applemango.domain.entity.CommonEntity {
+    ): CommonEntity {
         val userId = userDataStore.getUserId().first()
         return handleApiCall(
             apiCall = {
@@ -81,7 +83,7 @@ class JoinedRunnerRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getJoinedRunnerList(logId: Int): List<com.applemango.domain.entity.JoinedRunnerEntity> {
+    override suspend fun getJoinedRunnerList(logId: Int): List<JoinedRunnerEntity> {
         val userId = userDataStore.getUserId().first()
         val response = getJoinedRunnersApi.getJoinedRunnerList(userId, logId)
         if (response.isSuccessful) {

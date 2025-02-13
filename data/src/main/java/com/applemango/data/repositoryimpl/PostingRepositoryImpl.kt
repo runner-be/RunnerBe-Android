@@ -17,7 +17,9 @@ import com.applemango.data.network.api.PostReportPostingApi
 import com.applemango.data.network.api.PostRunningApi
 import com.applemango.data.network.request.WriteRunningRequest
 import com.applemango.data.paging.AddressSearchPagingSource
+import com.applemango.domain.entity.AddressEntity
 import com.applemango.domain.entity.CommonEntity
+import com.applemango.domain.entity.PostingDetailEntity
 import com.applemango.domain.entity.PostingEntity
 import com.applemango.domain.repository.PostingRepository
 import com.applemango.domain.usecaseImpl.post.GetPostsUseCase
@@ -186,7 +188,7 @@ class PostingRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostDetail(postId: Int): com.applemango.domain.entity.PostingDetailEntity {
+    override suspend fun getPostDetail(postId: Int): PostingDetailEntity {
         val userId = getUserId()
         val response = getPostDetailApi.getPostDetail(postId, userId)
         if (response.isSuccessful) {
@@ -201,7 +203,7 @@ class PostingRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAddressList(keyword: String): Flow<PagingData<com.applemango.domain.entity.AddressEntity>> {
+    override fun getAddressList(keyword: String): Flow<PagingData<AddressEntity>> {
         return Pager(PagingConfig(pageSize = 20)) {
             addressSearchPagingSource.apply {
                 this.query = keyword
