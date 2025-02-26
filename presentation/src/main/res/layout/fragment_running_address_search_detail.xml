@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchDetailViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_g7"
+        tools:context=".ui.screen.fragment.map.address.RunningAddressSearchDetailFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/running_search_detail_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="15dp"
+                android:src="@drawable/ic_close_g4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:text="@string/running_location_search"
+                android:textColor="@color/dark_g3_5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_address_main"
+            style="@style/TextStyleHead16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            tools:text="여의도 공원"
+            android:textColor="@color/dark_g2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/running_search_detail_top" />
+
+        <TextView
+            android:id="@+id/tv_address_sub"
+            style="@style/TextStyleBody16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="6dp"
+            android:paddingVertical="2dp"
+            android:text="서울 영등포구 여의도동 2"
+            android:textColor="@color/dark_g3_5"
+            app:layout_constraintEnd_toStartOf="@id/tv_address_sub_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_address_main"/>
+
+        <TextView
+            android:id="@+id/tv_address_sub_edit"
+            style="@style/TextStyleBody14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_r_6_no_stroke_g5_clickable"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            android:clickable="true"
+            android:text="@string/running_location_search_detail_edit"
+            android:textColor="@color/dark_g2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_address_sub" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_search"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            app:boxStrokeColor="@color/selector_g3_5_focused"
+            app:counterEnabled="true"
+            app:counterMaxLength="35"
+            app:counterTextColor="@color/dark_g3_5"
+            app:endIconDrawable="@drawable/ic_search_clear"
+            app:endIconMode="clear_text"
+            app:endIconTint="@null"
+            app:hintTextColor="@color/dark_g3_5"
+            android:textColorHint="@color/dark_g3_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_address_sub">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tie_address_detail"
+                style="@style/TextStyleBody16"
+                android:layout_width="match_parent"
+                android:hint="@string/running_location_search_detail_hint_2"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:inputType="text"
+                android:textColor="@color/dark_g1"
+                android:textCursorDrawable="@drawable/cursor_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_register"
+            style="@style/TextStyleBody16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="20dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="@drawable/bg_my_page_yet_running_custom"
+            android:gravity="center"
+            android:paddingVertical="14dp"
+            android:text="@string/running_location_search_detail_confirm"
+            android:textColor="@color/tc_enable_dark3_5g_black"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

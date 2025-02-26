@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_additional_info"
+    app:startDestination="@id/agreeToTermsFragment">
+
+    <fragment
+        android:id="@+id/agreeToTermsFragment"
+        tools:layout="@layout/fragment_agree_to_terms"
+        android:name="com.applemango.presentation.ui.screen.fragment.additionalinfo.terms.AgreeToTermsFragment"
+        android:label="AgreeToTermsFragment" >
+        <action
+            android:id="@+id/action_agreeToTermsFragment_to_yearInfoFragment"
+            app:destination="@id/yearInfoFragment" />
+        <action
+            android:id="@+id/action_agreeToTermsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/yearInfoFragment"
+        tools:layout="@layout/fragment_additional_year_info_select"
+        android:name="com.applemango.presentation.ui.screen.fragment.additionalinfo.year.AdditionalYearInfoSelectFragment"
+        android:label="YearInfoFragment" >
+        <action
+            android:id="@+id/action_yearInfoFragment_to_additionalGenderSelectFragment"
+            app:destination="@id/additionalGenderSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionalGenderSelectFragment"
+        tools:layout="@layout/fragment_additional_gender_select"
+        android:name="com.applemango.presentation.ui.screen.fragment.additionalinfo.gender.AdditionalGenderSelectFragment"
+        android:label="AdditionalGenderSelectFragment" >
+        <action
+            android:id="@+id/action_additionalGenderSelectFragment_to_additionalJobSelectFragment"
+            app:destination="@id/additionalJobSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionalJobSelectFragment"
+        tools:layout="@layout/fragment_additional_job_select"
+        android:name="com.applemango.presentation.ui.screen.fragment.additionalinfo.job.AdditionalJobSelectFragment"
+        android:label="AdditionalJobSelectFragment" >
+        <action
+            android:id="@+id/action_additionalJobSelectFragment_to_registerCompleteFragment"
+            app:destination="@id/registerCompleteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerCompleteFragment"
+        tools:layout="@layout/fragment_adiitional_register_complete"
+        android:name="com.applemango.presentation.ui.screen.fragment.additionalinfo.complete.RegisterCompleteFragment"
+        android:label="RegisterCompleteFragment" />
+    <fragment
+        android:id="@+id/webViewFragment"
+        tools:layout="@layout/fragment_web_view"
+        android:name="com.applemango.presentation.ui.screen.fragment.base.WebViewFragment"
+        android:label="WebViewFragment" >
+        <argument
+            android:name="url"
+            app:argType="string"/>
+
+        <argument
+            android:name="title"
+            app:argType="string"/>
+    </fragment>
+</navigation>

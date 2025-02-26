@@ -50,7 +50,6 @@
 
 # Moshi
 -keep class com.squareup.moshi.** { *; }
--keep @com.squareup.moshi.JsonClass class * { *; }
 
 # Parcelize
 -keep @kotlinx.parcelize.Parcelize class * { *; }
