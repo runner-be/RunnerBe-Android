@@ -1,0 +1,62 @@
+package com.applemango.data.mapper
+
+import com.applemango.data.dto.AlarmsDto
+import com.applemango.data.dto.CommonDto
+import com.applemango.data.dto.JoinedRunnerDto
+import com.applemango.data.dto.MonthlyRunningLogDto
+import com.applemango.data.dto.MyPageDto
+import com.applemango.data.dto.NewUserDto
+import com.applemango.data.dto.OtherUserDto
+import com.applemango.data.dto.PostingDetailDto
+import com.applemango.data.dto.PostingDto
+import com.applemango.data.dto.ProfileUrl
+import com.applemango.data.dto.RunningLogDetailDto
+import com.applemango.data.dto.RunningTalkMessageDto
+import com.applemango.data.dto.RunningTalkRoomDto
+import com.applemango.data.dto.SocialLoginDto
+import com.applemango.data.dto.UserDto
+import com.applemango.domain.entity.AlarmEntity
+import com.applemango.domain.entity.CommonEntity
+import com.applemango.domain.entity.JoinedRunnerEntity
+import com.applemango.domain.entity.MonthlyRunningLogEntity
+import com.applemango.domain.entity.MyPageEntity
+import com.applemango.domain.entity.NewUserEntity
+import com.applemango.domain.entity.OtherUserEntity
+import com.applemango.domain.entity.PostingDetailEntity
+import com.applemango.domain.entity.PostingEntity
+import com.applemango.domain.entity.ProfileUrlEntity
+import com.applemango.domain.entity.RunningLogDetailEntity
+import com.applemango.domain.entity.RunningTalkMessageEntity
+import com.applemango.domain.entity.RunningTalkRoomEntity
+import com.applemango.domain.entity.SocialLoginEntity
+import com.applemango.domain.entity.UserEntity
+
+interface CommonMapper:
+    BaseMapper<CommonDto, CommonEntity>
+interface UserMapper: BaseMapper<UserDto, UserEntity>
+interface MyPageMapper:
+    BaseMapper<MyPageDto, MyPageEntity>
+interface ProfileUrlMapper:
+    BaseMapper<ProfileUrl, ProfileUrlEntity>
+interface PostingMapper:
+    BaseMapper<PostingDto, PostingEntity>
+interface PostingDetailMapper:
+    BaseMapper<PostingDetailDto, PostingDetailEntity>
+interface JoinedRunnerMapper:
+    BaseMapper<JoinedRunnerDto, JoinedRunnerEntity>
+interface MonthlyRunningLogMapper:
+    BaseMapper<MonthlyRunningLogDto, MonthlyRunningLogEntity>
+interface RunningLogDetailMapper:
+    BaseMapper<RunningLogDetailDto, RunningLogDetailEntity>
+interface AlarmMapper:
+    BaseMapper<AlarmsDto, List<AlarmEntity>>
+interface SocialLoginMapper:
+    BaseMapper<SocialLoginDto, SocialLoginEntity>
+interface NewUserMapper:
+    BaseMapper<NewUserDto, NewUserEntity>
+interface OtherUserMapper:
+    BaseMapper<OtherUserDto, OtherUserEntity>
+interface RunningTalkRoomMapper:
+    BaseMapper<RunningTalkRoomDto, RunningTalkRoomEntity>
+interface RunningTalkMessageMapper:
+    BaseMapper<RunningTalkMessageDto, RunningTalkMessageEntity>

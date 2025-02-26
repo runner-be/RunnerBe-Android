@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.applemango.presentation.util.DateUtilKt"/>
+        <import type="android.view.View"/>
+        <variable
+            name="mode"
+            type="boolean" />
+        <variable
+            name="item"
+            type="com.applemango.presentation.ui.model.RunningTalkMessageModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:image_from_url_rounded="@{item.profileImageUrl}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/profileNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@{item.nickName}"
+            android:textColor="@color/dark_g3_5"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toRightOf="@id/profileImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="다른 사람" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/messageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="230dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="12dp"
+            android:background="@{item.whetherPostUser.equals(String.valueOf('Y')) ? @drawable/bg_other_talk_organizer : @drawable/bg_other_talk_participants}"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="11dp"
+            android:text="@{item.content}"
+            android:textColor="@{item.whetherPostUser.equals(String.valueOf('Y')) ? @color/black : @color/dark_g1}"
+            android:textSize="14sp"
+            tools:text="안녕하세요~! 참여하고 싶은데 혹시 동생이랑 같이 가도 될까요?! (가로 최대)"
+            app:layout_constraintLeft_toRightOf="@id/profileImageView"
+            app:layout_constraintTop_toBottomOf="@id/profileNameView"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:button="@null"
+            android:layout_marginTop="7dp"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="7dp"
+            android:visibility="@{mode ? View.VISIBLE : View.GONE}"
+            android:checked="@={item.checked}"
+            android:background="@drawable/selector_check_box"
+            app:layout_constraintTop_toTopOf="@id/messageTextView"
+            app:layout_constraintLeft_toRightOf="@id/messageTextView"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/createDateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="100dp"
+            android:textColor="@color/dark_g4"
+            android:textSize="10sp"
+            tools:text="7/3"
+            android:text="@{DateUtilKt.getMonthAndDay(item.createAt)}"
+            app:layout_constraintLeft_toRightOf="@id/messageTextView"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

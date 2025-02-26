@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="logo_yellow">#FFDD62</color>
+    <color name="logo_yellow_darker">#FFDD62</color>
+    <color name="kakao_yellow">#FEE500</color>
+
+    <color name="dark_g1">#F5F5F5</color>
+    <color name="dark_g2">#CDCDCD</color>
+    <color name="dark_g2_5">#BDBDBD</color>
+    <color name="dark_g3">#A8A8A8</color>
+    <color name="dark_g3_5">#8D8D8D</color>
+    <color name="dark_g4">#6F6F6F</color>
+    <color name="dark_g4_5">#595959</color>
+    <color name="dark_g5">#414141</color>
+    <color name="dark_g5_5">#363636</color>
+    <color name="dark_g6">#292929</color>
+    <color name="dark_g7">#141414</color>
+    <color name="dark_g8">#050505</color>
+    <color name="black_19">#191919</color>
+    <color name="black_29">#292929</color>
+    <color name="primary">#FFDD62</color>
+    <color name="primary_pressed">#FECF6C</color>
+    <color name="primary_glow">#373021</color>
+    <color name="naver_green">#03C75A</color>
+    <color name="black_background">#121212</color>
+    
+    <color name="white_20">#33FFFFFF</color>
+
+    <color name="tab_background">#0AFFFFFF</color>
+    <color name="error_light">#F59B92</color>
+</resources>

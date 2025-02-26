@@ -1,0 +1,167 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+android {
+    namespace = "com.applemango.presentation"
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 28
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "WITHDRAWAL_API_KEY", properties["WITHDRAWAL_API_KEY"].toString())
+        buildConfigField("String", "VERSION_NAME", properties["VERSION_NAME"].toString())
+        buildConfigField("String", "APPLICATION_ID", properties["APPLICATION_ID"].toString())
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+        viewBinding = true
+        dataBinding = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion composeCompilerVersion
+    }
+}
+
+dependencies {
+    implementation(project(":domain"))
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+
+    // RxKotlin
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+
+    //compose liveData
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+
+    //ui
+    implementation 'com.github.hannesa2:AndroidSlidingUpPanel:4.2.1'
+    implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'
+    implementation 'com.google.android.material:material:1.8.0'
+
+    // Navigation
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime:3.1.1")
+    implementation("androidx.paging:paging-common:3.1.1")
+
+    // Dagger Core
+    implementation "com.google.dagger:dagger:2.37"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    kapt "com.google.dagger:dagger-compiler:2.37"
+
+    // Dagger Android
+    api 'com.google.dagger:dagger-android:2.37'
+    api 'com.google.dagger:dagger-android-support:2.37'
+    kapt 'com.google.dagger:dagger-android-processor:2.37'
+
+    // Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.46"
+    kapt "com.google.dagger:hilt-android-compiler:2.46"
+
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
+    //    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    // JUnit5 테스트 프레임워크
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.1")
+    // 코루틴 테스트 라이브러리
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    // https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // https://github.com/square/okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+
+    // https://github.com/square/moshi
+    implementation 'com.squareup.moshi:moshi:1.15.0'  // 최신 버전 확인
+    implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'  // Kotlin 확장 라이브러리
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+
+    // https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    // https://github.com/ybq/Android-SpinKit
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    // 카카오
+//    implementation "com.kakao.sdk:v2-user:2.18.0"
+    implementation "com.kakao.sdk:v2-all:2.20.0"
+
+    //네이버 로그인
+    implementation("com.navercorp.nid:oauth:5.10.0") // jdk 11
+//    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'   // import from jcenter
+
+    //네이버 지도
+    implementation 'com.naver.maps:map-sdk:3.16.0'
+
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+    implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.0'
+
+    //facebook
+    implementation 'com.facebook.android:facebook-android-sdk:16.0.0'
+
+    // dots indicator
+    implementation 'com.tbuonomo:dotsindicator:4.3'
+
+    // circle image view
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // Ted permission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+}
