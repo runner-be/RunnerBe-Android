@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="pace"
+            type="com.applemango.presentation.ui.model.type.Pace" />
+
+        <variable
+            name="vm"
+            type="com.applemango.presentation.ui.screen.fragment.main.postdetail.PostDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_g7">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/postDetailTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.backClicked()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/top_txt"
+                style="@style/TextStyleHead18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.locationInfo}"
+                android:textColor="@color/dark_g3_5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2024년 11월 21일" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/home_bell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.reportBtnClicked()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_bell"
+                android:visibility="@{vm.myPost ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/moreIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.moreIconClicked()}"
+                android:padding="10dp"
+                android:src="@drawable/ic_more_vertical"
+                android:visibility="@{vm.myPost ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/mainScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@+id/bottomButtonLayout"
+            app:layout_constraintTop_toBottomOf="@id/postDetailTopBar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/const_pace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_dark_4_5g_solid_radius_4"
+                    android:paddingVertical="2dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="8dp"
+                    app:layout_constraintStart_toStartOf="@+id/titleTextView"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_pace"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        bind:paceImage16="@{vm.post.pace}" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_pace"
+                        style="@style/TextStyleCaption11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="@{pace.Companion.getPaceByName(vm.post.pace).time}"
+                        android:textColor="@color/dark_g1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_pace"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="700~900" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="9dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="@{vm.post.title}"
+                    android:textColor="@color/dark_g1"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/const_pace"
+                    tools:text="새벽에 달리기 하실 분 있으신가요?" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/recruitmentCompleteView"
+                    style="@style/TextStyleCaption11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_dark_4_5g_solid_radius_4"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="모집 완료"
+                    android:textColor="@color/dark_g2_5"
+                    android:visibility="@{vm.post.whetherEnd.equals(String.valueOf('Y')) ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+                <View
+                    android:id="@+id/titleIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_g6"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recruitmentCompleteView" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/dateLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/titleIndicator">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calender" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/dateDisplayView"
+                        date_string="@{vm.post.gatheringTime}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="3/31 (금) AM 6:00" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="8dp"
+                        android:src="@drawable/ic_dot_g3_5" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{vm.post.afterParty == 1 ? @string/after_party_exist : @string/after_party_not_exist}"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="뒷풀이 없음" />
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/timeLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateLayout">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_time_18" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/TimeDisplayView"
+                        time_string="@{vm.post.runningTime}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="1시간 20분" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/peopleLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/timeLayout">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_people_18" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        gender_string="@{vm.post.gender}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="여성만" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="7dp"
+                        android:src="@drawable/ic_dot_g3_5" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:text="@{vm.ageString(vm.post)}"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="20-35" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="7dp"
+                        android:src="@drawable/ic_dot_g3_5" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        runner_count="@{vm.post.peopleNum}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
+                        android:textColor="@color/dark_g3_5"
+                        android:textSize="14sp"
+                        tools:text="최대 8명" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:id="@+id/detailIndicator"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_g6"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/peopleLayout" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/contentTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="@{vm.post.contents}"
+                    android:textColor="@color/dark_g3_5"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/detailIndicator"
+                    tools:text="하루를 보람차게 시작해요~" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginTop="30dp"
+                    android:backgroundTint="@color/dark_g5"
+                    app:cardCornerRadius="12dp"
+                    app:layout_constraintTop_toBottomOf="@+id/contentTextView">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="15dp">
+
+                        <com.naver.maps.map.MapView
+                            android:id="@+id/map_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_address_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="15dp"
+                            android:text="@{vm.post.placeName}"
+                            android:textColor="@color/dark_g2_5"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toStartOf="@id/tv_text_copy"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/map_view"
+                            tools:text="여의도" />
+
+                        <TextView
+                            android:id="@+id/tv_address_detail"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="2dp"
+                            android:maxLength="35"
+                            bind:postPlaceAddressText="@{vm.post}"
+                            android:textColor="@color/dark_g3_5"
+                            app:layout_constraintEnd_toStartOf="@id/tv_text_copy"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_address_name"
+                            tools:text="여의도 국회의사당 옆 피자 가게" />
+
+                        <TextView
+                            android:id="@+id/tv_text_copy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="15dp"
+                            android:background="@drawable/selector_click_g5_5_to_4_5"
+                            android:clickable="true"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="3dp"
+                            android:text="주소 복사"
+                            android:textColor="@color/dark_g2"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_address_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/tv_address_name" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <View
+                    android:id="@+id/bottomIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/cv_map" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/joinCountLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/bottomIndicator">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextStyleBody16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/join_runner"
+                        android:textColor="@color/dark_g3_5" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextStyleBody16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:textColor="@color/dark_g3_5" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/joinRunnerRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="16dp"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/joinCountLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toTopOf="@id/bottomButtonLayout"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/moveToWaitingUserButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.waitingBtnClicked()}"
+                android:src="@drawable/ic_waiting_user"
+                android:visibility="@{vm.myPost ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:src="@drawable/ic_red_dot_14"
+                android:visibility="@{vm.isWaitingUserExist(vm.waitingInfo) ? View.VISIBLE : View.GONE}"
+                app:layout_constraintRight_toRightOf="@+id/moveToWaitingUserButton"
+                app:layout_constraintTop_toTopOf="@id/moveToWaitingUserButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/bottomButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/dark_g7"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/messageIcon"
+                isEnabled="@{vm.isParticipatePostIn(vm.post)}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:onClick="@{() -> vm.moveToMessageClicked()}"
+                android:src="@drawable/selector_message_circle" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_apply"
+                style="@style/TextStyleBody14"
+                isEnabled="@{vm.isBottomButtonEnabled(vm.post.whetherEnd)}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/selector_main_primary_button"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="10dp"
+                android:text="@{vm.setBottomButtonText(vm.post)}"
+                android:textColor="@color/tc_enable_dark3_5g_black" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.RunnerBeAndroid" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/black_29</item>
+    </style>
+
+    <style name="SliderTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/dark_g4</item>
+        <item name="colorAccent">@color/dark_g4</item>
+    </style>
+</resources>

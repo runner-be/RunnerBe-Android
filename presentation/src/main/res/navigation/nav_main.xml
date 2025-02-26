@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.MainFragment"
+        tools:layout="@layout/fragment_main"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_mainFragment_to_runningWriteFragment"
+            app:destination="@id/runningWriteFragment"/>
+        <action
+            android:id="@+id/action_mainFragment_to_runningFilterFragment"
+            app:destination="@id/runningFilterFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_runningTalkDetailFragment"
+            app:destination="@id/runningTalkDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_paceInfoFragment"
+            app:destination="@id/paceInfoRegistFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_monthlyCalendarFragment"
+            app:destination="@id/monthlyCalendarFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_otherUserJoinedRunningFragment"
+            app:destination="@id/otherUserJoinedRunningFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_joinedRunningFragment"
+            app:destination="@id/joinedRunningFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_myPostAttendanceSeeFragment"
+            app:destination="@id/myPostAttendanceSeeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_myPostAttendanceAccessionFragment"
+            app:destination="@id/myPostAttendanceAccessionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_alarmFragment"
+            app:destination="@id/alarmFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        tools:layout="@layout/fragment_settings"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.setting.SettingFragment"
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_creatorFragment"
+            app:destination="@id/creatorFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+
+        <argument
+            android:name="alarmCheck"
+            app:argType="boolean"/>
+        <action
+            android:id="@+id/action_settingFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/creatorFragment"
+        tools:layout="@layout/fragment_creators"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.setting.creator.CreatorFragment"
+        android:label="CreatorFragment" />
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        tools:layout="@layout/fragment_edit_profile"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.editprofile.EditProfileFragment"
+        android:label="EditProfileFragment" >
+
+        <argument
+            android:name="userData"
+            app:argType="com.applemango.presentation.ui.model.UserModel"/>
+    </fragment>
+    <fragment
+        android:id="@+id/runningWriteFragment"
+        tools:layout="@layout/fragment_running_write"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.write.RunningWriteOneFragment"
+        android:label="RunningWriteFragment" >
+        <argument
+            android:name="address"
+            app:argType="com.applemango.presentation.ui.screen.fragment.map.write.AddressData"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_runningWriteFragment_to_runningWriteTwoFragment"
+            app:destination="@id/runningWriteTwoFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningWriteTwoFragment"
+        tools:layout="@layout/fragment_running_write_two"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.write.RunningWriteTwoFragment"
+        android:label="RunningWriteTwoFragment" >
+
+        <argument
+            android:name="data"
+            app:argType="com.applemango.presentation.ui.model.vo.RunningWriteTransferData" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningFilterFragment"
+        tools:layout="@layout/fragment_running_filter"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.filter.RunningFilterFragment"
+        android:label="RunningFilterFragment" >
+
+        <argument
+            android:name="paces"
+            app:argType="com.applemango.presentation.ui.model.type.Pace[]"/>
+        <argument
+            android:name="gender"
+            app:argType="string"/>
+        <argument
+            android:name="afterParty"
+            app:argType="string"/>
+        <argument
+            android:name="job"
+            app:argType="string" />
+        <argument
+            android:name="maxAge"
+            app:argType="integer"/>
+        <argument
+            android:name="minAge"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPostAttendanceSeeFragment"
+        tools:layout="@layout/fragment_my_post_attendance_see"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.mypost.see.MyPostAttendanceSeeFragment"
+        android:label="MyPostAttendanceSeeFragment" >
+
+        <argument
+            android:name="postId"
+            app:argType="integer"/>
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_myPostAttendanceSeeFragment_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPostAttendanceAccessionFragment"
+        tools:layout="@layout/fragment_my_post_attendance_accession"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.mypost.accession.MyPostAttendanceAccessionFragment"
+        android:label="MyPostAttendanceAccessionFragment">
+
+        <argument
+            android:name="postId"
+            app:argType="integer"/>
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningTalkDetailFragment"
+        tools:layout="@layout/fragment_running_talk_detail"
+        android:name="com.applemango.presentation.ui.screen.fragment.chat.detail.RunningTalkDetailFragment"
+        android:label="RunningTalkDetailFragment" >
+
+        <argument
+            android:name="roomId"
+            app:argType="integer"/>
+
+        <argument
+            android:name="roomRepUserName"
+            app:argType="string"/>
+        <action
+            android:id="@+id/moveToImageDetailFragment"
+            app:destination="@id/imageDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.base.WebViewFragment"
+        android:label="WebViewFragment" >
+
+        <argument
+            android:name="url"
+            app:argType="string"/>
+
+        <argument
+            android:name="title"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailFragment"
+        tools:layout="@layout/fragment_post_detail"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.postdetail.PostDetailFragment"
+        android:label="PostDetailFragment" >
+
+        <argument
+            android:name="posting"
+            app:argType="com.applemango.presentation.ui.model.PostingModel"/>
+        <action
+            android:id="@+id/action_postDetailFragment_to_runningTalkDetailFragment"
+            app:destination="@id/runningTalkDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_paceInfoRegistFragment"
+            app:destination="@id/paceInfoRegistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paceInfoRegistFragment"
+        tools:layout="@layout/fragment_regist_pace_info"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.paceinfo.PaceInfoRegistFragment"
+        android:label="PaceInfoRegistFragment" >
+
+        <argument
+            android:name="mode"
+            app:argType="string"/>
+        <action
+            android:id="@+id/moveToWriteFragment"
+            app:destination="@id/runningWriteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageDetailFragment"
+        tools:layout="@layout/fragment_image_detail"
+        android:name="com.applemango.presentation.ui.screen.fragment.chat.detail.image.detail.ImageDetailFragment"
+        android:label="ImageDetailFragment" >
+
+        <argument
+            android:name="title"
+            app:argType="string"/>
+
+        <argument
+            android:name="pageNumber"
+            app:argType="integer"
+            android:defaultValue="0"/>
+
+        <argument
+            android:name="images"
+            app:argType="string[]"/>
+    </fragment>
+    <fragment
+        android:id="@+id/runningLogFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.write.RunningLogFragment"
+        android:label="RunningLogFragment" >
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="logId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="gatheringId"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_runningLogFragment_to_groupProfilesFragment"
+            app:destination="@id/groupProfilesFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_runningLogFragment_to_imageDetailFragment"
+            app:destination="@id/imageDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupProfilesFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.groupprofile.GroupProfilesFragment"
+        android:label="GroupProfilesFragment" >
+        <argument
+            android:name="gatheringId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_groupProfilesFragment_to_userProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_groupProfilesFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/monthlyCalendarFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.calendar.monthly.MonthlyCalendarFragment"
+        android:label="fragment_monthly_calendar"
+        tools:layout="@layout/fragment_monthly_calendar" >
+
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+
+        <argument
+            android:name="isOtherUser"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_monthlyCalendarFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_monthlyCalendarFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningLogDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.detail.RunningLogDetailFragment"
+        android:label="RunningLogDetailFragment" >
+
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+
+        <argument
+            android:name="logId"
+            app:argType="integer" />
+        <argument
+            android:name="isOtherUser"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_groupProfilesFragment"
+            app:destination="@id/groupProfilesFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_imageDetailFragment"
+            app:destination="@id/imageDetailFragment" />
+        <action
+            android:id="@+id/action_runningLogDetailFragment_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/otherUserProfileFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserProfileFragment"
+        android:label="OtherUserProfileFragment">
+
+        <argument
+            android:name="targetUserId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_monthlyCalendarFragment"
+            app:destination="@id/monthlyCalendarFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherUserProfileFragment_to_myPostAttendanceSeeFragment"
+            app:destination="@id/myPostAttendanceSeeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherUserProfileFragment_to_otherUserJoinedRunningFragment"
+            app:destination="@id/otherUserJoinedRunningFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/otherUserJoinedRunningFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.runninglog.otheruser.OtherUserJoinedPostFragment"
+        android:label="OtherUserJoinedRunningFragment" >
+
+        <argument
+            android:name="targetUserId"
+            app:argType="integer" />
+
+        <argument
+            android:name="nickname"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_otherUserJoinedRunningFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/joinedRunningFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.mypage.joinedrunning.JoinedRunningFragment"
+        android:label="JoinedRunningFragment" >
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceSeeFragment"
+            app:destination="@id/myPostAttendanceSeeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_myPostAttendanceAccessionFragment"
+            app:destination="@id/myPostAttendanceAccessionFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_runningLogFragment"
+            app:destination="@id/runningLogFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_joinedRunningFragment_to_runningLogDetailFragment"
+            app:destination="@id/runningLogDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/waitingRunnerListDialog"
+        android:name="com.applemango.presentation.ui.screen.dialog.appliedrunner.WaitingRunnerListDialog"
+        android:label="WaitingRunnerListDialog" >
+        <action
+            android:id="@+id/action_waitingRunnerListDialog_to_otherUserProfileFragment"
+            app:destination="@id/otherUserProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/alarmFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.main.alarm.AlarmFragment"
+        android:label="AlarmFragment" />
+</navigation>

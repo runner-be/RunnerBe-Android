@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_address"
+    app:startDestination="@id/runningAddressSearchFragment">
+
+    <fragment
+        android:id="@+id/runningAddressSearchFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchFragment"
+        android:label="RunningAddressSearchFragment" >
+        <action
+            android:id="@+id/action_runningAddressSearchFragment_to_runningAddressSearchDetailFragment"
+            app:destination="@id/runningAddressSearchDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/runningAddressSearchDetailFragment"
+        android:name="com.applemango.presentation.ui.screen.fragment.map.address.RunningAddressSearchDetailFragment"
+        android:label="RunningAddressSearchDetailFragment" >
+
+        <argument
+            android:name="address"
+            app:argType="com.applemango.presentation.ui.model.AddressModel"/>
+
+    </fragment>
+</navigation>
