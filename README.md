@@ -16,4 +16,4 @@
 <br>
 
 ## 아키텍처 구조도
-![Image](https://github.com/user-attachments/assets/8d8aba22-c173-4b17-9045-60015ab6b242)
+![Image](https://github.com/user-attachments/assets/5230a730-b2d0-40bc-a391-944973509af2)
