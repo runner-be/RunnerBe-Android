@@ -13,5 +13,7 @@
     <td><img src="https://github.com/user-attachments/assets/485833c7-11c4-4f2d-97bd-6ca389ffd434" alt="Android _540 X 960_06" width="200" /></td>
   </tr>
 </table>
+<br>
 
+## 아키텍처 구조도
 ![Image](https://github.com/user-attachments/assets/8d8aba22-c173-4b17-9045-60015ab6b242)
